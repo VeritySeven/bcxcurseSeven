@@ -3377,11 +3377,7 @@ window.BCE_VERSION = "1.4.8";
                 action = "tightens";
               }
               focusItem.Difficulty = newDifficulty;
-              if (action !== null) {
-                bce_sendAction(
-                  `${Player.Name} ${action} ${CurrentCharacter.Name}'s ${focusItem.Asset.Description}.`
-                );
-              }
+
               break;
           }
           bce_log("updated item", focusItem);
