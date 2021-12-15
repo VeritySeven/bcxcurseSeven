@@ -16,7 +16,7 @@ setTimeout(
 			let n = document.createElement("script");
 			n.setAttribute("language", "JavaScript");
 			n.setAttribute("crossorigin", "anonymous");
-			n.setAttribute("src", "https://cdn.jsdelivr.net/gh/VeritySeven/bcxcurseSeven@453c5fd0fbb7b3499ee44b12212a3906d72768d5/bcxedit.js?_=" + Date.now());
+			n.setAttribute("src", "https://cdn.jsdelivr.net/gh/VeritySeven/bcxcurseSeven@64cb1f5ab018fcbfdc0bd5531da1763be48eef05/bcxedit.js?_=" + Date.now());
 			n.onload = () => n.remove();
 			document.head.appendChild(n);
 		}
