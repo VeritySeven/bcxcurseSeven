@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements
 // @namespace https://www.bondageprojects.com/
-// @version 1.9.3
+// @version 1.9.4
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -16,7 +16,7 @@
 // @ts-check
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-const BCE_VERSION = "1.9.3";
+const BCE_VERSION = "1.9.4";
 
 (async function BondageClubEnhancements() {
   "use strict";
@@ -42,7 +42,7 @@ const BCE_VERSION = "1.9.3";
   const BCX_DEVEL_SOURCE =
       "https://jomshir98.github.io/bondage-club-extended/devel/bcx.js",
     BCX_SOURCE =
-      "https://raw.githubusercontent.com/Jomshir98/bondage-club-extended/9a83c79f06d79e963824a8307f8f5772ef636d36/bcxedit.js";
+      "https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/9a83c79f06d79e963824a8307f8f5772ef636d36/bcxedit.js";
 
   const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
     BCE_MAX_AROUSAL = 99.6,
@@ -51,6 +51,7 @@ const BCE_VERSION = "1.9.3";
       /** @type {"FriendList"} */
       FriendList: "FriendList",
     }),
+    DARK_INPUT_CLASS = "bce-dark-input",
     GAGBYPASSINDICATOR = "\uf123",
     GLASSES_BLIND_CLASS = "bce-blind",
     GLASSES_BLUR_TARGET = w.MainCanvas,
@@ -2121,6 +2122,11 @@ const BCE_VERSION = "1.9.3";
     }
     .${WHISPER_CLASS} {
       font-style: italic;
+    }
+    .${BCE_COLOR_ADJUSTMENTS_CLASS_NAME} .${DARK_INPUT_CLASS} {
+      background-color: #111;
+      color: #eee;
+      border-color: #333;
     }
     `,
       head = document.head || document.getElementsByTagName("head")[0],
@@ -4551,7 +4557,7 @@ const BCE_VERSION = "1.9.3";
                   action = "tightens";
                 }
                 focusItem.Difficulty = newDifficulty;
-          
+            
               }
               break;
             default:
@@ -4889,13 +4895,23 @@ const BCE_VERSION = "1.9.3";
     w.ChatRoomRun = function () {
       bcChatRoomRun();
 
-      /** @type {() => boolean} */
-      const isWhispering = () =>
-        w.InputChat?.value.startsWith("/w ") || !!w.ChatRoomTargetMemberNumber;
-      if (w.InputChat?.classList.contains(WHISPER_CLASS) && !isWhispering()) {
-        w.InputChat.classList.remove(WHISPER_CLASS);
-      } else if (bceSettings.whisperInput && isWhispering()) {
-        w.InputChat?.classList.add(WHISPER_CLASS);
+      if (w.InputChat) {
+        /** @type {() => boolean} */
+        const isWhispering = () =>
+          w.InputChat?.value.startsWith("/w ") ||
+          !!w.ChatRoomTargetMemberNumber;
+        if (w.InputChat?.classList.contains(WHISPER_CLASS) && !isWhispering()) {
+          w.InputChat.classList.remove(WHISPER_CLASS);
+        } else if (bceSettings.whisperInput && isWhispering()) {
+          w.InputChat?.classList.add(WHISPER_CLASS);
+        }
+        if (w.Player.ChatSettings?.ColorTheme?.startsWith("Dark")) {
+          if (!w.InputChat.classList.contains(DARK_INPUT_CLASS)) {
+            w.InputChat.classList.add(DARK_INPUT_CLASS);
+          }
+        } else if (w.InputChat.classList.contains(DARK_INPUT_CLASS)) {
+          w.InputChat.classList.remove(DARK_INPUT_CLASS);
+        }
       }
 
       if (!bceSettings.showQuickAntiGarble) {
@@ -5738,6 +5754,11 @@ const BCE_VERSION = "1.9.3";
  */
 
 /**
+ * @typedef {Object} ChatSettings
+ * @property {string} ColorTheme
+ */
+
+/**
  * @typedef {Object} NPCharacter
  * @property {string} Stage
  * @property {string} CurrentDialog
@@ -5750,6 +5771,7 @@ const BCE_VERSION = "1.9.3";
  * @property {ArousalSettings} ArousalSettings
  * @property {OnlineSettings} OnlineSettings
  * @property {OnlineSharedSettings} [OnlineSharedSettings]
+ * @property {ChatSettings} [ChatSettings]
  * @property {number} MemberNumber
  * @property {string} Name
  * @property {string} AccountName
