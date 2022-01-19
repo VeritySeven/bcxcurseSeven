@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 1.9.99
+// @version 1.9.991
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -16,7 +16,7 @@
 // @ts-check
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-const BCE_VERSION = "1.9.4";
+const BCE_VERSION = "1.9.6";
 
 (async function BondageClubEnhancements() {
   "use strict";
@@ -803,6 +803,24 @@ const BCE_VERSION = "1.9.4";
     );
 
     eval(
+      `ChatRoomMessage = ${w.ChatRoomMessage.toString().replace(
+        `div.innerHTML = msg;`,
+        `div.innerHTML = msg;
+        if (data.Type === "Whisper") {
+          let repl = document.createElement("a");
+          repl.href = "#";
+          repl.onclick = (e) => {
+            e.preventDefault();
+            ElementValue("InputChat", \`/w \${SenderCharacter.Name.split(' ')[0]} \${ElementValue("InputChat")}\`);
+            window.InputChat.focus();
+          };
+          repl.textContent = '↩️';
+          div.prepend(repl);
+        }`
+      )}`
+    );
+
+    eval(
       `CommandExecute = ${w.CommandExecute.toString().replace(
         `key.indexOf(CommandsKey + C.Tag) == 0)`,
         `key.substring(1) === C.Tag)`
@@ -835,7 +853,24 @@ const BCE_VERSION = "1.9.4";
           // eslint-disable-next-line no-template-curly-in-string
           'ChatRoomSendLocal(`<a onclick="ServerOpenFriendList()">(${ServerBeep.Message})</a>`);',
           // eslint-disable-next-line no-template-curly-in-string
-          '{ const beepId = FriendListBeepLog.length - 1; ChatRoomSendLocal(`<a class="bce-beep-link" onclick="ServerOpenFriendList();FriendListModeIndex = 1;FriendListShowBeep(${beepId})">(${ServerBeep.Message}${data.Message ? `: ${data.Message.length > 150 ? data.Message.substring(0, 150) + "..." : data.Message}` : ""})</a>`); }'
+          `{
+            const beepId = FriendListBeepLog.length - 1;
+            ChatRoomSendLocal(\`
+            <a id="bce-beep-reply-\${beepId}">↩️</a>
+            <a class="bce-beep-link" id="bce-beep-\${beepId}">(\${ServerBeep.Message}\${data.Message ? \`: \${data.Message.length > 150 ? data.Message.substring(0, 150) + "..." : data.Message}\` : ""})</a>
+            \`);
+            document.getElementById(\`bce-beep-reply-\${beepId}\`).onclick = (e) => {
+              e.preventDefault();
+              ElementValue("InputChat", \`/beep \${data.MemberNumber} \${ElementValue("InputChat")}\`);
+              document.getElementById('InputChat').focus();
+            };
+            document.getElementById(\`bce-beep-\${beepId}\`).onclick = (e) => {
+              e.preventDefault();
+              ServerOpenFriendList();
+              FriendListModeIndex = 1;
+              FriendListShowBeep(\`\${beepId}\`);
+            };
+          }`
         )}`
       );
     }
@@ -1149,7 +1184,7 @@ const BCE_VERSION = "1.9.4";
         .replace("// Prepares", "\n// Prepares")}`
     );
 
-    const timerInput = `ElementPosition("${TIMER_INPUT_ID}", 1400, 930, 250, 70);`;
+    const timerInput = `ElementPosition("${TIMER_INPUT_ID}", 1400, 930, 250, 70);document.getElementById('${TIMER_INPUT_ID}').disabled = false;`;
 
     // Lover locks
     eval(
@@ -1219,6 +1254,8 @@ const BCE_VERSION = "1.9.4";
       }
       w.ElementCreateInput(TIMER_INPUT_ID, "text", defaultValue, "11");
       w.ElementPosition(TIMER_INPUT_ID, -100, -100, 0, 0);
+      // @ts-ignore
+      document.getElementById(TIMER_INPUT_ID).disabled = true;
       /** @type {HTMLInputElement} */
       // @ts-ignore
       const timerInput = document.getElementById(TIMER_INPUT_ID);
@@ -4557,7 +4594,7 @@ const BCE_VERSION = "1.9.4";
                   action = "tightens";
                 }
                 focusItem.Difficulty = newDifficulty;
-            
+          
               }
               break;
             default:
@@ -6209,6 +6246,7 @@ const BCE_VERSION = "1.9.4";
  * @property {(C: Character) => void} CharacterSetCurrent
  * @property {{ [key: string]: string[][] }} [CommonCSVCache]
  * @property {(C: Character, csv: string[][]) => void} CharacterBuildDialog
+ * @property {(data: Object) => void} ChatRoomMessage
  *
  * @typedef {Window & WindowExtension} ExtendedWindow
  */
