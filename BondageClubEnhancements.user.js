@@ -42,7 +42,7 @@ const BCE_VERSION = "1.9.4";
   const BCX_DEVEL_SOURCE =
       "https://jomshir98.github.io/bondage-club-extended/devel/bcx.js",
     BCX_SOURCE =
-      "https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/9a83c79f06d79e963824a8307f8f5772ef636d36/bcxedit.js";
+      "https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/5b3cded0b3d3ba588f70a9b01146801aa1c22086/bcxedit.js";
 
   const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
     BCE_MAX_AROUSAL = 99.6,
