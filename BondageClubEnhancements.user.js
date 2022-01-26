@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 1.9.991
+// @version 1.9.992
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -16,7 +16,7 @@
 // @ts-check
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-const BCE_VERSION = "1.9.6";
+const BCE_VERSION = "1.9.11";
 
 (async function BondageClubEnhancements() {
   "use strict";
@@ -56,6 +56,7 @@ const BCE_VERSION = "1.9.6";
     GLASSES_BLIND_CLASS = "bce-blind",
     GLASSES_BLUR_TARGET = w.MainCanvas,
     HIDDEN = "Hidden",
+    INPUT_WARN_CLASS = "bce-input-warn",
     MESSAGE_TYPES = Object.freeze({
       Activity: "Activity",
       ArousalSync: "ArousalSync",
@@ -643,6 +644,7 @@ const BCE_VERSION = "1.9.6";
       ChatRoomDrawCharacterOverlay: 5369638654189394,
       ChatRoomKeyDown: 6879966488410200,
       ChatRoomListManipulation: 218675230270,
+      ChatRoomMessage: 1275188464356568,
       ChatRoomResize: 5251276321558043,
       ChatRoomRun: 7692271367116918,
       ChatRoomStart: 8043968639468530,
@@ -811,7 +813,7 @@ const BCE_VERSION = "1.9.6";
           repl.href = "#";
           repl.onclick = (e) => {
             e.preventDefault();
-            ElementValue("InputChat", \`/w \${SenderCharacter.Name.split(' ')[0]} \${ElementValue("InputChat")}\`);
+            ElementValue("InputChat", \`/w \${SenderCharacter.Name.split(' ')[0]} \${ElementValue("InputChat").replace(/^\\/(beep|w) \\S+ ?/u, '')}\`);
             window.InputChat.focus();
           };
           repl.textContent = '↩️';
@@ -831,7 +833,7 @@ const BCE_VERSION = "1.9.6";
     eval(
       `ChatRoomCreateElement = ${w.ChatRoomCreateElement.toString().replace(
         `document.getElementById("InputChat").setAttribute("maxLength", 1000);`,
-        "document.getElementById('InputChat').addEventListener('input', (e) => { if (e.target.value.length > 1000 && (!e.target.value.startsWith('/') || e.target.value.startsWith('/w '))) e.target.classList.add('bce-input-warn'); else e.target.classList.remove('bce-input-warn') }, true);"
+        ``
       )}`
     );
 
@@ -855,21 +857,22 @@ const BCE_VERSION = "1.9.6";
           // eslint-disable-next-line no-template-curly-in-string
           `{
             const beepId = FriendListBeepLog.length - 1;
-            ChatRoomSendLocal(\`
-            <a id="bce-beep-reply-\${beepId}">↩️</a>
-            <a class="bce-beep-link" id="bce-beep-\${beepId}">(\${ServerBeep.Message}\${data.Message ? \`: \${data.Message.length > 150 ? data.Message.substring(0, 150) + "..." : data.Message}\` : ""})</a>
-            \`);
-            document.getElementById(\`bce-beep-reply-\${beepId}\`).onclick = (e) => {
-              e.preventDefault();
-              ElementValue("InputChat", \`/beep \${data.MemberNumber} \${ElementValue("InputChat")}\`);
-              document.getElementById('InputChat').focus();
-            };
-            document.getElementById(\`bce-beep-\${beepId}\`).onclick = (e) => {
-              e.preventDefault();
-              ServerOpenFriendList();
-              FriendListModeIndex = 1;
-              FriendListShowBeep(\`\${beepId}\`);
-            };
+            ChatRoomSendLocal(\`<a id="bce-beep-reply-\${beepId}">↩️</a><a class="bce-beep-link" id="bce-beep-\${beepId}">(\${ServerBeep.Message}\${data.Message ? \`: \${data.Message.length > 150 ? data.Message.substring(0, 150) + "..." : data.Message}\` : ""})</a>\`);
+            if (document.getElementById("bce-beep-reply-" + beepId)) {
+              document.getElementById(\`bce-beep-reply-\${beepId}\`).onclick = (e) => {
+                e.preventDefault();
+                ElementValue("InputChat", \`/beep \${data.MemberNumber} \${ElementValue("InputChat").replace(/^\\/(beep|w) \\S+ ?/u, '')}\`);
+                document.getElementById('InputChat').focus();
+              };
+            }
+            if (document.getElementById("bce-beep-" + beepId)) {
+              document.getElementById(\`bce-beep-\${beepId}\`).onclick = (e) => {
+                e.preventDefault();
+                ServerOpenFriendList();
+                FriendListModeIndex = 1;
+                FriendListShowBeep(\`\${beepId}\`);
+              };
+            }
           }`
         )}`
       );
@@ -2128,8 +2131,11 @@ const BCE_VERSION = "1.9.6";
       border: 0.1em solid black;
       margin-right: 0.1em;
     }
-    .bce-input-warn {
-      background-color: yellow;
+    .${BCE_COLOR_ADJUSTMENTS_CLASS_NAME} .${DARK_INPUT_CLASS}.${INPUT_WARN_CLASS} {
+      background-color: #400000 !important;
+    }
+    .${INPUT_WARN_CLASS} {
+      background-color: yellow !important;
     }
     #TextAreaChatLog a {
       color: #003f91;
@@ -3808,6 +3814,26 @@ const BCE_VERSION = "1.9.6";
     });
 
     w.Commands.push({
+      Tag: "anim",
+      Description: "['list' or name of emote]: run an animation",
+      Action: (_1, _2, args) => {
+        if (args[0] === "list") {
+          bceChatNotify(
+            `Available animations: ${Object.keys(w.bce_EventExpressions).join(
+              ", "
+            )}`
+          );
+        }
+        const animation = Object.keys(w.bce_EventExpressions).find(
+          (a) => a.toLowerCase() === args[0]?.toLowerCase()
+        );
+        if (animation) {
+          pushEvent(w.bce_EventExpressions[animation]);
+        }
+      },
+    });
+
+    w.Commands.push({
       Tag: "pose",
       Description: "['list' or list of poses]: set your pose",
       Action: (_1, _2, poses) => {
@@ -4345,17 +4371,13 @@ const BCE_VERSION = "1.9.6";
         };
       }
       const basePoseMatcher = /^Base(Lower|Upper)$/u;
-      let newPose = Object.values(desiredPose).map((p) => p.Pose);
-      if (
-        !w.Player.ActivePose ||
-        !newPose.every(
-          (p) => basePoseMatcher.test(p) || w.Player.ActivePose.includes(p)
-        ) ||
-        !w.Player.ActivePose.every((p) => newPose.includes(p))
-      ) {
-        if (newPose.every((p) => basePoseMatcher.test(p))) {
-          newPose = null;
-        }
+      let newPose = Object.values(desiredPose)
+        .map((p) => p.Pose)
+        .filter((p) => !basePoseMatcher.test(p));
+      if (newPose.length === 0) {
+        newPose = null;
+      }
+      if (JSON.stringify(w.Player.ActivePose) !== JSON.stringify(newPose)) {
         bcCharacterSetActivePose(w.Player, newPose, true);
         needsPoseUpdate = true;
         needsRefresh = true;
@@ -4594,7 +4616,7 @@ const BCE_VERSION = "1.9.6";
                   action = "tightens";
                 }
                 focusItem.Difficulty = newDifficulty;
-          
+             
               }
               break;
             default:
@@ -4948,6 +4970,15 @@ const BCE_VERSION = "1.9.6";
           }
         } else if (w.InputChat.classList.contains(DARK_INPUT_CLASS)) {
           w.InputChat.classList.remove(DARK_INPUT_CLASS);
+        }
+        if (
+          w.InputChat.value.length > 1000 &&
+          (!w.InputChat.value.startsWith("/") ||
+            w.InputChat.value.startsWith("/w "))
+        ) {
+          w.InputChat.classList.add(INPUT_WARN_CLASS);
+        } else {
+          w.InputChat.classList.remove(INPUT_WARN_CLASS);
         }
       }
 
@@ -5531,37 +5562,73 @@ const BCE_VERSION = "1.9.6";
             150
       );
 
-      w.CommonCSVCache["Screens/Online/ChatRoom/Dialog_Online.csv"].splice(
+      const clubSlaveDialog = [
+        [
+          "160",
+          "100",
+          "([BCE] Force her to become a Club Slave.)",
+          "(She will become a Club Slave for the next hour.)",
+          "bceSendToClubSlavery()",
+          "bceCanSendToClubSlavery()",
+        ],
+        [
+          "160",
+          "",
+          "([BCE] Force her to become a Club Slave.)",
+          "(Requires both to use compatible versions of BCE and the target to not already be a club slave.)",
+          "",
+          "!bceCanSendToClubSlavery()",
+        ],
+      ];
+
+      const idx =
         w.CommonCSVCache["Screens/Online/ChatRoom/Dialog_Online.csv"].findIndex(
           (v) => v[0] === "160"
-        ),
+        ) + 1;
+      w.CommonCSVCache["Screens/Online/ChatRoom/Dialog_Online.csv"].splice(
+        idx,
         0,
-        ...[
-          [
-            "160",
-            "100",
-            "([BCE] Force her to become a Club Slave.)",
-            "(She will become a Club Slave for the next hour.)",
-            "bceSendToClubSlavery()",
-            "bceCanSendToClubSlavery()",
-          ],
-          [
-            "160",
-            "",
-            "([BCE] Force her to become a Club Slave.)",
-            "(Requires both to use compatible versions of BCE and the target to not already be a club slave.)",
-            "",
-            "!bceCanSendToClubSlavery()",
-          ],
-        ]
+        ...clubSlaveDialog
       );
 
-      for (const c of w.ChatRoomCharacter.filter((cc) => !cc.IsPlayer())) {
-        w.CharacterBuildDialog(
-          c,
-          w.CommonCSVCache["Screens/Online/ChatRoom/Dialog_Online.csv"]
+      /** @type {(c: Character) => void} */
+      const appendDialog = (c) => {
+        if (!c.Dialog || c.Dialog.some((v) => v.Modded)) {
+          return;
+        }
+        c.Dialog.splice(
+          idx,
+          0,
+          ...clubSlaveDialog.map((v) => ({
+            Stage: v[0],
+            NextStage: v[1],
+            Option: v[2]
+              .replace("DialogCharacterName", c.Name)
+              .replace("DialogPlayerName", w.Player.Name),
+            Result: v[3]
+              .replace("DialogCharacterName", c.Name)
+              .replace("DialogPlayerName", w.Player.Name),
+            Function:
+              (v[4].trim().substring(0, 6) === "Dialog" ? "" : "ChatRoom") +
+              v[4],
+            Prerequisite: v[5],
+          }))
         );
+      };
+
+      for (const c of w.ChatRoomCharacter.filter(
+        (cc) => !cc.IsPlayer() && cc.IsOnline()
+      )) {
+        appendDialog(c);
       }
+
+      const bcCharacterBuildDialog = w.CharacterBuildDialog;
+      w.CharacterBuildDialog = function (C, CSV) {
+        bcCharacterBuildDialog(C, CSV);
+        if (C.IsOnline()) {
+          appendDialog(C);
+        }
+      };
     })();
 
     w.bceSendToClubSlavery = function () {
@@ -5816,19 +5883,21 @@ const BCE_VERSION = "1.9.6";
  * @property {Item[]} Appearance
  * @property {ItemLayer[]} AppearanceLayers
  * @property {AssetGroup} [FocusGroup]
- * @property {string[] | null} ActivePose
+ * @property {string[] | null} [ActivePose]
  * @property {string} [BCE]
  * @property {boolean} [BCEArousal]
  * @property {string[]} [BCECapabilities]
  * @property {number} [BCEArousalProgress]
  * @property {number} [BCEEnjoyment]
  * @property {() => boolean} IsPlayer
+ * @property {() => boolean} IsOnline
  * @property {() => boolean} CanChange
  * @property {number[]} BlackList
  * @property {number[]} GhostList
  * @property {number[]} FriendList
  * @property {Map<number, string>} FriendNames
  * @property {{ Name: string; MemberNumber: number; Start: number; Stage: number }} [Ownership]
+ * @property {{ Function: string; NextStage: string; Option: string; Prerequisite: string; Result: string; Stage: string; Modded?: boolean }[]} [Dialog]
  */
 
 /**
@@ -6247,6 +6316,7 @@ const BCE_VERSION = "1.9.6";
  * @property {{ [key: string]: string[][] }} [CommonCSVCache]
  * @property {(C: Character, csv: string[][]) => void} CharacterBuildDialog
  * @property {(data: Object) => void} ChatRoomMessage
+ * @property {(data: { MemberNumber: number; Character?: Character; Pose: string | string[]; }) => void} ChatRoomSyncPose
  *
  * @typedef {Window & WindowExtension} ExtendedWindow
  */
