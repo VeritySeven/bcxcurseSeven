@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 1.9.992
+// @version 1.9.993
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -16,7 +16,7 @@
 // @ts-check
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-const BCE_VERSION = "1.9.11";
+const BCE_VERSION = "1.9.16";
 
 (async function BondageClubEnhancements() {
   "use strict";
@@ -37,16 +37,17 @@ const BCE_VERSION = "1.9.11";
   w.BCE_VERSION = BCE_VERSION;
 
   const DISCORD_INVITE_URL = "https://discord.gg/aCCWVzXBUj",
-    SUPPORTED_GAME_VERSIONS = ["R75", "R76"];
+    SUPPORTED_GAME_VERSIONS = ["R76"];
 
   const BCX_DEVEL_SOURCE =
       "https://jomshir98.github.io/bondage-club-extended/devel/bcx.js",
     BCX_SOURCE =
-      "https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/5b3cded0b3d3ba588f70a9b01146801aa1c22086/bcxedit.js";
+      "https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/5b3cded0b3d3ba588f70a9b01146801aa1c22086/bcxedit.j";
 
   const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
     BCE_MAX_AROUSAL = 99.6,
     BCE_MSG = "BCEMsg",
+    BCX_ORIGINAL_MESSAGE = "BCX_ORIGINAL_MESSAGE",
     BEEP_CLICK_ACTIONS = Object.freeze({
       /** @type {"FriendList"} */
       FriendList: "FriendList",
@@ -615,7 +616,7 @@ const BCE_VERSION = "1.9.11";
     );
   }
 
-  function functionIntegrityCheck() {
+  async function functionIntegrityCheck() {
     /**
      * @type {Readonly<{ [key: string]: number }>}
      */
@@ -717,20 +718,31 @@ const BCE_VERSION = "1.9.11";
       WardrobeRun: 2335336863253367,
     });
 
+    let possibleIncompatibility = false;
     for (const [func, hash] of Object.entries(expectedHashes)) {
       if (!w[func]) {
         bceWarn(`Expected function ${func} not found.`);
+        possibleIncompatibility = true;
         continue;
       }
       if (typeof w[func] !== "function") {
         bceWarn(`Expected function ${func} is not a function.`);
+        possibleIncompatibility = true;
         continue;
       }
       // eslint-disable-next-line
       const actualHash = cyrb53(w[func].toString());
       if (actualHash !== hash) {
         bceWarn(`Function ${func} has been modified before BCE: ${actualHash}`);
+        possibleIncompatibility = true;
       }
+    }
+    if (possibleIncompatibility) {
+      await waitFor(() => !!w.Player?.Name);
+      bceBeepNotify(
+        "Incompatibility warning",
+        "BCE has detected that game code has been modified before BCE was loaded. This may be caused by using an incompatible version of the club or running another addon. This may cause unexpected behavior and is unsupported.\n\nIf this was caused by another addon, please report this to that addon's developer. Alternatively, ensure BCE loads first."
+      );
     }
   }
 
@@ -805,9 +817,19 @@ const BCE_VERSION = "1.9.11";
     );
 
     eval(
-      `ChatRoomMessage = ${w.ChatRoomMessage.toString().replace(
-        `div.innerHTML = msg;`,
-        `div.innerHTML = msg;
+      `ChatRoomSendChat = ${w.ChatRoomSendChat.toString()
+        .replace(`ChatRoomSendChat()`, `ChatRoomSendChat(skipHistory)`)
+        .replace(
+          `ChatRoomLastMessage.push(msg);`,
+          `if (!skipHistory) ChatRoomLastMessage.push(msg);`
+        )}`
+    );
+
+    eval(
+      `ChatRoomMessage = ${w.ChatRoomMessage.toString()
+        .replace(
+          `div.innerHTML = msg;`,
+          `div.innerHTML = msg;
         if (data.Type === "Whisper") {
           let repl = document.createElement("a");
           repl.href = "#";
@@ -816,10 +838,28 @@ const BCE_VERSION = "1.9.11";
             ElementValue("InputChat", \`/w \${SenderCharacter.Name.split(' ')[0]} \${ElementValue("InputChat").replace(/^\\/(beep|w) \\S+ ?/u, '')}\`);
             window.InputChat.focus();
           };
+          repl.classList.add("bce-button");
           repl.textContent = '↩️';
           div.prepend(repl);
         }`
-      )}`
+        )
+        .replace(
+          `const chatMsg`,
+          `const clientGagged = data.Content.endsWith('\\uf123');data.Content = data.Content.replace(/[\\uE000-\\uF8FF]/gu, '');const chatMsg`
+        )
+        .replace(
+          `msg += chatMsg;`,
+          `msg += chatMsg;
+        if (bceSettingValue("gagspeak") && SpeechGetTotalGagLevel(SenderCharacter) > 0 && !clientGagged) {
+          let original = data.Content;
+          if (data.Type === "Whisper" && data.Dictionary?.some(d => d.Tag === "${BCX_ORIGINAL_MESSAGE}")) {
+            original = data.Dictionary.find(d => d.Tag === "${BCX_ORIGINAL_MESSAGE}").Text;
+          }
+          if (original.toLowerCase() !== chatMsg.toLowerCase()) {
+            msg += \` (\${ChatRoomHTMLEntities(original)})\`
+          }
+        }`
+        )}`
     );
 
     eval(
@@ -857,7 +897,7 @@ const BCE_VERSION = "1.9.11";
           // eslint-disable-next-line no-template-curly-in-string
           `{
             const beepId = FriendListBeepLog.length - 1;
-            ChatRoomSendLocal(\`<a id="bce-beep-reply-\${beepId}">↩️</a><a class="bce-beep-link" id="bce-beep-\${beepId}">(\${ServerBeep.Message}\${data.Message ? \`: \${data.Message.length > 150 ? data.Message.substring(0, 150) + "..." : data.Message}\` : ""})</a>\`);
+            ChatRoomSendLocal(\`<a id="bce-beep-reply-\${beepId}">↩️</a><a class="bce-beep-link" id="bce-beep-\${beepId}">(\${ServerBeep.Message}\${ChatRoomHTMLEntities(data.Message ? \`: \${data.Message.length > 150 ? data.Message.substring(0, 150) + "..." : data.Message}\` : "")})</a>\`);
             if (document.getElementById("bce-beep-reply-" + beepId)) {
               document.getElementById(\`bce-beep-reply-\${beepId}\`).onclick = (e) => {
                 e.preventDefault();
@@ -1244,6 +1284,76 @@ const BCE_VERSION = "1.9.11";
         'if (!bceSettingValue("accurateTimerLocks")) InventoryItemMiscTimerPasswordPadlockAdd(PasswordTimerChooseList[PasswordTimerChooseIndex] * 60, false);'
       )}`
     );
+
+    const bcServerSend = w.ServerSend;
+    w.ServerSend = function (
+      message,
+      /** @type {ChatMessage} */
+      data
+    ) {
+      if (message === "ChatRoomChat") {
+        switch (data.Type) {
+          case "Whisper":
+            {
+              const idx = data.Dictionary?.findIndex(
+                (d) => d.Tag === BCX_ORIGINAL_MESSAGE
+              );
+              if (
+                idx >= 0 &&
+                (bceSettings.antiAntiGarble ||
+                  bceSettings.antiAntiGarbleStrong ||
+                  bceSettings.antiAntiGarbleExtra)
+              ) {
+                data.Dictionary.splice(idx, 1);
+              }
+            }
+            break;
+          case "Chat":
+            {
+              const gagLevel = w.SpeechGetTotalGagLevel(w.Player);
+              if (gagLevel > 0) {
+                if (bceSettings.antiAntiGarble) {
+                  data.Content =
+                    w.SpeechGarbleByGagLevel(1, data.Content) +
+                    GAGBYPASSINDICATOR;
+                } else if (bceSettings.antiAntiGarbleExtra && gagLevel > 24) {
+                  const icIndicator = "\uF124";
+                  let inOOC = false;
+                  data.Content = `${data.Content.split("")
+                    .map((c) => {
+                      switch (c) {
+                        case "(":
+                          inOOC = true;
+                          return c;
+                        case ")":
+                          inOOC = false;
+                          return c;
+                        default:
+                          return inOOC ? c : icIndicator;
+                      }
+                    })
+                    .join("")
+                    .replace(
+                      new RegExp(`${icIndicator}+`, "gu"),
+                      "m"
+                    )}${GAGBYPASSINDICATOR}`;
+                } else if (
+                  bceSettings.antiAntiGarbleStrong ||
+                  bceSettings.antiAntiGarbleExtra
+                ) {
+                  data.Content =
+                    w.SpeechGarbleByGagLevel(gagLevel, data.Content) +
+                    GAGBYPASSINDICATOR;
+                }
+              }
+            }
+            break;
+          default:
+            break;
+        }
+      }
+      bcServerSend(message, data);
+    };
   }
 
   function accurateTimerInputs() {
@@ -1695,11 +1805,14 @@ const BCE_VERSION = "1.9.11";
             const targetMemberNumber = targetMembers[0].MemberNumber;
             const originalTarget = w.ChatRoomTargetMemberNumber;
             w.ChatRoomTargetMemberNumber = targetMemberNumber;
-            w.CommandParse(
+            w.ElementValue(
+              "InputChat",
               `${
                 msg.length > 0 && [".", "/"].includes(msg[0]) ? "\u200b" : ""
               }${msg}`
             );
+            // True to skip history
+            w.ChatRoomSendChat(true);
             w.ChatRoomTargetMemberNumber = originalTarget;
           }
         },
@@ -2170,6 +2283,9 @@ const BCE_VERSION = "1.9.11";
       background-color: #111;
       color: #eee;
       border-color: #333;
+    }
+    a.bce-button {
+      text-decoration: none;
     }
     `,
       head = document.head || document.getElementsByTagName("head")[0],
@@ -4616,7 +4732,7 @@ const BCE_VERSION = "1.9.11";
                   action = "tightens";
                 }
                 focusItem.Difficulty = newDifficulty;
-             
+
               }
               break;
             default:
@@ -4869,69 +4985,6 @@ const BCE_VERSION = "1.9.11";
   async function antiGarbling() {
     await waitFor(() => !!w.SpeechGarbleByGagLevel);
 
-    const bcSpeechGarbleByGagLevel = w.SpeechGarbleByGagLevel;
-    w.SpeechGarbleByGagLevel = function (GagEffect, CD, IgnoreOOC) {
-      const garbled = bcSpeechGarbleByGagLevel(
-        GagEffect,
-        CD,
-        IgnoreOOC
-      ).replace(GAGBYPASSINDICATOR, "");
-      if (CD?.trim().endsWith(GAGBYPASSINDICATOR)) {
-        return CD.replace(/[\uE000-\uF8FF]/gu, "");
-      } else if (bceSettings.gagspeak) {
-        return garbled.toLowerCase() === CD?.toLowerCase()
-          ? garbled
-          : `${garbled} (${CD})`;
-      }
-      return garbled;
-    };
-
-    const bcServerSend = w.ServerSend;
-    w.ServerSend = function (
-      message,
-      /** @type {ChatMessage} */
-      data
-    ) {
-      if (message === "ChatRoomChat" && data.Type === "Chat") {
-        const gagLevel = w.SpeechGetTotalGagLevel(w.Player);
-        if (gagLevel > 0) {
-          if (bceSettings.antiAntiGarble) {
-            data.Content =
-              bcSpeechGarbleByGagLevel(1, data.Content) + GAGBYPASSINDICATOR;
-          } else if (bceSettings.antiAntiGarbleExtra && gagLevel > 24) {
-            const icIndicator = "\uF124";
-            let inOOC = false;
-            data.Content = `${data.Content.split("")
-              .map((c) => {
-                switch (c) {
-                  case "(":
-                    inOOC = true;
-                    return c;
-                  case ")":
-                    inOOC = false;
-                    return c;
-                  default:
-                    return inOOC ? c : icIndicator;
-                }
-              })
-              .join("")
-              .replace(
-                new RegExp(`${icIndicator}+`, "gu"),
-                "m"
-              )}${GAGBYPASSINDICATOR}`;
-          } else if (
-            bceSettings.antiAntiGarbleStrong ||
-            bceSettings.antiAntiGarbleExtra
-          ) {
-            data.Content =
-              bcSpeechGarbleByGagLevel(gagLevel, data.Content) +
-              GAGBYPASSINDICATOR;
-          }
-        }
-      }
-      bcServerSend(message, data);
-    };
-
     const bcChatRoomResize = w.ChatRoomResize;
     w.ChatRoomResize = function (load) {
       bcChatRoomResize(load);
@@ -5182,7 +5235,6 @@ const BCE_VERSION = "1.9.11";
         if (fromMax <= 0) {
           Progress = 0;
         } else if (C.BCEArousal) {
-          console.log("capped", Max, "/", fromMax, C.BCEEnjoyment);
           Progress = Math.floor(fromMax / ${enjoymentMultiplier} / C.BCEEnjoyment);
         } else {
           Progress = fromMax;
@@ -6317,6 +6369,7 @@ const BCE_VERSION = "1.9.11";
  * @property {(C: Character, csv: string[][]) => void} CharacterBuildDialog
  * @property {(data: Object) => void} ChatRoomMessage
  * @property {(data: { MemberNumber: number; Character?: Character; Pose: string | string[]; }) => void} ChatRoomSyncPose
+ * @property {(skipHistory?: boolean) => void} ChatRoomSendChat
  *
  * @typedef {Window & WindowExtension} ExtendedWindow
  */
