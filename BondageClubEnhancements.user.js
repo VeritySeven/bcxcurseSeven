@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 1.9.996
+// @version 1.9.997
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -20,51 +20,54 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-implicit-globals */
 
-const BCE_VERSION = "2.5.13";
+/**
+ *     BCE
+ *  Copyright (C) 2022  Sid
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+const BCE_VERSION = "2.10.1";
 
 const bceChangelog = `${BCE_VERSION}
-- fix alternate arousal messing with normal arousal
-- update stable bcx
+2.10.1
+- r78 compatibility, removing r77 compatibility
 
-2.5.12
-- update stable bcx
+2.10.0
+- add option to allow leashing without a leash (roleplay carrying etc.)
 
-2.5.10
-- mod sdk 1.0.2
+2.9
+- added license
+- added the ability to give yourself a nickname visible to other users of BCE
 
-2.5.9
-- R77 compatibility
-- removed friendly activity labels (integrated with the game now)
-- improved compatibility with other addons
+2.8
+- added chinese translation (by 洛星臣)
+- added autostruggle cheat
 
-2.5.8
-- escape as a hotkey to close the IM
+2.7
+- added tab activity workaround to hopefully prevent browsers from killing the connection to the server
+- disabled layering menus when player is bound or target group is blocked
+- added separate cheat setting to restore old behavior
 
-2.5.7
-- fix inspecting locks and other advanced item properties
+2.6
+- added discreet mode, which disables rendering kinky parts of the club
+- fix crash upon entering security settings with IM enabled
 
-2.5.6
-- fix leaving layering menus with ESC
-- fix pagination button in settings
-
-2.5.5
-- removed browser timers, making use of game's rendering functions instead
-
-2.5.4
-- added /bcedebug
-
-2.5.3
-- update BCX stable
-
-2.5.2
-- load extended wardrobe properly even when BCE is loaded after login
-
-2.5.1
-- R77Beta1 compatibility
-
-2.5.0
+2.5
 - settings page overhaul
 - cache clear refreshes character renders after it's done
+- added /bcedebug
 
 2.4
 - added instant messenger (you can talk to your friends who use bcutil without installing bcutil yourself, with BCE's chat augments)
@@ -85,7 +88,7 @@ const BCE_BC_MOD_SDK=function(){"use strict";const o="1.0.2";function e(o){alert
 async function BondageClubEnhancements() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R77"];
+	const SUPPORTED_GAME_VERSIONS = ["R78"];
 	const CAPABILITIES = ["clubslave"];
 
 	const w = window;
@@ -107,6 +110,7 @@ async function BondageClubEnhancements() {
 			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/6252bd755d7ba84f4bb93aed74ab51753b18080a/bcxedit.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
+		BCE_LICENSE = "https://gitlab.com/Sidiousious/bce/-/blob/main/LICENSE",
 		BCE_MAX_AROUSAL = 99.6,
 		BCE_MSG = "BCEMsg",
 		BCX_ORIGINAL_MESSAGE = "BCX_ORIGINAL_MESSAGE",
@@ -130,6 +134,7 @@ async function BondageClubEnhancements() {
 		TIMER_INPUT_ID = "bce_timerInput",
 		WHISPER_CLASS = "bce-whisper-input";
 
+	/** @type {"none" | "external" | "stable" | "devel"} */
 	let bcxType = "none";
 
 	if (typeof ChatRoomCharacter === "undefined") {
@@ -148,7 +153,7 @@ async function BondageClubEnhancements() {
 		Observe: 0,
 	});
 
-	const settingsVersion = 25;
+	const settingsVersion = 30;
 	/**
 	 * @type {Settings}
 	 */
@@ -188,7 +193,7 @@ async function BondageClubEnhancements() {
 			value: false,
 			sideEffects: (newValue) => {
 				sendHello();
-				Player.BCEArousal = newValue;
+				Player.BCEArousal = !!newValue;
 				Player.BCEArousalProgress = Math.min(
 					BCE_MAX_AROUSAL,
 					Player.ArousalSettings.Progress
@@ -309,8 +314,32 @@ async function BondageClubEnhancements() {
 			},
 			category: "chat",
 		},
+		nicknames: {
+			label: "Show nicknames",
+			value: true,
+			sideEffects: (newValue) => {
+				bceLog("nicknames", newValue);
+				if (!newValue) {
+					bceSettings.nickname = "";
+					for (const c of Character) {
+						if (c.BCEOriginalName) {
+							if (c.IsPlayer()) {
+								setOwnNickname(c.BCEOriginalName);
+							} else {
+								c.Name = c.BCEOriginalName;
+							}
+						}
+					}
+					sendHello();
+				} else if (isString(bceSettings.nickname)) {
+					setOwnNickname(bceSettings.nickname);
+					sendHello(null, true);
+				}
+			},
+			category: "chat",
+		},
 		gagspeak: {
-			label: "(Cheat) Understand All Gagged and when Deafened",
+			label: "Understand All Gagged and when Deafened",
 			value: false,
 			sideEffects: (newValue) => {
 				bceLog("gagspeak", newValue);
@@ -318,10 +347,26 @@ async function BondageClubEnhancements() {
 			category: "cheats",
 		},
 		lockpick: {
-			label: "(Cheat) Reveal Lockpicking Order Based on Skill",
+			label: "Reveal Lockpicking Order Based on Skill",
 			value: false,
 			sideEffects: (newValue) => {
 				bceLog("lockpick", newValue);
+			},
+			category: "cheats",
+		},
+		allowLayeringWhileBound: {
+			label: "Allow layering menus while bound",
+			value: false,
+			sideEffects: (newValue) => {
+				bceLog("allowLayeringWhileBound", newValue);
+			},
+			category: "cheats",
+		},
+		autoStruggle: {
+			label: "Make automatic progress while struggling",
+			value: false,
+			sideEffects: (newValue) => {
+				bceLog("autoStruggle", newValue);
 			},
 			category: "cheats",
 		},
@@ -396,6 +441,20 @@ async function BondageClubEnhancements() {
 			},
 			category: "immersion",
 		},
+		leashAlways: {
+			label:
+				"Allow leashing without wearing a leashable item (requires leasher to have BCE too)",
+			value: false,
+			sideEffects: (newValue) => {
+				bceLog("leashAlways", newValue);
+				if (newValue) {
+					enableLeashing();
+				} else {
+					disableLeashing();
+				}
+			},
+			category: "immersion",
+		},
 		checkUpdates: {
 			label: "Check for updates",
 			sideEffects: (newValue) => {
@@ -441,6 +500,28 @@ async function BondageClubEnhancements() {
 			value: true,
 			sideEffects: (newValue) => {
 				bceLog("confirmLeave", newValue);
+			},
+			category: "misc",
+		},
+		discreetMode: {
+			label: "Discreet mode (disable drawing)",
+			value: false,
+			sideEffects: (newValue) => {
+				bceLog("discreetMode", newValue);
+				if (newValue) {
+					/** @type {HTMLLinkElement} */
+					(document.getElementById("favicon")).href =
+						"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oFFAADATTAuQQAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAEklEQVQ4y2NgGAWjYBSMAggAAAQQAAGFP6pyAAAAAElFTkSuQmCC";
+					document.title = "OnlineChat";
+				}
+			},
+			category: "misc",
+		},
+		tabActivityWorkaround: {
+			label: "Keep tab active (requires refresh)",
+			value: true,
+			sideEffects: (newValue) => {
+				bceLog("tabActivityWorkaround", newValue);
 			},
 			category: "misc",
 		},
@@ -495,6 +576,14 @@ async function BondageClubEnhancements() {
 				}
 			},
 			category: "performance",
+		},
+		nickname: {
+			label: "Nickname",
+			value: "",
+			sideEffects: (newValue) => {
+				bceLog("nickname", newValue);
+			},
+			category: "hidden",
 		},
 	});
 
@@ -596,106 +685,217 @@ async function BondageClubEnhancements() {
 	});
 
 	const DEVS = [23476];
+
 	/**
-	 * @type {Readonly<{ [key: string]: string }>}
+	 * @param {string} original - The English message
+	 * @param {Record<string, string>} [replacements] - The replacements
+	 * @returns {string} - The translated message
 	 */
-	const expectedHashes = Object.freeze({
-		ActivityChatRoomArousalSync: "21318CAF",
-		ActivitySetArousal: "3AE28123",
-		ActivitySetArousalTimer: "A034E6C0",
-		ActivityTimerProgress: "6CD388A7",
-		AppearanceClick: "0D1455A9",
-		AppearanceExit: "AA300341",
-		AppearanceLoad: "A14CB302",
-		AppearanceRun: "6DDA14A1",
-		CharacterAppearanceWardrobeLoad: "A5B63A03",
-		CharacterBuildDialog: "E69E1DFE",
-		CharacterGetCurrent: "A4EA6438",
-		CharacterRefresh: "5BF9DA5A",
-		CharacterSetActivePose: "0339D069",
-		CharacterSetCurrent: "FD267B9B",
-		CharacterSetFacialExpression: "D66B4515",
-		ChatRoomCharacterItemUpdate: "4EB70443",
-		ChatRoomCharacterUpdate: "9D0EEA39",
-		ChatRoomClearAllElements: "C49AA2C1",
-		ChatRoomClick: "79E651EB",
-		ChatRoomCreateElement: "AD7CBE68",
-		ChatRoomCurrentTime: "A462DD3A",
-		ChatRoomDrawCharacterOverlay: "4AE4AD9E",
-		ChatRoomKeyDown: "33C77F12",
-		ChatRoomListManipulation: "75D28A8B",
-		ChatRoomMessage: "3041CEA5",
-		ChatRoomResize: "9D52CF52",
-		ChatRoomRun: "07117155",
-		ChatRoomSendChat: "7F540ED0",
-		ChatRoomStart: "9CB3783A",
-		CommandExecute: "12B2BAA4",
-		CommandParse: "12DC018B",
-		CommonColorIsValid: "390A2CE4",
-		CommonSetScreen: "17692CD7",
-		DialogClick: "CE16B270",
-		DialogDraw: "302268CE",
-		DialogDrawItemMenu: "A6FE3967",
-		DialogLeave: "354CBC00",
-		DrawBackNextButton: "0DE5491B",
-		DrawButton: "63FDE2B2",
-		DrawCheckbox: "00FD87EB",
-		DrawImageResize: "8CF55F04",
-		DrawText: "C1BF0F50",
-		DrawTextFit: "F9A1B11E",
-		ElementCreateInput: "2B2603E4",
-		ElementIsScrolledToEnd: "D28B0638",
-		ElementPosition: "CC4E3C82",
-		ElementRemove: "60809E60",
-		ElementScrollToEnd: "1AC45575",
-		ElementValue: "B647E0E6",
-		FriendListShowBeep: "6C0449BB",
-		GLDrawResetCanvas: "EDF1631A",
-		InventoryGet: "E666F671",
-		InventoryItemMiscLoversTimerPadlockClick: "B8F431EB",
-		InventoryItemMiscLoversTimerPadlockDraw: "87818D41",
-		InventoryItemMiscLoversTimerPadlockExit: "D316C21B",
-		InventoryItemMiscLoversTimerPadlockLoad: "6931D8FF",
-		InventoryItemMiscMistressTimerPadlockClick: "7DCDC57B",
-		InventoryItemMiscMistressTimerPadlockDraw: "DC5D4BB4",
-		InventoryItemMiscMistressTimerPadlockExit: "479A8F6F",
-		InventoryItemMiscMistressTimerPadlockLoad: "8B23B841",
-		InventoryItemMiscOwnerTimerPadlockClick: "B36A6AD3",
-		InventoryItemMiscOwnerTimerPadlockDraw: "2E431407",
-		InventoryItemMiscOwnerTimerPadlockExit: "4A0243F9",
-		InventoryItemMiscOwnerTimerPadlockLoad: "06E1141F",
-		InventoryItemMiscTimerPasswordPadlockClick: "CB736461",
-		InventoryItemMiscTimerPasswordPadlockDraw: "953C9EF8",
-		InventoryItemMiscTimerPasswordPadlockExit: "7323E56D",
-		InventoryItemMiscTimerPasswordPadlockLoad: "304BC9DE",
-		LoginClick: "8A3B973F",
-		LoginRun: "B40EF142",
-		LoginSetSubmitted: "C88F4A8E",
-		MouseIn: "CA8B839E",
-		OnlineGameAllowChange: "3779F42C",
-		ServerAccountBeep: "D93AD698",
-		ServerAppearanceBundle: "94A27A29",
-		ServerAppearanceLoadFromBundle: "76D1CC95",
-		ServerClickBeep: "3E6277BE",
-		ServerConnect: "845E50A6",
-		ServerDisconnect: "0D4630FA",
-		ServerOpenFriendList: "25665C3F",
-		ServerSend: "90A61F57",
-		SkillGetWithRatio: "16620445",
-		SpeechGarbleByGagLevel: "A07EE53B",
-		SpeechGetTotalGagLevel: "E8051EA2",
-		StruggleDrawLockpickProgress: "A9C2DBBC",
-		TextGet: "4DDE5794",
-		TextLoad: "ADF7C890",
-		TimerProcess: "19F09E1E",
-		WardrobeClick: "D388FE7D",
-		WardrobeExit: "EE83FF29",
-		WardrobeFastLoad: "545CB8FD",
-		WardrobeFastSave: "B62385C1",
-		WardrobeFixLength: "CA3334C6",
-		WardrobeLoad: "C343A4C7",
-		WardrobeRun: "9616EB3A",
-	});
+	function displayText(original, replacements = {}) {
+		/** @type {Readonly<Record<string, Record<string, string>>>} */
+		const translations = Object.freeze({
+			CN: {
+				"Automatic Arousal Expressions (Replaces Vanilla)":
+					"自动欲望表情 (替换原版)",
+				"Activity Expressions": "活动表示",
+				"Alternate Arousal (Replaces Vanilla, requires hybrid/locked arousal meter)":
+					"另一种欲望 (替换原版, 需要混合或锁定欲望条)",
+				"Alternative speech stutter": "另一种言语不清",
+				"Enable layering menus": "开启服装分层选项",
+				"Extended wardrobe slots (96)": "扩展衣柜保存槽 (96个)",
+				"Replace wardrobe list with character previews":
+					"使用角色预览替换衣柜保存列表",
+				"Clear Drawing Cache Hourly": "每小时清除绘图缓存",
+				"Instant messenger (BcUtil compatible)": "即时通讯 (与BcUtil 兼容)",
+				"Chat Links and Embeds": "聊天链接和嵌入",
+				"Use Ctrl+Enter to OOC": "使用Ctrl+Enter进行OOC发言",
+				"Use italics for input when whispering": "悄悄话使用斜体字",
+				"Improve colors for readability": "改善颜色以提高可读性",
+				"Show friend presence notifications": "显示好友在线通知",
+				"Show friends going offline too (requires friend presence)":
+					"显示朋友离线通知 (需要启用好友在线通知)",
+				"Understand All Gagged and when Deafened":
+					"在被堵住嘴和被堵住耳朵时可以听懂所有发言",
+				"Reveal Lockpicking Order Based on Skill": "根据技能显示撬锁/开锁顺序",
+				"Allow layering menus while bound": "允许在捆绑时用分层菜单",
+				"Load BCX by Jomshir98 (requires refresh - no auto-update)":
+					"加载 BCX by Jomshir98 (需要刷新 - 无自动更新)",
+				"Load BCX beta (requires refresh - auto-updates, compatibility not guaranteed)":
+					"加载 BCX beta 测试版 (需要刷新 - 自动升级, 不保证兼容性)",
+				"Limited gag anti-cheat: cloth-gag equivalent garbling":
+					"有限的堵嘴反作弊: 和布堵嘴相同的乱码",
+				"Full gag anti-cheat: use equipped gags to determine garbling":
+					"完整的堵嘴反作弊: 使用当前装备的堵嘴来确定乱码",
+				"Extra gag anti-cheat: even more garbling for the most extreme gags":
+					"扩展的堵嘴反作弊: 对于使用最极端的堵嘴更加混乱",
+				"Require glasses to see": "需要眼镜才能看清",
+				"Check for updates": "检查更新",
+				"Automatic Relogin on Disconnect": "断线后自动重连",
+				"Show gag cheat and anti-cheat options in chat":
+					"在聊天室里显示堵嘴作弊和反作弊选项",
+				"Automatically ghost+blocklist unnaturally new users":
+					"自动对不自然的用户无视并添加黑名单",
+				"Use accurate timer inputs": "使用准确的计时器输入",
+				"Confirm leaving the game": "离开游戏前需要确认",
+				"Discreet mode (disable drawing)": "谨慎模式 (禁用绘图)",
+				"Keep tab active (requires refresh)":
+					"保持标签页处于活动状态 (需要刷新)",
+				"Show FPS counter": "显示 FPS 计数器",
+				"Limit FPS in background": "在后台时限制FPS",
+				"Limit FPS to ~15": "限制 FPS 最高为 ~15",
+				"Limit FPS to ~30": "限制 FPS 最高为 ~30",
+				"Limit FPS to ~60": "限制 FPS 最高为 ~60",
+				"Make automatic progress while struggling": "在挣扎时自动增加进度",
+				"Chat & Social": "聊天 & 社交",
+				"Activities & Arousal": "活动 & 欲望",
+				"Appearance & Wardrobe": "外观 & 衣柜",
+				"Immersion & Anti-Cheat": "沉浸体验 & 反作弊",
+				Performance: "表现",
+				Misc: "杂项",
+				Cheats: "作弊",
+				"Other Addons": "其他插件",
+				"Show nicknames": "修改你的昵称",
+				"Change your nickname": "修改你的昵称",
+			},
+		});
+
+		let text =
+			TranslationLanguage in translations &&
+			original in translations[TranslationLanguage]
+				? translations[TranslationLanguage][original]
+				: original;
+		for (const [key, val] of Object.entries(replacements)) {
+			while (text.includes(key)) {
+				text = text.replace(key, val);
+			}
+		}
+		return text;
+	}
+
+	window.bceDisplayText = (original, replacements = {}) =>
+		displayText(original, replacements);
+
+	/**
+	 * @type {(gameVersion: string) => Readonly<{ [key: string]: string }>}
+	 */
+	const expectedHashes = (gameVersion) => {
+		const hashes = {
+			ActivityChatRoomArousalSync: "21318CAF",
+			ActivitySetArousal: "3AE28123",
+			ActivitySetArousalTimer: "A034E6C0",
+			ActivityTimerProgress: "6CD388A7",
+			AppearanceClick: "0D1455A9",
+			AppearanceExit: "AA300341",
+			AppearanceLoad: "A14CB302",
+			AppearanceRun: "6DDA14A1",
+			CharacterAppearanceWardrobeLoad: "A5B63A03",
+			CharacterBuildDialog: "E69E1DFE",
+			CharacterCompressWardrobe: "8D3B1AB1",
+			CharacterDecompressWardrobe: "A9FD29CC",
+			CharacterGetCurrent: "A4EA6438",
+			CharacterRefresh: "5BF9DA5A",
+			CharacterSetActivePose: "0339D069",
+			CharacterSetCurrent: "FD267B9B",
+			CharacterSetFacialExpression: "D66B4515",
+			ChatRoomCharacterItemUpdate: "4EB70443",
+			ChatRoomCharacterUpdate: "9D0EEA39",
+			ChatRoomClearAllElements: "C49AA2C1",
+			ChatRoomClick: "79E651EB",
+			ChatRoomCreateElement: "AD7CBE68",
+			ChatRoomCurrentTime: "A462DD3A",
+			ChatRoomDrawBackground: "898C1B12",
+			ChatRoomDrawCharacterOverlay: "4AE4AD9E",
+			ChatRoomKeyDown: "33C77F12",
+			ChatRoomListManipulation: "75D28A8B",
+			ChatRoomMessage: "D355B2C4",
+			ChatRoomResize: "9D52CF52",
+			ChatRoomRun: "07117155",
+			ChatRoomSendChat: "7F540ED0",
+			ChatRoomStart: "9CB3783A",
+			CommandExecute: "12B2BAA4",
+			CommandParse: "534545CD",
+			CommonClick: "1F6DF7CB",
+			CommonColorIsValid: "390A2CE4",
+			CommonSetScreen: "17692CD7",
+			DialogClick: "CE16B270",
+			DialogDraw: "302268CE",
+			DialogDrawItemMenu: "A6FE3967",
+			DialogLeave: "354CBC00",
+			DrawBackNextButton: "0DE5491B",
+			DrawButton: "63FDE2B2",
+			DrawCheckbox: "00FD87EB",
+			DrawImageEx: "3D3D74F5",
+			DrawImageResize: "8CF55F04",
+			DrawProcess: "053C046E",
+			DrawText: "C1BF0F50",
+			DrawTextFit: "F9A1B11E",
+			ElementCreateInput: "2B2603E4",
+			ElementIsScrolledToEnd: "D28B0638",
+			ElementPosition: "CC4E3C82",
+			ElementRemove: "60809E60",
+			ElementScrollToEnd: "1AC45575",
+			ElementValue: "B647E0E6",
+			FriendListShowBeep: "6C0449BB",
+			GLDrawResetCanvas: "EDF1631A",
+			InventoryGet: "E666F671",
+			InventoryItemMiscLoversTimerPadlockClick: "B8F431EB",
+			InventoryItemMiscLoversTimerPadlockDraw: "87818D41",
+			InventoryItemMiscLoversTimerPadlockExit: "D316C21B",
+			InventoryItemMiscLoversTimerPadlockLoad: "6931D8FF",
+			InventoryItemMiscMistressTimerPadlockClick: "7DCDC57B",
+			InventoryItemMiscMistressTimerPadlockDraw: "DC5D4BB4",
+			InventoryItemMiscMistressTimerPadlockExit: "479A8F6F",
+			InventoryItemMiscMistressTimerPadlockLoad: "8B23B841",
+			InventoryItemMiscOwnerTimerPadlockClick: "B36A6AD3",
+			InventoryItemMiscOwnerTimerPadlockDraw: "2E431407",
+			InventoryItemMiscOwnerTimerPadlockExit: "4A0243F9",
+			InventoryItemMiscOwnerTimerPadlockLoad: "06E1141F",
+			InventoryItemMiscTimerPasswordPadlockClick: "CB736461",
+			InventoryItemMiscTimerPasswordPadlockDraw: "953C9EF8",
+			InventoryItemMiscTimerPasswordPadlockExit: "7323E56D",
+			InventoryItemMiscTimerPasswordPadlockLoad: "D7F9CCA4",
+			LoginClick: "8A3B973F",
+			LoginRun: "B40EF142",
+			LoginSetSubmitted: "C88F4A8E",
+			MainRun: "B09F3B95",
+			MouseIn: "CA8B839E",
+			NotificationDrawFavicon: "AB88656B",
+			NotificationTitleUpdate: "0E92F3ED",
+			OnlineGameAllowChange: "3779F42C",
+			ServerAccountBeep: "D93AD698",
+			ServerAppearanceBundle: "94A27A29",
+			ServerAppearanceLoadFromBundle: "76D1CC95",
+			ServerClickBeep: "3E6277BE",
+			ServerConnect: "845E50A6",
+			ServerDisconnect: "0D4630FA",
+			ServerOpenFriendList: "25665C3F",
+			ServerSend: "90A61F57",
+			SkillGetWithRatio: "16620445",
+			SpeechGarbleByGagLevel: "A07EE53B",
+			SpeechGetTotalGagLevel: "E8051EA2",
+			StruggleDexterity: "95812A41",
+			StruggleDrawLockpickProgress: "A9C2DBBC",
+			StruggleFlexibility: "148CEB8F",
+			StruggleStrength: "7980C89B",
+			TextGet: "4DDE5794",
+			TextLoad: "ADF7C890",
+			TimerProcess: "19F09E1E",
+			WardrobeClick: "D388FE7D",
+			WardrobeExit: "EE83FF29",
+			WardrobeFastLoad: "545CB8FD",
+			WardrobeFastSave: "B62385C1",
+			WardrobeFixLength: "CA3334C6",
+			WardrobeLoad: "C343A4C7",
+			WardrobeRun: "9616EB3A",
+		};
+
+		switch (gameVersion) {
+			default:
+				break;
+		}
+
+		return Object.freeze(hashes);
+	};
 
 	/**
 	 * @type {(...args: unknown[]) => void}
@@ -798,7 +998,15 @@ async function BondageClubEnhancements() {
 			Content: "Beep",
 			Type: "Action",
 			Dictionary: [
+				// EN
 				{ Tag: "Beep", Text: "msg" },
+				// CN
+				{ Tag: "发送私聊", Text: "msg" },
+				// DE
+				{ Tag: "Biep", Text: "msg" },
+				// FR
+				{ Tag: "Sonner", Text: "msg" },
+				// Message itself
 				{ Tag: "msg", Text: text },
 			],
 		});
@@ -866,7 +1074,7 @@ async function BondageClubEnhancements() {
 		return date.getTime();
 	};
 
-	functionIntegrityCheck();
+	await functionIntegrityCheck();
 	bceStyles();
 	extendedWardrobe();
 	automaticReconnect();
@@ -874,6 +1082,7 @@ async function BondageClubEnhancements() {
 	await bceLoadSettings();
 	postSettings();
 	bceLog(bceSettings);
+	discreetMode();
 	commonPatches();
 	const bcxLoad = loadBCX();
 	beepImprovements();
@@ -896,6 +1105,10 @@ async function BondageClubEnhancements() {
 	forcedClubSlave();
 	fpsCounter();
 	instantMessenger();
+	tabActivityWorkaround();
+	autoStruggle();
+	nicknames();
+	leashAlways();
 
 	await bcxLoad;
 
@@ -906,15 +1119,10 @@ async function BondageClubEnhancements() {
 	if (bceSettings.checkUpdates) {
 		checkUpdate();
 	}
-	if (!SUPPORTED_GAME_VERSIONS.includes(GameVersion)) {
-		bceBeepNotify(
-			"Warning",
-			`Unknown game version: ${GameVersion}. Things may break. Check for updates.`
-		);
-	}
 
-	function functionIntegrityCheck() {
-		for (const [func, hash] of Object.entries(expectedHashes)) {
+	async function functionIntegrityCheck() {
+		await waitFor(() => GameVersion !== "R0");
+		for (const [func, hash] of Object.entries(expectedHashes(GameVersion))) {
 			if (!w[func]) {
 				bceWarn(`Expected function ${func} not found.`);
 				continue;
@@ -950,15 +1158,22 @@ async function BondageClubEnhancements() {
 				if (latest !== BCE_VERSION) {
 					// Create beep
 					bceBeepNotify(
-						"Update",
-						`Your version of BCE is outdated and may not be supported. Please update.
+						displayText("Update"),
+						displayText(
+							`Your version of BCE is outdated and may not be supported. Please update.
 
-	Your version: ${BCE_VERSION}
-	Latest version: ${latest}
+	Your version: $Version
+	Latest version: $Latest
 
 	Changelog available on GitLab (raw) and Discord:
 	- https://gitlab.com/Sidiousious/bce/-/commits/main/
-	- ${DISCORD_INVITE_URL}`
+	- $DiscordUrl`,
+							{
+								$Version: BCE_VERSION,
+								$Latest: latest,
+								$DiscordUrl: DISCORD_INVITE_URL,
+							}
+						)
 					);
 				}
 			})
@@ -1051,8 +1266,10 @@ async function BondageClubEnhancements() {
 	function beepImprovements() {
 		if (typeof StartBcUtil === "function") {
 			bceBeepNotify(
-				"Incompatibility",
-				"BCE is incompatible with BCUtil. Some functionality from BCE may not work. BCUtil's wardrobe, appearance, and instant messaging functionality are all available within BCE. Go to BCE settings and enable the relevant options, then disable BCUtil to migrate fully to BCE. This beep will appear every time BCE detects BCUtil as having loaded before BCE."
+				displayText("Incompatibility"),
+				displayText(
+					"BCE is incompatible with BCUtil. Some functionality from BCE may not work. BCUtil's wardrobe, appearance, and instant messaging functionality are all available within BCE. Go to BCE settings and enable the relevant options, then disable BCUtil to migrate fully to BCE. This beep will appear every time BCE detects BCUtil as having loaded before BCE."
+				)
 			);
 			return;
 		}
@@ -1247,27 +1464,24 @@ async function BondageClubEnhancements() {
 					);
 					let timeMessage = "";
 					if (DialogFocusSourceItem.Property.ShowTimer) {
-						timeMessage += " to ";
-						if (until.days > 0) {
-							timeMessage += `${until.days} days, `;
-						}
-						if (until.hours > 0) {
-							timeMessage += `${until.hours} hours, `;
-						}
-						if (until.minutes > 0) {
-							timeMessage += `${until.minutes} minutes, `;
-						}
-						if (until.seconds > 0) {
-							timeMessage += `${until.seconds} seconds`;
-						}
+						timeMessage =
+							" to $days days, $hours hours, $minutes minutes, and $seconds seconds";
 					}
 					bceSendAction(
-						`${Player.Name} changed the timer on the ${
-							DialogFocusItem?.Asset?.Description?.toLowerCase() || "timer lock"
-						} on ${CharacterGetCurrent().Name}'s ${
-							CharacterGetCurrent().FocusGroup?.Description?.toLowerCase() ||
-							"body"
-						}${timeMessage.replace(/[,\s]+$/u, "")}.`
+						displayText(
+							`$PlayerName changed the timer on the $ItemName on $TargetName $GroupName ${timeMessage}`,
+							{
+								$PlayerName: Player.Name,
+								$ItemName: DialogFocusItem?.Asset?.Description?.toLowerCase(),
+								$TargetName: CharacterGetCurrent()?.Name,
+								$GroupName:
+									CharacterGetCurrent()?.FocusGroup?.Description?.toLowerCase(),
+								$days: until.days.toString(),
+								$hours: until.hours.toString(),
+								$minutes: until.minutes.toString(),
+								$seconds: until.seconds.toString(),
+							}
+						)
 					);
 				}
 			};
@@ -1362,12 +1576,21 @@ async function BondageClubEnhancements() {
 		const cmds = [
 			{
 				Tag: "bcedebug",
-				Description: "Get debug information to share with developers.",
+				Description: displayText(
+					"Get debug information to share with developers."
+				),
 				Action: async () => {
 					/** @type {Map<string, string>} */
 					const info = new Map();
 					info.set("Browser", navigator.userAgent);
-					info.set("Game Version", GameVersion);
+					info.set(
+						"Game Version",
+						`${GameVersion}${
+							SUPPORTED_GAME_VERSIONS.includes(GameVersion)
+								? ""
+								: " (unsupported)"
+						}`
+					);
 					info.set("WebGL Version", GLVersion);
 					info.set("BCE Version", BCE_VERSION);
 					info.set(
@@ -1402,15 +1625,16 @@ async function BondageClubEnhancements() {
 			},
 			{
 				Tag: "bcechangelog",
-				Description: "Show recent BCE changelog",
+				Description: displayText("Show recent BCE changelog"),
 				Action: () => {
 					bceChatNotify(bceChangelog);
 				},
 			},
 			{
 				Tag: "exportlooks",
-				Description:
-					"[target member number] [includeBinds: true/false] [total: true/false]: Copy your or another player's appearance in a format that can be imported with BCX",
+				Description: displayText(
+					"[target member number] [includeBinds: true/false] [total: true/false]: Copy your or another player's appearance in a format that can be imported with BCX"
+				),
 				Action: async (_, _command, args) => {
 					const [target, includeBindsArg, total] = args;
 					/** @type {Character} */
@@ -1454,15 +1678,16 @@ async function BondageClubEnhancements() {
 					const looks = (
 						total === "true" ? targetMember.Appearance : appearance
 					).map((i) => {
-						if (i.Property?.LockMemberNumber) {
-							i.Property.LockMemberNumber = Player.MemberNumber;
+						const property = i.Property ? { ...i.Property } : {};
+						if (property?.LockMemberNumber) {
+							property.LockMemberNumber = Player.MemberNumber;
 						}
 						return {
 							Group: i.Asset.Group.Name,
 							Name: i.Asset.Name,
 							Color: i.Color,
 							Difficulty: i.Difficulty,
-							Property: i.Property,
+							Property: property,
 						};
 					});
 
@@ -1471,13 +1696,18 @@ async function BondageClubEnhancements() {
 						: targetMember.Name;
 
 					await navigator.clipboard.writeText(JSON.stringify(looks));
-					bceChatNotify(`Exported looks for ${targetName} copied to clipboard`);
+					bceChatNotify(
+						displayText(`Exported looks for $TargetName copied to clipboard`, {
+							$TargetName: targetName,
+						})
+					);
 				},
 			},
 			{
 				Tag: "importlooks",
-				Description:
-					"[looks string]: Import looks from a string (BCX or BCE export)",
+				Description: displayText(
+					"[looks string]: Import looks from a string (BCX or BCE export)"
+				),
 				Action: (_, command) => {
 					if (!Player.CanChange() || !OnlineGameAllowChange()) {
 						bceLog(
@@ -1534,27 +1764,31 @@ async function BondageClubEnhancements() {
 							Player.MemberNumber
 						);
 						ChatRoomCharacterUpdate(Player);
-						bceChatNotify("Applied looks");
+						bceChatNotify(displayText("Applied looks"));
 					} catch (e) {
 						console.error(e);
-						bceChatNotify("Could not parse looks");
+						bceChatNotify(displayText("Could not parse looks"));
 					}
 				},
 			},
 			{
 				Tag: "beep",
-				Description: "[membernumber] [message]: beep someone",
+				Description: displayText("[membernumber] [message]: beep someone"),
 				Action: (_, command, args) => {
 					const [target] = args,
 						[, , ...message] = command.split(" "),
 						msg = message?.join(" ");
 					if (!target || !msg || !/^\d+$/u.test(target)) {
-						bceChatNotify(`beep target or message not provided`);
+						bceChatNotify(displayText(`beep target or message not provided`));
 						return;
 					}
 					const targetMemberNumber = parseInt(target);
 					if (!Player.FriendList.includes(targetMemberNumber)) {
-						bceChatNotify(`${target} is not in your friend list`);
+						bceChatNotify(
+							displayText(`$Target is not in your friend list`, {
+								$Target: target,
+							})
+						);
 						return;
 					}
 					ServerSend("AccountBeep", {
@@ -1581,19 +1815,23 @@ async function BondageClubEnhancements() {
 						FriendListModeIndex = 1;
 						FriendListShowBeep(beepId);
 					};
-					link.textContent = `(Beep to ${Player.FriendNames.get(
-						targetMemberNumber
-					)} (${targetMemberNumber}): ${
-						msg.length > 150 ? `${msg.substring(0, 150)}...` : msg
-					})`;
+					link.textContent = displayText(
+						"(Beep to $Name ($Number): $Message)",
+						{
+							$Name: Player.FriendNames.get(targetMemberNumber),
+							$Number: targetMemberNumber.toString(),
+							$Message: msg.length > 150 ? `${msg.substring(0, 150)}...` : msg,
+						}
+					);
 					link.classList.add("bce-beep-link");
 					bceChatNotify(link);
 				},
 			},
 			{
 				Tag: "w",
-				Description:
-					"[target name] [message]: whisper the target player. Use first name only. Finds the first person in the room with a matching name, left-to-right, top-to-bottom.",
+				Description: displayText(
+					"[target name] [message]: whisper the target player. Use first name only. Finds the first person in the room with a matching name, left-to-right, top-to-bottom."
+				),
 				Action: (_, command, args) => {
 					const [target] = args,
 						[, , ...message] = command.split(" "),
@@ -1606,14 +1844,17 @@ async function BondageClubEnhancements() {
 						bceChatNotify(`Whisper target not found: ${target}`);
 					} else if (targetMembers.length > 1) {
 						bceChatNotify(
-							`Multiple whisper targets found: ${targetMembers
-								.map((c) => `${c.Name} (${c.MemberNumber})`)
-								.join(
-									", "
-								)}. You can still whisper the player by clicking their name.`
+							displayText(
+								"Multiple whisper targets found: $Targets. You can still whisper the player by clicking their name.",
+								{
+									$Targets: targetMembers
+										.map((c) => `${c.Name} (${c.MemberNumber})`)
+										.join(", "),
+								}
+							)
 						);
 					} else if (!msg) {
-						bceChatNotify(`No message provided`);
+						bceChatNotify(displayText(`No message provided`));
 					} else {
 						const targetMemberNumber = targetMembers[0].MemberNumber;
 						const originalTarget = ChatRoomTargetMemberNumber;
@@ -1632,27 +1873,34 @@ async function BondageClubEnhancements() {
 			},
 			{
 				Tag: "versions",
-				Description:
-					"show versions of the club, BCE, and BCX in use by players",
+				Description: displayText(
+					"show versions of the club, BCE, and BCX in use by players"
+				),
 				Action: () => {
-					bceChatNotify(
-						ChatRoomCharacter.map(
-							(a) =>
-								`${a.Name} (${a.MemberNumber}) club ${
-									a.OnlineSharedSettings?.GameVersion
-								}${
-									bcx?.getCharacterVersion(a.MemberNumber)
-										? ` BCX ${bcx.getCharacterVersion(a.MemberNumber)}`
-										: ""
-								}${
-									a.BCE
-										? `\nBCE v${a.BCE} Alt Arousal: ${a.BCEArousal?.toString()}`
-										: ""
-								}`
-						)
+					/** @type {(chars: Character[]) => string} */
+					const versionOutput = (chars) =>
+						chars
+							.map(
+								(a) =>
+									`${a.Name} (${a.MemberNumber}) club ${
+										a.OnlineSharedSettings?.GameVersion
+									}${
+										bcx?.getCharacterVersion(a.MemberNumber)
+											? ` BCX ${bcx.getCharacterVersion(a.MemberNumber)}`
+											: ""
+									}${
+										a.BCE
+											? `\nBCE v${
+													a.BCE
+											  } Alt Arousal: ${a.BCEArousal?.toString()}`
+											: ""
+									}`
+							)
 							.filter((a) => a)
-							.join("\n\n")
-					);
+							.join("\n\n");
+
+					bceChatNotify(versionOutput(ChatRoomCharacterDrawlist));
+					bceLog(versionOutput(ChatRoomCharacter));
 				},
 			},
 		];
@@ -1704,12 +1952,17 @@ async function BondageClubEnhancements() {
 			);
 
 		/** @type {[number, number, number, number]} */
-		const discordInvitePosition = [1650, 810, 250, 90];
+		const discordInvitePosition = [1650, 810, 250, 50];
+		/** @type {[number, number, number, number]} */
+		const licensePosition = [1650, 870, 250, 50];
 		let currentPageNumber = 0;
 
 		/** @type {SettingsCategory | null} */
 		let currentCategory = null;
-		/** @type {SettingsCategory[]} */
+		/**
+		 * Excludes hidden
+		 * @type {SettingsCategory[]}
+		 */
 		const settingsCategories = [
 			"chat",
 			"activities",
@@ -1729,11 +1982,12 @@ async function BondageClubEnhancements() {
 			misc: "Misc",
 			cheats: "Cheats",
 			addons: "Other Addons",
+			hidden: "",
 		};
 
 		const currentDefaultSettings = (category) =>
 			Object.entries(defaultSettings).filter(
-				([, v]) => v.category === category
+				([, v]) => v.category === category && v.value === !!v.value
 			);
 
 		w.PreferenceSubscreenBCESettingsLoad = function () {
@@ -1745,12 +1999,26 @@ async function BondageClubEnhancements() {
 		};
 		w.PreferenceSubscreenBCESettingsRun = function () {
 			w.MainCanvas.getContext("2d").textAlign = "left";
-			DrawText("Bondage Club Enhancements Settings", 300, 125, "Black", "Gray");
+			DrawText(
+				displayText("Bondage Club Enhancements Settings"),
+				300,
+				125,
+				"Black",
+				"Gray"
+			);
 			DrawButton(...discordInvitePosition, "", "White", "");
 			DrawText(
-				"Join Discord",
+				displayText("Join Discord"),
 				discordInvitePosition[0] + 20,
 				discordInvitePosition[1] + discordInvitePosition[3] / 2,
+				"Black",
+				""
+			);
+			DrawButton(...licensePosition, "", "White", "");
+			DrawText(
+				displayText("License"),
+				licensePosition[0] + 20,
+				licensePosition[1] + licensePosition[3] / 2,
 				"Black",
 				""
 			);
@@ -1769,8 +2037,8 @@ async function BondageClubEnhancements() {
 						y,
 						64,
 						64,
-						defaultSetting.label,
-						bceSettings[settingName]
+						displayText(defaultSetting.label),
+						!!bceSettings[settingName]
 					);
 					y += settingsYIncrement;
 				}
@@ -1787,7 +2055,7 @@ async function BondageClubEnhancements() {
 				for (const category of settingsCategories) {
 					DrawButton(300, y, 400, 64, "", "White");
 					DrawTextFit(
-						settingCategoryLabels[category],
+						displayText(settingCategoryLabels[category]),
 						310,
 						y + 32,
 						380,
@@ -1796,6 +2064,7 @@ async function BondageClubEnhancements() {
 					y += settingsYIncrement;
 				}
 			}
+			w.MainCanvas.getContext("2d").textAlign = "center";
 		};
 		w.PreferenceSubscreenBCESettingsClick = function () {
 			let y = settingsYStart;
@@ -1805,6 +2074,8 @@ async function BondageClubEnhancements() {
 				} else {
 					currentCategory = null;
 				}
+			} else if (MouseIn(...licensePosition)) {
+				open(BCE_LICENSE, "_blank");
 			} else if (MouseIn(...discordInvitePosition)) {
 				open(DISCORD_INVITE_URL, "_blank");
 			} else if (currentCategory !== null) {
@@ -1861,13 +2132,25 @@ async function BondageClubEnhancements() {
 			(args, next) => {
 				switch (args[0]) {
 					case "HomepageBCESettings":
-						return "BCE Settings";
+						return displayText("BCE Settings");
 					default:
 						return next(args);
 				}
 			}
 		);
 		PreferenceSubscreenList.push("BCESettings");
+
+		/** @type {(e: KeyboardEvent) => void} */
+		function keyHandler(e) {
+			if (e.key === "Escape" && currentCategory !== null) {
+				currentCategory = null;
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		}
+
+		document.addEventListener("keydown", keyHandler, true);
+		document.addEventListener("keypress", keyHandler, true);
 	}
 
 	async function lockpickHelp() {
@@ -1972,9 +2255,15 @@ async function BondageClubEnhancements() {
 			SDK.hookFunction("LoginRun", HOOK_PRIORITIES.Top, (args, next) => {
 				const ret = next(args);
 				if (Object.keys(loginData.passwords).length > 0) {
-					DrawText("Saved Logins (BCE)", 170, 35, "White", "Black");
+					DrawText(
+						displayText("Saved Logins (BCE)"),
+						170,
+						35,
+						"White",
+						"Black"
+					);
 				}
-				DrawButton(1250, 385, 180, 60, "Save (BCE)", "White");
+				DrawButton(1250, 385, 180, 60, displayText("Save (BCE)"), "White");
 
 				let y = 60;
 				for (const user in loginData.passwords) {
@@ -2069,7 +2358,7 @@ async function BondageClubEnhancements() {
 					MemberName: "VOID",
 					ChatRoomName: "VOID",
 					Private: true,
-					Message: "Reconnected!",
+					Message: displayText("Reconnected!"),
 					ChatRoomSpace: "",
 				},
 			]);
@@ -2089,10 +2378,11 @@ async function BondageClubEnhancements() {
 						{
 							MemberNumber: Player.MemberNumber,
 							MemberName: Player.Name,
-							ChatRoomName: "ERROR",
+							ChatRoomName: displayText("ERROR"),
 							Private: true,
-							Message:
-								"Signed in from a different location! Refresh the page to re-enable relogin in this tab.",
+							Message: displayText(
+								"Signed in from a different location! Refresh the page to re-enable relogin in this tab."
+							),
 							ChatRoomSpace: "",
 						},
 					]);
@@ -2494,7 +2784,59 @@ async function BondageClubEnhancements() {
 	async function automaticExpressions() {
 		await waitFor(() => CurrentScreen === "ChatRoom");
 
-		bceLog("Started arousal faces");
+		patchFunction(
+			"StruggleStrength",
+			{
+				'CharacterSetFacialExpression(Player, "Blush", "Low");':
+					'CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
+				'CharacterSetFacialExpression(Player, "Blush", "Medium");':
+					'CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
+				'CharacterSetFacialExpression(Player, "Blush", "High");':
+					'CharacterSetFacialExpression(Player, "Blush", "High", 10);',
+				'CharacterSetFacialExpression(Player, "Fluids", "DroolMessy");':
+					'CharacterSetFacialExpression(Player, "Fluids", "DroolMessy", 10);',
+				'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null);':
+					'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null, 10);',
+				"StruggleProgressStruggleCount ==": "StruggleProgressStruggleCount >=",
+			},
+			"Resetting blush, fluids and eyebrows after brute force struggling"
+		);
+
+		patchFunction(
+			"StruggleFlexibility",
+			{
+				'CharacterSetFacialExpression(Player, "Blush", "Low");':
+					'CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
+				'CharacterSetFacialExpression(Player, "Blush", "Medium");':
+					'CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
+				'CharacterSetFacialExpression(Player, "Blush", "High");':
+					'CharacterSetFacialExpression(Player, "Blush", "High", 10);',
+				'CharacterSetFacialExpression(Player, "Eyes2", "Closed");':
+					'CharacterSetFacialExpression(Player, "Eyes2", "Closed", 10);',
+				'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null);':
+					'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null, 10);',
+				"StruggleProgressStruggleCount ==": "StruggleProgressStruggleCount >=",
+			},
+			"Resetting blush, eyes2 and eyebrows after flexibility struggling"
+		);
+
+		patchFunction(
+			"StruggleDexterity",
+			{
+				'CharacterSetFacialExpression(Player, "Blush", "Low");':
+					'CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
+				'CharacterSetFacialExpression(Player, "Blush", "Medium");':
+					'CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
+				'CharacterSetFacialExpression(Player, "Blush", "High");':
+					'CharacterSetFacialExpression(Player, "Blush", "High", 10);',
+				'CharacterSetFacialExpression(Player, "Eyes", "Dazed");':
+					'CharacterSetFacialExpression(Player, "Eyes", "Dazed", 10);',
+				'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null);':
+					'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null, 10);',
+				"StruggleProgressStruggleCount ==": "StruggleProgressStruggleCount >=",
+			},
+			"Resetting blush, eyes and eyebrows after dexterity struggling"
+		);
 
 		if (!w.bce_ArousalExpressionStages) {
 			// eslint-disable-next-line camelcase
@@ -3560,6 +3902,9 @@ async function BondageClubEnhancements() {
 						{
 							Tester:
 								/^(TriggerShock|(ShockCollar|Collar(Auto)?ShockUnit|(LoveChastityBelt|SciFiPleasurePanties)Shock)Trigger)0$/u,
+							Criteria: {
+								TargetIsPlayer: true,
+							},
 						},
 					],
 				},
@@ -3821,8 +4166,9 @@ async function BondageClubEnhancements() {
 
 		Commands.push({
 			Tag: "r",
-			Description:
-				"[part of face or 'all']: resets expression overrides on part of or all of face",
+			Description: displayText(
+				"[part of face or 'all']: resets expression overrides on part of or all of face"
+			),
 			Action: (args) => {
 				if (args.length === 0 || args === "all") {
 					bceExpressionsQueue.push(
@@ -3830,7 +4176,7 @@ async function BondageClubEnhancements() {
 							.splice(0, bceExpressionsQueue.length)
 							.filter((e) => e.Type === MANUAL_OVERRIDE_EVENT_TYPE && e.Poses)
 					);
-					bceChatNotify("Reset all expressions");
+					bceChatNotify(displayText("Reset all expressions"));
 				} else {
 					const component = `${args[0].toUpperCase()}${args
 						.substring(1)
@@ -3843,26 +4189,32 @@ async function BondageClubEnhancements() {
 							delete e.Expression[component];
 						}
 					}
-					bceChatNotify(`Reset expression on ${component}`);
+					bceChatNotify(
+						displayText(`Reset expression on $component`, {
+							$component: component,
+						})
+					);
 				}
 			},
 		});
 
 		Commands.push({
 			Tag: "anim",
-			Description: "['list' or name of emote]: run an animation",
+			Description: displayText("['list' or name of emote]: run an animation"),
 			Action: (_1, _2, args) => {
 				if (!bceSettings.activityExpressions) {
 					bceChatNotify(
-						"Activity expressions are not enabled in BCE settings. Unable to run animations."
+						displayText(
+							"Activity expressions are not enabled in BCE settings. Unable to run animations."
+						)
 					);
 					return;
 				}
 				if (args[0] === "list") {
 					bceChatNotify(
-						`Available animations: ${Object.keys(w.bce_EventExpressions).join(
-							", "
-						)}`
+						displayText(`Available animations: $anims`, {
+							$anims: Object.keys(w.bce_EventExpressions).join(", "),
+						})
 					);
 				}
 				const animation = Object.keys(w.bce_EventExpressions).find(
@@ -3876,7 +4228,7 @@ async function BondageClubEnhancements() {
 
 		Commands.push({
 			Tag: "pose",
-			Description: "['list' or list of poses]: set your pose",
+			Description: displayText("['list' or list of poses]: set your pose"),
 			Action: (_1, _2, poses) => {
 				if (poses[0] === "list") {
 					const categories = [
@@ -3893,7 +4245,9 @@ async function BondageClubEnhancements() {
 				}
 				if (!bceSettings.expressions && !bceSettings.activityExpressions) {
 					bceChatNotify(
-						"Warning: both expression settings in BCE are disabled. Animation engine disabled. Pose may not be synchronized or set."
+						displayText(
+							"Warning: both expression settings in BCE are disabled. Animation engine disabled. Pose may not be synchronized or set."
+						)
 					);
 				}
 				bceExpressionsQueue.forEach((e) => {
@@ -4471,6 +4825,17 @@ async function BondageClubEnhancements() {
 	async function layeringMenu() {
 		await waitFor(() => !!Player?.AppearanceLayers);
 
+		const canAccessLayeringMenus = () => {
+			const c = CharacterGetCurrent();
+			return (
+				bceSettings.layeringMenu &&
+				(bceSettings.allowLayeringWhileBound ||
+					(Player.CanInteract() &&
+						c?.FocusGroup?.Name &&
+						!InventoryGroupIsBlocked(c, c.FocusGroup.Name)))
+			);
+		};
+
 		// Pseudo-items that we do not want to process for color copying
 		const ignoredColorCopiableAssets = [
 			"LeatherCrop",
@@ -4537,7 +4902,7 @@ async function BondageClubEnhancements() {
 				if (bceSettings.layeringMenu) {
 					const C = CharacterAppearanceSelection;
 					if (CharacterAppearanceMode === "Cloth") {
-						DrawText("Priority", 70, 35, "White", "Black");
+						DrawText(displayText("Priority"), 70, 35, "White", "Black");
 						ElementPosition(layerPriority, 60, 105, 100);
 						DrawButton(
 							110,
@@ -4547,7 +4912,7 @@ async function BondageClubEnhancements() {
 							"",
 							"White",
 							"Icons/Accept.png",
-							"Set Priority"
+							displayText("Set Priority")
 						);
 						const item = C.Appearance.find(
 							(a) => a.Asset.Group === C.FocusGroup
@@ -4659,7 +5024,7 @@ async function BondageClubEnhancements() {
 			HOOK_PRIORITIES.AddBehaviour,
 			(args, next) => {
 				const [C] = args;
-				if (isCharacter(C) && bceSettings.layeringMenu) {
+				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
 						DrawButton(
@@ -4670,7 +5035,7 @@ async function BondageClubEnhancements() {
 							"",
 							"White",
 							ICONS.TIGHTEN,
-							"Loosen or tighten (Cheat)"
+							displayText("Loosen or tighten")
 						);
 						if (
 							colorCopiableAssets.includes(focusItem.Asset.Name) &&
@@ -4684,7 +5049,9 @@ async function BondageClubEnhancements() {
 								"",
 								"White",
 								ICONS.PAINTBRUSH,
-								`Copy colors to other ${focusItem.Asset.Description.toLowerCase()}`
+								displayText(`Copy colors to other $Item`, {
+									$Item: focusItem.Asset.Description.toLowerCase(),
+								})
 							);
 						}
 					}
@@ -4697,7 +5064,7 @@ async function BondageClubEnhancements() {
 							"",
 							"White",
 							ICONS.LAYERS,
-							"Modify layering priority"
+							displayText("Modify layering priority")
 						);
 					}
 				}
@@ -4711,24 +5078,36 @@ async function BondageClubEnhancements() {
 			(args, next) => {
 				const C = CharacterGetCurrent(),
 					focusItem = InventoryGet(C, C.FocusGroup?.Name);
-				if (bceSettings.layeringMenu && prioritySubscreen) {
-					if (focusItem) {
-						DrawText(`Set item ${priorityField}`, 950, 150, "White", "Black");
-						DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png");
-						ElementPosition(layerPriority, 950, 210, 100);
-						DrawButton(
-							900,
-							280,
-							90,
-							90,
-							"",
-							"White",
-							"Icons/Accept.png",
-							`Set ${priorityField}`
-						);
-						return null;
+				if (prioritySubscreen) {
+					if (canAccessLayeringMenus()) {
+						if (focusItem) {
+							// Localization guide: valid options for priorityField can be seen in the "const FIELDS" object above
+							DrawText(
+								displayText(`Set item ${priorityField}`),
+								950,
+								150,
+								"White",
+								"Black"
+							);
+							DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png");
+							ElementPosition(layerPriority, 950, 210, 100);
+							DrawButton(
+								900,
+								280,
+								90,
+								90,
+								"",
+								"White",
+								"Icons/Accept.png",
+								// Localization guide: valid options for priorityField can be seen in the "const FIELDS" object above
+								displayText(`Set ${priorityField}`)
+							);
+							return null;
+						}
+						prioritySubscreenExit();
+					} else {
+						prioritySubscreenExit();
 					}
-					prioritySubscreenExit();
 				}
 				return next(args);
 			}
@@ -4738,7 +5117,7 @@ async function BondageClubEnhancements() {
 			"DialogClick",
 			HOOK_PRIORITIES.OverrideBehaviour,
 			(args, next) => {
-				if (!bceSettings.layeringMenu) {
+				if (!canAccessLayeringMenus()) {
 					return next(args);
 				}
 				const C = CharacterGetCurrent(),
@@ -4780,9 +5159,14 @@ async function BondageClubEnhancements() {
 			if (CurrentScreen === "ChatRoom") {
 				ChatRoomCharacterUpdate(C);
 				bceSendAction(
-					`${
-						Player.Name
-					}'s ${focusItem.Asset.Description.toLowerCase()} colors spread from her ${focusItem.Asset.Group.Description.toLowerCase()}`
+					displayText(
+						"$PlayerName $ItemName colors spread from her $ItemGroup",
+						{
+							$PlayerName: Player.Name,
+							$ItemName: focusItem.Asset.Description.toLowerCase(),
+							$ItemGroup: focusItem.Asset.Group.Description.toLowerCase(),
+						}
+					)
 				);
 			} else {
 				CharacterRefresh(C);
@@ -4831,7 +5215,7 @@ async function BondageClubEnhancements() {
 							action = "tightens";
 						}
 						focusItem.Difficulty = newDifficulty;
-					
+
 					}
 					break;
 				default:
@@ -4867,7 +5251,15 @@ async function BondageClubEnhancements() {
 				GLDrawCanvas.GL.textureCache.clear();
 			}
 			GLDrawResetCanvas();
-			Character.forEach((c) => CharacterRefresh(c, false, false));
+			const oldOnlineCharacters = Character.filter(
+				(c) =>
+					c.IsOnline?.() &&
+					!ChatRoomCharacter.some((cc) => cc.MemberNumber === c.MemberNumber)
+			);
+			oldOnlineCharacters.forEach((c) => CharacterDelete(c.AccountName));
+			Character.filter((c) => c.IsOnline?.()).forEach((c) =>
+				CharacterRefresh(c, false, false)
+			);
 		};
 
 		const clearCaches = () => {
@@ -4926,9 +5318,10 @@ async function BondageClubEnhancements() {
 				message: {
 					type: MESSAGE_TYPES.Hello,
 					version: BCE_VERSION,
-					alternateArousal: bceSettings.alternateArousal,
+					alternateArousal: !!bceSettings.alternateArousal,
 					replyRequested: requestReply,
 					capabilities: CAPABILITIES,
+					nick: Player.BCEOriginalName ? Player.Name : null,
 				},
 			},
 		};
@@ -4946,6 +5339,7 @@ async function BondageClubEnhancements() {
 
 		ServerSocket.on(
 			"ChatRoomMessage",
+			// eslint-disable-next-line complexity
 			(
 				/** @type {BCEChatMessage} */
 				data
@@ -4964,6 +5358,21 @@ async function BondageClubEnhancements() {
 							sender.BCE = message.version;
 							sender.BCEArousal = message.alternateArousal || false;
 							sender.BCECapabilities = message.capabilities;
+							if (bceSettings.nicknames) {
+								const newName = removeNonPrintables(message.nick);
+								if (newName && newName.length <= 20) {
+									if (!sender.BCEOriginalName) {
+										sender.BCEOriginalName = sender.Name;
+									}
+									sender.Name = newName;
+									if (sender.BCEOriginalName === sender.Name) {
+										delete sender.BCEOriginalName;
+									}
+								} else if (sender.BCEOriginalName) {
+									sender.Name = sender.BCEOriginalName;
+									delete sender.BCEOriginalName;
+								}
+							}
 							if (message.replyRequested) {
 								sendHello(sender.MemberNumber);
 							}
@@ -5113,6 +5522,21 @@ async function BondageClubEnhancements() {
 				return next(args);
 			}
 		);
+
+		/** @type {(e: KeyboardEvent) => void} */
+		function keyHandler(e) {
+			if (!bceSettings.privateWardrobe) {
+				return;
+			}
+			if (e.key === "Escape" && inCustomWardrobe) {
+				WardrobeExit();
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		}
+
+		document.addEventListener("keydown", keyHandler, true);
+		document.addEventListener("keypress", keyHandler, true);
 	}
 
 	async function antiGarbling() {
@@ -5231,6 +5655,7 @@ async function BondageClubEnhancements() {
 				const ret = next(args);
 				if (
 					bceSettings.showQuickAntiGarble &&
+					!bceSettings.discreetMode &&
 					CharacterGetCurrent() === null &&
 					CurrentScreen === "ChatRoom" &&
 					document.getElementById("InputChat")
@@ -5285,20 +5710,20 @@ async function BondageClubEnhancements() {
 					}
 				}
 
-				if (!bceSettings.showQuickAntiGarble) {
+				if (!bceSettings.showQuickAntiGarble || bceSettings.discreetMode) {
 					return ret;
 				}
-				const shorttip = "Gagging: ",
-					tooltip = "Antigarble anti-cheat strength: ";
+				const shorttip = displayText("Gagging"),
+					tooltip = displayText("Antigarble anti-cheat strength");
 
 				let color = "white",
 					label = "None";
 
-				const disableBoth = () => `${tooltip}None`,
-					enableLimited = () => `${tooltip}Limited`,
-					enableStrong = () => `${tooltip}Full`,
+				const disableBoth = () => displayText("$tip: None", { $tip: tooltip }),
+					enableLimited = () => displayText("$tip: Limited", { $tip: tooltip }),
+					enableStrong = () => displayText("$tip: Full", { $tip: tooltip }),
 					// eslint-disable-next-line sort-vars
-					enableExtra = () => `${tooltip}Extra`;
+					enableExtra = () => displayText("$tip: Extra", { $tip: tooltip });
 
 				let next = enableLimited,
 					previous = enableExtra;
@@ -5321,7 +5746,8 @@ async function BondageClubEnhancements() {
 				}
 				DrawBackNextButton(
 					...gagAntiCheatMenuPosition,
-					shorttip + label,
+					// Localization guide: ignore, covered by localizing the arrow functions above
+					displayText(`$tip: ${label}`, { $tip: shorttip }),
 					color,
 					"",
 					previous,
@@ -5336,11 +5762,11 @@ async function BondageClubEnhancements() {
 				/** @type {[string, string, string, () => string, () => string, boolean, number, Position]} */
 				const gagCheatMenuParams = bceSettings.gagspeak
 					? [
-							"Understand: Yes",
+							displayText("Understand: Yes"),
 							"green",
 							"",
-							() => "Understand gagspeak: No",
-							() => "Understand gagspeak: No",
+							() => displayText("Understand gagspeak: No"),
+							() => displayText("Understand gagspeak: No"),
 							// eslint-disable-next-line no-undefined
 							undefined,
 							// eslint-disable-next-line no-undefined
@@ -5351,8 +5777,8 @@ async function BondageClubEnhancements() {
 							"Understand: No",
 							"white",
 							"",
-							() => "Understand gagspeak: Yes",
-							() => "Understand gagspeak: Yes",
+							() => displayText("Understand gagspeak: Yes"),
+							() => displayText("Understand gagspeak: Yes"),
 							// eslint-disable-next-line no-undefined
 							undefined,
 							// eslint-disable-next-line no-undefined
@@ -5369,7 +5795,7 @@ async function BondageClubEnhancements() {
 			"ChatRoomClick",
 			HOOK_PRIORITIES.ModifyBehaviourHigh,
 			(args, nextFunc) => {
-				if (bceSettings.showQuickAntiGarble) {
+				if (bceSettings.showQuickAntiGarble && !bceSettings.discreetMode) {
 					if (MouseIn(...gagAntiCheatMenuPosition)) {
 						const disableAll = () => {
 								bceSettings.antiAntiGarble = false;
@@ -5629,21 +6055,22 @@ async function BondageClubEnhancements() {
 							maxProgress = vibes === 0 || vibes > noOrgasmVibes ? 100 : 95;
 							break;
 					}
-					let stepInterval = 1;
+					const topStepInterval = 2;
+					let stepInterval = topStepInterval;
 					if (Factor < 0) {
 						ActivityVibratorLevel(Character[C], 0);
 					} else {
 						if (Factor < 1) {
 							ActivityVibratorLevel(Character[C], 1);
 							maxProgress = Math.min(maxProgress, 35);
-							stepInterval = 6;
+							stepInterval = 5;
 						} else if (Factor < 2) {
 							ActivityVibratorLevel(Character[C], 1);
 							maxProgress = Math.min(maxProgress, 65);
 							stepInterval = 4;
 						} else if (Factor < 3) {
 							maxProgress = Math.min(maxProgress, 95);
-							stepInterval = 2;
+							stepInterval = 3;
 							ActivityVibratorLevel(Character[C], 2);
 						} else {
 							ActivityVibratorLevel(Character[C], Math.min(4, Math.floor(Factor)));
@@ -5653,9 +6080,7 @@ async function BondageClubEnhancements() {
 						}
 						let maxIncrease = maxProgress - Character[C].ArousalSettings.Progress;
 						if (TimerLastArousalProgressCount % stepInterval === 0 && maxIncrease > 0) {
-							if (stepInterval === 1) {
-								Character[C].BCEEnjoyment = 1 + (Factor > 1 ? Math.round(1.5*Math.log2(Factor)) : 0);
-							}
+							Character[C].BCEEnjoyment = 1 + (Factor > 1 ? Math.round(1.5*Math.log2(Factor)) : 0);
 							ActivityTimerProgress(Character[C], 1);
 						}
 					}
@@ -5743,13 +6168,17 @@ async function BondageClubEnhancements() {
 				GLASSES_BLUR_TARGET.classList.contains(GLASSES_BLIND_CLASS)
 			) {
 				GLASSES_BLUR_TARGET.classList.remove(GLASSES_BLIND_CLASS);
-				bceChatNotify("Having recovered your glasses you can see again!");
+				bceChatNotify(
+					displayText("Having recovered your glasses you can see again!")
+				);
 			} else if (
 				!hasGlasses &&
 				!GLASSES_BLUR_TARGET.classList.contains(GLASSES_BLIND_CLASS)
 			) {
 				GLASSES_BLUR_TARGET.classList.add(GLASSES_BLIND_CLASS);
-				bceChatNotify("Having lost your glasses your eyesight is impaired!");
+				bceChatNotify(
+					displayText("Having lost your glasses your eyesight is impaired!")
+				);
 			}
 		}
 
@@ -5802,32 +6231,30 @@ async function BondageClubEnhancements() {
 						(f) => !lastFriends.some((ff) => ff.MemberNumber === f)
 					);
 				if (onlineFriends.length) {
-					bceNotify(
-						`Now online: ${onlineFriends
-							.map((f) => {
-								const { MemberNumber, MemberName } = data.Result.find(
-									(d) => d.MemberNumber === f
-								);
-								return `${MemberName} (${MemberNumber})`;
-							})
-							.join(", ")}`,
-						5000,
-						{ ClickAction: BEEP_CLICK_ACTIONS.FriendList }
-					);
+					const list = onlineFriends
+						.map((f) => {
+							const { MemberNumber, MemberName } = data.Result.find(
+								(d) => d.MemberNumber === f
+							);
+							return `${MemberName} (${MemberNumber})`;
+						})
+						.join(", ");
+					bceNotify(displayText(`Now online: $list`, { $list: list }), 5000, {
+						ClickAction: BEEP_CLICK_ACTIONS.FriendList,
+					});
 				}
 				if (bceSettings.friendOfflineNotifications && offlineFriends.length) {
-					bceNotify(
-						`Now offline: ${offlineFriends
-							.map((f) => {
-								const { MemberNumber, MemberName } = lastFriends.find(
-									(d) => d.MemberNumber === f
-								);
-								return `${MemberName} (${MemberNumber})`;
-							})
-							.join(", ")}`,
-						5000,
-						{ ClickAction: BEEP_CLICK_ACTIONS.FriendList }
-					);
+					const list = offlineFriends
+						.map((f) => {
+							const { MemberNumber, MemberName } = lastFriends.find(
+								(d) => d.MemberNumber === f
+							);
+							return `${MemberName} (${MemberNumber})`;
+						})
+						.join(", ");
+					bceNotify(displayText(`Now offline: $list`, { $list: list }), 5000, {
+						ClickAction: BEEP_CLICK_ACTIONS.FriendList,
+					});
 				}
 				lastFriends = data.Result;
 			}
@@ -5907,16 +6334,18 @@ async function BondageClubEnhancements() {
 				[
 					"160",
 					"100",
-					"([BCE] Force her to become a Club Slave.)",
-					"(She will become a Club Slave for the next hour.)",
+					displayText("([BCE] Force her to become a Club Slave.)"),
+					displayText("(She will become a Club Slave for the next hour.)"),
 					"bceSendToClubSlavery()",
 					"bceCanSendToClubSlavery()",
 				],
 				[
 					"160",
 					"",
-					"([BCE] Force her to become a Club Slave.)",
-					"(Requires both to use compatible versions of BCE and the target to not already be a club slave.)",
+					displayText("([BCE] Force her to become a Club Slave.)"),
+					displayText(
+						"(Requires both to use compatible versions of BCE and the target to not already be a club slave.)"
+					),
 					"",
 					"!bceCanSendToClubSlavery()",
 				],
@@ -5953,6 +6382,7 @@ async function BondageClubEnhancements() {
 							(v[4].trim().substring(0, 6) === "Dialog" ? "" : "ChatRoom") +
 							v[4],
 						Prerequisite: v[5],
+						Modded: true,
 					}))
 				);
 			};
@@ -6022,7 +6452,10 @@ async function BondageClubEnhancements() {
 			const managementScreen = "Management";
 
 			bceSendAction(
-				`${Player.Name} gets grabbed by two maids and escorted to management to serve as a Club Slave.`
+				displayText(
+					`$PlayerName gets grabbed by two maids and escorted to management to serve as a Club Slave.`,
+					{ $PlayerName: Player.Name }
+				)
 			);
 
 			const room = ChatRoomData.Name;
@@ -6036,8 +6469,9 @@ async function BondageClubEnhancements() {
 			CharacterSetActivePose(Player, "Kneel", false);
 			// eslint-disable-next-line require-atomic-updates
 			ManagementMistress.Stage = "320";
-			ManagementMistress.CurrentDialog =
-				"(You get grabbed by a pair of maids and brought to management.) Your owner wants you to be a Club Slave. Now strip.";
+			ManagementMistress.CurrentDialog = displayText(
+				"(You get grabbed by a pair of maids and brought to management.) Your owner wants you to be a Club Slave. Now strip."
+			);
 			CharacterSetCurrent(ManagementMistress);
 
 			await waitFor(
@@ -6073,7 +6507,10 @@ async function BondageClubEnhancements() {
 
 		const friendSearch = document.createElement("input");
 		friendSearch.id = "bce-friend-search";
-		friendSearch.setAttribute("placeholder", "Search for a friend");
+		friendSearch.setAttribute(
+			"placeholder",
+			displayText("Search for a friend")
+		);
 
 		container.appendChild(leftContainer);
 		container.appendChild(rightContainer);
@@ -6258,10 +6695,10 @@ async function BondageClubEnhancements() {
 			);
 			switch (status) {
 				case "completed":
-					friend.statusText.textContent = "Available";
+					friend.statusText.textContent = displayText("Online");
 					break;
 				default:
-					friend.statusText.textContent = "Unavailable";
+					friend.statusText.textContent = displayText("Unavailable");
 					break;
 			}
 			[...friendList.children]
@@ -6434,6 +6871,9 @@ async function BondageClubEnhancements() {
 				/** @type {{ Query: string; Result: Friend[] }} */
 				data
 			) => {
+				if (data.Query !== "OnlineFriends") {
+					return;
+				}
 				if (data.Result && bceSettings.instantMessenger) {
 					for (const friend of data.Result) {
 						const f = handleUnseenFriend(friend.MemberNumber);
@@ -6506,7 +6946,7 @@ async function BondageClubEnhancements() {
 						"",
 						unreadSinceOpened ? "Red" : "White",
 						"Icons/Small/Chat.png",
-						"Instant Messenger",
+						displayText("Instant Messenger"),
 						false
 					);
 				}
@@ -6638,8 +7078,10 @@ async function BondageClubEnhancements() {
 		await waitFor(() => !!Player?.AccountName);
 		await sleep(5000);
 		bceBeepNotify(
-			"BCE Changelog",
-			`BCE has received significant updates since you last used it:\n\n${bceChangelog}\n\nYou can use /bcechangelog to view this again.`
+			displayText("BCE Changelog"),
+			displayText(
+				`BCE has received significant updates since you last used it. See /bcechangelog in a chatroom.`
+			)
 		);
 	}
 
@@ -6670,8 +7112,10 @@ async function BondageClubEnhancements() {
 				"cdn.discordapp.com",
 				"media.discordapp.com",
 				"i.imgur.com",
+				"tenor.com",
 				"c.tenor.com",
 				"i.redd.it",
+				"puu.sh",
 			].includes(url.host) &&
 			/\/[^/]+\.(png|jpe?g|gif)$/u.test(url.pathname)
 		) {
@@ -6759,28 +7203,412 @@ async function BondageClubEnhancements() {
 		}
 	}
 
+	function discreetMode() {
+		/** @type {(args: [unknown], next: (args: [unknown]) => unknown) => unknown} */
+		const discreetModeHook = (args, next) => {
+			if (bceSettings.discreetMode) {
+				return;
+			}
+			// eslint-disable-next-line consistent-return
+			return next(args);
+		};
+
+		SDK.hookFunction(
+			"ChatRoomDrawBackground",
+			HOOK_PRIORITIES.Top,
+			discreetModeHook
+		);
+
+		SDK.hookFunction("DrawCharacter", HOOK_PRIORITIES.Top, discreetModeHook);
+		SDK.hookFunction(
+			"NotificationDrawFavicon",
+			HOOK_PRIORITIES.Top,
+			discreetModeHook
+		);
+
+		SDK.hookFunction(
+			"DrawImageEx",
+			HOOK_PRIORITIES.Top,
+			/** @type {(args: [string | HTMLImageElement | HTMLCanvasElement], next: (args: [string | HTMLImageElement | HTMLCanvasElement]) => boolean) => boolean} */
+			(args, next) => {
+				if (bceSettings.discreetMode) {
+					if (!args) {
+						return false;
+					}
+					const ignoredImages =
+						/(^Backgrounds\/(?!Sheet(White)?|grey|White\.)|\b(Kneel|Arousal|Activity|Asylum|Cage|Cell|ChangeLayersMouth|Diaper|Kidnap|Logo|Player|Remote|Restriction|SpitOutPacifier|Struggle|Therapy|Orgasm\d|Poses|HouseVincula|Seducer\w+)\b|^data:|^Assets\/(?!Female3DCG\/Emoticon\/(Afk|Sleep|Read|Gaming|Hearing|Thumbs(Up|Down))\/))/u;
+					if (isString(args[0]) && ignoredImages.test(args[0])) {
+						return false;
+					}
+					// @ts-ignore
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+					if (args[0]?.src && ignoredImages.test(args[0].src)) {
+						return false;
+					}
+				}
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"NotificationTitleUpdate",
+			HOOK_PRIORITIES.Top,
+			(args, next) => {
+				if (bceSettings.discreetMode) {
+					const notificationCount = NotificationGetTotalCount(1);
+					document.title = `${
+						notificationCount > 0 ? `(${notificationCount}) ` : ""
+					}${displayText("OnlineChat")}`;
+					return;
+				}
+				// eslint-disable-next-line consistent-return
+				return next(args);
+			}
+		);
+	}
+
+	function tabActivityWorkaround() {
+		if (!bceSettings.tabActivityWorkaround) {
+			return;
+		}
+		// Quiet white noise
+		const audioUrl =
+			"data:audio/aac;base64,//FMgCqiVCERRQAUUAFG//EKWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaXeTiFLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLz/8UyAKqJUIRoThaUgJgGIgGYVQKw3AgqDADWkGLpB4ieUxNP1jHIOPx/G30vv6pAa7/P9fcD0/f4eotmFyDob9joywike1cB+MQ8A8P5Zpf4AHSvdcwHp0g5G5gsx9LSN7uADxCM/A+8fwUas0zOiloPmOw0kCGfgCUS1xTUOEQf+VpHKhMkUAQQhBGAAA1pBi6QeInlMXU5+jouMRnQrqekB301ZI9hIoQgS2AfmZ+GjJGhvkBClpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWl4P/xTIA5whghGhPtro9losLcIEZAWMQmXQAAJ5HMcLVocUpCiU81EHPXQUe5/vL6h9T5xoUOf9S5iL2QkuLmlPM6pmj9vGaapZKNVpE/i4LJ8s7Z2Xge5ZbcvzHgO78+l9tm2xH3/X5jb2gpR00Xj92Q95dWlszML9ga6efEGukenOXUlUPzMWEzxAvXHU2w9Wo3eJ9RxT1i/UeqVzNKXic10WMd4M1D4dmZhU5u3jVzWGHBpMXQaXSJ1ccQxSkYF4MOX+73F5yPrszHeUxcnbVYI7TSbDkv/pOw2u0u25n6QkUOXV+ozLqan0mCpKDVpp0SeIcbRTML9+o1E1uJBpajOj2lIhmobJjVbcvCZdCpRmyx6qXU1Muq1F6Ca+E+tYrtgpN6ht8y4QvsPfHr1d1UvS8GHcVMjTadRPm35TGgkT42+YuXT2GGDRwQ3s6wqJqnVFO4otzXX2dYlli7mWLUS+/g3eTX4/O9Xy93hyB+oT2OBIegEqWKoCAANP6zS6LkRn9v7Wf2obgbm4bAN5yTaG42nO5gBub24NgNoDeByd4AHuj3D1j/1O8HdAD/1AesesDu//5B3wHdd/1j1vWHr94euAHfA7h6x64AHP/xTIA2weghGhQNiqcTJVlbuDLKlS5REJRKoCRcF4Srav+Nu/IwbBU+7MRlfI8bkRaKu3ZCXtVJMcz7t/hRj+eZmIbAPoEe+MjVCffG6KdezjiSVa3PX4TBEhJ2F6Ka2BLWhE4HBjyfHhqkoTY7FyV49tqtwid4vHntdWvzA79PK6NN6Pd7RC593h3J+kojQvEmuuRZl7ZGwm2nBgxn1ws8ScNpWWgN+5owR32OD4TmNtJsKxlCHRXVhSYw8OG2DWz7BHaIYjD7bFmVbcVozbD8PT5HElaWnPguJu9xTCdlS7jTODRakMP63VE8/Hg0/Y3KURMiEGdvPbb1bhm2+jPPtmXoHrHNTatFzSrBfe8aV229YMlsEsxdNG0nimIQ3p2dMufH3rE9J7T1pFvj2xCCL22/S7AwkcHhTHn41rNUizP0joMvBhs4Tuc5zoGzuc9OFgM7AEAEFAZImtX5hq3bY/MALZF08sB62M15uGGzfuA7/dd71g7nd9x33d9w90H/oB/ufdd8ev/Ldwe5//p7gO6P8AHud8Dvj/2A7jvHrgA90d8ev3B3R7vrAA7j3B7oe5/7x//xTIAy4cQhGhQthq8QLXtJWigIgiSgFARuzdq31oUV95eZCcIelsLglEOrSkbjbHr02s00dPCMn37Td2xbFXanBsEh7eQXT18sOYvL7BiFU18TtIB9CLUsVmk7DRQamPjVOFZgTCS5RtCXHJk2mZnbsrq69XQUqfI2L/QlcXZvhcuuDVJbHHkXo2TlXOSZojBqUxZUyTJJvlIWfboWSlRzGZ1I5NJ4u7EzVyJV0JEVfcSTlb2kkXLZsYLe4QuxjnrFGTJk6fV2t7vaRFKqiYd+rttAku7QnZt7ClQSUFjPVSvVsvRoy8yKXF00enDRo8UL+EgilqnJUjRj3odVbNUVAhvXV+jNw49ISXemjkVoBP0MMs+OGQSGVkVcyyu0EAIS0SarYLTpoRtGgqAmW/qQiwVA5BTwkJsnKAZznOdBWFTAQ+gTN0Ag4EAAVIWAfkSOR8nc7ssKQRumCqoVgTuQJAPdd7uD3Qdx6473cDvD1weu7gfye+HrA9wesAP/9+sO4/xvdO76w/xh6wDv+t7rvd13+8HA//FMgDKBqCEaFBWKmRpJKCkKBVrokUgAEp+C3R+Z6T4uzXXtnhMsqb7P+pp5HrsZvD0NndB7h1bEGbRhpkQMEMwTBHv3qE4Trl57ZaibHhtUjdeXn+BlVEWJd9rQsqtHvbRudMVd2fkTCO37e/I0EvCdkqnb0ODzMeTGyZLTDRMGTW8rMxrGpDWciZX4IxqX4xg0VWVCkYMeuORfs8IL1AqK4d5jfIQjhjinUYlhX4ZdXg0yGn0mV48dNcMGl6tlQTa6UdOupCtJhCdSFANQnUx0IRzoEcMmwdM1wkgoPiK06QkIiVRiJ1IUytRBsQLNxNSEtWYL2PBK0JU3EKSYoDVI0k2cZ2Ley7QkxCUGHCx2uC/UiihwCgevyyFMikQ2lXOoJEQQSbomrBQAhJwiotSKdOpjWUSpmEN2E4IDOc5zn6xPABm0BGQWZ4QAEAlQBQMr/bJOYyPue79meSW8bzabDcDbuNw3m8G0/kgfyHePWD1z3e8A9YB7oPcAHunuj3R64d31neAeueud4d8HrAA7oDj/8UyAL+GQIRoUFbIuxSwBhCplrzQAqVQVvlLHT1zot19qaozi28zOHEb7YqXVs91YUlnpwch+HitURN/DOB5u4gjgtxw664zCyZBOVwQyI9UmLvTzNde1xUsOwjbHVSjWVYyCSvRwk6riKll7oDBoLGXOvYmbPQkH8QjMMHC3J2mGhQkljuqFwjO08bfRoLyilCG/WDrBjA1VNUshkUbUSr5zoXqYLAuXIqQvx1yTXcWrr2q+tTiPVVrepYUBx55HeCQY0enlNYCzx1WCNFEqqqiGY9vNlI3xn30AO71KOk/UnrhhivgurmCrYe3hi3g4JxNdYscUioWqh5ZLbbkpkKam7qwm80pqvg1z1/Vf2Tr5WSXDT3Qu2JLZsrREiPto1HZLLxEUg+R007M7HQAAAfrE6jsAjIFVjHIRQF8ABsKBkVahq7J/BePreYjmb23eSFiRLOK0RrUAKgLIHed7vh7r3Ad13HrAAAd07z1g9cD//Y9YeuHfDuB3gWBYDv/xTIAvgYAhGhQ1hqUVIWU0ugKiCJUFQAlRwVGXCkYtqhGqHtiDvyx/FYKRIhMgJ5izYBwFFKYEqLpz4zg1CJaRg1SuopLPRcCkyhi6wDljX7F6fsUecqXGiI2D8eYAqoYmwG0lfEDYVNGRWaUu4yPvN5Q8BqqxQYlCe+qAFEk47rayr9VQxdCMmOWaEousbyZUp+kRfvVO+iA0CRAEWn8D8EqMmuzkF7d+xj1acsoiVPNUraqy5cibom3V8E8MkV8eMTq6mlObMhoo9OsU3WryokOk2E+e0PKIQzjoaMaIVilI1ExgQhG64qk5AQWmLvWqDEipzoJD1GnZ0UsSncIgFY3MCMDY6MFkUjFYKJo1Ex6/fomDay6mZbMUSWgU0LmaY9xBixDlMjQtoHka4wIxKVC+85znOiXiAzcAzCAluCqMNIBEKEHcsNg5q2W2NrcLAoGwNhsbBv9x7oe6B3h3Xrj3A7/fO6B7nryo9cAA7vfAd97gO8B3AHcO//FMgDYBUCEaFA2GlQ9moEUADKuiVZCVCpUYCL9uTUd4oLP6zH3bGBiqdz2iQe+MrC2w6y0dWBXIGNELXGkxmScslm7FIeJWi8kjSQtUk2Cq9DQExk22G4nHMglxmX6URiWFT8NmNhBGNQVRQDNmJ4aQ47YgxGq29vaOXdXUVK1fGkQRsq03DK7zpi00Vh2KR9zP2bCKtWtYZ9bQsgNzqm4PJ39xTz8368LqBKkNCyaJN+O1JMp4VrOn0rfjoOPtJgUt87dJ9edt3ffWWHddhfaOWwS+UPpai3n2hOITW91cjkVT7+vdXNXvELWygnC2scGlPs5b3XlX2c4HO5T0DEm62LD0tqN1rpcNiYY+TlPvC/sBVTvAWGDowAkZBkoHPGAVQAkAAFZBi3qozKEWrizTDpEvQABTkNjJeXDZeZ97n1uG0mM/AUOpuXxwsl63pZaHBptstRQXoY00JmeP5poeF9b3UNZuyyrSue2FrPvpCDsg0tISZQcb5kKOw62Z0TNJ+dDXq5V45E+CBiPnfPevomBIuLCcBifVF5/5ShvR7TPXfuLJ21477fr2CkwH//FMgCnhVCEaFC2Ojw5oCGIaxChZV1IEMgCXAbf4qb6XjYFLGd7RB0LqehU9SOZqgEguasmSRCXHvDRBJBR45zMm2pESGKAEiJqUyE9jBE42UN9ld8DECdoWnAac2uKjXXAZ4gxAvtOb04Lmri1ekpprkTcxdfNrfHokt29eqSh+s6qKpioGfI/GJWml6WQWHP2HEVYOslhfRs9a4dh3d36HZbt46JqmCVDgy6Kw1Ba+xvNVJqK+m97dnUU3a1F3h3tdp888lt2kjCdrd+vgy48wv4ayra1Wal59jeGNm876kkfKvafCD1kIVyvJ43kK9cPks6qE1edMh3vxw77+eK7G1VVno75Xx2z2aIaUZYpwqAAAIk/jAQhAQhLy8AEAQAAHoOidzJBTWWCFF5yESJJwAlIuVAClC6cQnSTWLRRbay5IFxRcAUBBMUAWwhz/8UyAKcFYIRoUFa26WTMoZakolaBAABDDxcvwWFu/pfXsx3wqc2yBp/RF+myLnUsCRMSejsrkaoyvpk5auvvSmquSi4sreFPg8im3jyw+sjdNQ++WfsTrAorX82fVb576OfoRz1zzzdWyGWYvl/2yzurqtoimuJgYLgexp+2lacD2Ecc9665zE6Ev7HplSS3uzUyqqOE3s0MsKRktjRRrIinMblkY0qmA5KooonwoZIkJYszOyu4Jq7LUOrCcozlzKW1EMzWXMRjKd5YIaNMthHMz1z1QKy9QJYV6RKskk3IlGkHmKrtvrVaKqO62YwAn7wdAZQQWh5rqwmuYCkqoAAAIC0D8IhyHIAIAAAl0c8wlsvqag2nkoZvn2QMg0iAzgDqaEwtCw/csi4aCihKV0zAnFeFNKAKQndJQhQg7CVSgACi1YgXBIgAN4ABw//FMgCpBWCEaE/2tlwJnoEAPDEISrCAq8gEq4Ag0V8bI+2c7zdF+mM/5dX7sbefXC3fCxKmhDzTJK10bQ2tdde+rFMkW2igkjCfDG5+fhwo03YWSzQnVlO+U21wEcsNxZ8obE41ImCejYTRSGGQwVv23J28f2jNVHusGHrnmau1bl221PzqtVYiWaa8bbUdivokm3XW1rmnKrAV7apo8XCbONk8rPtfXVXTM9dGZYV2HYs0y8xmCps21ZyUgeR4VzzcoslnIxVaLJ0NIUhgJ0WNBWS55hc7qZgCZ23IKGQWVNFj0ERlXRa8WUGjBQlZyRVqO5u8AIHiiQa2CpAOhgWeKqd4EAwdyjQBCVckGeHJAAAQBtl9z3+Iyu67/dC0Xe755/O2toJSIuZaoRqLJXnMjeihCCs0iliFgAj3WlSZNKJlBcKCCARmEaqEFgAOgBEf/8UyAKCFkIRoUTZYg0lC0MvLoukQELQKEoLEwtIRtfL0iRR0mcDyy37y5DYUCBQYgkTwiSqi0ICoEiVkHaYlBddyY7TFIhb07IjQ7cdmS+FkURIfJv1WYt7tNVaUe/4nVXc+CW1nnVIc9m4Wbj2JFTzUPZp0PZ6kq9T4M0sZAcxhU8mcjtTpoGure+tFjIKGw5bMcLK9nKiV1sunno0pfZy7C7WI9POWascljlVKV8YzTzPc6UoEZWVY3xMEaOuuqZ8KhxzmOo1wFyjmL3WRM/MwtXq4yDLVNP5O2zKeSPC3LWM76Zk4V0b7UknF4vFJ+GFdmNhWXNz1123yy0tlNNR3+vqdmOFdOYAiJUPgUAAgCAAoe15hYVYFAFzkoAVoL/cuBOIEwTXVdF1wEZgsxJEAIXASABENwAtQCwAQEgHD/8UyAK0FgIRoT/YqU20CCsGVSKLqVoCAGCu9xRBdecnz2g/LW/vmN9GNPuR1142F+fmro2Re3Bgk20gP0czpE84xKrwnne7hRYz4d0gFpNbbnwkRtHPY2yx9Vn6rC0Rx4VXVT5PdTO3Yffpynmxr37l436a9fIc7proia5Le22tcaIwaaQrJV4FY18XZWRROA3udV/mm0Z1UXtBhk94mgiAarL7nXPbm12IBOluqevHRShDbQAyDvMl7FriqSeyySzr2biFjsowloujOydbLBMyraa0+ap2vkC33VHd33YT1xg4DRGOnHmjzzc7deCtIZ2VTwlFk9eO5zS9YmGqUh9AVyIGW7wViVY7WDKByAIKgADhW6CXjTfhqmns5ubmDmfLiDbGtS1gra3cWiknAsVtER77JyrJ0E5nrXT12CwnEXk3IVvS8SBcuUAleSpUABWE7iJEuICoMH//FMgCihaCEaFB2KEt0MAEhSl0uAAAQymFIAAAd1+7S8JVNVfCK0tsagCBmXP4NEhDn21hcyp0q4TUz18XkOjrvLl66+OivD+sx5S5XHLPRP7plOjvet+/dpx14Qne13OeaJajeXpC6o7TVOrlbfS9DrbjnJmGUh1zDPcknatmR2zxrkwwCVsLJ18mQJo7cLge9+dM2cw5Zyvy3S3Yau+dJ50h+aWVXyvSk0udrRZz03h9LXiqzE0U6ONY2rjL1KXZVqz0RA2nr4Ddet0PsxzQiG44YJaqXg5ytmRbpMslmK3UmDWUl2mmageE787uEjD0CvvoC+nK9li+RfdEmGBvhKYAAAEHQXMawGIwELg05G1AFqAAP6T8OZ0PN5/v9+96xQvYViXQVAkoxJIAAIBqCwivqEAUWAFoAAUAtMAXsCoIoA4P/xTIAo4XAhGhQ9hiTUQJAZaylioCwAYCOJkUCLx3Dem0lRZakPHt/HXXkzsqdGXjPZRm45DZZBwWzJznBc4CGV3EICqZyhw3KZGZYrLNVTbrrqb8i11kdIzozHK/x0W8/PwTl1S+26vESseqo97ZnVRiN3OFKzqmmFHgXNaiklO+mIsrpmOP1DvbdyLGau2zKvG/O55pJsJR5yjRTYKyTracvss3WFnqDG/O9mpPXxWbmaXR3UBVForIF/HwnoyjfLVPVd2MIQdlPeQ3HJdK5rJLLNeNZJ1VzSz73vktXCSd6rqOzs3Yzh4T0rW+jgVA20jjyEqZ+PRICuq9vBLnSE2uPiCwFbvDugfhGqBtAAACAD/R2gN7fWxt2biBCiByJxSUiigCuxZci5LAASBQE1LAEhUAAoscrgvYAOsgCa4KyFBQFqjv/xTIApQXghGhQdkg7cUJbdsKqAWCrIKigCGRbLgIZlnMNK3DoSY/G13+UNfDIkTr78fLu6u2sXDQ0B+OPOX7W9le+fXOyVBwCODzt5sOOsLeru81AddzzZJ7Js8d3soTDRSWnLs0dKTlOgSsOBqIRkOwgGUN1pJYZlFY2ZyIV1Wm7XiRjRjBX2GptK/gbXizmlIz75piortDJr56qA4LwWWHkQ64lneslsbLCyabmO7RTYN3AVSoNlttihQJlDhJMFusra0kzhZtkve0b5oolDitt6kK3uD7aKMHK2BBKylnkA44gKCJYUsUjDcxmLLe/FAEiCmgK6rX0xWcTgCAsapHgFGzkAgEBUAWaFyX8MYHn4eXhHt+pHgcuDgcXFFJ1UoIpQqmqLVJxRzlAVmVRVABR6wuCQqoUsCYCwdUVAACwBSQWCrKBiHP/xTIAoYYAhGhQlohbUQKWI7URVWFiVeSpKqSgIxqnYMBfTDMcR4g7KV0NHlNz1e7TvV1ZHG5nrF2ASEMMohJxMuNHymZYBIwqUcUWikCahdzZUnSTBvUcO+yubsRZD6K83gkn35dL+n+Ud//vNslPmUyIPuvnZ+VHE8cLaSRFCR9gPy0jKCHTB4zFPQYPUjTJeVJWZS44xfNJm4tfNK99s70jRZiCy0UM1TODytXMxuA1hkKObAi1yieulaN61qS073QT5ypcwublUpoFZjfOzILANSgpvT4QKGhwStWFLrAM70lTSVl1xPeaXPUz8knwsCDaRURSKaYN1MF825o7vDOgfhOJDl2CwAAQAdtAvm4t0OfeQuuLiY1uoELaQNRVcApEKES6PQFzaoBAWBaqEQiSC4gotEClbCCo3iIAKjdA4//FMgCuhfCEaE92WjNxAgbqswmVAiEQCACWAy31XVVBC624ncpBCXz/yx/meMzppllnjlRMKWLP346177/j66WsJ9yWXsWbBQGyLxKJ/L7v5H++SCy5Z7srP8daZKq/Yvvt623evpyu42WdH0ieQVct9L2z31iop4S7t1jBTRPjeVKXS5Vkk085wzlszjheUvQZ8K53vlS0brCOnGpmA5i0vwz5VPbNpeuj17c0kzO2nCxmApYGpoemSmh1LatsRlv5nYzZ6uq2DQIodYwumVVxcRmsm7srpFwKiFvdbYllrnLO1PDHBsKvmUZvaNc1cktFVJgEuMYbsqZx01CaVLppNj/f0vue9fSFO73ZXMPQAx80AgAAA+658APCZKj2SC49P8F165frYOzspvSKkJ8IBnT5SvpA62Z4WTDBSqGuqIALgFqgAXKKriAyF5AJEgFvUOSSVk5hNCkZAOP/xTIAqAYAhGhP9nhTWQIyDCgYCyEoSqtQwWnd5onsnT45b2xXlzaL5c7B90Z8nupNWzTrY/MSDFl3ZcgnDmFPR7Qo5LSDp8PQImNRYltXvD4O/Q5isG/HKAF7w4NX2+qd++ohnnOmvsImhKb0tyrWzBrL+VK10uEmNkld2AKT2ZTjbTUxupleNjmU0haDmg1nwTauPfNbL7oCbJjjpUXQDIeIT+ARFc4YPQrpa4kMGmNyoasCE42EghaU2iexe4BcacGEQsLNR6owphc8giAgsREbnhLVU3hqleKz5oVM7Hk2c/Yco4ZG2XChOa9YNTIN081KDT1XIPgprxVu7/QnUPCIcorwQFAgIUB8nB3d9Lz9h57dobDZW/ZtBs5U61PCBKtLVCa8QHoBGpaQEOdFlEaLWAAFJBashVUIC9ZWEkiUZCcxcgtaJApQXnAUDB//xTIAooYghGhQNjiTTG4rJCoFJUkqyUKWAS2o1bZtXR91XDPyr1Xkj0kp+JFPAWjq9dcW2LNeHJnMMkotSXpw5Q4KMq7ZjKYPA4ccUYQ56TITs0qKeDYzzF9suiQB1lXKaAE1ukUxOLEnRbJF7Z6qapbrZhgkHcNq57pqa8ssji6g1cLbMpntv7QT0Q7RiMYWzSDjlF2EoWb/vw7JtJrVwpzoKvqJnk7Y40zNmXljrvok42UVtgea3v2QWDz/G6SlXGminuotuwByrTrdBySY57HpYJUEYUab6o0zDGQv4V8G8bT2cs0sWW7su1RS1mFOwd1UTaJfo3OTO40j5jW532k1GyculY/QAAAhVgOCwA5UAgAAD/MHk8fEDnyORyAOKgBewBJcRBfKLBNlAosykQAUZACIkAE3cAASEFygAAUIAFA7/8UyAKuGEIRoT7bGygwG6dxSVdC1StFEKqUCQDyuXY+WLoLgQORqGDPDf+40hqn71eERpiNoO5xQOzytzkZQLfLPZwBbiGr23NPFZ3dk3Cnw3t6d9fnjzh4Ttyu78K78UvmWZr+Ar+r5I7rqmneVdOcmqgCrrBeuS40O26iuQS5QViGCmWLUMp1T0201Gt7T8q4vgcopstyUQyxeeVMgunussjOiCpScJfKalcWqai6/ISzgdEkk8V1XtE9E9JiCUxDhBmE0bc5fTJf1y2hol5aRK+Zz3hiZdtDSqieKOThTdVkogchwvOe2uKEA+Maw4X3WTFNW9JvM+wfoVH6E1DTOkqqnd6srmFQDGAAfLYAAAAsRel823FqZQthmbbJf3R7L7X9pyBFbotr3pQiCE5wu99RBgE6UElhSG6A6qAA0+NUXUAvQAqCKthcohEEUVgIqUjZMO//FMgCmBjCEaFE2GltxOpBustSrIVZFWqpACxntA6mNK1RfyCngOn1rqvRTcKCbGAjQbdE2Wse6JBryk13TV1jWL94xP7FK2Lt0/hgo+6jBRn8/SurzSQa5X16o09tBaEEemzNwtemm92xhxSM8d0N1yFJdY9gNItCT14qbm0YWOoI90WlhFAUXBAlFyvB3gXhq4JSs2zSluDasKtlNFaPbIEXnKIAbSVuY10UzRasUDSI1ng4ICltZqFqjPGkweg5Ln42SV4YZVDWl9Ob2olinN1Uqe1qLqZ5SF9nC7NqbqVpvGnSvZXE2ZSXuqsgXURvScUr2S2Tmzz0UV+RKgAACAsLpHxdQqnuRkAQgAArAraP/3J2/dx7Uk9EdHOqi3bYBxuCLAXL1AIhzE0KCIrQURTCtOYsWKZCyQuAJBMALiEgKrlCxICKJqQOD/8UyALoF8IRoUFa2PAmmgTRGRzl4XkEVaAAwEBAvOSuQ7/qEHVfL9KdgbDtp//a3+fisxaRkhCpmZ77kXbVdJddohe46KwyWa2q6G/QIdpORgbvj75jrBa1qNpSSXGFFmmzCTq7eH+ldYUskwBgnA7xpokPvGkswss76PHqFbYwlnjhNeF86lRrSO1V1VNStlaV5139tVxmlvjVfttW2S6ZeSXN2FpdKKLJJZsVpiueeCvnCShaM8AqKrBWqQtE5XzYUoVAIz21xYyXYUPbtBdRcSIZpXeN8oyLE4DU82Tr22sU8ys8hrY3cRVeZ4prosn24pfg5DYUvOGB/N3eDy150y12fnT3+wq2p3grM6hwNLXjmjsQgAAAlwF4iPQAW1tapOG6fx9395ByBvNuw3au/YugxbMhTEuy4410L7/dXBK4tUFX/pfIplmJjqCagSmU4jLFSpwQUnHJMStcEbRmUFPcE0tlVEKpSZ7U7wCkZOdxz/8UyAK2F4IRoUDYqU20CErI3AFWFXABUATzUL2vrOkrLTwvgvSrNbX/c6zeMxDq99Le31pAXbF7TXiXrsOv+crq3CT3+pu+a6eItw7qp55tByT/529lfhsn7O3N686eXVhXjYWF9o6Xm1au0bI3CBNgVst7Tx3xJnA4PuRerK45YHBRW8Sxny8Hkmak5Nk2U23XPM1dK4oGU91Nr6aSkirbf47dQ4XS0RxEtssyVgNAZ3ySJIIxT1FKDYZJVOfSmRCkGMnIp8ZKYkumprqIXvz55vq3Lz3CQZ8kfK1oPVfCxF+QMqwDU2Agzzqs0hWnFSYg2IwqP64FirbCLHtAbTHvnE+9Kd36zKQfIGz0KIAhFCFAE4UDFY8AAnmeS2xfhXgePhmAZKgh1v9DTdnpCKNy7ImJWqdyZGJKlBGV0RKq68lBcKBW4XLpRJyunZKQDy1gLhcTRAAlIDB//xTIAoYYAhGhQVhpTcQKIG8Ci8WqIikpIKBK9Q7y6jIeN0beOH3u98oHg8WfkRbtMS1SP3j4YSU4VGBZn385mUNb5pMQ4365narXxlRc1KyyfPPGjxfPuLXldR+onqRaqrtHfm9VNGEkl5mWUpU+wMQllKrzMt/G9Ly1pnAggHrebBneClvITqcIVVoujQ+VR0rjc1rhe9cS2ihSrLYgzCBWo4Biz3g4vFkU3Wu9AnS7pVc1c1CGDTSNKBMUTtegxGFG8LaICMx2IHY6nIks91qzNUjRjVE3Y6P3TUG456lnK7Ky07oKzr093e4WIdmIZTROWcvceh8P5vvDu79YXMOAEJwOzsgFECAIoEop7CPtPPHn80Ryxy0lZQSS6imNCKtkFAkqOoSrUkioFgwBMSAEEzMDOCUFgVqABO85gAtMDg//FMgCnhhCEaFCWKItRAhDMaCrlUQgspVlUCeXP1Xv9s74ZVObc7Gxnxc8uugRwSFitacqUhLQyMIGTjajNCXBTIRxR1EB0Y6ay2L9gL7pVP3+TJqk6cfx1HPf2JJbXZMgyS+mWynmnH/dFE/VRJzKmya7kOZUKGq7ot1FG5VwmKu/MjnfVZ7yDsldopigjku51HbZ3TWONPSOFvSTUFFNeHZ1xwxp2VzAWm4LphuLqpRbqyivhXNJXZOC6KBpxoqp0ZWz9qStO23aiHI+LHpYajavC4RF2Iznsqqx0YyLeNt+LX2Do5sx3Y2RktUUzxTrSi48bbx7RuzjKlByNMpBQzOzUpcoABK3eEsKqFgCF4koUckAQAAHZxvug5nlxfAcnPgOQqg3KZTTUcARBQskWmI0EpAAZrgSQmWFJtxYCVRGQKsQCtYWIgQFRAAcD/8UyAKsGEIRoUDY6VC2eIQgcgLoKiQAGwSyuA664B4t45hVsyfFfB5pZWWl8N3VPz6kcVBVwRLCPAgGAY7C4UmZyhsKvlFNne6X6x401vCsvbQX6uMtJbWllz5ulC2OARoWtRxRm4lmmwVIwIE2Vsgkyt7+xSeXHX6weco2xfSYljRFNHbmeEkiDMMhvJbLttm7zqK2SErh8iqhpaEi2a+jnRLdcm46qXOQUzaaTydueMzX1EeMu2MozmJZV5oTa9yz31Uzr1UTHC8MYhabJQE67L7bZ5CqsFMLnAwKqKMHu8JBxNlaiVhnKWoJIAkx8K+RHCXXktzZjXhROGGi6BVO3idGixz9G7XEgrEpT+JEAynIUQBAAEzGFgwHj4eHhDy8RH1nuENZUOJPSrtAFrVusCl4GsRmAAi2GddMAKlgAUQEA1CrQqoiK3EUItAAXE5ZSaxE7/8UyAJ8GQIRoUPYYU3SyVkpJCi6QWhkq8hQJ4FtfwlRF+o9P6/ZSbf6HCxsCSSmo+lneYyS/5attpyjL6vsGd+VslPqtWih4pfy9Qzy2aarZap+yWZ6RTsur/6EZvWZafnRwpjHu88st/whaompBGUiSflaVWAV3UXyMUZzVi6s0GBK5Hah0zeN5yvTnjLNUp03OlNW3RLfpqWy3dJNo2jWpyWwN2nJItuWd6kRbTuNb8GTJrSC9KeUtD03yI89z2zgjpVLiEJLREXrPjSdNGxJgFrjVAjJ9jZTSjPJIwpCbcxxRgnKJhoh7M7rH8RrQ9IOM0A6bep5igUqJBAAAISwn9AKnYBEAIAAPcnk/9/r9/uzdVIooBKxaWOAJAWAJUC6IFiwFgZgRNgAAJAVJBhWAAtMSugvYKgrG0Zjj/8UyAK4GMIRoUFaYa0TCGUUixUBKiCAVQJYzLEjJ5wq0ZLxVVOMmjweVFCAnJ5GFFkDq+VJSbks4qAcUYGWZdXBfZImwIV5bToixhAzE73ImZOGEcY1wXLMk69NKWVS4plX2twWp6Fljt6q9mznbd7OcwZFDbKls3afmcI8ijpmcQ1zJnQ1E1WGreN9lOF5WLXV33z5X13xdMXgU+4780ayS7XXbYQxNXF60yHadA0eeD6V2DX23WkR9HKUb5VwxrW4VorjO61brpR4Q1OU811WNucmVO0f7pxlqFLi1DpKx8KuOF7WRDpLRhEh5sHfV7oTDn08kl+qWXzDSU90yXEp4X+ErTJbcFf6/kfqaRIOwq0dCFKYwgAIQoAfytZ5eXD58hycOXAFkMzZEs3UvaKy/jSkVSv3XVLWLgxiLImEhAAXHEjSIy9UXEiAAubVmlYRRA6AWRLYisQAf/8UyAKYGQIRoUDYaVCWmgUZV12RFLCUSxRFIwE8zY+Rneo940KoUKV83fSbx0q0pV5RCApWir5AnkBPIxHoyD7eCO0ZxjxWyHwF5AyTISFq3AohbEmbf+Pg0V7sM0BerVzt+vyi0rt+ujGqDlf2U3yZ8Dg6gRWfY0fizuienpD6y6ZTYvshlfj2TTz21S2wFq5ylKFMUi4bu/Dfue+TCFrG1IbZNdS2qZBAGCSyEkMxuA1IiW5G7zIoenkChFIC4S3K5FoFyCiJihh6nBN2SAaaIsJl2zQJOCGlphPgzKtDAUWdFaeHnuTpZPCLa0jjD3XJdTRTkHeM9OVQr0X9aClu8DYXaNQEIxYfIgABAAFDipP2aHZGfk8hzdOJbEQQFgYBTaAJ1Ylk0iKKdQqQArsE0MVESFUizioQhRBSaFlUKKlwF0SagTBFaIHP/xTIAqQZQhGhQVio8OYcBZiBCpVVixZlhKslFsqMBDMWra/Zpb2qZsHgmy2Bragqhcxit8aQDVAigJwZAFUHpKxwJ8cUDsbIKoTpkqeWoSTQmJL6q4nKLFU7BkjCYs1/CLfYT10cmnvvgmWb22eGvyNccs9YYvmOQAV5zOZSbsZ3d/BYqEEJi2UM6MMdHOU4spm6BX2D4XnjZM/WYH1S6uyfSmHCuYLdlnC1YxQq+6wrtuGc6xQc5wc2PyOzTtwzu2beVlFPI6L2WTfdPVfE501c5D8klkc75b2nzKujWHhXpeYjFrtBYqtTxBkVNcCJ0GFyOIyJtg7X3JUk9Mw0z5FTbWUlL0vZaQXge901lXd3+xOcYgIWAcjkoAEBAASCLFsbCw8771sDaUYSUiE1Eui5KMAmgWFwA2FL3AEEiqIuFwKg0hVsKgiAEBYlMAF4Bw//FMgCrhlCEaE+21thiO6KAghKuquoVAE7mXrG3WJ3cx19lHZu6aYdO3pgpdNilhwttNsESxVZq5rW2lQBgAwuppGp77lPtWul7d+UfX1zpJ/KYhFR5cJH/rLVR/j/hNcreVcqYGTlO93935MBaR1uW+PNNZTLJYAZ8vXRPTws1mFb54RM5hCZo82kStmtswM/C1NPHutvQuZNqBtgos71JfapQ89LBYN+UwnRlNtyM30zXmOEikbhnmKz3qqrQeOaSXOFDLFbIhKZ9S0WBVfMtMNUFmF1bUyAZluKjK16agsMsLqlwE6eN8xUkhrnZO6IywMhTd1uRmm+keUmvtSSClk0mgAAA+WF1jwChz4VAAIAAPiMR+nVfV7LyVUd88/k83nGzYEhOMsAxxQzEsgjGVZCqAap3QgAkWVmLXqLSKpEUwEIrEyPcKqCCgoAAqkCBFSgADB//xTIAqoZQhGhQVhpDUgLJQIMYqQFJIIhSBl0CG1kwdj025camqcpaiTiedWVegRwvktX05EvG/azNhVVwm33YSeAyN24dQUFw1V2B5JYjQeFNerXQl8nNfNffx7bNO3X3WTVZ7ZO9uuihK9/jWjstmuRZb1sAJfZZZhWMqmVcKebNR5rqZpGokOyc74ypOR7pLJt6erUpcPjRJCBAbiGBDvHXV4YAT5PTBz2kibKgOaqg32UHJZnsDruOLmsN4ohntoxi/14crs5sqVV8WwbwuejYNIFNVpk5TnbrflTzS2KuCySduWJVgSC0tuqoZRBtg3zWMOIHZfo3/HbJXjUx2MD9sDFDXZu7wNjV42HJJQ5ABAQACsDu3GjX6/ufPk58HxfHnz4ufEFmQFRMkIskAg6RoN1JuQDUmEgUABEoAuKP1AKhOipBATBQagACSlCi5ACg4//FMgCxBjCEaFAWeGNUB3UIwsgRAQUAjoqsuumCM8M7fhvRs9xfMsUL3+svxn1JN0oqqIeIRAjUlpwidA83ehci2mI6MaMYD5r7NRD2NUMyYHTHkxbKfVJTIHn4bbNXyiwbJMa71+QLLMwxHnSnAGWTbl2YPIz32Ld+Mcq9LyB0bpkbXulHbbZPiwU5zNe2649j19uXDSela6Tjv0SPRH2TraTsFUswepZMXRaMaRsCwakSTTlPjcA0tNS/6mxpd37dW+X5+WnHJg0xSN01cG/ykLuvmWxWNbcoszevbuzJ1tqjw13KOd5pPdTVNIdUJRFK0XNwCfLwofRUptVvtsWSZMqVYrcQ4OIAAA/2F4jYBzA5qAAgAAtWNsg7jDw+jJw1Tt5O2G03Nze3N26BQuUyEIsAUC0MgAzRmK7rLFKs3QUB1AKXKLmzLEAedCV15IRADJahCKwnOoZwqtKxvqqMH//FMgChhlCEaFB2KkwtpAMCGIRYQJkAMAzH7QAAsnaPrN7zExq6nFypbCCDMrAMjKW9QbfGuiWgHfll5bMDiWFlOxp6KwylEolUtWptzaML9yJGBJc+rll0J6CfWi7EqSHkr0lhSgU9W2estl0kBPT3cg15IQPE5U2Xytep50T9Syjwbholp43E2dWurMpvxx8TmjKycUnzsxO+qbwtrvpNK65+9Fkxa6WfDWWl9t7RKZVMsV5ydzznfVLNnOOxa4JJBkkCJSesTtOWRS52tLFDm1QHbdONY099i0tZc9lMqzukXz7odYYWsrzFyYwpLbZRUM8cEhLroCgzrxCUrGmNAAACKgItAg2FgIAAQADFYO0JJbIzbxfDhiovdfihThRBJa1gFJEFIrgXmIEEEhYAAZaCKlFq+cBEuEAAmkOIACg7/8UyAKqGUIRoT/a24gQHLZUWVCEICrMAjmszfrtB4PX2jsx2z1+Y4V2H2u9v+cVSfPqSRArcg9q7I7uIRgYc5JUke22eehLNw+SitudxpD+aTTQ00dcyc6q6W04jZsppdtsq/b1+ZvL8JvCnwsGmauxbD76u2m/bdhtJbMLa2p1WDdX3zLDTEmHIjd1We6HnXCMJZJ8DerTVbZg0caNAtWzUy40uNM8cIau/yGwyy0EEiysU4LbjWAZpbkk91KS53Qjy0plK8h13KBretTW3T5EwgZMNnf2i9LNVZeYzZS3DY2mzBrbJ9Wm22W+LrrOxMK+4gPqohSao7XQmFbNtZN/cmEevlu8BYXQPwGijnsAAAgAEyjXH9+de33vr+aC/A3cvWpWKEBDBCBvlMgFJKG4BQtHMC6l1KxAgCtQOesLllxakK5wEoCwJwsJiAChQgCoVBwP/xTIApwZghGhQFphTFgLPBVUoAjJFgAIFFbOszcfVbpbnYvF9U2W2dwwR3KVVSOxuabo13x4TInyB18QJKki452uOUptN2FyfFPqyXyjUmS+0W0qZhDV2xvWdnLTwe/+9pS3Didd/gkga3kaOvZssNJxKqSGxv1OXS6yuzG0MDkoiDtiD2INc/hsmCKg4yn2JlU2cf06cXbUF2P6Ts0Vzn3eEiruSm5hKnnF1cnFx15V33axOI+Vdwh5vEYHQQNgIUezNDrkqPGSol67VUEBomo2N1PUtdpHYmEGTXk0XtO715jr2xJYdHBnZDSy2cZcp8NbZlMjoOKy6ZLZ+OBTVLLmwcopGfnTuqAAAICwu0bgIQge4UgQCAAD4dKe3LwOZzEygiUygCoqwtDoEYNa6cYpMkAQFUAAoQmIoiAxBICpMIgAsDeEiaqgBQgDj/8UyALIGQIRoUDa24gSb0pWGJTRStAgqCUCViPLyIjn7UM2me9heEXn0zGDldN97oQJZynZIYJTZ5ImsmrS7DZlqSq+/ASukfyft36OrIK/ANP/8bs/Rd168KZ5Ltc9VFkxIHGZXDmuE+GZassPB8KLtl/XNj+Z6JaZNGJ2lpSo6c5o45euEF1uNcAuagrnCelvBFtB1RgLtfWr4S5tVgXffGEz5E61pXVGY5yx3PQ1PdXSdpjW+q4IYTmn7b8DC+mvB7C6CqU0AozuQKxSBg3une3KffS1ImIkEhlLle4UA6WPePDiFKtrabNLEupsprGUeT9TX2wds/Xll49MiDfNj860GWZiU7v1nVA5BUKpnNAQAAAbS5Ohd/fQynNXeBr01lB73iPpeH8XJxEMyC8Lo3tZM1tHOSIBel1s0SXKopW+FdC7jJ2WK325y51pKkAKgE0wtCwIrBUFICZYWXahNcOP/xTIArIZAhGhP1rbhhDJu2VupBRZFsgRV4BJFYhEJzR+Cr3lPmqPdINfMeaHz+ZVs2ReGRM0ZOf6/+KsEnwihpSTMpMRn1jBz689CrzTZ6rEq5Ok26J5VeOt62teOkYhnM+FNHl5NVNX7VOM3pc5ZXxvN24KE5dF7mwKqhM+fg2C9moZRKpsV7oqS+qUpJz02hqn3yrdZ0RzhiowQjAgu0ysp8TpYb0hAKfBExZ6YZiE7VomBFqNE3Uz122ySHJa2ZzE5Luep7LqK5BtE8lusKbwjdJTnZjS7yU9WGiZUnY4megoEQJQXKVsksvd2pG06crjQzriqmcGPW33kfmuxD/ZlcAxiRuwM7AEoAgFrD1Rjb8XCoIUDzNXeDz8lvJ7fR5eTnz4iIFJIBNblQam1BvLSr573a7zrRdAnMrGICrdQhqmAhJ1tUAdiIKrkQLHYqiui7ioxAB//xTIAqYZAhGhRNkg7FhLOULjSlVVElLECEqAKCVZtkvUY6F2mxUwZ/B2t6oeInUlJIlHrfAAh2llKXe7UFe+D5s3V4o2jlxk1Do98wXVzT4mnJKLSs0ZVIyaS4ME1KaxMJo0AiLA5MsKO+QuQMop5vVh4X1hbxPlTZhUoaKGmHOlOoHklfYtl1VqhvYlzxPlGuZotpkkrYpJrxriouFsnOmc6JZJqcpujMs++e7TNXq40pt1qEDIk/plrnrRE3Ty5YStSUArIdsrSZgphWZJpYnptzsn74Y7Ti68rrJDUp2DAL6qajkV5GK+ute8b75aLYbFqqWHIpZ1azSSz0rGeWbeFze5BAwU/kAzkpAAEAADsMmvdvVmExqt/htJaSqVrXKyywW7BKNFSKgIpGuRxAE7gIVUpK9cBpRsSBaKMlZTAAJrBCAkE4iwVFaSJilCkQOP/xTIApoZQhGhQtrbaCeRQ7FJUqyIEAUoEZ01o8o93zXjv+PTOOM/0dcsJFvhrzhFzikqv9HZWnssabhOE44WHxpl02XX0yzLz+sAZGLaj2X50AdCU4n+fi45PL1S9mT165Uu7aeW3pjHtGi7sq4wmFNA0SRdNLPe1FRWcPCSMrk2HnACoWAQrXtnnOyd5AvCjJOEVWX+ToNkx23V5hechXuxUvVSshcHocltGjK4brCeVKj4iuEAxm0i5lPbcnYWOJ5odXW1ruz0a+VMMhnfnFTQMuPcFKXDPVFFCBOddNh2OVuRYgsOaQo3hSzq054mkEhXW8FzEZPXR61+9+O7vCwYfjeSU+QgpAQAADwDVwj7ixPtnbzkoXoVTlaPDGTSOlhstOHDx3gtM6QSZVUJ1mR4gATIq0uQEARAAahcULUbU6ACBRBmAAFk0Q4P/xTIAqYZghGhQVrhrOQRYqhmIQqWFigFAhdocuTfEIXcvQ7s/Htj66s07ql+wqQ1t1JQFS8Yz4QHWmozguOW8VVLbtMDSRMidASW8RZ4+mqaEEiprYoZNGFA+wUuGCylEzH5s8bkVlVyM1dUUN4hGxAPH83CNY/CiWqyTlTordpafTbXkjV05WS67N02HY+6StALZP9Laou3108Z8N1F2JHhzscbaa5IqlkxrWgalvvxrKucA0U00W5SX5nBU0dLxPVS1VpcBFTpnueeraiSasmgJZpXHDdJeus8MK6xWes9y67VvmqSYU+V1tNEAV1wQ+4EbTdJqwhlvnVUDCFO4b/3OvuB63V/mcCHETDu8DYVYOwYHIUBAEAAoQjtn8aY8hx4Ac0iYjCwXEmVSdJCQDBYsmzJpCCUpKIpKBQACoFAUKBKgBLIsTCxaYFQ5gKgcgcP/xTIAqoZghGhQthpzZTRiqhDFQSVYTF0VYEbU/umE6b1Z/H8bfd+I2pnP6YnKAmsJRrxNWNAOBABA7TRGoFzdTI8J2rk7Ypa60Q3pPp6992rb28n5DHZWE+oWQJ6359T2wTRpNJNfSnKM8qRsMpBpxrzHPBKdnhHfRAkOdUzRdbPMhFI79k89MskXZTFXi2vzFLOmMCuNtVlZ7zs26wrWoie+Qxm6qnCerfqpSwlkGSMnUTGjQVu5kxrJRla9gjpTvgRS/GmApA3akqMV2G2q+e2AZqFVRXYszuFIjIeLUQrsANYd5AMpklNl6nQTVlfOGR3dVvdOu/KW65JraO+O9BAAAIKRQZTDYBCIjYDYAEKQAP1HyJxV+DBBC++5t+E4cXM4ceIUlYnQZGoA+EgIWvelIkIQnFe1BBZXbcXJzsAkRQKWQku13oCJnABDXQmUKBCgH//FMgCqhmCEaE/2tjwdnKERRmxQIghFKkZbYIFxBBKN/WIHnbKF+5d2Dkrv7ty+fPXbE+a4pEi4geR0fhwkyadMW+PO+3I0kyyxKmF7s0Uq023p3GSncqfrELKOzH0r6IUZYgEp3y6NXGOZcpKMFgYjlsmSFpxhKMGbJSw6O+/I4mnktC6W9+EsNINenhpllspKDtPAfXLKyZljbK9ddULLqCFBYB7STvqa0kM1rhkpqYoILyKdFrNbJNLDF1qVygCIEMld4lUkC1z4TFApRTbZfdPF7WM+LON6tldLIo0LHTCVwla0BokQACmu48kqsK5CumKfCTfn2iIn0kGcby39VqjSt6gEBRXQLQELECUY7qgCwKgA8wpufwe1RHyl4JHmnm6YN2ze2a4UzcMSBJMKI8/IkOwG2RZYyVJkqLoEwBG1wTBK4CNEKAJRC4XLAFgIp3Bz/8UyAKwGUIRoUFYaW20CLqPFijLqBdWIpKQwEcXQ++3/Y6iPu+aercB57bdT9bAEhYSHUlm4Wgulow3PtnGonqs8J93ARMHopxp01VtXRh+Flw1UXTT0t1FLFDlyvmhvCiVK81oiA2V3dMRBxI7bKs42Ntw7crq/7C+Kd3Xlgdps9d50X4vVGEVrdSlKXTYKFkp9TyoVt+s6p8u3GyqpZLMJ3su3SXIczWaKWamXGamcRsW9XruiEtW7vrznoemVqCrqozowQqK6rOG9tfpGnVfCSPDsMHNgT6ZMqL5nqA4I7KcdtqZMMxWGmHcl51z050tOWu2rL2WOUWljWIWRmFL1+lNFto9bvBUR0ikBi9cDkOQBAAAe4uYeILRzGjhDwtrY2mzftbBVMdoX4waBat7pTkXn2SkXJvAksVAnt/BISAEGdIqIKBGdwqJIJCJW4uC5YALoBwP/xTIAqwZQhGhQNmozGgzPMKyzupVMlQqy6QgEpQJS3ywHesM+uY5wjxHc/zdP4TCmNensXVJ1vBik49bTkhhJebBMski4tIMksZcO+dyjlfrIayGFgRXEEi/0U5U4zZhPo2RDNNsm2wueJePJrSyEZzzWuv9VtVevFtVvDHEO9hFmi5Gw8su9aBDHSWSY9kDJUlcr2FKjQ4c8fM9ijdsaf23UxNVJ31HhGl/kDnTwGYaHsATSU7ZWx0R2JPI+Ug8OfOXnxsr540AAcDtpCTjEttlhidoGpo8ZwstHKpyDph2UlqpDSQMtkssq3yx5tBy01abZaWel6greayzfRK8m1qrjue0lekA+MavV/M4Q/wVUikBCcBCYEUV6AAIABreFqvEvxRF2Kmjw8QcfbQgBQVsIdQybzM765kyXVYVALVqsEbrEkSIOZBETAASJ3KL3CoUKAcP/xTIAsQZAhGhQNngzbWlnoFBl1FWsTL3al7FayvJXK/dubQtnm3JOWM1/D9A87vdJp0eO9ptf5uBkpSWQxb/RbFv4lKcmoB2d2dwaiGapGDs68dXOuKzMX3vNTdTNbl36O0Eruvp4arAUTELZ/Cr52Z6rN3hs2I/PDmk6VZQTpryroCUa6r+q2iavK67bEonf0v9lc0Oi7dCr6YlA3Wnok0TBQ8VXaVQbbLqKrMZLWNZL4WcLnTipZ8uNfHoMl1h9/CvLGRDgzGUSvRENYsBQrtU6rxqWm3UwzHFMdXNao0HkiMStqmwSmGnwla8JrYeOTCBWwlv8599R3S0UrSK+FwsUtDmh6BAAAHu1D4CvC/QABAAAVGDjePSitshM1NLnq/zQpeDNk9vF5CCaTRG7PZHacYFJgKXiSnSsIXXAUSShAWzAXjW6qa4uEEATg3usCAoi1QiCUhrBKV8KIK2YAHP/xTIAqAZAhGhQlhpkNZqBSUFBmgqouohKEMAnjQ9r/yVfkcbb38dKaJkeYBfSVq3befjXFyELLgzF+MUdwyYvLjS9+dXkIYw7hHAy+d4FFrTSrHjpqhc1HLCFG+/GGtIgMW1CTnSCkGjME2dfFiIlhjpJoiijhwXwxypoBZrECMI8qV+lXzVtdurhvkw08LJL31z7cjyyy65EJ6AINWGUlmXfLR3F3BeQX6dsmGFcBKCJ5sc7WtKBb/ErfOVUS7e7q3WEt1ayhLEg3YjUEYU5QrtQ1USNcl8tkQz1HG2Mlh5pDKGzUoLZz7J5LqFKtLBli6pefdY8tV8T2WZz4rT1yukCRPZF7sB3vJ0rI7vAUJ1jsKYUcgAEABB0f69GdLzefoGwbtjYDcEgssgrOu5cVgXAQiAXBMEICLCWAHY1gTkRTFhQCVAAJgAuACRAROP/xTIAqIZQhGhQFipLKgbPQIBXIVVoEVJCkKjASy1/+t3FqMr2wb1ucqON/ddFTJnu0GWSe6IlbDF1dmA6UykhCyei59IfnMKRcr7fS1mBLr6r86Ukq7FH72xAt02IlxVdaxEUBvBAVXnx7gqaW8FuDztlL12FfjHA1+iLvBpQVplK3FW6p0JAuppYRlOe608K7eT71nCWLK8LLpi3PgnaGx8LqZaJKpp+vXijVNVTqNyvYonm8arhsvS6esgyO4UBZspJ1ZYrkvFZXcJ7Zrp3ekxsLhhLT5Llyka62yRC3S3LDhWkjbxabTOilJ4DRNRouZrjqyhzhZNxbZJM7pKJc7y/+lxOF98t3grC6RYAhaAhCsB6AqAIUQqDABad7CX3OG6YcZzE9KCTIJ0I0UP3AS2TESQRuSLBuEATWrVsAhAACVhYN4C1QgnZGBVW6iI7/8UyAKkGUIRoT/Y6VBmooQGKNiUjLCwgAE7+PyePZuSfhqUpKb1akpd0xcFwlikNWfo8tij6Y2mFYA5ewbDsyGWyy4zKIWSSlt0jkrE8i25CJmPxafvznWXnkOqwVk4Ff9m35cZr7he6LZvpMIxX04iTD8LVwILT7byijkdCG8+Id5mUQE4DhE9D2U3iE8FBveJUjlNQMUCjnUxoCV0UUhD0kgT6r4TJqWGlL0ltW+e2q+m84a2d61pkjbflVTYVTFJm6joulJJwfcckTMgdtmR0O9aiC5KRTm0lGJgEUUMk9grI1LslJHWdstciy3XzL1JyttM1ykh5XYx9fp6NangB9sLuG4CAraqcgAQAAEwOuc0se4ue+7jOfvnQNw5GwIgLoFcEdxaxQrBNbkCkgX5M8hVALEozKym3VtNvSiQCIuKhETkmKwCIUJhWs1BRJwP/xTIApoZghGhQdkibQQIooIoRBCBFKhQJZ6llKPnypaYPPLNtxb3iz9Cz+NCOyazKs3J60qWdFtpgqcUPfOG4lpklnSJQFfUu9EpZogRooL0R2iuILux3kpaaCkEyJM6p4yS3YJQejbxpuJdGifP+9mQ0d3gDSD2brXaOv0amx2peFidl1FTYg9pW5tPskrKiRLp9Ne2Ups63tGV89ZJNTWBaq6OequfbARnJecIt8Yjhxyd6MKBMQkF6Qxo6U4L32hW76WMCkz2ISBDUyFNARYki5gMSVsI4nIA1FOtl74PJTtYFGUHZITIk7pHOKJ5oE2leiQklM+BAlrtav6DtxYAW7w9idA+GnB6oAgAgABy8MiA5Bv8nDcaeiVWRhcclwlSkrEuI0lEqgmkXEiJvksC6CnSkFA3gATCxV3BFcTDbROrbQCwSCN1QAHP/xTIAp4ZwhGhQFjpMHaaCBOVVABSFlWolJQE85hqnZ074PZOxaL19f5t4jYtTx7TKawDLCMGKXgFy1okBQNMKCQmtCiAh0XCpRQ59GJOjAh29f35DWyqBnKKBospdmqtjVvbltwKYMimXAU9Ms3uy7KM+/cnWAV8bsdY99uvPbTT3ZGUrd1c18ioYuVpUAxo1zHamIpPTirC2N9OB4usCSyL7pN9jU0JckzWUe6/Iwiigg7zAcXnAKKN7nVPZqngtAriHrSG3UkNL1oynQec1rFIqNiCRYAKJpVfVWU9SuDa368HWeEpCgTMHZ7HTSvGUxUNul4O0pp3+O0P74+0f8SW7wUDdY6TQO6NgogAAQPmgj4QvoPN5z7371sbtps2i5LlQT3MKUJyVKQreMQcz7owsL7QUO5YCoTAmwglMAAXAAOAURLwgCxUAgL3HA//FMgCphnCEaFBWOFtlQilKoLUiBEEKCASz86gh0nhl9v0EZvOgnfr2IaO+ugFGXk+GUQ8RgOe3m3mr9OPOJFSLZdyzG1G/IpI0xp+/dZonkw+x8Ou6Wrur8dyY9WeijzoUk+OnR9r5ce2azJKrrLsnn7r+/r303XLxG1Iu909Fz7+7W8na1VO9pvRT5eyfGk0urwrh3OW45bnWzZP+p5+dtE1RfHfokiYYqkzsH85ZVLxmt8Uluz8B+wbW0cs8Hy3Q1AuhFMEcOkDnOCoedyXW0UGsl9OF+c+Esd85DddWCyBdOW1r2BJbWaKFu5Z0xsmaq1Z3sLPnW1maHXVM1V+q+4GS6xp6Xdzr0cIiAQFBdI+AK9AAgAgAOg5gfa7k6OY6XBjnMAFoR0i3IsFxeqkzbcrRAo98VSOsAhRbOEwBWCwiTTSASAAAFFQLhtJXZUwA4//FMgC1BlCEaFAWtnQFnCGDmCiJSQQJQBU1qzQ5BFn28rHDvHJUQW9Iu+4dx3/Hemn3VzCwudwNi6dela5ppyx9VMklqPZdINUa9rTMhd/f9h/tcHqpify7Iu8k1to1NxLwgJNjWTSc2Xr8nU9Mvhv6FynxdcrgubGhTzpkIgBfGvfFVg0RPWv0pr3S1IfKo2prO7iBUWWUXpOttEW02QD6a75p784tv28iGWS2vCTy7b4lzQ4kszO8Jwp3Wa53KSxlKhLDwOluXGa1vfPJ251NXcLles+Z25ToU1l9tuPXSVRvES1xMyhTNbE/OmgkJ+kt190TCh7MTlaqK9BYY20LUpUBmLz4V0B1Y5z5qAAAA/WR0nsA5s2cgBAAAx7K2yrZJ5CK2oP7bzuw8nltv6OcJ8MN24f+ybWK1EzFLKEdlRKEKpUQkAlxk5JJi5OtqIwgLzEJwF7IXuoqCZICa4CcVy0kwhABQXBz/8UyAKyGQIRoUDa26LOaywGQiJVgKIBDGgx3wSQqfnv8s/qUcTVilwyBNWCQR0aVQEf9tOMd3KVqs52F5/NHRfCU+3dOb8wB+4W5TT+QI6U9q5HHkn1MF5BG/++U/W9sbKAzpsipqtTlRyGXOod2x23lb9TqtMkmaBqmCYYbCKZ09Ns8ZW1b8raKa8ymk0xaPKnr15XLRe/etcFLRNm9fdO52OxuW6mtywCn0wlrtLSj74kO12VdEI0yTrJF8JuDKY7kk3FM14LXcb0Szz24LUhhS5UmlVhG7BKLBBGDLcg5IAPyFlZipoO05r3PfPnusiQToInlqeiy+KloqQAAAfqKrBuMttg5AqIEAAH5nV4W21YOJsFdf/3J1uZz5OPFy58KKqJ0Bk3UgIsFbKzter2gZkwGEKYvHRehnLFqVKHguRJCJOIAL3jcKWUDaIC4pdQmN62AOKgf/8UyAK4GQIRoUBaYI2UESrU2wBSpapWlQFFAnAg/K7P1vnO5v0VXt367xlGcIkF10dqMeyUTOg+lOWGKIvoSZZgbDx04Fh2beOvHfdJraF2eKHT4S8JSl9eiaumUyN8dGSyYebVTtu0Tu9LTB3VdeuvWGcGcBAybKfAtV4BaA3hLeC8ZmGWXUU1oWYpZJpxHs2TTKZLfe6WDXFmLQjPc72pW/Vnyam6qyektrZzAIzq01zwoxXnU78bCllJj8lLYCQULIZWmJlUNNc1OuKcVztkY1dq8Jq5fCx4QZ5EoPXMYS8QGx2yRhqqJ3NMsasQN2DjQ9gR+YQGRX/84SCenW3QMU7vljdQ7Bl5yB2lAEAgBMw73yVRuYj49z5+0d4vdvbgDe5IEy335mvFIhCdXE6IWI0NQCSVuCsbEya6RQJNUwtIAs5i6KgLLL2VnSojNG9r0ZVSFgTiCaYwf/8UyAKqGQIRoUFa24YRLo22gy1WRBAqYsCGFgdSfeOI5Gbdx7O0XrRHE4LZG+2FobqkeEHYoBZUJXtbXzQLzrC6uXVNcBcQhurfck3tur1OAEOrv+WrZl3LjYjDxHkWs4miMrYm808TCXZ3Dqa+4bBnN8K+folwpeqEsGQJtZ0XOzpUiVTAindNd+qUmqhBYMQNQSTDE8ZJLsTv3y85W6prc86CrnlfmFxcZ99FoUOEoJk8ZR2tsPv8pyLPjE8StQklWMTYCnHhTH4ethBgFbxCGkmHDbTxW+Cc2mOEla1zUAPG5HAzhnzpIHIhYnGumSJqYoPBYlno4f1PI888WJA2F4jYBRRzQBBAQoChiKrze3PAXt3m7cb2xt2huNiBISpJbIkXTjdVdIuuf9sTb7kBQ13tFa2+vEJiFKFgWFeUxCBQisT0Esa5JMgM4uJgDLdQC0x//xTIArYYwhGhP1rZMDaIVUd8yIxrLIVaCoACOdqS5FkwPx/dW/Ztz+6+N7+nwhRppyI2yYOqnwhZ3VT9QTVfBeTphPbij46JDqs9OzQNnD203tylUaFKhuQydW8YtFJFTMim0OhIkytwGW1Lj/Vb8q8POyLY3bRBvkFpiCq8ya209iUXjP3c07p7Mch+vblIZxGNciVyzyTyXTrIgzrLjDAPlCqQ72pzUkkMmbjIlbS68RKoLacpZj6AqS0wFhleRMHdJHDChpFpkVb7eUPJVvSqnrmRhYtstdpINhzWemQMVnn4LkeiyoXvWi7FMLWvvoSUEha8acTacFKpCuupkOA2AJ8l9Ej2UcQAAB8srnHgUZQ8UqAAQKQAkIni+S6v2247YKKjy5mXmdPPIdPPRNRwurBGY3ohGEALEnCU7Ny1QXAEEBMGMAUWFl6BUABEVBYDoqLlwXqAMH//FMgCqhjCEaFEWGkN5QnmopW7okyFhJiwVdAlSg0SC/WaTApKjtsHYpXeJqioRwP5NGX9O+AcSDCmEaKO6zK3yZ+ie605us9sR5nx3GqHTNZTHfd2+E+UyNtsm2jd5/R2aO+fat3LGWQ9kbN3dJaYFFm/ns7c4Khpmmy2eFLTDNxXIOjSUCqawCi8VgkWSYFjMQxm0a4y30WZ5oW7a5a4a/Ozb4bJPqSWKeznaXUnGtsJaLM1+mNI6XlyqlUpZZa+gtOAMhDzKIvkILniNps7E5QwxtxtkpOd51ZmA7e7Cmvyjssr31s4plYgkj32bq4skVytzIZtVc1k0tFxNrX+b1bWtyCElI+AKNHgxKAQJQRCgf3yOZJ3WHO7sXUEoQ6Q4n9CPMRArS9TgpF3lKak11SikwilaV1ZJbQgVETgBqWAyC8IrqzF0YIhEzSkBEFxOQVwf/8UyAKsGMIRoUDaW8oRiKzehFIIVZFQjJQI6qdt7lPd2xM0Yjc70ecizNtJR5YMirKBM3V/7t9lc+Azz0tLoEKU0b9FS37RPnjxbfqx8PAdMixqpso8aOv7z379xnXbr8arqKR0lEoW1Nl9I1mGWiVUp7adddl0rtwmF5DpCgVwmoQ0ZLKWtMZKs3mW5iqIUSDnQmedfNOhWaXrzwO/NbHsvlTGJy2Qb1nvF+j1zXpB0ug4CeFWmmEFlCVLTvm3XgSJJCSlOt5zsIlKF1VR5EFVa0zxvXGfCSqeizBc8B8MxKeS/sjMzeWIqkvcUG6EUwrOhxuY5Z0UL+d9SO7wm4gEFQnUPBAoeBAAgAA9JrUpuc3T4XRzDwOnm6ANmzaSd6id/Mzdl6sNnTCmnJvT3UOs0zPCsqzGr1iFCcK2CAjMsGekkIqiVwLgRBRRYAA6XACApGgwf/8UyAKqGMIRoUDYqW2jCCmApRBYSpSVagCGZfYgLl2YT5lrj8LcLzfCaY3D7k/SbJ04gYGPv1ZhyLNhHm4SNNaoxPt2yIEm8CvKWq61ubd11Ms8Q/ONUilLR9L26s/dTnqugdEsz44nfyo1aeXonra3MfNjRGWevzcqZ1lryvHXPDvS53pc9J8XusXKtqYTdUo0CQEIailtpca664K26khncoQRhaFlOYUpvsUDOkaaLozmuGmJamfbMztLUjicrtNXI6ToT45gLbsCJ6Q7kftykKRhOXjnU5UeUnmydJVpFDfadhywhmUQLiyRBx1jI8DU1a0UgvL++8Pc+ih+tB/CWZmB2AAQAAUSMTTymWS36VGls4016MZsh/7X/oas4WpGrhrS2iITiyABKSVoVvJNPYIo1HBbKASuXjILQnwJDV2yBtAAQlIIFwje2kElwACU1bDv/xTIAq4YwhGhQFrbaCEMrOdTelCFWVIFQMBGblv8uQheNsuymulnZB6qmzeeYacbdOCPA7SqtVPHdXOlxNgnwKfHXS8vVTYERffThtsC6/hnT6uDeHbZVXliU03UTnb8b/ViemdVLZVh3+u58p6RO3d/ahlNQ9YJLJ0u1lJXTkCgFQIT2G6ExvWFVst8yMGS022m8tcjIAhfGNN858TRc7pfrJC1y0WzZKkd9Ub5KZiurbAVaHRsJDp9EgBStTnkFjKbCdyrbBJPINdKzMpaawoFUnQxuihaVcKyC2hrqHtmkn1tY1ldsyTgrHZueq1GQ0NDa+2o6I6HyUgyF9tAp3fLIxR8ARN5OzYAAQAAJwDcZq1WBV2L2zDhyD30ZUXlacUWVOsJZF5KS4orAmWWtBEd7TkuAvXwTQkmvCjUoXTIopSuHWsSwzHPmTuACpYABI41RldQ7/8UyALGGEIRoT9a4Q1FCAqu96yypSyVYQAwZ2xJKMKoQcxbo+09l6gjzyLZV84ZuWvpDg65aYJwdUIK2pBayqK5onmlyYJhaRITJlGmv1ihKbcRDoItTkNdA6dUtWXqzMcKr5U6nfCXi0kVH4BJtlHtR6bczw6Oee7yJuPTF01lpdLsmqknIsAKVe9UqpFZgVH63NKeU9FjIqPHJxqrSdMQdlrHg8rP4uN0l9k2U2VlgwM52SmluwvX0s553hJY+QpU9c+GBWAmgbrQenCgVmulzlRRsrvJ1HQ08Gzm2EK46EvIaoqpuZ5rmonfvkZKZdjlfANfBTPP3a3moGxpysf1Z7JzZGpA/2pSjkLUB8gAIAQC0D31TMfmyQD1OWwU2Zq3QBUVHloedqeJ7kStA4ehAXQh2qhJKHR1LokNRW4sIEpDtNCQTIyuEp0EoSmRCk7i8lgChYhuAxphHeEMxFAAMH//FMgCkhiCEaFD2GHNhAppl1hVqovNVZS0qCoAtSvqhH2PAF5sd96u10v/ED2AkinPM1pK8ZNNKigEBKRcl+8EJrArYFRK6D3jK2XIJLtdeFNE7FYos9OON0b/lbfGnyTfV3/rIfCTFTlr/axrqp3knXE4vxVJiba0i0k1dNTDdMMSu+hbq0bNUI5KLWq1SuM8DRONM6Eb1TtppKMSJzslM9L3FhRvGqtKXgBtJSuDuWdWmWuLKBouOwedx42is9Cu7HCIjnsO2+ipzhlOQ1mriR5HemSrZW9qVBaNEXTICXziMLookxpkITRnupbGEGK6gnD3fnfBCNuU7wNjH5h4KECiAgAAGQwvxdNWxNLSxwtarRAmZqRSdE4aMITofABGnSzFjoTvOoWVRoBRWsIVFhC5KG06BzUAAErBAk+CnaRcFkwFF7kgf/8UyAKcGMIRoULaYQ1xYABUqFWiAGQE7db0+K41BDdwT2iiWgQBtXHeUGgop97lDQ/6uUgRTnoHSFbljPsCATgQgNwaUs6904rsyv49D6XyyiFsoXUaqEqbtor8dXTVqK7rIl8oyc5qwC3/FwtMyzHw9nPj76tsvJ0kDQMtwZcZBC7hUeMiMNg082Ol1mursrS7Zf0ZXe3853tOXZPbKNGuiRZdzjGMrxWb3XSw79fTRZ11QOrC0TxsWJGtGfrtx2GlN/eV+Fqhyxq1TFPksAVsfEdA2TpngV+Odq2It2+rrfbRMkWX9nCMGqqyPycKLgdzsqk1yFrvIjLixOZTGF6w8t8lgkXXUAAAQlhdQ4AQjICg5AQAgAd7ieAlu3Gw3bDeGptBEFVrY1IhWvAqrcC8REJkBXc2yARQAQcCGFY3pSRATkClxWgCQawiA4//FMgCjhlCEaFEWGHsWBNBQlmFyFWwLq6hqc2GLoEsRC7OXbW3AvNUEcMR82javllHyI8PyJIlFXKadUt9ME7iisTZJoywF7y1JWpcOv7T9Z4ZBY95y3zw/NPdTbBHaIcMtzyYZt0VSTy6fZfIHiWFFMrbr9hc+fFfr+d27fZSs9NN4JDsdE0CnSw7r4IsKvaBUbfmuwsM/JnbbPruxrsAJY8Oprx8LHvurQBuzhdQ3zT3Xp+GX6wMhxP18osqHILCqgbbJKA4Ukjx4V2ZIWkaCGWOwKPxbPJbIzO4L1HJPEWX9MUkvvdAfBKoC2KhvJRpn8FgHJh5vFAklmA24pviqXM/i7O3uY3uJBDuYfjEbUSAoQALFAfjcAbNxtorPfS9TJAkQhMSSFHeKkgEEwAKgjVYATCoBWKFwTC5EAAvEBUmLAAAIH//FMgCphlCEaFCWSJ2GBs0kpjLBUgON1IEBQE8qa1zRkupaG7Ufg5m55uYMrpMiqn405n05q40tKNJZENNkFuRIXCIsTd540rxpPllAKqoqNU23IhCVVlyNgSGWOVDjpIJMNy9tfutpkWwk8xbg+D4q/se/x2zV2CLaTyWJPURIffC2kmmwoKTaaD6bd1WdnlYcdK1+XsedtUs0mAjfE1nVXLpvkdq+q6SFuK/GXlle91IFX7praZwnBRmoc6sMGlI8571sqLwXN7spx3/TbWL2Wz6S6+ylRSWP13UHqFbYCfgQmwjOavpuptIp+xZ/rSFclBu+Pt8qYTzmdci1zqPfZEoiA+ELRXEibJZ5xTacScNgHDSFRWlAAABELQCiwBCEeVUcgAQAAB5vdTy4gVYtSwYAAlBARaFAqoAQQKIAFEgCU8xcCIkFpACQAUsQWsuDg//FMgCjBnCEaFDWKMM1Qi6ZUWkKKkCyCoVNgliJdl184ZALHLq5ViANweCPZyk4gJ9a2Ue7wN4gGjJ376D1aFMtMopiGppSrlKkp/j7dXNSejx1oU3n5RWQZKjlVSL0q7TsS69VbW1L7TU7H7CpT4hQ3n06UBP6217a/htt0SpxSI6Uq2Tv4VRN6NXX4Hu7IkqtMLTdqxxE2rXn4U416cJIUQqE0lfvdMpEvg2m2LctmK7asZKqiMBguXPXRINAnKna6I1F1UWKC0z7qIA8ebYV0NYvkdOkd2fhtFypmwtpCWbfd5rlE6Lu+WQqRhONCTY1yNhSQOWdh1cnabhPqx2H326Arh48L00y1Kfl6Ln4gI5VicBiIBi4fqwOSiALAUHhEWny8TgAE0CBMoICMiyYCyoAC4AvEBEAAmAF6AF0gCkVAAgf/8UyAKiGgIRoUFYaW2zCcc6tnOy8LxEpIQmRUAJsHHEn9bgMbAeH4HkXmHTP/nSs02fjj3NaymT9PJDo9Ms82tJwxILNOMi1G0p/rur2DQZP23Xba6DSyyiZNXOk5B3bs9vLC15eRaCksq7F7fQ2Ch3nTGHjLTyo92b9/qfolQGpA22x91pvLTllJ0Gq0LnWvMtqjdbLfTWqg48rnspkOqDq6LNyYBS+uMhprwtTN5vRVFc/XLPsqxaXgwCxFcCANyq5br88zjvK9eel5tpiInaxNSJLMOmQbxQrL4VzVxJakS8sliexzoWCzmzKFlnrZy2AEAh6+WqsiuGpGU/vby797s4j/QlOLQGLxvSnoAAQAAeXqIaBzbn6XnHmeUpPK3zV4Ld2grWCsosy8cSldoRTDlEQAQTYiiSpKTgICXcFiIACQUhACSYpNW9ZlVaAc//FMgCohoCEaFD2GMUWCMUQlqKIRCkUaAAbBDB0tuA4uwwJsdQtI072FQPknJly43LQMRSs8DjNFjfbaQKGqS01daKYjGSoPLQgbtZF9GMTWW2917vaWSynTIKUYINMjSluCkZyoiK6EGxJqizskZVq3BhJkbXpvom/KWEk1XJSQ1zkxhlU093hYSSZL5F9qGKTwgbUy6khkEZe4QtlfHirIBxxzoV24AbLipgQMLKbMqnAwF/DhgSC9fTZYWSXC6ii+AkUKe8TNWBPeasbVgpRcUBg8TcKRIRWU4GLm2UZOUnRmuCmbJXC2bzbRXE1pyIhaGv5puw540uSWtaeTw43pPdJhMyd2rbj4LHdJ13lNbVNMeF0vHRbuGxela69FokRQTmAxCAhCAhEBRINGwABADohPcfkd5BNaQtdcIgF6WC87FFgCdQJrTAAmJ5RjHP/xTIApwaQhGhQdhpUVZAABCipVomWAKBHl9yWI/O6W8yE9WaCt6heI+CcGIItQMzavm6cJmAHqbRnvrwzLdeSlYUU26dUsquIvkSwwOa2WXXSN8cAwUFOmsWAJs1k16nen3HjZgLEUp6JSfxqjbz5VKnEJWRcnyKphsluuRVZ3WC8CXHJqW9+DAMgc8USoffrK5lm7kXSAkGlSbN8M05w3hIN0TT1GwszE0E0TRlpwU4Ct6UXWjiyVMkmqJ6RFSgwcCctCPiaOI7Qd8tFVbS17MFo2ztOPQ70MVWK7ozxq7+XVtp3OluPdc1eDHVKFY0B9aGz45Vt1x1VR0mqzG+6W6wp7kltwXnZm3weubvNx6xsu5zzh2iMz0OWec1MwAAAESPAEJQEIQEEFAEAAQASFJiaoXqLVEEYJgVEnQBbEkAdIiAkAAmCcgTAkCI7/8UyAK2GkIRoT9aW2gmECyqad3LmHWGapJKQy6a0oRS8AAA88oiEHiJpxGzUlyASQi0wY9NUQaGBnUlCgJCNQ4Pvu5Plu0fwDd9Ht66P41YlhfdqbG2rFrV80yX+BM0YUxhIn5//wxQ8cUZq+0DQ8W83m+D0zW9r14c/8StfDtZ6xpxocsBFHpxmdkrHHFHJ2OasXMicTxIUAsHGnHEhA2pmcDmcHfB61br8GYu7td6cfNMaP3druzIbABtTFUzmBV4K1MxVyMbNijyO4AhzOF+JA4Vi5tjD4LGD4KzI4E64zVyA7mgEMzeaZJNckaKoZSVP9VNfBeFdaXDGalHd78WQSXzTMzE7gDJy9YgYvsCc5EBAmAYhAglAAihoUNaUIpeAAAeeURB/0Hzd1uh43PAV4WepFFl4KzRegt4fhq1ADz+4DHq9wMG8AxUAAy/lqgH+fRceRD0aTBw==";
+
+		const el = document.createElement("audio");
+		el.src = audioUrl;
+		el.autoplay = true;
+		el.loop = true;
+		el.style.display = "none";
+		// Disable playing over chromecast etc.
+		el.disableRemotePlayback = true;
+		// Set to almost muted
+		el.volume = 0.000001;
+		document.body.appendChild(el);
+	}
+
+	function autoStruggle() {
+		const allowAllDialogExpressions = () => {
+			if (!(bceSettings.expressions || bceSettings.activityExpressions)) {
+				return;
+			}
+			if (
+				StruggleProgressAuto >= 0 ||
+				StruggleProgressChallenge <= 0 ||
+				!CharacterGetCurrent()?.IsPlayer()
+			) {
+				return;
+			}
+			DialogAllowBlush = true;
+			DialogAllowEyebrows = true;
+			DialogAllowFluids = true;
+		};
+
+		createTimer(() => {
+			if (!bceSettings.autoStruggle) {
+				return;
+			}
+
+			if (typeof StruggleProgress !== "number" || StruggleProgress < 0) {
+				return;
+			}
+
+			if (StruggleProgressCurrentMinigame === "Strength") {
+				allowAllDialogExpressions();
+				StruggleStrength(false);
+			} else if (StruggleProgressCurrentMinigame === "Flexibility") {
+				if (StruggleProgressFlexCircles?.length > 0) {
+					allowAllDialogExpressions();
+					StruggleFlexibility(false, true);
+					StruggleProgressFlexCircles.splice(0, 1);
+				}
+			}
+		}, 60);
+
+		createTimer(() => {
+			if (!bceSettings.autoStruggle) {
+				return;
+			}
+
+			if (typeof StruggleProgress !== "number" || StruggleProgress < 0) {
+				return;
+			}
+			if (StruggleProgressCurrentMinigame === "Dexterity") {
+				// Duplicated logic from StruggleDexterity
+				const distMult = Math.max(
+					-0.5,
+					Math.min(
+						1,
+						(85 -
+							Math.abs(
+								StruggleProgressDexTarget - StruggleProgressDexCurrent
+							)) /
+							75
+					)
+				);
+				if (distMult > 0.5) {
+					allowAllDialogExpressions();
+					StruggleDexterity(false);
+				}
+			}
+		}, 0);
+	}
+
+	function nicknames() {
+		if (isString(bceSettings.nickname)) {
+			setOwnNickname(bceSettings.nickname);
+		}
+
+		/** @type {[number, number, number, number]} */
+		const nickButtonPosition = [475, 100, 60, 60];
+		/** @type {[number, number, number, number]} */
+		const exitButtonPosition = [1815, 75, 90, 90];
+		let nickInputVisible = false;
+		const nickInputName = "bce-nick-input";
+
+		function showNickInput() {
+			nickInputVisible = true;
+			let name = "";
+			if (isString(bceSettings.nickname)) {
+				name = bceSettings.nickname;
+			}
+			ElementCreateInput(nickInputName, "text", name, "20");
+		}
+
+		function hideNickInput() {
+			if (!Player.BCEOriginalName) {
+				Player.BCEOriginalName = Player.Name;
+			}
+			bceSettings.nickname = ElementValue(nickInputName);
+			setOwnNickname(bceSettings.nickname);
+			bceSaveSettings();
+			ElementRemove(nickInputName);
+			nickInputVisible = false;
+			sendHello();
+		}
+
+		SDK.hookFunction(
+			"InformationSheetRun",
+			HOOK_PRIORITIES.AddBehaviour,
+			/** @type {(args: unknown[], next: (args: unknown[]) => unknown) => unknown} */
+			(args, next) => {
+				if (bceSettings.nicknames) {
+					if (
+						InformationSheetSelection?.BCEOriginalName &&
+						InformationSheetSelection.BCEOriginalName !==
+							InformationSheetSelection.Name
+					) {
+						w.MainCanvas.getContext("2d").textAlign = "left";
+						DrawText(
+							displayText("Official Name: ") +
+								InformationSheetSelection.BCEOriginalName,
+							550,
+							75,
+							"grey",
+							"black"
+						);
+						w.MainCanvas.getContext("2d").textAlign = "center";
+					}
+					if (InformationSheetSelection?.IsPlayer()) {
+						DrawButton(
+							...nickButtonPosition,
+							"",
+							"white",
+							"Icons/Small/Preference.png",
+							displayText("Change your nickname")
+						);
+					}
+				}
+				// eslint-disable-next-line consistent-return
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"InformationSheetRun",
+			HOOK_PRIORITIES.OverrideBehaviour,
+			/** @type {(args: unknown[], next: (args: unknown[]) => unknown) => unknown} */
+			(args, next) => {
+				if (bceSettings.nicknames && nickInputVisible) {
+					DrawButton(
+						...exitButtonPosition,
+						"",
+						"white",
+						"Icons/Accept.png",
+						displayText("Save this nickname")
+					);
+					DrawText(
+						displayText("Set your nickname here. Leave empty to reset."),
+						1000,
+						400,
+						"black",
+						"black"
+					);
+					ElementPosition(nickInputName, 1000, 500, 500);
+					return;
+				}
+				// eslint-disable-next-line consistent-return
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"InformationSheetClick",
+			HOOK_PRIORITIES.AddBehaviour,
+			/** @type {(args: unknown[], next: (args: unknown[]) => unknown) => unknown} */
+			(args, next) => {
+				if (
+					bceSettings.nicknames &&
+					InformationSheetSelection?.IsPlayer() &&
+					MouseIn(...nickButtonPosition)
+				) {
+					showNickInput();
+				}
+				// eslint-disable-next-line consistent-return
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"InformationSheetClick",
+			HOOK_PRIORITIES.OverrideBehaviour,
+			/** @type {(args: unknown[], next: (args: unknown[]) => unknown) => unknown} */
+			(args, next) => {
+				if (bceSettings.nicknames && nickInputVisible) {
+					if (MouseIn(...exitButtonPosition)) {
+						hideNickInput();
+					}
+					return;
+				}
+				// eslint-disable-next-line consistent-return
+				return next(args);
+			}
+		);
+
+		/** @type {(e: KeyboardEvent) => void} */
+		function keyHandler(e) {
+			if (e.key === "Escape" && nickInputVisible) {
+				hideNickInput();
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		}
+
+		document.addEventListener("keydown", keyHandler, true);
+		document.addEventListener("keypress", keyHandler, true);
+	}
+
+	/** @type {(newName: string) => void} */
+	function setOwnNickname(newName) {
+		if (!Player.BCEOriginalName) {
+			Player.BCEOriginalName = Player.Name;
+		}
+		if (!newName) {
+			newName = Player.BCEOriginalName;
+		}
+		if (newName !== Player.BCEOriginalName) {
+			newName = removeNonPrintables(newName);
+		}
+		if (newName !== Player.Name) {
+			bceSendAction(
+				displayText("$OldName is now known as $NewName", {
+					$OldName: Player.Name,
+					$NewName: newName,
+				})
+			);
+		}
+		Player.Name = newName;
+		if (Player.Name === Player.BCEOriginalName) {
+			delete Player.BCEOriginalName;
+		}
+	}
+
+	function enableLeashing() {
+		const emoticon = Player.Appearance.find((a) => a.Asset.Name === "Emoticon");
+		if (!emoticon) {
+			bceWarn("Could not find emoticon asset.");
+			return;
+		}
+		if (!emoticon.Property) {
+			emoticon.Property = { Effect: ["Leash"] };
+		} else if (!emoticon.Property.Effect) {
+			emoticon.Property.Effect = ["Leash"];
+		} else if (!emoticon.Property.Effect.includes("Leash")) {
+			emoticon.Property.Effect.push("Leash");
+		}
+		ChatRoomCharacterUpdate(Player);
+	}
+
+	function disableLeashing() {
+		const emoticon = Player.Appearance.find((a) => a.Asset.Name === "Emoticon");
+		if (emoticon?.Property?.Effect?.includes("Leash")) {
+			emoticon.Property.Effect = emoticon.Property.Effect.filter(
+				(e) => e !== "Leash"
+			);
+		}
+		ChatRoomCharacterUpdate(Player);
+	}
+
+	async function leashAlways() {
+		await waitFor(() =>
+			Player?.Appearance?.some((a) => a.Asset.Name === "Emoticon")
+		);
+		const emoticon = Player.Appearance.find((a) => a.Asset.Name === "Emoticon");
+		if (Array.isArray(emoticon.Asset.AllowEffect)) {
+			emoticon.Asset.AllowEffect.push("Leash");
+		} else {
+			emoticon.Asset.AllowEffect = ["Leash"];
+		}
+
+		if (bceSettings.leashAlways) {
+			enableLeashing();
+		} else {
+			disableLeashing();
+		}
+	}
+
 	(function () {
 		const sendHeartbeat = () => {
-			ServerSend("AccountBeep", {
-				BeepType: "Leash",
-				// BCE statbot, which only collects anonymous aggregate version and usage data to justify supporting or dropping support for features
-				MemberNumber: 61197,
-				Message: JSON.stringify({
-					Version: BCE_VERSION,
-					GameVersion,
-					BCX: bcxType,
-					// !! to avoid passing room name to statbot, only presence inside a room or not
-					InRoom: !!Player.LastChatRoom,
-					InPrivate: !!Player.LastChatRoomPrivate,
-				}),
-				// IsSecret: true to avoid passing room name to statbot
-				IsSecret: true,
-			});
+			if (w.BCX_Loaded && bcxType === "none") {
+				bcxType = "external";
+			}
+			SDK.callOriginal("ServerSend", [
+				"AccountBeep",
+				{
+					BeepType: "Leash",
+					// BCE statbot, which only collects anonymous aggregate version and usage data to justify supporting or dropping support for features
+					MemberNumber: 61197,
+					Message: JSON.stringify({
+						Version: BCE_VERSION,
+						GameVersion,
+						BCX: bcxType,
+						// !! to avoid passing room name to statbot, only presence inside a room or not
+						InRoom: !!Player.LastChatRoom,
+						InPrivate: !!Player.LastChatRoomPrivate,
+						// @ts-ignore
+						// eslint-disable-next-line camelcase
+						InTampermonkey: typeof GM_info !== "undefined",
+					}),
+					// IsSecret: true to avoid passing room name to statbot
+					IsSecret: true,
+				},
+			]);
 		};
 		sendHeartbeat();
 		// 5 minutes
 		createTimer(sendHeartbeat, 1000 * 60 * 5);
 	})();
+
+	/** @type {(s: string) => string} */
+	function removeNonPrintables(s) {
+		if (!s) {
+			return "";
+		}
+		return s
+			.replace(/[^\p{L}\p{Z}'-]/gu, "")
+			.replace(/[\n\r\p{Z}]/gu, " ")
+			.trim();
+	}
 
 	/** @type {(cb: () => void, intval: number) => void} */
 	function createTimer(cb, intval) {
