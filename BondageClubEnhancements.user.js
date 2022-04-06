@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 1.9.999
+// @version 2.0.1
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -97,7 +97,7 @@ async function BondageClubEnhancements() {
 	const DISCORD_INVITE_URL = "https://discord.gg/aCCWVzXBUj";
 
 	const BCX_DEVEL_SOURCE =
-			"https://jomshir98.github.io/bondage-club-extended/devel/bcx.js",
+			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
 			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/6252bd755d7ba84f4bb93aed74ab51753b18080a/bcxedit.js";
 
@@ -5492,13 +5492,6 @@ async function BondageClubEnhancements() {
 							action = "tightens";
 						}
 						focusItem.Difficulty = newDifficulty;
-						bceSendAction(
-							displayText(`$PlayerName ${action} $TargetName $ItemName`, {
-								$PlayerName: Player.Name,
-								$TargetName: C.Name,
-								$ItemName: focusItem.Asset.Description.toLowerCase(),
-							})
-						);
 					}
 					break;
 				default:
