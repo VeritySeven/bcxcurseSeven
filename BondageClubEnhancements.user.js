@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name Bondage Club Enhancements Edit
+// @name Bondage Club Enhancements edit
 // @namespace https://www.bondageprojects.com/
-// @version 2.0.9
+// @version 2.0.10
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -38,40 +38,25 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const BCE_VERSION = "3.4.3";
-const settingsVersion = 37;
+const BCE_VERSION = "3.6.0";
+const settingsVersion = 38;
 
 const bceChangelog = `${BCE_VERSION}
-- update BCX stable
+- R81 compatibility
+- add /craft command
+- improvements to the crafting interface
+- removed all activities cheat until it can be implemented better
 
-3.4.2
-- R80 compatibility
-- enhance game's nicknames instead of implementing separate nicknames
+3.5.0
+- R81Beta3 compatibility
+- remove cheat to loosen/tighten *while bound*: it has become apparent this is causing more problems than the issues it was created to solve
+- fix notes in profile
+- validate version strings before displaying them
+- new setting to allow using all activities always regardless of their prerequisites
 
-3.4.1
-- change EBCH to load from Elicia's URL
-- fix message when copying colors from item to another (layering menus)
-
-3.4.0
+3.4
 - add loading for Eli's BC Helper by the wonderful Elicia
 - move loosen or tighten button to its own cheat setting
-
-3.3
-- add option to hide hidden items icon on other characters
-- add ability to resize the instant messenger
-- change blind without glasses setting to use R80's new blur effect
-
-3.2
-- render pending messages in chat
-- fix duplicate login looping
-
-3.1
-- R79 compatibility
-
-3.0
-- BREAKING CHANGE: instant messenger now uses normal beeps instead of BcUtil-compatible beeps
-	- This means you can now use the instant messenger as a full replacement for beeps with all your friends, whether they use BCE or not
-- update Chinese translation
 `;
 
 /*
@@ -88,7 +73,7 @@ const bcModSdk=function(){"use strict";const o="1.0.2";function e(o){alert("Mod 
 async function BondageClubEnhancements() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R80"];
+	const SUPPORTED_GAME_VERSIONS = ["R81"];
 	const CAPABILITIES = ["clubslave"];
 
 	const w = window;
@@ -367,6 +352,10 @@ async function BondageClubEnhancements() {
 			value: false,
 			sideEffects: (newValue) => {
 				bceLog("allowLayeringWhileBound", newValue);
+				if (newValue && !bceSettings.layeringMenu) {
+					bceSettings.layeringMenu = true;
+					defaultSettings.layeringMenu.sideEffects(true);
+				}
 			},
 			category: "cheats",
 		},
@@ -375,6 +364,10 @@ async function BondageClubEnhancements() {
 			value: false,
 			sideEffects: (newValue) => {
 				bceLog("modifyDifficulty", newValue);
+				if (newValue && !bceSettings.layeringMenu) {
+					bceSettings.layeringMenu = true;
+					defaultSettings.layeringMenu.sideEffects(true);
+				}
 			},
 			category: "cheats",
 		},
@@ -924,6 +917,8 @@ async function BondageClubEnhancements() {
 	const expectedHashes = (gameVersion) => {
 		const hashes = {
 			ActivityChatRoomArousalSync: "21318CAF",
+			ActivityCheckPrerequisite: "6DB129F9",
+			ActivityCheckPrerequisites: "4B8903AF",
 			ActivitySetArousal: "3AE28123",
 			ActivitySetArousalTimer: "A034E6C0",
 			ActivityTimerProgress: "6CD388A7",
@@ -935,13 +930,16 @@ async function BondageClubEnhancements() {
 			CharacterBuildDialog: "3CC4F4AA",
 			CharacterCompressWardrobe: "8D3B1AB1",
 			CharacterDecompressWardrobe: "A9FD29CC",
+			CharacterDelete: "398D1116",
 			CharacterGetCurrent: "A4EA6438",
+			CharacterLoadSimple: "7F6FA9F2",
 			CharacterNickname: "EB452E5E",
 			CharacterRefresh: "5BF9DA5A",
+			CharacterReleaseTotal: "396640D1",
 			CharacterSetActivePose: "0339D069",
 			CharacterSetCurrent: "FD267B9B",
 			CharacterSetFacialExpression: "D66B4515",
-			ChatRoomCharacterItemUpdate: "4EB70443",
+			ChatRoomCharacterItemUpdate: "041F9B91",
 			ChatRoomCharacterUpdate: "9D0EEA39",
 			ChatRoomClearAllElements: "C49AA2C1",
 			ChatRoomClick: "79E651EB",
@@ -951,7 +949,7 @@ async function BondageClubEnhancements() {
 			ChatRoomDrawCharacterOverlay: "4AE4AD9E",
 			ChatRoomKeyDown: "B4BFDB0C",
 			ChatRoomListManipulation: "75D28A8B",
-			ChatRoomMessage: "F9414B8C",
+			ChatRoomMessage: "BA549E5F",
 			ChatRoomResize: "9D52CF52",
 			ChatRoomRun: "861854FF",
 			ChatRoomSendChat: "7F540ED0",
@@ -961,12 +959,19 @@ async function BondageClubEnhancements() {
 			CommonClick: "1F6DF7CB",
 			CommonColorIsValid: "390A2CE4",
 			CommonSetScreen: "17692CD7",
-			DialogClick: "CE16B270",
-			DialogDraw: "302268CE",
-			DialogDrawItemMenu: "A6FE3967",
+			CraftingClick: "4A59F3E8",
+			CraftingItemListBuild: "107646D8",
+			CraftingLoad: "8ACDAB6E",
+			CraftingExit: "27578DC8",
+			CraftingModeSet: "CD06BF9E",
+			CraftingRun: "50DAA6E6",
+			DialogClick: "592A4F65",
+			DialogDraw: "7AD8C0F6",
+			DialogDrawItemMenu: "FB5172D2",
 			DialogLeave: "354CBC00",
 			DrawBackNextButton: "0DE5491B",
 			DrawButton: "63FDE2B2",
+			DrawCharacter: "C8F13D85",
 			DrawCheckbox: "00FD87EB",
 			DrawImageEx: "3D3D74F5",
 			DrawImageResize: "8CF55F04",
@@ -1000,6 +1005,11 @@ async function BondageClubEnhancements() {
 			InventoryItemMiscTimerPasswordPadlockDraw: "953C9EF8",
 			InventoryItemMiscTimerPasswordPadlockExit: "7323E56D",
 			InventoryItemMiscTimerPasswordPadlockLoad: "D7F9CCA4",
+			InventoryWear: "37C4B814",
+			ItemColorClick: "79DF36F7",
+			ItemColorDraw: "65543502",
+			ItemColorLoad: "B777DA79",
+			ItemColorOnExit: "44C4DAC8",
 			LoginClick: "8A3B973F",
 			LoginRun: "B40EF142",
 			LoginSetSubmitted: "C88F4A8E",
@@ -1009,24 +1019,22 @@ async function BondageClubEnhancements() {
 			NotificationRaise: "E8F29646",
 			NotificationTitleUpdate: "0E92F3ED",
 			OnlineGameAllowChange: "3779F42C",
-			OnlineProfileClick: "9EF4F64F",
-			OnlineProfileExit: "53E58C94",
-			OnlineProfileLoad: "04F6A136",
-			OnlineProfileRun: "8388DFE2",
+			OnlineProfileClick: "CC034993",
+			OnlineProfileRun: "B0AF608D",
 			RelogRun: "10AF5A60",
 			RelogExit: "2DFB2DAD",
-			ServerAccountBeep: "D93AD698",
-			ServerAppearanceBundle: "94A27A29",
+			ServerAccountBeep: "6A6EC803",
+			ServerAppearanceBundle: "56C7E218",
 			ServerAppearanceLoadFromBundle: "76D1CC95",
 			ServerClickBeep: "3E6277BE",
 			ServerConnect: "845E50A6",
-			ServerDisconnect: "0D4630FA",
+			ServerDisconnect: "06C1A6B0",
 			ServerInit: "BBE09687",
-			ServerOpenFriendList: "531EBF56",
+			ServerOpenFriendList: "FA8D3CDE",
 			ServerSend: "90A61F57",
 			SkillGetWithRatio: "16620445",
-			SpeechGarbleByGagLevel: "D29A6759",
-			SpeechGetTotalGagLevel: "E8051EA2",
+			SpeechGarbleByGagLevel: "2AEDED9D",
+			SpeechGetTotalGagLevel: "C55B705A",
 			StruggleDexterity: "95812A41",
 			StruggleDrawLockpickProgress: "0C83B6D4",
 			StruggleFlexibility: "148CEB8F",
@@ -1036,7 +1044,6 @@ async function BondageClubEnhancements() {
 			TimerInventoryRemove: "83E7C8E9",
 			TimerProcess: "19F09E1E",
 			TitleExit: "9DB9BA4A",
-			WardrobeClick: "D388FE7D",
 			WardrobeExit: "EE83FF29",
 			WardrobeFastLoad: "545CB8FD",
 			WardrobeFastSave: "B62385C1",
@@ -1282,6 +1289,7 @@ async function BondageClubEnhancements() {
 	pastProfiles();
 	pendingMessages();
 	hideHiddenItemsIcon();
+	crafting();
 
 	// Post ready when in a chat room
 	await bceNotify(`Bondage Club Enhancements v${w.BCE_VERSION} Loaded`);
@@ -1432,7 +1440,7 @@ async function BondageClubEnhancements() {
 			/** @type {(args: DOMHighResTimeStamp[], next: (args: DOMHighResTimeStamp[]) => void) => void} */
 			(args, next) => {
 				const [time] = args;
-				if (lastFrame >= 0) {
+				if (lastFrame >= 0 && time > 0) {
 					let ftl = 0;
 					if (bceSettings.limitFPSInBackground && !document.hasFocus()) {
 						ftl = 10;
@@ -1448,10 +1456,13 @@ async function BondageClubEnhancements() {
 						return;
 					}
 				}
-				const frameTime = time - lastFrame;
-				lastFrame = time;
+				let frameTime = 10000;
+				if (time > 0) {
+					frameTime = time - lastFrame;
+					lastFrame = time;
+				}
 				next(args);
-				if (bceSettings.fpsCounter) {
+				if (time > 0 && bceSettings.fpsCounter) {
 					DrawTextFit(
 						(Math.round(10000 / frameTime) / 10).toString(),
 						15,
@@ -3052,6 +3063,10 @@ async function BondageClubEnhancements() {
 			100% {
 				transform: translate(24px, 0);
 			}
+		}
+
+		#bceNoteInput {
+			z-index: 100 !important;
 		}
 
 		`;
@@ -5330,6 +5345,15 @@ async function BondageClubEnhancements() {
 						!InventoryGroupIsBlocked(c, c.FocusGroup.Name)))
 			);
 		};
+		const canAccessDifficultyMenu = () => {
+			const c = CharacterGetCurrent();
+			return (
+				bceSettings.layeringMenu &&
+				Player.CanInteract() &&
+				c?.FocusGroup?.Name &&
+				!InventoryGroupIsBlocked(c, c.FocusGroup.Name)
+			);
+		};
 
 		// Pseudo-items that we do not want to process for color copying
 		const ignoredColorCopiableAssets = [
@@ -5522,7 +5546,6 @@ async function BondageClubEnhancements() {
 				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
-						if (bceSettings.modifyDifficulty) {
 							DrawButton(
 								10,
 								890,
@@ -5533,7 +5556,7 @@ async function BondageClubEnhancements() {
 								ICONS.TIGHTEN,
 								displayText("Loosen or tighten")
 							);
-						}
+						
 						if (
 							colorCopiableAssets.includes(focusItem.Asset.Name) &&
 							Player.CanInteract()
@@ -5752,6 +5775,8 @@ async function BondageClubEnhancements() {
 				GLDrawCanvas.GL.textureCache.clear();
 			}
 			GLDrawResetCanvas();
+
+			bceLog("Clearing old characters from cache");
 			const oldOnlineCharacters = Character.filter(
 				(c) =>
 					c.IsOnline?.() &&
@@ -5795,7 +5820,7 @@ async function BondageClubEnhancements() {
 						50 * Zoom
 					);
 					DrawTextFit(
-						C.BCE,
+						/^\d+\.\d+(\.\d+)?$/u.test(C.BCE) ? C.BCE : "",
 						CharX + 300 * Zoom,
 						CharY + 40 * Zoom,
 						50 * Zoom,
@@ -7891,9 +7916,6 @@ async function BondageClubEnhancements() {
 	}
 
 	function nicknames() {
-		/** @type {[number, number, number, number]} */
-		const nickButtonPosition = [475, 100, 60, 60];
-
 		SDK.hookFunction("TitleExit", HOOK_PRIORITIES.Observe, (args, next) => {
 			const oldNick = Player.Nickname;
 			if (ElementValue("InputNickname") === "") {
@@ -7911,25 +7933,6 @@ async function BondageClubEnhancements() {
 			}
 			return ret;
 		});
-
-		// TODO: remove soon after R80
-		SDK.hookFunction(
-			"InformationSheetRun",
-			HOOK_PRIORITIES.AddBehaviour,
-			(args, next) => {
-				if (InformationSheetSelection?.IsPlayer()) {
-					DrawButton(
-						...nickButtonPosition,
-						"",
-						"grey",
-						"Icons/Small/Preference.png",
-						displayText("Use title menu on the right to change your nickname"),
-						true
-					);
-				}
-				return next(args);
-			}
-		);
 	}
 
 	/** @type {(effect: string) => boolean} */
@@ -8372,9 +8375,7 @@ async function BondageClubEnhancements() {
 				);
 				C.BCESeen = profile.seen;
 				if (CurrentScreen === "ChatRoom") {
-					document.getElementById("InputChat").style.display = "none";
-					document.getElementById("TextAreaChatLog").style.display = "none";
-					ChatRoomChatHidden = true;
+					hideChatRoomElements();
 					ChatRoomBackground = ChatRoomData.Background;
 				}
 				InformationSheetLoadCharacter(C);
@@ -8438,51 +8439,44 @@ async function BondageClubEnhancements() {
 			},
 		});
 
-		SDK.hookFunction(
-			"OnlineProfileExit",
-			HOOK_PRIORITIES.AddBehaviour,
-			(args, next) => {
-				noteInput.classList.add("bce-hidden");
-				return next(args);
-			}
-		);
+		// Notes view
+		let inNotes = false;
 
-		SDK.hookFunction(
-			"OnlineProfileLoad",
-			HOOK_PRIORITIES.AddBehaviour,
-			(args, next) => {
-				next(args);
-				noteInput.classList.remove("bce-hidden");
-				noteInput.value = "Loading...";
-				notes
-					.get(InformationSheetSelection.MemberNumber)
-					.then((note) => {
-						// eslint-disable-next-line
-						noteInput.value = note?.note || "";
-					})
-					.catch((reason) => {
-						noteInput.value = "";
-						bceError("getting note", reason);
-					});
-			}
-		);
+		function showNoteInput() {
+			inNotes = true;
+			noteInput.classList.remove("bce-hidden");
+			noteInput.value = "Loading...";
+			notes
+				.get(InformationSheetSelection.MemberNumber)
+				.then((note) => {
+					// eslint-disable-next-line
+					noteInput.value = note?.note || "";
+				})
+				.catch((reason) => {
+					noteInput.value = "";
+					bceError("getting note", reason);
+				});
+		}
+
+		function hideNoteInput() {
+			noteInput.classList.add("bce-hidden");
+			inNotes = false;
+		}
 
 		SDK.hookFunction(
 			"OnlineProfileRun",
-			HOOK_PRIORITIES.AddBehaviour,
+			HOOK_PRIORITIES.OverrideBehaviour,
 			(args, next) => {
-				const ret = next(args);
-				ElementPositionFix("DescriptionInput", 36, 100, 160, 1790, 400);
-				DrawText(
-					displayText("Personal notes (only you can read these):"),
-					910,
-					160 + 455,
-					"Black",
-					"Gray"
-				);
-				ElementPositionFix("bceNoteInput", 36, 100, 160 + 500, 1790, 250);
-				// Always draw the accept button; normal method shows it when is player
-				if (!InformationSheetSelection.IsPlayer()) {
+				if (inNotes) {
+					DrawText(
+						displayText("Personal notes (only you can read these):"),
+						910,
+						105,
+						"Black",
+						"Gray"
+					);
+					ElementPositionFix("bceNoteInput", 36, 100, 160, 1790, 750);
+					// Always draw the accept button; normal method shows it when is player
 					DrawButton(
 						1720,
 						60,
@@ -8493,35 +8487,50 @@ async function BondageClubEnhancements() {
 						"Icons/Accept.png",
 						TextGet("LeaveSave")
 					);
+					DrawButton(
+						1820,
+						60,
+						90,
+						90,
+						"",
+						"White",
+						"Icons/Cancel.png",
+						TextGet("LeaveNoSave")
+					);
+					return null;
 				}
-				return ret;
+				DrawButton(
+					1620,
+					60,
+					90,
+					90,
+					"",
+					"White",
+					"Icons/Notifications.png",
+					displayText("[BCE] Notes")
+				);
+				return next(args);
 			}
-		);
-
-		patchFunction(
-			"OnlineProfileRun",
-			{
-				ElementPositionFix: "// ElementPositionFix",
-			},
-			"Scrolling in profile descriptions"
 		);
 
 		SDK.hookFunction(
 			"OnlineProfileClick",
 			HOOK_PRIORITIES.AddBehaviour,
 			(args, next) => {
-				if (MouseIn(1720, 60, 90, 90)) {
-					// Save note
-					notes.put({
-						memberNumber: InformationSheetSelection.MemberNumber,
-						note: noteInput.value,
-					});
-					if (InformationSheetSelection.IsPlayer()) {
-						OnlineProfileExit(true);
-					} else {
-						OnlineProfileExit(false);
+				if (inNotes) {
+					if (MouseIn(1720, 60, 90, 90)) {
+						// Save note
+						notes.put({
+							memberNumber: InformationSheetSelection.MemberNumber,
+							note: noteInput.value,
+						});
+						hideNoteInput();
+					} else if (MouseIn(1820, 60, 90, 90)) {
+						hideNoteInput();
 					}
 					return;
+				} else if (!inNotes && MouseIn(1620, 60, 90, 90)) {
+					showNoteInput();
 				}
 				next(args);
 			}
@@ -8582,7 +8591,8 @@ async function BondageClubEnhancements() {
 					args?.length >= 2 &&
 					args[0] === "ChatRoomChat" &&
 					isChatMessage(args[1]) &&
-					args[1].Type !== HIDDEN
+					args[1].Type !== HIDDEN &&
+					!args[1].Target
 				) {
 					nonce++;
 					if (nonce >= Number.MAX_SAFE_INTEGER) {
@@ -8665,6 +8675,260 @@ async function BondageClubEnhancements() {
 				return ret;
 			}
 		);
+	}
+
+	async function crafting() {
+		await waitFor(() => Array.isArray(Commands) && Commands.length > 0);
+
+		/** @type {Item} */
+		let coloringItem = null;
+		let coloring = false;
+		/** @type {Character} */
+		let previewChar = null;
+		let viaRoom = false;
+		Commands.push({
+			Tag: "craft",
+			Description: displayText("open the crafting menu"),
+			Action: () => {
+				hideChatRoomElements();
+				viaRoom = true;
+				CommonSetScreen("Room", "Crafting");
+			},
+		});
+		SDK.hookFunction(
+			"CraftingLoad",
+			HOOK_PRIORITIES.AddBehaviour,
+			(args, next) => {
+				previewChar = CharacterLoadSimple(
+					`CraftingPreview-${Player.MemberNumber}`
+				);
+				previewChar.Appearance = [...Player.Appearance];
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				previewChar.Crafting = JSON.parse(JSON.stringify(Player.Crafting));
+				CharacterReleaseTotal(previewChar);
+				return next(args);
+			}
+		);
+		SDK.hookFunction(
+			"CraftingExit",
+			HOOK_PRIORITIES.OverrideBehaviour,
+			(args, next) => {
+				if (viaRoom) {
+					viaRoom = false;
+					ElementRemove("InputSearch");
+					CommonSetScreen("Online", "ChatRoom");
+					return null;
+				}
+				CharacterDelete(previewChar.AccountName);
+				return next(args);
+			}
+		);
+
+		/** @type {(craft: Craft) => void} */
+		function updatePreview(craft) {
+			CharacterReleaseTotal(previewChar);
+			const items = Asset.filter((a) => a.Name === craft.Item && a.Group.Zone);
+			for (const item of items) {
+				InventoryWear(
+					previewChar,
+					item.Name,
+					item.Group.Name,
+					null,
+					null,
+					previewChar.MemberNumber,
+					craft
+				);
+				const worn = InventoryGet(previewChar, item.Group.Name);
+				coloringItem = worn;
+				if (CraftingLock) {
+					if (!worn.Property) {
+						worn.Property = {};
+					}
+					worn.Property.LockedBy = CraftingLock.Asset.Name;
+				}
+				if (craft.Color) {
+					/** @type {string | string[]} */
+					let color = craft.Color.split(",");
+					if (color.length === 1) {
+						[color] = color;
+					}
+					worn.Color = color;
+				}
+			}
+			CharacterRefresh(previewChar);
+		}
+
+		const updateCraftListeners = {
+			Name: updateCraft("Name"),
+			Description: updateCraft("Description"),
+			Color: updateCraft("Color"),
+		};
+
+		/** @type {(field: "Name" | "Description" | "Color") => () => void} */
+		function updateCraft(field) {
+			return () => {
+				const val = ElementValue(`Input${field}`);
+				previewChar.Crafting[CraftingSlot][field] = val;
+				if (field === "Color") {
+					updatePreview(previewChar.Crafting[CraftingSlot]);
+				}
+			};
+		}
+
+		SDK.hookFunction(
+			"CraftingModeSet",
+			HOOK_PRIORITIES.AddBehaviour,
+			(args, next) => {
+				const ret = next(args);
+				if (args[0] === "Name") {
+					const craft = previewChar.Crafting[CraftingSlot];
+					craft.Item = CraftingItem.Name;
+					craft.Property = CraftingProperty;
+					craft.Lock = CraftingLock?.Asset.Name || "";
+					ElementValue("InputName", craft.Name);
+					ElementValue("InputDescription", craft.Description);
+					ElementValue("InputColor", craft.Color);
+					for (const field of ["Name", "Description", "Color"]) {
+						const el = document.getElementById(`Input${field}`);
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+						el.removeEventListener("change", updateCraftListeners[field]);
+						if (!coloring) {
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+							el.addEventListener("change", updateCraftListeners[field]);
+						}
+					}
+					updatePreview(craft);
+				}
+				return ret;
+			}
+		);
+
+		patchFunction(
+			"CraftingClick",
+			{
+				'else {\n\t\t\t\t\tCraftingModeSet("Item");': `else if (Player.Crafting[S]?.Name) {CraftingSlot = S;CraftingProperty = Player.Crafting[S].Property;CraftingOffset = 0;CraftingItem = Player.Inventory.find(a=>a.Asset.Name==Player.Crafting[S].Item).Asset;CraftingLock = Player.Inventory.find(a=>a.Asset.Group.Name=="ItemMisc" && a.Asset.Name==Player.Crafting[S].Lock);CraftingModeSet("Name");} else {CraftingModeSet("Item");`,
+			},
+			"Partial crafting enhancements - editing existing items"
+		);
+
+		patchFunction(
+			"CraftingRun",
+			{
+				'DrawText(TextGet("EnterName"), 1325, 250':
+					'DrawText(TextGet("EnterName"), 1625, 150',
+				'ElementPosition("InputName", 1325, 320, 1000);':
+					'ElementPosition("InputName", 1625, 200, 700);',
+				'DrawText(TextGet("EnterDescription"), 1325, 500':
+					'DrawText(TextGet("EnterDescription"), 1625, 250',
+				'ElementPosition("InputDescription", 1325, 570, 1000);':
+					'ElementPosition("InputDescription", 1625, 300, 700);',
+				'DrawText(TextGet("EnterColor"), 1325, 750':
+					'DrawText(TextGet("EnterColor"), 1625, 350',
+				'ElementPosition("InputColor", 1325, 820, 1000':
+					'ElementPosition("InputColor", 1625, 400, 700',
+			},
+			"Partial crafting enhancements - coloring"
+		);
+
+		SDK.hookFunction(
+			"CraftingClick",
+			HOOK_PRIORITIES.AddBehaviour,
+			(args, next) => {
+				switch (CraftingMode) {
+					case "Name":
+						if (MouseIn(80, 250, 225, 275)) {
+							CraftingModeSet("Item");
+							CraftingOffset = 0;
+							CraftingItemListBuild();
+							return null;
+						} else if (MouseIn(425, 250, 225, 275) && CraftingItem.AllowLock) {
+							CraftingModeSet("Lock");
+							return null;
+						} else if (MouseIn(80, 650, 570, 190)) {
+							CraftingModeSet("Property");
+							return null;
+						} else if (!coloring && MouseIn(1275, 450, 700, 50)) {
+							coloring = true;
+							ElementRemove("InputColor");
+							ItemColorLoad(
+								previewChar,
+								coloringItem,
+								1200,
+								450,
+								800,
+								550,
+								true
+							);
+							ItemColorOnExit((c) => {
+								coloring = false;
+								bceLog(c, "CraftingColor");
+								ElementCreateInput("InputColor", "text", "", "100");
+								document
+									.getElementById("InputColor")
+									.addEventListener("change", updateCraftListeners.Color);
+								ElementValue(
+									"InputColor",
+									Array.isArray(coloringItem.Color)
+										? coloringItem.Color.join(",")
+										: coloringItem.Color || ""
+								);
+							});
+						} else if (coloring && MouseIn(1200, 450, 800, 550)) {
+							ItemColorClick(
+								previewChar,
+								coloringItem.Asset.Group.Name,
+								1200,
+								450,
+								800,
+								550,
+								true
+							);
+						}
+						break;
+					default:
+						break;
+				}
+				return next(args);
+			}
+		);
+
+		SDK.hookFunction(
+			"CraftingRun",
+			HOOK_PRIORITIES.ModifyBehaviourMedium,
+			(args, next) => {
+				const ret = next(args);
+				if (CraftingMode === "Name") {
+					DrawCharacter(previewChar, 665, 65, 0.9, false);
+					if (coloring) {
+						ItemColorDraw(
+							previewChar,
+							coloringItem.Asset.Group.Name,
+							1200,
+							450,
+							800,
+							550,
+							true
+						);
+					} else {
+						DrawButton(
+							1275,
+							450,
+							700,
+							50,
+							displayText("Open Colorpicker"),
+							"white"
+						);
+					}
+				}
+				return ret;
+			}
+		);
+	}
+
+	function hideChatRoomElements() {
+		document.getElementById("InputChat").style.display = "none";
+		document.getElementById("TextAreaChatLog").style.display = "none";
+		ChatRoomChatHidden = true;
 	}
 
 	(function () {
