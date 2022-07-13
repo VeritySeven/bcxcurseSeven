@@ -368,7 +368,6 @@ async function BondageClubEnhancements() {
 			label: "Add option to modify difficulty of restraints to layering menu",
 			value: false,
 			sideEffects: (newValue) => {
-				bceLog("modifyDifficulty", newValue);
 				if (newValue && !bceSettings.layeringMenu) {
 					bceSettings.layeringMenu = true;
 					defaultSettings.layeringMenu.sideEffects(true);
@@ -5669,8 +5668,7 @@ async function BondageClubEnhancements() {
 					if (
 						assetWorn(C, focusItem) &&
 						MouseIn(10, 890, 52, 52) &&
-						bceSettings.modifyDifficulty &&
-						canAccessDifficultyMenu()
+						bceSettings.modifyDifficulty
 					) {
 						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
 						return null;
