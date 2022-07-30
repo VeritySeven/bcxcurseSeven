@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 2.0.15
+// @version 2.0.16
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -100,7 +100,7 @@ async function BondageClubEnhancements() {
 	const WEBSITE_URL = "https://sidiousious.gitlab.io/bce/";
 
 	const BCX_DEVEL_SOURCE =
-			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.j",
+			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
 			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/bc31ebc0ccb7366cddd1fb5258135b444d1e552f/bcxedit.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
