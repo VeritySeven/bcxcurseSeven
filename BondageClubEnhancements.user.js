@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 2.0.16
+// @version 2.0.17
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -39,10 +39,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const BCE_VERSION = "3.9.0";
+const BCE_VERSION = "3.9.3";
 const settingsVersion = 39;
 
 const bceChangelog = `${BCE_VERSION}
+- fix a rare bug with alt arousal keeping arousal meter at 0
+- R83 Beta 1 compatibility
+
+3.9.2-3.9.1
+- bcx stable hotfixes
+
+3.9.0
 - add ability to load wardrobe sets without overriding body parts such as hair styles, eye colors, body sizes
 
 3.8
@@ -82,7 +89,7 @@ const bcModSdk=function(){"use strict";const o="1.0.2";function e(o){alert("Mod 
 async function BondageClubEnhancements() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R82"];
+	const SUPPORTED_GAME_VERSIONS = ["R82", "R83Beta1"];
 	const CAPABILITIES = ["clubslave"];
 
 	const w = window;
@@ -100,9 +107,9 @@ async function BondageClubEnhancements() {
 	const WEBSITE_URL = "https://sidiousious.gitlab.io/bce/";
 
 	const BCX_DEVEL_SOURCE =
-			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
+			"https://jomshir98.github.io/bondage-club-extended/devel/bcx.js",
 		BCX_SOURCE =
-			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/bc31ebc0ccb7366cddd1fb5258135b444d1e552f/bcxedit.js",
+			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/8edd57b3586f5ce085e7c2450424d8b0f48d67a4/bcxedit.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
@@ -1020,8 +1027,6 @@ async function BondageClubEnhancements() {
 	const expectedHashes = (gameVersion) => {
 		const hashes = {
 			ActivityChatRoomArousalSync: "21318CAF",
-			ActivityCheckPrerequisite: "6DB129F9",
-			ActivityCheckPrerequisites: "4B8903AF",
 			ActivitySetArousal: "3AE28123",
 			ActivitySetArousalTimer: "A034E6C0",
 			ActivityTimerProgress: "6CD388A7",
@@ -1161,6 +1166,17 @@ async function BondageClubEnhancements() {
 		};
 
 		switch (gameVersion) {
+			case "R83Beta1":
+				hashes.ChatRoomMessage = "F6D15264";
+				hashes.ChatRoomRun = "685FF69C";
+				hashes.CommandParse = "B398E685";
+				hashes.DialogDraw = "C533BAD0";
+				hashes.DialogLeave = "5CA8C7C9";
+				hashes.DrawProcess = "4CE8C9F7";
+				hashes.ServerAppearanceLoadFromBundle = "7658C7FA";
+				hashes.TimerProcess = "EAF648B7";
+				hashes.TitleExit = "F13F533C";
+				break;
 			default:
 				break;
 		}
@@ -1512,14 +1528,16 @@ async function BondageClubEnhancements() {
 			"Nickname validation not overridden in use"
 		);
 
-		patchFunction(
-			"TitleExit",
-			{
-				"/^[a-zA-Z\\s]*$/": "/^[\\p{L}0-9\\p{Z}'-]+$/u",
-				"let Nick": "console.log(Regex); let Nick",
-			},
-			"Nickname validation not overridden in saving"
-		);
+		if (!GameVersion.startsWith("R83")) {
+			patchFunction(
+				"TitleExit",
+				{
+					"/^[a-zA-Z\\s]*$/": "/^[\\p{L}0-9\\p{Z}'-]+$/u",
+					"let Nick": "console.log(Regex); let Nick",
+				},
+				"Nickname validation not overridden in saving"
+			);
+		}
 
 		// Prevent friendlist results from attempting to load into the HTML outside of the appropriate view
 		SDK.hookFunction(
@@ -5886,7 +5904,6 @@ async function BondageClubEnhancements() {
 							action = "tightens";
 						}
 						focusItem.Difficulty = newDifficulty;
-
 					}
 					break;
 				default:
@@ -6016,6 +6033,11 @@ async function BondageClubEnhancements() {
 		if (target) {
 			message.Target = target;
 		}
+		if (bceSettings.alternateArousal) {
+			message.Dictionary[0].message.progress =
+				Player.BCEArousalProgress || Player.ArousalSettings.Progress || 0;
+			message.Dictionary[0].message.enjoyment = Player.BCEEnjoyment || 1;
+		}
 		ServerSend("ChatRoomChat", message);
 	}
 	if (ServerIsConnected) {
@@ -6056,6 +6078,9 @@ async function BondageClubEnhancements() {
 						case MESSAGE_TYPES.Hello:
 							sender.BCE = message.version;
 							sender.BCEArousal = message.alternateArousal || false;
+							sender.BCEArousalProgress =
+								message.progress || sender.ArousalSettings.Progress || 0;
+							sender.BCEEnjoyment = message.enjoyment || 1;
 							sender.BCECapabilities = message.capabilities;
 							if (newName && newName.length <= 20) {
 								sender.Nickname = newName;
@@ -6656,7 +6681,7 @@ async function BondageClubEnhancements() {
 						if (fromMax <= 0) {
 							Progress = 0;
 						} else if (C.BCEArousal) {
-							Progress = Math.floor(fromMax / ${enjoymentMultiplier} / C.BCEEnjoyment);
+							Progress = Math.floor(fromMax / ${enjoymentMultiplier} / (C.BCEEnjoyment || 1));
 						} else {
 							Progress = fromMax;
 						}
@@ -6741,6 +6766,9 @@ async function BondageClubEnhancements() {
 				if (isCharacter(C) && typeof progress === "number") {
 					if (!C.BCEArousalProgress) {
 						C.BCEArousalProgress = 0;
+					}
+					if (!C.BCEEnjoyment) {
+						C.BCEEnjoyment = 1;
 					}
 					C.BCEArousalProgress +=
 						progress *
@@ -8108,23 +8136,27 @@ async function BondageClubEnhancements() {
 	}
 
 	function nicknames() {
-		SDK.hookFunction("TitleExit", HOOK_PRIORITIES.Observe, (args, next) => {
-			const oldNick = Player.Nickname;
-			if (ElementValue("InputNickname") === "") {
-				ElementValue("InputNickname", Player.Name);
-			}
-			const ret = next(args);
-			if (Player.Nickname !== oldNick) {
-				bceSendAction(
-					displayText("$OldName is now known as $NewName", {
-						$OldName: oldNick || Player.Name,
-						$NewName: Player.Nickname,
-					})
-				);
-				sendHello();
-			}
-			return ret;
-		});
+		if (GameVersion.startsWith("R83")) {
+			ServerCharacterNicknameRegex = /^[\p{L}0-9\p{Z}'-]+$/u;
+		} else {
+			SDK.hookFunction("TitleExit", HOOK_PRIORITIES.Observe, (args, next) => {
+				const oldNick = Player.Nickname;
+				if (ElementValue("InputNickname") === "") {
+					ElementValue("InputNickname", Player.Name);
+				}
+				const ret = next(args);
+				if (Player.Nickname !== oldNick) {
+					bceSendAction(
+						displayText("$OldName is now known as $NewName", {
+							$OldName: oldNick || Player.Name,
+							$NewName: Player.Nickname,
+						})
+					);
+					sendHello();
+				}
+				return ret;
+			});
+		}
 	}
 
 	/** @type {(effect: string) => boolean} */
