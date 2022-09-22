@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements Edit
 // @namespace https://www.bondageprojects.com/
-// @version 3.0.0
+// @version 3.0.1
 // @description enhancements for the bondage club
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -39,31 +39,30 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const BCE_VERSION = "3.11.1";
-const settingsVersion = 40;
+const BCE_VERSION = "3.12.3";
+const settingsVersion = 42;
 
 const bceChangelog = `${BCE_VERSION}
-- fixed loading the addon when extended wardrobe is corrupted
+- added a cheat for IM to bypass BCX beep rules
 
-3.11.0
+3.12.2
+- removed craft sharing settings from BCE with the game handling sharing now
+
+3.12.1
+- compatibility for R84
+
+3.12.0
+- compatibility for R84 Beta2
+- potential fix for anti-cheat sometimes triggering on own changes e.g. locks expiring
+
+3.11
 - BCX 0.9.1
 - initial support for BCX rules (beeps, emoticon locking)
 - nicknames will now be used instead of or in addition to names in many places
 - member number support for /w
 
 3.10
-- add anti-cheat for certain console-driven item changes; this will be expanded in the future
-
-3.9
-- add ability to load wardrobe sets without overriding body parts such as hair styles, eye colors, body sizes
-
-3.8
-- removed "keep tab active" option, which did not work. In Firefox you can set widget.windows.window_occlusion_tracking.enabled to false in about:config to keep the game processing in the background
-- add descriptions for settings, which show up when clicking each setting
-- allow sharing your crafted items with other BCE users in the room, per item
-- option to disable seeing shared crafts
-- import/export for crafts
-- show crafted property and description when hovering over item
+- added anti-cheat for certain console-driven item changes; this will be expanded in the future
 `;
 
 /*
@@ -80,7 +79,7 @@ const bcModSdk=function(){"use strict";const o="1.0.2";function e(o){alert("Mod 
 async function BondageClubEnhancements() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R83"];
+	const SUPPORTED_GAME_VERSIONS = ["R84"];
 	const CAPABILITIES = ["clubslave"];
 
 	const w = window;
@@ -102,7 +101,7 @@ async function BondageClubEnhancements() {
 	const BCX_DEVEL_SOURCE =
 			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
-			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/127fbd54237b5aab6f7ed61fed7e2b6cbae3d0b8/bcxedit.js",
+			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/b038394c90316d1c52e9c8bd330811bf6d931627/bcxedit.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
@@ -158,7 +157,7 @@ async function BondageClubEnhancements() {
 	};
 
 	/** @type {boolean[]} */
-	let sharedCrafts = [];
+	const sharedCrafts = [];
 
 	/** @type {Readonly<{Top: 11; OverrideBehaviour: 10; ModifyBehaviourHigh: 6; ModifyBehaviourMedium: 5; ModifyBehaviourLow: 4; AddBehaviour: 3; Observe: 0}>} */
 	const HOOK_PRIORITIES = {
@@ -376,15 +375,6 @@ async function BondageClubEnhancements() {
 			description:
 				"Shows messages you've sent while waiting for the server to respond, confirming you have sent the message and the server is just being slow.",
 		},
-		seeSharedCrafts: {
-			label: "See shared crafts",
-			value: true,
-			sideEffects: (newValue) => {
-				bceLog("seeSharedCrafts", newValue);
-			},
-			category: "chat",
-			description: "Allows you to see other player's crafts in the item lists.",
-		},
 		gagspeak: {
 			label: "Understand All Gagged and when Deafened",
 			value: false,
@@ -442,6 +432,16 @@ async function BondageClubEnhancements() {
 			category: "cheats",
 			description:
 				"All three forms of struggling will be completed automatically in a realistic amount of time, if the restraint is possible to struggle out of.",
+		},
+		allowIMBypassBCX: {
+			label: "Allow IMs to bypass BCX beep restrictions",
+			value: false,
+			sideEffects: (newValue) => {
+				bceLog("allowIMBypassBCX", newValue);
+			},
+			category: "cheats",
+			description:
+				"This setting is temporary until BCX supports a focus mode rule.",
 		},
 		bcx: {
 			label: "Load BCX by Jomshir98 (no auto-update)",
@@ -789,15 +789,6 @@ async function BondageClubEnhancements() {
 			category: "hidden",
 			description: "",
 		},
-		sharedCrafts: {
-			label: "Shared crafts",
-			value: "",
-			sideEffects: (newValue) => {
-				bceLog("sharedCrafts", newValue);
-			},
-			category: "hidden",
-			description: "",
-		},
 	};
 
 	/** @type {SocketEventListenerRegister} */
@@ -1050,7 +1041,6 @@ async function BondageClubEnhancements() {
 			AppearanceExit: "AA300341",
 			AppearanceLoad: "A14CB302",
 			AppearanceRun: "6DDA14A1",
-			CharacterAppearanceNaked: "E95F92F7",
 			CharacterAppearanceWardrobeLoad: "A5B63A03",
 			CharacterBuildDialog: "3CC4F4AA",
 			CharacterCompressWardrobe: "8D3B1AB1",
@@ -1085,16 +1075,13 @@ async function BondageClubEnhancements() {
 			CommonClick: "1F6DF7CB",
 			CommonColorIsValid: "390A2CE4",
 			CommonSetScreen: "17692CD7",
-			CraftingClick: "3D4C8373",
-			CraftingItemListBuild: "AD8AB2D2",
-			CraftingLoad: "8ACDAB6E",
-			CraftingExit: "27578DC8",
-			CraftingModeSet: "CD06BF9E",
-			CraftingRun: "7E104EC8",
+			CraftingClick: "8A425456",
+			CraftingConvertSelectedToItem: "EB2512A3",
+			CraftingRun: "143055F3",
+			CraftingUpdatePreview: "9E861826",
 			DialogClick: "592A4F65",
 			DialogDraw: "7AD8C0F6",
 			DialogDrawItemMenu: "FB5172D2",
-			DialogInventoryBuild: "F779D30F",
 			DialogLeave: "354CBC00",
 			DrawAssetPreview: "5BD59B42",
 			DrawBackNextButton: "0DE5491B",
@@ -1112,7 +1099,7 @@ async function BondageClubEnhancements() {
 			ElementPosition: "CC4E3C82",
 			ElementRemove: "60809E60",
 			ElementScrollToEnd: "1AC45575",
-			ElementValue: "62C4242F",
+			ElementValue: "429E34AA",
 			FriendListShowBeep: "6C0449BB",
 			GLDrawResetCanvas: "EDF1631A",
 			InformationSheetRun: "EE8678A4",
@@ -1133,7 +1120,7 @@ async function BondageClubEnhancements() {
 			InventoryItemMiscTimerPasswordPadlockDraw: "953C9EF8",
 			InventoryItemMiscTimerPasswordPadlockExit: "7323E56D",
 			InventoryItemMiscTimerPasswordPadlockLoad: "D7F9CCA4",
-			InventoryWear: "37C4B814",
+			InventoryWear: "B56E0D81",
 			ItemColorClick: "79DF36F7",
 			ItemColorDraw: "65543502",
 			ItemColorLoad: "B777DA79",
@@ -5761,7 +5748,7 @@ async function BondageClubEnhancements() {
 				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
-						
+
 							DrawButton(
 								10,
 								890,
@@ -5870,7 +5857,7 @@ async function BondageClubEnhancements() {
 					if (
 						assetWorn(C, focusItem) &&
 						MouseIn(10, 890, 52, 52) &&
-						bceSettings.modifyDifficulty
+						bceSettings.modifyDifficulty 
 					) {
 						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
 						return null;
@@ -5955,6 +5942,7 @@ async function BondageClubEnhancements() {
 							action = "tightens";
 						}
 						focusItem.Difficulty = newDifficulty;
+
 					}
 					break;
 				default:
@@ -7281,9 +7269,9 @@ async function BondageClubEnhancements() {
 				if (data?.Item?.Target !== Player.MemberNumber) {
 					return next(args);
 				}
-				const sourceCharacter = ChatRoomCharacter.find(
-					(a) => a.MemberNumber === data.Source
-				);
+				const sourceCharacter =
+					ChatRoomCharacter.find((a) => a.MemberNumber === data.Source) ||
+					(data.Source === Player.MemberNumber ? Player : null);
 				const ignoreLocks = Player.Appearance.some(
 					(a) => a.Asset.Name === "FuturisticCollar"
 				);
@@ -7326,9 +7314,11 @@ async function BondageClubEnhancements() {
 					return next(args);
 				}
 
-				const sourceCharacter = ChatRoomCharacter.find(
-					(a) => a.MemberNumber === data.SourceMemberNumber
-				);
+				const sourceCharacter =
+					ChatRoomCharacter.find(
+						(a) => a.MemberNumber === data.SourceMemberNumber
+					) ||
+					(data.SourceMemberNumber === Player.MemberNumber ? Player : null);
 
 				// Gets the item bundles to be used for diff comparison, also making necessary changes for the purpose
 				/** @type {(bundle: ItemBundle[]) => Map<string, ItemBundle>} */
@@ -7893,7 +7883,10 @@ async function BondageClubEnhancements() {
 		messageInput.addEventListener("keydown", (e) => {
 			if (e.key === "Enter" && !e.shiftKey) {
 				e.preventDefault();
-				if (BCX?.getRuleState("speech_restrict_beep_send").isEnforced) {
+				if (
+					BCX?.getRuleState("speech_restrict_beep_send").isEnforced &&
+					!bceSettings.allowIMBypassBCX
+				) {
 					bceNotify(
 						displayText("Sending beeps is currently restricted by BCX rules")
 					);
@@ -8086,9 +8079,10 @@ async function BondageClubEnhancements() {
 				next(args);
 				if (bceSettings.instantMessenger) {
 					if (
-						BCX?.getRuleState("speech_restrict_beep_receive").isEnforced ||
-						(BCX?.getRuleState("alt_hide_friends").isEnforced &&
-							Player.GetBlindLevel() >= 3)
+						!bceSettings.allowIMBypassBCX &&
+						(BCX?.getRuleState("speech_restrict_beep_receive").isEnforced ||
+							(BCX?.getRuleState("alt_hide_friends").isEnforced &&
+								Player.GetBlindLevel() >= 3))
 					) {
 						if (!container.classList.contains("bce-hidden")) {
 							container.classList.add("bce-hidden");
@@ -9260,211 +9254,10 @@ async function BondageClubEnhancements() {
 	async function crafting() {
 		await waitFor(() => Array.isArray(Commands) && Commands.length > 0);
 
-		try {
-			if (isString(bceSettings.sharedCrafts)) {
-				if (bceSettings.sharedCrafts === "") {
-					buildSharedCrafts();
-				} else {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-					sharedCrafts = JSON.parse(bceSettings.sharedCrafts);
-				}
-			} else {
-				throw new Error(
-					`invalid shared crafts: ${bceSettings.sharedCrafts.toString()}`
-				);
-			}
-		} catch (e) {
-			bceError(e);
-			buildSharedCrafts();
-		}
-		function buildSharedCrafts() {
-			sharedCrafts = [];
-			for (let i = 0; i < 20; i++) {
-				sharedCrafts.push(false);
-			}
-			bceSettings.sharedCrafts = JSON.stringify(sharedCrafts);
-		}
-
-		/** @type {Item} */
-		let coloringItem = null;
-		let coloring = false;
-		/** @type {Character} */
-		let previewChar = null;
-		let viaRoom = false;
-		let nakedPreview = false;
-		let sharesChanged = false;
-		/** @type {[number, number, number, number]} */
-		const nudityToggleButtonPosition = [560, 870, 90, 90];
 		/** @type {[number, number, number, number]} */
 		const importPosition = [1485, 15, 90, 90];
 		/** @type {[number, number, number, number]} */
 		const exportPosition = [1585, 15, 90, 90];
-		/** @type {[number, number, number, number]} */
-		const shareTogglePosition = [80, 150, 64, 64];
-		Commands.push({
-			Tag: "craft",
-			Description: displayText("open the crafting menu"),
-			Action: () => {
-				hideChatRoomElements();
-				viaRoom = true;
-				CommonSetScreen("Room", "Crafting");
-			},
-		});
-		SDK.hookFunction(
-			"CraftingLoad",
-			HOOK_PRIORITIES.AddBehaviour,
-			(args, next) => {
-				sharesChanged = false;
-				const ret = next(args);
-				previewChar = CharacterLoadSimple(
-					`CraftingPreview-${Player.MemberNumber}`
-				);
-				previewChar.Appearance = [...Player.Appearance];
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				previewChar.Crafting = JSON.parse(JSON.stringify(Player.Crafting));
-				CharacterReleaseTotal(previewChar);
-				return ret;
-			}
-		);
-		SDK.hookFunction(
-			"CraftingExit",
-			HOOK_PRIORITIES.OverrideBehaviour,
-			(args, next) => {
-				if (viaRoom) {
-					viaRoom = false;
-					ElementRemove("InputSearch");
-					CommonSetScreen("Online", "ChatRoom");
-					if (sharesChanged) {
-						sendHello(null, false);
-						bceSettings.sharedCrafts = JSON.stringify(sharedCrafts);
-						bceSaveSettings();
-					}
-					ElementRemove("InputColor");
-					return null;
-				}
-				CharacterDelete(previewChar.AccountName);
-				ElementRemove("InputColor");
-				return next(args);
-			}
-		);
-
-		/** @type {(craft: Craft) => void} */
-		function updatePreview(craft) {
-			previewChar.Appearance = [...Player.Appearance];
-			CharacterReleaseTotal(previewChar);
-			if (nakedPreview) {
-				CharacterNaked(previewChar);
-			}
-			const items = Asset.filter((a) => a.Name === craft.Item && a.Group.Zone);
-			for (const item of items) {
-				InventoryWear(
-					previewChar,
-					item.Name,
-					item.Group.Name,
-					null,
-					null,
-					previewChar.MemberNumber,
-					craft
-				);
-				const worn = InventoryGet(previewChar, item.Group.Name);
-				coloringItem = worn;
-				if (CraftingLock) {
-					if (!worn.Property) {
-						worn.Property = {};
-					}
-					worn.Property.LockedBy = CraftingLock.Asset.Name;
-				}
-				if (craft.Color) {
-					/** @type {string | string[]} */
-					let color = craft.Color.split(",");
-					if (color.length === 1) {
-						[color] = color;
-					}
-					worn.Color = color;
-				}
-			}
-			CharacterRefresh(previewChar);
-		}
-
-		const updateCraftListeners = {
-			Name: updateCraft("Name"),
-			Description: updateCraft("Description"),
-			Color: updateCraft("Color"),
-		};
-
-		/** @type {(field: "Name" | "Description" | "Color") => () => void} */
-		function updateCraft(field) {
-			return () => {
-				const val = ElementValue(`Input${field}`);
-				previewChar.Crafting[CraftingSlot][field] = val;
-				if (field === "Color") {
-					updatePreview(previewChar.Crafting[CraftingSlot]);
-				}
-			};
-		}
-
-		SDK.hookFunction(
-			"CraftingModeSet",
-			HOOK_PRIORITIES.AddBehaviour,
-			(args, next) => {
-				const ret = next(args);
-				if (args[0] === "Name") {
-					const craft = previewChar.Crafting[CraftingSlot];
-					craft.Item = CraftingItem.Name;
-					craft.Property = CraftingProperty;
-					craft.Lock = CraftingLock?.Asset.Name || "";
-					ElementValue("InputName", craft.Name);
-					ElementValue("InputDescription", craft.Description);
-					ElementValue("InputColor", craft.Color);
-					for (const field of ["Name", "Description", "Color"]) {
-						const el = document.getElementById(`Input${field}`);
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-						el.removeEventListener("change", updateCraftListeners[field]);
-						if (!coloring) {
-							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-							el.addEventListener("change", updateCraftListeners[field]);
-						}
-					}
-					updatePreview(craft);
-				}
-				return ret;
-			}
-		);
-
-		patchFunction(
-			"CraftingClick",
-			{
-				'else {\n\t\t\t\t\tCraftingModeSet("Item");': `else if (Player.Crafting[S]?.Name) {CraftingSlot = S;CraftingProperty = Player.Crafting[S].Property;CraftingOffset = 0;CraftingItem = Player.Inventory.find(a=>a.Asset.Name==Player.Crafting[S].Item).Asset;CraftingLock = Player.Inventory.find(a=>a.Asset.Group.Name=="ItemMisc" && a.Asset.Name==Player.Crafting[S].Lock);CraftingModeSet("Name");} else {CraftingModeSet("Item");`,
-			},
-			"Partial crafting enhancements - editing existing items"
-		);
-
-		patchFunction(
-			"CraftingRun",
-			{
-				'DrawText(TextGet("EnterName"), 1325, 250':
-					'DrawText(TextGet("EnterName"), 1625, 150',
-				'ElementPosition("InputName", 1325, 320, 1000);':
-					'ElementPosition("InputName", 1625, 200, 700);',
-				'DrawText(TextGet("EnterDescription"), 1325, 500':
-					'DrawText(TextGet("EnterDescription"), 1625, 250',
-				'ElementPosition("InputDescription", 1325, 570, 1000);':
-					'ElementPosition("InputDescription", 1625, 300, 700);',
-				'DrawText(TextGet("EnterColor"), 1325, 750':
-					'DrawText(TextGet("EnterColor"), 1625, 350',
-				'ElementPosition("InputColor", 1325, 820, 1000':
-					'ElementPosition("InputColor", 1625, 400, 700',
-			},
-			"Partial crafting enhancements - coloring"
-		);
-
-		patchFunction(
-			"CraftingItemListBuild",
-			{
-				'(I.Asset.Group.Name != "ItemAddon")': "true",
-			},
-			"Crafting addon items"
-		);
 
 		function importCraft() {
 			const str = window.prompt(displayText("Paste the craft here")) || "";
@@ -9479,23 +9272,19 @@ async function BondageClubEnhancements() {
 					bceError(craft);
 					throw new Error("invalid craft type");
 				}
-				for (const [, value] of Object.entries(craft)) {
-					if (!isString(value) && !Number.isInteger(value)) {
-						bceError(value);
+				for (const [key, value] of Object.entries(craft)) {
+					if (
+						!isString(value) &&
+						!Number.isInteger(value) &&
+						value !== false &&
+						value !== true
+					) {
+						bceError(key, "was", value);
 						throw new Error("invalid craft properties");
 					}
 				}
-				CraftingItem = Asset.find((a) => a.Name === craft.Item);
-				CraftingProperty = craft.Property;
-				CraftingLock = Player.Inventory.find(
-					(a) =>
-						a.Asset.Group.Name === "ItemMisc" && a.Asset.Name === craft.Lock
-				);
-				ElementValue("InputName", craft.Name);
-				ElementValue("InputDescription", craft.Description);
-				ElementValue("InputColor", craft.Color);
-				previewChar.Crafting[CraftingSlot] = craft;
-				updatePreview(craft);
+				CraftingSelectedItem = CraftingConvertItemToSelected(craft);
+				CraftingModeSet("Name");
 			} catch (e) {
 				bceError("importing craft", e);
 			}
@@ -9507,68 +9296,15 @@ async function BondageClubEnhancements() {
 			(args, next) => {
 				switch (CraftingMode) {
 					case "Name":
-						if (MouseIn(...shareTogglePosition)) {
-							sharedCrafts[CraftingSlot] = !sharedCrafts[CraftingSlot];
-							sharesChanged = true;
-						} else if (MouseIn(...nudityToggleButtonPosition)) {
-							nakedPreview = !nakedPreview;
-							updatePreview(previewChar.Crafting[CraftingSlot]);
-						} else if (MouseIn(...exportPosition)) {
+						if (MouseIn(...exportPosition)) {
 							window.prompt(
 								displayText("Copy the craft here"),
 								LZString.compressToBase64(
-									JSON.stringify(previewChar.Crafting[CraftingSlot])
+									JSON.stringify(CraftingConvertSelectedToItem())
 								)
 							);
-						} else if (!coloring && MouseIn(...importPosition)) {
+						} else if (MouseIn(...importPosition)) {
 							importCraft();
-						} else if (MouseIn(80, 250, 225, 275)) {
-							CraftingModeSet("Item");
-							CraftingOffset = 0;
-							CraftingItemListBuild();
-							return null;
-						} else if (MouseIn(425, 250, 225, 275) && CraftingItem.AllowLock) {
-							CraftingModeSet("Lock");
-							return null;
-						} else if (MouseIn(80, 650, 570, 190)) {
-							CraftingModeSet("Property");
-							return null;
-						} else if (!coloring && MouseIn(1275, 450, 700, 50)) {
-							coloring = true;
-							ElementRemove("InputColor");
-							ItemColorLoad(
-								previewChar,
-								coloringItem,
-								1200,
-								450,
-								800,
-								550,
-								true
-							);
-							ItemColorOnExit((c) => {
-								coloring = false;
-								bceLog(c, "CraftingColor");
-								ElementCreateInput("InputColor", "text", "", "100");
-								document
-									.getElementById("InputColor")
-									.addEventListener("change", updateCraftListeners.Color);
-								ElementValue(
-									"InputColor",
-									Array.isArray(coloringItem.Color)
-										? coloringItem.Color.join(",")
-										: coloringItem.Color || ""
-								);
-							});
-						} else if (coloring && MouseIn(1200, 450, 800, 550)) {
-							ItemColorClick(
-								previewChar,
-								coloringItem.Asset.Group.Name,
-								1200,
-								450,
-								800,
-								550,
-								true
-							);
 						}
 						break;
 					default:
@@ -9578,78 +9314,14 @@ async function BondageClubEnhancements() {
 			}
 		);
 
-		patchFunction(
-			"CharacterAppearanceNaked",
-			{ "C.IsNpc()": "!C.IsOnline()" },
-			"Crash when toggling nudity in crafting preview"
-		);
-
-		patchFunction(
-			"DialogInventoryBuild",
-			{
-				"// Fifth": `if (bceSettingValue("seeSharedCrafts")) for (const char of ChatRoomCharacter) {
-				if (!char?.Crafting) {
-					continue;
-				}
-				for (const craft of char.Crafting.filter((c) => c.Item != null && InventoryAvailable(Player, c.Item, C.FocusGroup.Name))) {
-					for (const ass of Asset.filter((a) => a.Name === craft.Item && a.Group.Name === C.FocusGroup.Name)) {
-						if (DialogCanUseCraftedItem(C, craft)) {
-							DialogInventoryAdd(C, { Asset: ass, Craft: craft }, false);
-						}
-					}
-				}
-			}
-			// Fifth`,
-			},
-			"Unable to see shared crafts from others"
-		);
-
 		SDK.hookFunction(
 			"CraftingRun",
 			HOOK_PRIORITIES.ModifyBehaviourMedium,
 			(args, next) => {
 				const ret = next(args);
 				if (CraftingMode === "Name") {
-					DrawCharacter(previewChar, 665, 65, 0.9, false);
-					DrawButton(
-						...nudityToggleButtonPosition,
-						"",
-						"white",
-						`Icons/${nakedPreview ? "Dress" : "Naked"}.png`
-					);
-					if (!coloring) {
-						DrawButton(...importPosition, displayText("Import"), "white");
-					}
+					DrawButton(...importPosition, displayText("Import"), "white");
 					DrawButton(...exportPosition, displayText("Export"), "white");
-					if (coloring) {
-						ItemColorDraw(
-							previewChar,
-							coloringItem.Asset.Group.Name,
-							1200,
-							450,
-							800,
-							550,
-							true
-						);
-					} else {
-						DrawButton(
-							1275,
-							450,
-							700,
-							50,
-							displayText("Open Colorpicker"),
-							"white"
-						);
-					}
-					w.MainCanvas.getContext("2d").textAlign = "left";
-					DrawCheckbox(
-						...shareTogglePosition,
-						displayText("Share with other BCE users"),
-						sharedCrafts[CraftingSlot],
-						false,
-						"white"
-					);
-					w.MainCanvas.getContext("2d").textAlign = "center";
 				}
 				return ret;
 			}
