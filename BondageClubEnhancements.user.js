@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name Bondage Club Enhancements Edit
+// @name Bondage Club Enhancements edit
 // @namespace https://www.bondageprojects.com/
-// @version 4.1
+// @version 4.2
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -39,20 +39,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const FBC_VERSION = "4.1";
+const FBC_VERSION = "4.4";
 const settingsVersion = 44;
 
 const fbcChangelog = `${FBC_VERSION}
-- fix whitelisting for anti-cheat, additional logging in lock validation
+- R85 compatibility
 
-4.0
-- BCE is now known as FBC (For Better Club) to reduce confusion with BCX
+4.3
+- fix race condition in bcModSdk initialization
 
-BCE:
-3.12
-- compatibility for R84
-- potential fix for anti-cheat sometimes triggering on own changes e.g. locks expiring
-- added a cheat for IM to bypass BCX beep rules
+4.2
+- R85 beta 1 compatibility
 `;
 
 /*
@@ -64,12 +61,12 @@ BCE:
 // prettier-ignore
 // @ts-ignore
 // eslint-disable-next-line
-const bcModSdk=function(){"use strict";const o="1.0.2";function e(o){alert("Mod ERROR:\n"+o);const e=new Error(o);throw console.error(e),e}const t=new TextEncoder;function n(o){return!!o&&"object"==typeof o&&!Array.isArray(o)}function r(o){const e=new Set;return o.filter((o=>!e.has(o)&&e.add(o)))}const a=new Map,i=new Set;function d(o){i.has(o)||(i.add(o),console.warn(o))}function c(o,e){if(0===e.size)return o;let t=o.toString().replaceAll("\r\n","\n");for(const[n,r]of e.entries())t.includes(n)||d(`ModSDK: Patching ${o.name}: Patch ${n} not applied`),t=t.replaceAll(n,r);return(0,eval)(`(${t})`)}function s(o){const e=[],t=new Map,n=new Set;for(const r of u.values()){const a=r.patching.get(o.name);if(a){e.push(...a.hooks);for(const[e,i]of a.patches.entries())t.has(e)&&t.get(e)!==i&&d(`ModSDK: Mod '${r.name}' is patching function ${o.name} with same pattern that is already applied by different mod, but with different pattern:\nPattern:\n${e}\nPatch1:\n${t.get(e)||""}\nPatch2:\n${i}`),t.set(e,i),n.add(r.name)}}return e.sort(((o,e)=>e.priority-o.priority)),{hooks:e,patches:t,patchesSources:n,final:c(o.original,t)}}function l(o,e=!1){let r=a.get(o);if(r)e&&(r.precomputed=s(r));else{let e=window;const i=o.split(".");for(let t=0;t<i.length-1;t++)if(e=e[i[t]],!n(e))throw new Error(`ModSDK: Function ${o} to be patched not found; ${i.slice(0,t+1).join(".")} is not object`);const d=e[i[i.length-1]];if("function"!=typeof d)throw new Error(`ModSDK: Function ${o} to be patched not found`);const c=function(o){let e=-1;for(const n of t.encode(o)){let o=255&(e^n);for(let e=0;e<8;e++)o=1&o?-306674912^o>>>1:o>>>1;e=e>>>8^o}return((-1^e)>>>0).toString(16).padStart(8,"0").toUpperCase()}(d.toString().replaceAll("\r\n","\n")),l={name:o,original:d,originalHash:c};r=Object.assign(Object.assign({},l),{precomputed:s(l)}),a.set(o,r),e[i[i.length-1]]=function(o){return function(...e){const t=o.precomputed,n=t.hooks,r=t.final;let a=0;const i=d=>{var c,s,l,f;if(a<n.length){const e=n[a];a++;const t=null===(s=(c=w.errorReporterHooks).hookEnter)||void 0===s?void 0:s.call(c,o.name,e.mod),r=e.hook(d,i);return null==t||t(),r}{const n=null===(f=(l=w.errorReporterHooks).hookChainExit)||void 0===f?void 0:f.call(l,o.name,t.patchesSources),a=r.apply(this,e);return null==n||n(),a}};return i(e)}}(r)}return r}function f(){const o=new Set;for(const e of u.values())for(const t of e.patching.keys())o.add(t);for(const e of a.keys())o.add(e);for(const e of o)l(e,!0)}function p(){const o=new Map;for(const[e,t]of a)o.set(e,{name:e,originalHash:t.originalHash,hookedByMods:r(t.precomputed.hooks.map((o=>o.mod))),patchedByMods:Array.from(t.precomputed.patchesSources)});return o}const u=new Map;function h(o){u.get(o.name)!==o&&e(`Failed to unload mod '${o.name}': Not registered`),u.delete(o.name),o.loaded=!1}function g(o,t,r){"string"==typeof o&&o||e("Failed to register mod: Expected non-empty name string, got "+typeof o),"string"!=typeof t&&e(`Failed to register mod '${o}': Expected version string, got ${typeof t}`),r=!0===r;const a=u.get(o);a&&(a.allowReplace&&r||e(`Refusing to load mod '${o}': it is already loaded and doesn't allow being replaced.\nWas the mod loaded multiple times?`),h(a));const i=t=>{"string"==typeof t&&t||e(`Mod '${o}' failed to patch a function: Expected function name string, got ${typeof t}`);let n=c.patching.get(t);return n||(n={hooks:[],patches:new Map},c.patching.set(t,n)),n},d={unload:()=>h(c),hookFunction:(t,n,r)=>{c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`);const a=i(t);"number"!=typeof n&&e(`Mod '${o}' failed to hook function '${t}': Expected priority number, got ${typeof n}`),"function"!=typeof r&&e(`Mod '${o}' failed to hook function '${t}': Expected hook function, got ${typeof r}`);const d={mod:c.name,priority:n,hook:r};return a.hooks.push(d),f(),()=>{const o=a.hooks.indexOf(d);o>=0&&(a.hooks.splice(o,1),f())}},patchFunction:(t,r)=>{c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`);const a=i(t);n(r)||e(`Mod '${o}' failed to patch function '${t}': Expected patches object, got ${typeof r}`);for(const[n,i]of Object.entries(r))"string"==typeof i?a.patches.set(n,i):null===i?a.patches.delete(n):e(`Mod '${o}' failed to patch function '${t}': Invalid format of patch '${n}'`);f()},removePatches:o=>{c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`);i(o).patches.clear(),f()},callOriginal:(t,n,r)=>(c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`),"string"==typeof t&&t||e(`Mod '${o}' failed to call a function: Expected function name string, got ${typeof t}`),Array.isArray(n)||e(`Mod '${o}' failed to call a function: Expected args array, got ${typeof n}`),function(o,e,t=window){return l(o).original.apply(t,e)}(t,n,r)),getOriginalHash:t=>("string"==typeof t&&t||e(`Mod '${o}' failed to get hash: Expected function name string, got ${typeof t}`),l(t).originalHash)},c={name:o,version:t,allowReplace:r,api:d,loaded:!0,patching:new Map};return u.set(o,c),Object.freeze(d)}function m(){const o=[];for(const e of u.values())o.push({name:e.name,version:e.version});return o}let w;const y=void 0===window.bcModSdk?window.bcModSdk=function(){const e={version:o,apiVersion:1,registerMod:g,getModsInfo:m,getPatchingInfo:p,errorReporterHooks:Object.seal({hookEnter:null,hookChainExit:null})};return w=e,Object.freeze(e)}():(n(window.bcModSdk)||e("Failed to init Mod SDK: Name already in use"),1!==window.bcModSdk.apiVersion&&e(`Failed to init Mod SDK: Different version already loaded ('1.0.2' vs '${window.bcModSdk.version}')`),window.bcModSdk.version!==o&&alert(`Mod SDK warning: Loading different but compatible versions ('1.0.2' vs '${window.bcModSdk.version}')\nOne of mods you are using is using an old version of SDK. It will work for now but please inform author to update`),window.bcModSdk);return"undefined"!=typeof exports&&(Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=y),y}();
+window.bcModSdk=function(){"use strict";const o="1.0.2";function e(o){alert("Mod ERROR:\n"+o);const e=new Error(o);throw console.error(e),e}const t=new TextEncoder;function n(o){return!!o&&"object"==typeof o&&!Array.isArray(o)}function r(o){const e=new Set;return o.filter((o=>!e.has(o)&&e.add(o)))}const a=new Map,i=new Set;function d(o){i.has(o)||(i.add(o),console.warn(o))}function c(o,e){if(0===e.size)return o;let t=o.toString().replaceAll("\r\n","\n");for(const[n,r]of e.entries())t.includes(n)||d(`ModSDK: Patching ${o.name}: Patch ${n} not applied`),t=t.replaceAll(n,r);return(0,eval)(`(${t})`)}function s(o){const e=[],t=new Map,n=new Set;for(const r of u.values()){const a=r.patching.get(o.name);if(a){e.push(...a.hooks);for(const[e,i]of a.patches.entries())t.has(e)&&t.get(e)!==i&&d(`ModSDK: Mod '${r.name}' is patching function ${o.name} with same pattern that is already applied by different mod, but with different pattern:\nPattern:\n${e}\nPatch1:\n${t.get(e)||""}\nPatch2:\n${i}`),t.set(e,i),n.add(r.name)}}return e.sort(((o,e)=>e.priority-o.priority)),{hooks:e,patches:t,patchesSources:n,final:c(o.original,t)}}function l(o,e=!1){let r=a.get(o);if(r)e&&(r.precomputed=s(r));else{let e=window;const i=o.split(".");for(let t=0;t<i.length-1;t++)if(e=e[i[t]],!n(e))throw new Error(`ModSDK: Function ${o} to be patched not found; ${i.slice(0,t+1).join(".")} is not object`);const d=e[i[i.length-1]];if("function"!=typeof d)throw new Error(`ModSDK: Function ${o} to be patched not found`);const c=function(o){let e=-1;for(const n of t.encode(o)){let o=255&(e^n);for(let e=0;e<8;e++)o=1&o?-306674912^o>>>1:o>>>1;e=e>>>8^o}return((-1^e)>>>0).toString(16).padStart(8,"0").toUpperCase()}(d.toString().replaceAll("\r\n","\n")),l={name:o,original:d,originalHash:c};r=Object.assign(Object.assign({},l),{precomputed:s(l)}),a.set(o,r),e[i[i.length-1]]=function(o){return function(...e){const t=o.precomputed,n=t.hooks,r=t.final;let a=0;const i=d=>{var c,s,l,f;if(a<n.length){const e=n[a];a++;const t=null===(s=(c=w.errorReporterHooks).hookEnter)||void 0===s?void 0:s.call(c,o.name,e.mod),r=e.hook(d,i);return null==t||t(),r}{const n=null===(f=(l=w.errorReporterHooks).hookChainExit)||void 0===f?void 0:f.call(l,o.name,t.patchesSources),a=r.apply(this,e);return null==n||n(),a}};return i(e)}}(r)}return r}function f(){const o=new Set;for(const e of u.values())for(const t of e.patching.keys())o.add(t);for(const e of a.keys())o.add(e);for(const e of o)l(e,!0)}function p(){const o=new Map;for(const[e,t]of a)o.set(e,{name:e,originalHash:t.originalHash,hookedByMods:r(t.precomputed.hooks.map((o=>o.mod))),patchedByMods:Array.from(t.precomputed.patchesSources)});return o}const u=new Map;function h(o){u.get(o.name)!==o&&e(`Failed to unload mod '${o.name}': Not registered`),u.delete(o.name),o.loaded=!1}function g(o,t,r){"string"==typeof o&&o||e("Failed to register mod: Expected non-empty name string, got "+typeof o),"string"!=typeof t&&e(`Failed to register mod '${o}': Expected version string, got ${typeof t}`),r=!0===r;const a=u.get(o);a&&(a.allowReplace&&r||e(`Refusing to load mod '${o}': it is already loaded and doesn't allow being replaced.\nWas the mod loaded multiple times?`),h(a));const i=t=>{"string"==typeof t&&t||e(`Mod '${o}' failed to patch a function: Expected function name string, got ${typeof t}`);let n=c.patching.get(t);return n||(n={hooks:[],patches:new Map},c.patching.set(t,n)),n},d={unload:()=>h(c),hookFunction:(t,n,r)=>{c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`);const a=i(t);"number"!=typeof n&&e(`Mod '${o}' failed to hook function '${t}': Expected priority number, got ${typeof n}`),"function"!=typeof r&&e(`Mod '${o}' failed to hook function '${t}': Expected hook function, got ${typeof r}`);const d={mod:c.name,priority:n,hook:r};return a.hooks.push(d),f(),()=>{const o=a.hooks.indexOf(d);o>=0&&(a.hooks.splice(o,1),f())}},patchFunction:(t,r)=>{c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`);const a=i(t);n(r)||e(`Mod '${o}' failed to patch function '${t}': Expected patches object, got ${typeof r}`);for(const[n,i]of Object.entries(r))"string"==typeof i?a.patches.set(n,i):null===i?a.patches.delete(n):e(`Mod '${o}' failed to patch function '${t}': Invalid format of patch '${n}'`);f()},removePatches:o=>{c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`);i(o).patches.clear(),f()},callOriginal:(t,n,r)=>(c.loaded||e(`Mod '${c.name}' attempted to call SDK function after being unloaded`),"string"==typeof t&&t||e(`Mod '${o}' failed to call a function: Expected function name string, got ${typeof t}`),Array.isArray(n)||e(`Mod '${o}' failed to call a function: Expected args array, got ${typeof n}`),function(o,e,t=window){return l(o).original.apply(t,e)}(t,n,r)),getOriginalHash:t=>("string"==typeof t&&t||e(`Mod '${o}' failed to get hash: Expected function name string, got ${typeof t}`),l(t).originalHash)},c={name:o,version:t,allowReplace:r,api:d,loaded:!0,patching:new Map};return u.set(o,c),Object.freeze(d)}function m(){const o=[];for(const e of u.values())o.push({name:e.name,version:e.version});return o}let w;const y=void 0===window.bcModSdk?window.bcModSdk=function(){const e={version:o,apiVersion:1,registerMod:g,getModsInfo:m,getPatchingInfo:p,errorReporterHooks:Object.seal({hookEnter:null,hookChainExit:null})};return w=e,Object.freeze(e)}():(n(window.bcModSdk)||e("Failed to init Mod SDK: Name already in use"),1!==window.bcModSdk.apiVersion&&e(`Failed to init Mod SDK: Different version already loaded ('1.0.2' vs '${window.bcModSdk.version}')`),window.bcModSdk.version!==o&&alert(`Mod SDK warning: Loading different but compatible versions ('1.0.2' vs '${window.bcModSdk.version}')\nOne of mods you are using is using an old version of SDK. It will work for now but please inform author to update`),window.bcModSdk);return"undefined"!=typeof exports&&(Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=y),y}();
 
 async function ForBetterClub() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R84"];
+	const SUPPORTED_GAME_VERSIONS = ["R84", "R85Beta1", "R85"];
 	const CAPABILITIES = ["clubslave"];
 
 	const w = window;
@@ -79,7 +76,12 @@ async function ForBetterClub() {
 		return;
 	}
 
-	const SDK = bcModSdk.registerMod("FBC", FBC_VERSION, false);
+	if (!w.bcModSdk) {
+		console.warn("bcModSdk not found. Skipping load.");
+		return;
+	}
+
+	const SDK = w.bcModSdk.registerMod("FBC", FBC_VERSION, false);
 	/** @type {import('./types/bcxExternalInterface').BCX_ModAPI | null} */
 	let BCX = null;
 
@@ -91,7 +93,7 @@ async function ForBetterClub() {
 	const BCX_DEVEL_SOURCE =
 			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
-			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/57fb2ce13397c7ca3c850d154f4aa7c92f8b2f58/bcxedit.js",
+			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/a0d7d354baadc7c3bf41c13f9cc03db6d9ca07c2/bcxedit.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
@@ -1173,6 +1175,37 @@ async function ForBetterClub() {
 		};
 
 		switch (gameVersion) {
+			case "R85":
+				hashes.AppearanceClick = "D29F295D";
+				hashes.AppearanceRun = "C65F23EF";
+				hashes.ChatRoomMessage = "91C72542";
+				hashes.CommandParse = "6E46F29E";
+				hashes.CraftingClick = "8C0B062E";
+				hashes.CraftingRun = "E41A3822";
+				hashes.DialogDrawItemMenu = "E8711B10";
+				hashes.ElementIsScrolledToEnd = "1CC4FE11";
+
+				// New in R85
+				hashes.ChatRoomHTMLEntities = "0A7ADB1D";
+				hashes.ChatRoomMessageDisplay = "A11BF94B";
+				hashes.ChatRoomRegisterMessageHandler = "C432923A";
+				hashes.SpeechGarble = "9D669F73";
+				break;
+			case "R85Beta1":
+				hashes.AppearanceClick = "D29F295D";
+				hashes.AppearanceRun = "C65F23EF";
+				hashes.ChatRoomMessage = "BC1AF8B4";
+				hashes.CommandParse = "6E46F29E";
+				hashes.CraftingClick = "8C0B062E";
+				hashes.CraftingRun = "E41A3822";
+				hashes.DialogDrawItemMenu = "E8711B10";
+
+				// New in R85
+				hashes.ChatRoomHTMLEntities = "0A7ADB1D";
+				hashes.ChatRoomMessageDisplay = "C56FD561";
+				hashes.ChatRoomRegisterMessageHandler = "C432923A";
+				hashes.SpeechGarble = "9D669F73";
+				break;
 			default:
 				break;
 		}
@@ -3290,7 +3323,7 @@ async function ForBetterClub() {
 			"CommandParse",
 			{
 				"// Regular chat can be prevented with an owner presence rule":
-					"// Regular chat can be prevented with an owner presence rule\nmsg = bceMessageReplacements(msg);",
+					"// Regular chat can be prevented with an owner presence rule\nmsg = bceMessageReplacements(msg);\n// ",
 				"// The whispers get sent to the server and shown on the client directly":
 					"// The whispers get sent to the server and shown on the client directly\nmsg = bceMessageReplacements(msg);",
 			},
@@ -6181,6 +6214,13 @@ async function ForBetterClub() {
 
 		let excludeBodyparts = false;
 
+		function currentWardrobeTargetIsPlayer() {
+			return (
+				(inCustomWardrobe && targetCharacter?.IsPlayer()) ||
+				CharacterAppearanceSelection?.IsPlayer()
+			);
+		}
+
 		SDK.hookFunction(
 			"CharacterAppearanceWardrobeLoad",
 			HOOK_PRIORITIES.OverrideBehaviour,
@@ -6212,7 +6252,10 @@ async function ForBetterClub() {
 			"AppearanceRun",
 			HOOK_PRIORITIES.AddBehaviour,
 			(args, next) => {
-				if (CharacterAppearanceMode === "Wardrobe") {
+				if (
+					CharacterAppearanceMode === "Wardrobe" &&
+					currentWardrobeTargetIsPlayer()
+				) {
 					DrawCheckbox(1300, 350, 64, 64, "", excludeBodyparts, false, "white");
 					drawTextFitLeft(
 						displayText("Load without body parts"),
@@ -6232,7 +6275,8 @@ async function ForBetterClub() {
 			(args, next) => {
 				if (
 					CharacterAppearanceMode === "Wardrobe" &&
-					MouseIn(1300, 350, 64, 64)
+					MouseIn(1300, 350, 64, 64) &&
+					currentWardrobeTargetIsPlayer()
 				) {
 					excludeBodyparts = !excludeBodyparts;
 					return null;
@@ -6367,10 +6411,12 @@ async function ForBetterClub() {
 		await waitFor(() => !!SpeechGarbleByGagLevel);
 
 		// Antigarble patch for message printing
-		patchFunction(
-			"ChatRoomMessage",
-			{
-				"div.innerHTML = msg;": `div.innerHTML = msg;
+		if (GameVersion.startsWith("R85")) {
+			// Whisper reply button
+			patchFunction(
+				"ChatRoomMessageDisplay",
+				{
+					"div.innerHTML = msg;": `div.innerHTML = msg;
 				if (data.Type === "Whisper") {
 					let repl = document.createElement("a");
 					repl.href = "#";
@@ -6383,21 +6429,101 @@ async function ForBetterClub() {
 					repl.textContent = '\u21a9\ufe0f';
 					div.prepend(repl);
 				}`,
-				"const chatMsg": `const clientGagged = data.Content.endsWith('\\uf123');data.Content = data.Content.replace(/[\\uE000-\\uF8FF]/gu, '');const chatMsg`,
-				"msg += chatMsg;": `msg += chatMsg;
-			if (bceSettingValue("gagspeak") && SpeechGetTotalGagLevel(SenderCharacter) > 0 && !clientGagged) {
-				let original = data.Content;
-				if (data.Type === "Whisper" && data.Dictionary?.some(d => d.Tag === "${BCX_ORIGINAL_MESSAGE}")) {
-					original = data.Dictionary.find(d => d.Tag === "${BCX_ORIGINAL_MESSAGE}").Text;
-				}
-				original = ChatRoomHTMLEntities(original);
-				if (original.toLowerCase().trim() !== chatMsg.toLowerCase().trim()) {
-					msg += \` (\${original})\`
-				}
-			}`,
-			},
-			"No anti-garbling."
-		);
+				},
+				"No whisper reply button in chat"
+			);
+
+			ChatRoomRegisterMessageHandler({
+				Priority: 1,
+				Description: "Anti-garbling by FBC",
+				Callback: (data, sender, msg) => {
+					const clientGagged = msg.endsWith(GAGBYPASSINDICATOR);
+					msg = msg.replace(/[\uE000-\uF8FF]/gu, "");
+					let handled = clientGagged;
+					if (fbcSettings.gagspeak && !clientGagged) {
+						switch (data.Type) {
+							case "Whisper":
+								{
+									let original = msg;
+									if (
+										data.Dictionary?.some((d) => d.Tag === BCX_ORIGINAL_MESSAGE)
+									) {
+										original = ChatRoomHTMLEntities(
+											data.Dictionary.find(
+												(d) => d.Tag === BCX_ORIGINAL_MESSAGE
+											).Text
+										);
+									}
+									if (
+										original.toLowerCase().trim() !== msg.toLowerCase().trim()
+									) {
+										msg += ` (${original})`;
+										handled = true;
+									}
+								}
+								break;
+							case "Chat":
+								{
+									const original = msg;
+									msg = SpeechGarble(sender, msg);
+									if (
+										original.toLowerCase().trim() !==
+											msg.toLowerCase().trim() &&
+										SpeechGetTotalGagLevel(sender) > 0
+									) {
+										msg += ` (${original})`;
+										handled = true;
+									}
+								}
+								break;
+							default:
+								break;
+						}
+					}
+
+					const skip = (
+						/** @type {ChatRoomMessageHandler} */
+						handler
+					) =>
+						handler.Description === "Sensory-deprivation processing" &&
+						!!fbcSettings.gagspeak &&
+						handled;
+					return { skip, msg };
+				},
+			});
+		} else {
+			patchFunction(
+				"ChatRoomMessage",
+				{
+					"div.innerHTML = msg;": `div.innerHTML = msg;
+					if (data.Type === "Whisper") {
+						let repl = document.createElement("a");
+						repl.href = "#";
+						repl.onclick = (e) => {
+							e.preventDefault();
+							ElementValue("InputChat", \`/w \${SenderCharacter.MemberNumber} \${ElementValue("InputChat").replace(/^\\/(beep|w) \\S+ ?/u, '')}\`);
+							window.InputChat.focus();
+						};
+						repl.classList.add("bce-button");
+						repl.textContent = '\u21a9\ufe0f';
+						div.prepend(repl);
+					}`,
+					"const chatMsg": `const clientGagged = data.Content.endsWith('\\uf123');data.Content = data.Content.replace(/[\\uE000-\\uF8FF]/gu, '');const chatMsg`,
+					"msg += chatMsg;": `msg += chatMsg;
+				if (bceSettingValue("gagspeak") && SpeechGetTotalGagLevel(SenderCharacter) > 0 && !clientGagged) {
+					let original = data.Content;
+					if (data.Type === "Whisper" && data.Dictionary?.some(d => d.Tag === "${BCX_ORIGINAL_MESSAGE}")) {
+						original = data.Dictionary.find(d => d.Tag === "${BCX_ORIGINAL_MESSAGE}").Text;
+					}
+					original = ChatRoomHTMLEntities(original);
+					if (original.toLowerCase().trim() !== chatMsg.toLowerCase().trim()) {
+						msg += \` (\${original})\`
+					}
+				}`,
+				},
+				"No anti-garbling."
+			);
+		}
 
 		// ServerSend hook for client-side gagspeak, priority lower than BCX's whisper dictionary hook
 		SDK.hookFunction("ServerSend", 0, (args, next) => {
@@ -7003,6 +7129,13 @@ async function ForBetterClub() {
 			if (
 				!fbcSettings.friendPresenceNotifications &&
 				!fbcSettings.instantMessenger
+			) {
+				return;
+			}
+			if (
+				CurrentScreen === "FriendList" ||
+				CurrentScreen === "Relog" ||
+				CurrentScreen === "Login"
 			) {
 				return;
 			}
