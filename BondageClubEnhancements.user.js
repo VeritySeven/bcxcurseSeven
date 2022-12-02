@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements edit
 // @namespace https://www.bondageprojects.com/
-// @version 4.2.1
+// @version 4.2.2
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -39,10 +39,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const FBC_VERSION = "4.11";
+const FBC_VERSION = "4.12";
 const settingsVersion = 44;
 
 const fbcChangelog = `${FBC_VERSION}
+- disabled difficulty adjustment for locked items you do not have keys for
+- fixed an error in /w with not found numeric target
+- more optimistic patching now that debug tracking is more robust and errors caught at functional level
+
+4.11
 - fix /fbcdebug chat command
 - bcx hotfix
 - correct version number for SDK
@@ -54,10 +59,6 @@ const fbcChangelog = `${FBC_VERSION}
 - update to bcModSDK 1.1
 - eval scope fix
 - more powerful fbcdebug
-
-4.8
-- added R86 compatibility
-- removed R85 compatibility
 `;
 
 /*
@@ -111,7 +112,7 @@ async function ForBetterClub() {
 	const BCX_DEVEL_SOURCE =
 			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
-			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/e20f6a462d4055fee14e6378838e7cdf72b91f0f/bcxedit.js",
+			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/4602deb402b2c0bce2232aa8843676c8f1106815/bcxedit.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
@@ -1268,11 +1269,10 @@ async function ForBetterClub() {
 			deviatingHashes.includes(functionName) &&
 			SUPPORTED_GAME_VERSIONS.includes(GameVersion)
 		) {
-			logError(
-				`Skipping patching of ${functionName} due to detected deviation. Impact: ${affectedFunctionality}\n\nSee /fbcdebug in a chatroom for more information.`
+			logWarn(
+				`Attempted patching of ${functionName} despite detected deviation. Impact may be: ${affectedFunctionality}\n\nSee /fbcdebug in a chatroom for more information or copy(await fbcDebug()) in console.`
 			);
 			skippedFunctionality.push(affectedFunctionality);
-			return;
 		}
 		SDK.patchFunction(functionName, patches);
 	};
@@ -2280,7 +2280,7 @@ async function ForBetterClub() {
 								c.Name.split(" ")[0].toLowerCase() === target?.toLowerCase()
 						);
 					}
-					if (!target || targetMembers.length === 0) {
+					if (!target || !targetMembers || targetMembers.length === 0) {
 						fbcChatNotify(`Whisper target not found: ${target}`);
 					} else if (targetMembers.length > 1) {
 						fbcChatNotify(
@@ -5607,11 +5607,15 @@ async function ForBetterClub() {
 		};
 		const canAccessDifficultyMenu = () => {
 			const c = CharacterGetCurrent();
+			const item = c?.FocusGroup?.Name && InventoryGet(c, c.FocusGroup.Name);
+			const locked = item?.Property?.LockedBy;
+			const canUnlock = !locked || DialogCanUnlock(c, item);
 			return (
 				fbcSettings.layeringMenu &&
 				Player.CanInteract() &&
 				c?.FocusGroup?.Name &&
-				!InventoryGroupIsBlocked(c, c.FocusGroup.Name)
+				!InventoryGroupIsBlocked(c, c.FocusGroup.Name) &&
+				canUnlock
 			);
 		};
 
@@ -5806,6 +5810,7 @@ async function ForBetterClub() {
 				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
+
 							DrawButton(
 								10,
 								890,
@@ -5914,8 +5919,7 @@ async function ForBetterClub() {
 					if (
 						assetWorn(C, focusItem) &&
 						MouseIn(10, 890, 52, 52) &&
-						fbcSettings.modifyDifficulty &&
-						canAccessDifficultyMenu()
+						fbcSettings.modifyDifficulty
 					) {
 						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
 						return null;
@@ -9404,7 +9408,7 @@ async function ForBetterClub() {
 				const craft = JSON.parse(LZString.decompressFromBase64(str));
 				if (!isNonNullObject(craft)) {
 					logError(craft);
-					throw new Error("invalid craft type", typeof craft, craft);
+					throw new Error(`invalid craft type ${typeof craft} ${str}`);
 				}
 				for (const [key, value] of Object.entries(craft)) {
 					if (
