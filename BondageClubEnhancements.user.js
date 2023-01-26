@@ -110,7 +110,7 @@ async function ForBetterClub() {
 	const BCX_DEVEL_SOURCE =
 			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
-			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/780bd744fc4865f1e416ae7b4765d2a80512611a/bcxedit.js",
+			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/9921ca33475feb622ec2bbc2f32212a245a8b692/bcxedit.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
