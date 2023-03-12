@@ -33926,7 +33926,39 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
             }
-
+            if (this.allowBinds && WardrobeImportCheckChangesLockedItem(this.character, this.data, WardrobeImportMakeFilterFunction({
+                cloth: false,
+                cosplay: false,
+                body: false,
+                binds: true,
+                collar: false,
+                piercings: false
+            }))) {
+                this.allowBinds = false;
+                this.bindsBlockedByLock = true;
+            }
+            if (this.allowPiercings && WardrobeImportCheckChangesLockedItem(this.character, this.data, WardrobeImportMakeFilterFunction({
+                cloth: false,
+                cosplay: false,
+                body: false,
+                binds: true,
+                collar: false,
+                piercings: true
+            }))) {
+                this.allowPiercings = false;
+                this.piercingsBlockedByLock = true;
+            }
+            if (this.allowCollar && WardrobeImportCheckChangesLockedItem(this.character, this.data, WardrobeImportMakeFilterFunction({
+                cloth: false,
+                cosplay: false,
+                body: false,
+                binds: false,
+                collar: true,
+                piercings: false
+            }))) {
+                this.allowCollar = false;
+                this.collarBlockedByLock = true;
+            }
             this.refresh();
         }
         Unload() {
@@ -34441,16 +34473,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             WardrobeDoImport(this.character, this.data, a => this.checkAllowChange(smartGetAssetGroup(a)), this.allowLocks ? enabledLocks : false);
         }
         checkAllowChange(group) {
-            if (!this.allowCosplay && CATEGORIES$1.cosplay.filter(group))
-                return false;
-            if (!this.allowBody && CATEGORIES$1.body.filter(group))
-                return false;
-            if (!this.allowBinds && CATEGORIES$1.items.filter(group))
-                return false;
-            if (!this.allowPiercings && CATEGORIES$1.piercings.filter(group))
-                return false;
-            if (!this.allowCollar && CATEGORIES$1.collar.filter(group))
-                return false;
+
             return enabledSlots.has(group.Name) && !checkImportItemNoChange(group.Name, this.data, this.originalData);
         }
         getGlobalSelectorState(type) {
@@ -34470,16 +34493,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             type === "piercings" ? this.allowPiercings :
                                 type === "collar" ? this.allowCollar :
                                     false;
-            const blockedByLock = !allowed && (type === "items" ? this.bindsBlockedByLock :
+            
                 type === "piercings" ? this.piercingsBlockedByLock :
                     type === "collar" ? this.collarBlockedByLock :
                         false);
-            if (!allowed)
-                return {
-                    checked: "no",
-                    color: blockedByLock ? "#faa" : "#ccc",
-                    disabled: true
-                };
+
             const assetGroupsWithChange = AssetGroups.filter(g => !checkImportItemNoChange(g.Name, this.data, this.originalData));
             let checked = "no";
             const selectedSlots = assetGroupsWithChange.map(g => g.Name).filter(g => enabledSlots.has(g));
@@ -34808,8 +34826,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             collar: false,
             piercings: includeBinds
         });
-        if (includeBinds && !force && WardrobeImportCheckChangesLockedItem(C, data, Allow))
-            return "Refusing to change locked item!";
+  
         // Check if everything (except ignored properties) matches
         let fullMatch = includeBinds;
         if (includeBinds) {
