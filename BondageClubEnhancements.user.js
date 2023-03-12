@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements edit
 // @namespace https://www.bondageprojects.com/
-// @version 4.2.4
+// @version 4.2.5
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -39,24 +39,18 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const FBC_VERSION = "4.16";
+const FBC_VERSION = "4.22";
 const settingsVersion = 44;
 
 const fbcChangelog = `${FBC_VERSION}
-4.16
-- R88 compatibility
-- fixed bad lock numbers from self blacklisting self via anticheat
-- fixed notes textarea not disappearing when exiting notes by pressing escape
-- changed Ctrl+enter OOC to handle whispers and refuse to send commands without double //
-- changed Ctrl+enter OOC to handle closing brackets in the message
+- R90 beta compatibility beta
 
-4.15
-- fixed an error in setting lock timers
+4.21
+- added MBS loader
+- stable BCX update
 
-4.14
-- R87 compatibility
-- switched to gender neutral pronouns in FBC-originated messages
-- support his/their in addition to her for animation triggers
+4.20
+- BCX hotfix
 `;
 
 /*
@@ -73,7 +67,7 @@ var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ER
 async function ForBetterClub() {
 	"use strict";
 
-	const SUPPORTED_GAME_VERSIONS = ["R88"];
+	const SUPPORTED_GAME_VERSIONS = ["R89", "R90Beta1"];
 	const CAPABILITIES = ["clubslave"];
 
 	const w = window;
@@ -110,8 +104,9 @@ async function ForBetterClub() {
 	const BCX_DEVEL_SOURCE =
 			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
 		BCX_SOURCE =
-			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/9921ca33475feb622ec2bbc2f32212a245a8b692/bcxedit.js",
-		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js";
+			"https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/89baa831aaee32b1f2dfa2ef224c8eb2bcb57679/bcxedit.js",
+		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js",
+		MBS_SOURCE = "https://bananarama92.github.io/MBS/main/mbs.js";
 
 	const BCE_COLOR_ADJUSTMENTS_CLASS_NAME = "bce-colors",
 		BCE_LICENSE = "https://gitlab.com/Sidiousious/bce/-/blob/main/LICENSE",
@@ -148,6 +143,7 @@ async function ForBetterClub() {
 	const addonTypes = {
 		BCX: "none",
 		EBCH: "none",
+		MBS: "none",
 	};
 
 	if (typeof ChatRoomCharacter === "undefined") {
@@ -517,6 +513,22 @@ async function ForBetterClub() {
 			category: "addons",
 			description:
 				"Load the latest stable version of EBCH. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
+		},
+		mbs: {
+			label: "Load MBS by Rama (auto-updates)",
+			value: false,
+			sideEffects: (newValue) => {
+				if (newValue) {
+					loadExternalAddon("MBS", MBS_SOURCE).then((success) => {
+						if (success) {
+							addonTypes.MBS = "stable";
+						}
+					});
+				}
+			},
+			category: "addons",
+			description:
+				"Load the latest stable version of MBS. To see all details, see the link in sidiousious.gitlab.io/bce. This option always loads the latest version, which may change between refreshes.",
 		},
 		toySync: {
 			label: "Enable buttplug.io (requires refresh)",
@@ -1061,10 +1073,10 @@ async function ForBetterClub() {
 			ActivitySetArousal: "3AE28123",
 			ActivitySetArousalTimer: "AC563FD4",
 			ActivityTimerProgress: "6CD388A7",
-			AppearanceClick: "09FAC1CB",
+			AppearanceClick: "BA05C0CB",
 			AppearanceExit: "AA300341",
 			AppearanceLoad: "A14CB302",
-			AppearanceRun: "C65F23EF",
+			AppearanceRun: "6615AAD9",
 			CharacterAppearanceWardrobeLoad: "A5B63A03",
 			CharacterBuildDialog: "3CC4F4AA",
 			CharacterCompressWardrobe: "8D3B1AB1",
@@ -1072,7 +1084,6 @@ async function ForBetterClub() {
 			CharacterDelete: "398D1116",
 			CharacterGetCurrent: "45608177",
 			CharacterLoadCanvas: "678F3155",
-			CharacterLoadSimple: "7F6FA9F2",
 			CharacterNickname: "EB452E5E",
 			CharacterRefresh: "5BF9DA5A",
 			CharacterReleaseTotal: "396640D1",
@@ -1105,11 +1116,10 @@ async function ForBetterClub() {
 			CraftingClick: "BF7CE7B2",
 			CraftingConvertSelectedToItem: "46CE5BE0",
 			CraftingRun: "ADEAFA91",
-			CraftingUpdatePreview: "5F3030D4",
-			DialogClick: "EC7CDA6E",
+			DialogClick: "2B8A5A65",
 			DialogDraw: "7AD8C0F6",
-			DialogDrawItemMenu: "A85CB52B",
-			DialogLeave: "E929C751",
+			DialogDrawItemMenu: "9741F121",
+			DialogLeave: "5C5F8D62",
 			DrawAssetPreview: "5BD59B42",
 			DrawBackNextButton: "0DE5491B",
 			DrawButton: "63FDE2B2",
@@ -1129,7 +1139,7 @@ async function ForBetterClub() {
 			ElementValue: "4F26C62F",
 			FriendListShowBeep: "6C0449BB",
 			GLDrawResetCanvas: "EDF1631A",
-			InformationSheetRun: "D4947525",
+			InformationSheetRun: "676EE812",
 			InventoryGet: "E666F671",
 			InventoryItemMiscLoversTimerPadlockClick: "60FBC451",
 			InventoryItemMiscLoversTimerPadlockDraw: "C98C2F44",
@@ -1177,10 +1187,12 @@ async function ForBetterClub() {
 			SpeechGarble: "9D669F73",
 			SpeechGarbleByGagLevel: "2AEDED9D",
 			SpeechGetTotalGagLevel: "C55B705A",
-			StruggleDexterity: "95812A41",
-			StruggleDrawLockpickProgress: "0C83B6D4",
-			StruggleFlexibility: "148CEB8F",
-			StruggleStrength: "7980C89B",
+			StruggleDexterityProcess: "DD907C10",
+			StruggleFlexibilityCheck: "727CE05B",
+			StruggleFlexibilityProcess: "DC567B59",
+			StruggleLockPickDraw: "4ADC62CA",
+			StruggleMinigameHandleExpression: "41FA76AC",
+			StruggleStrengthProcess: "29D7FF44",
 			TextGet: "4DDE5794",
 			TextLoad: "ADF7C890",
 			TimerInventoryRemove: "ED80F802",
@@ -1196,6 +1208,40 @@ async function ForBetterClub() {
 		};
 
 		switch (gameVersion) {
+			case "R90Beta1":
+			case "R90Beta2":
+			case "R90Beta3":
+			case "R90Beta4":
+				hashes.ActivitySetArousalTimer = "1342AFE2";
+				hashes.AppearanceClick = "6d043815";
+				hashes.AppearanceRun = "24E07FA0";
+				hashes.CharacterBuildDialog = "EE68309E";
+				hashes.CharacterLoadCanvas = "CBDA8803";
+				hashes.CharacterSetActivePose = "D3186110";
+				hashes.CharacterSetFacialExpression = "AB7E8F62";
+				hashes.ChatRoomMessageDisplay = "F20D1969";
+				hashes.ChatRoomRun = "7D2E2D71";
+				hashes.CommandExecute = "5C948CC3";
+				hashes.CraftingClick = "0B915622";
+				hashes.DialogClick = "F4FCD7DD";
+				hashes.DialogDraw = "BBFB23E5";
+				hashes.DialogDrawItemMenu = "689891E5";
+				hashes.DrawBackNextButton = "B0DB9555";
+				hashes.DrawCharacter = "0A5772FA";
+				hashes.GLDrawResetCanvas = "81214642";
+				hashes.InformationSheetRun = "E248ADC7";
+				hashes.InventoryItemMiscLoversTimerPadlockLoad = "4993D2EB";
+				hashes.InventoryItemMiscMistressTimerPadlockLoad = "BE46432F";
+				hashes.InventoryItemMiscOwnerTimerPadlockLoad = "8A55C0D1";
+				hashes.InventoryItemMiscTimerPasswordPadlockLoad = "82223608";
+				hashes.ServerAppearanceLoadFromBundle = "FB794E30";
+				hashes.SpeechGarbleByGagLevel = "5F6E16C8";
+				hashes.StruggleDexterityProcess = "7E19ADA9";
+				hashes.StruggleFlexibilityProcess = "278D7285";
+				hashes.StruggleLockPickDraw = "2F1F603B";
+				hashes.StruggleStrengthProcess = "D20CF698";
+				hashes.TimerInventoryRemove = "FFDD61B9";
+				break;
 			default:
 				break;
 		}
@@ -1568,7 +1614,7 @@ async function ForBetterClub() {
 			// eslint-disable-next-line
 			const actualHash = SDK.getOriginalHash(func);
 			if (actualHash !== hash) {
-				logError(
+				logWarn(
 					`Function ${func} has been modified before FBC, potential incompatibility: ${actualHash}`
 				);
 				deviatingHashes.push(func);
@@ -1645,9 +1691,13 @@ async function ForBetterClub() {
 		// CommandExecute patch to fix /whitelistadd and /whitelistremove
 		patchFunction(
 			"CommandExecute",
-			{
-				"key.indexOf(CommandsKey + C.Tag) == 0)": `key.substring(1) === C.Tag)`,
-			},
+			GameVersion.startsWith("R89")
+				? {
+						"key.indexOf(CommandsKey + C.Tag) == 0)": `key.substring(1) === C.Tag)`,
+				  }
+				: {
+						"key.indexOf(CommandsKey + cmd.Tag) == 0)": `key.substring(1) === cmd.Tag)`,
+				  },
 			"Whitelist commands will not work."
 		);
 
@@ -1991,7 +2041,7 @@ async function ForBetterClub() {
 	}
 
 	// Load BCX
-	/** @type {(addon: "BCX" | "EBCH", source: string) => Promise<boolean>} */
+	/** @type {(addon: "BCX" | "EBCH" | "MBS", source: string) => Promise<boolean>} */
 	async function loadExternalAddon(addon, source) {
 		await waitFor(settingsLoaded);
 
@@ -2327,7 +2377,7 @@ async function ForBetterClub() {
 									`${CharacterNickname(a)} (${a.MemberNumber}) club ${
 										a.OnlineSharedSettings?.GameVersion
 									}${
-										bcx?.getCharacterVersion(a.MemberNumber)
+										w.bcx?.getCharacterVersion(a.MemberNumber)
 											? ` BCX ${bcx.getCharacterVersion(a.MemberNumber)}`
 											: ""
 									}${
@@ -2768,7 +2818,7 @@ async function ForBetterClub() {
 	}
 
 	async function lockpickHelp() {
-		await waitFor(() => !!StruggleDrawLockpickProgress);
+		await waitFor(() => !!StruggleMinigames);
 
 		/** @type {(s: number) => () => number} */
 		const newRand = (s) =>
@@ -2783,10 +2833,10 @@ async function ForBetterClub() {
 			y = 300;
 
 		SDK.hookFunction(
-			"StruggleDrawLockpickProgress",
+			"StruggleLockPickDraw",
 			HOOK_PRIORITIES.AddBehaviour,
 			(args, next) => {
-				if (fbcSettings.lockpick) {
+				if (fbcSettings.lockpick && w.StruggleLockPickOrder) {
 					const seed = parseInt(StruggleLockPickOrder.join(""));
 					const rand = newRand(seed);
 					const threshold = SkillGetWithRatio("LockPicking") / 20;
@@ -2811,6 +2861,8 @@ async function ForBetterClub() {
 				return next(args);
 			}
 		);
+		debug("hooking struggle for lockpick cheat draw", StruggleMinigames);
+		StruggleMinigames.LockPick.Draw = StruggleLockPickDraw;
 	}
 
 	function automaticReconnect() {
@@ -3547,57 +3599,27 @@ async function ForBetterClub() {
 		await waitFor(() => CurrentScreen === "ChatRoom");
 
 		patchFunction(
-			"StruggleStrength",
+			"StruggleMinigameHandleExpression",
 			{
-				'if (StruggleProgressStruggleCount == 15) CharacterSetFacialExpression(Player, "Blush", "Low");':
-					'if (StruggleProgressStruggleCount >= 125) CharacterSetFacialExpression(Player, "Blush", "High", 10);',
-				'if (StruggleProgressStruggleCount == 50) CharacterSetFacialExpression(Player, "Blush", "Medium");':
-					'else if (StruggleProgressStruggleCount >= 50) CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
-				'if (StruggleProgressStruggleCount == 125) CharacterSetFacialExpression(Player, "Blush", "High");':
-					'else if (StruggleProgressStruggleCount >= 15) CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
+				'if (Count == 15) CharacterSetFacialExpression(Player, "Blush", "Low");':
+					'if (Count >= 125) CharacterSetFacialExpression(Player, "Blush", "High", 10);',
+				'if (Count == 50) CharacterSetFacialExpression(Player, "Blush", "Medium");':
+					'else if (Count >= 50) CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
+				'if (Count == 125) CharacterSetFacialExpression(Player, "Blush", "High");':
+					'else if (Count >= 15) CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
 				'CharacterSetFacialExpression(Player, "Fluids", "DroolMessy");':
 					'CharacterSetFacialExpression(Player, "Fluids", "DroolMessy", 10);',
-				'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null);':
-					'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null, 10);',
-				"StruggleProgressStruggleCount ==": "StruggleProgressStruggleCount >=",
-			},
-			"Resetting blush, fluids and eyebrows after brute force struggling"
-		);
-
-		patchFunction(
-			"StruggleFlexibility",
-			{
-				'if (StruggleProgressStruggleCount == 15) CharacterSetFacialExpression(Player, "Blush", "Low");':
-					'if (StruggleProgressStruggleCount >= 125) CharacterSetFacialExpression(Player, "Blush", "High", 10);',
-				'if (StruggleProgressStruggleCount == 50) CharacterSetFacialExpression(Player, "Blush", "Medium");':
-					'else if (StruggleProgressStruggleCount >= 50) CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
-				'if (StruggleProgressStruggleCount == 125) CharacterSetFacialExpression(Player, "Blush", "High");':
-					'else if (StruggleProgressStruggleCount >= 15) CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
 				'CharacterSetFacialExpression(Player, "Eyes2", "Closed");':
 					'CharacterSetFacialExpression(Player, "Eyes2", "Closed", 10);',
-				'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null);':
-					'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null, 10);',
-				"StruggleProgressStruggleCount ==": "StruggleProgressStruggleCount >=",
-			},
-			"Resetting blush, eyes2 and eyebrows after flexibility struggling"
-		);
-
-		patchFunction(
-			"StruggleDexterity",
-			{
-				'if (StruggleProgressStruggleCount == 15) CharacterSetFacialExpression(Player, "Blush", "Low");':
-					'if (StruggleProgressStruggleCount >= 125) CharacterSetFacialExpression(Player, "Blush", "High", 10);',
-				'if (StruggleProgressStruggleCount == 50) CharacterSetFacialExpression(Player, "Blush", "Medium");':
-					'else if (StruggleProgressStruggleCount >= 50) CharacterSetFacialExpression(Player, "Blush", "Medium", 10);',
-				'if (StruggleProgressStruggleCount == 125) CharacterSetFacialExpression(Player, "Blush", "High");':
-					'else if (StruggleProgressStruggleCount >= 15) CharacterSetFacialExpression(Player, "Blush", "Low", 10);',
 				'CharacterSetFacialExpression(Player, "Eyes", "Dazed");':
 					'CharacterSetFacialExpression(Player, "Eyes", "Dazed", 10);',
-				'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null);':
-					'CharacterSetFacialExpression(Player, "Eyebrows", (StruggleProgress >= 50) ? "Angry" : null, 10);',
-				"StruggleProgressStruggleCount ==": "StruggleProgressStruggleCount >=",
+				'CharacterSetFacialExpression(Player, "Eyebrows", "Angry");':
+					'CharacterSetFacialExpression(Player, "Eyebrows", "Angry", 10);',
+				'CharacterSetFacialExpression(Player, "Eyebrows", null);':
+					'CharacterSetFacialExpression(Player, "Eyebrows", null, 10);',
+				"Count ==": "Count >=",
 			},
-			"Resetting blush, eyes and eyebrows after dexterity struggling"
+			"Resetting blush, eyes, and eyebrows after struggling"
 		);
 
 		if (!w.bce_ArousalExpressionStages) {
@@ -5064,13 +5086,12 @@ async function ForBetterClub() {
 						});
 					}
 				});
-				CharacterSetActivePose(
-					Player,
-					PoseFemale3DCG.filter((p) =>
-						poses.includes(p.Name.toLowerCase())
-					).map((p) => p.Name),
-					false
-				);
+				const poseNames = PoseFemale3DCG.filter((p) =>
+					poses.includes(p.Name.toLowerCase())
+				).map((p) => p.Name);
+				for (const poseName of poseNames) {
+					CharacterSetActivePose(Player, poseName, false);
+				}
 			},
 		});
 
@@ -5171,7 +5192,10 @@ async function ForBetterClub() {
 					return;
 				}
 				if (data.MemberNumber === Player.MemberNumber) {
-					CharacterSetActivePose(Player, data.Pose, true);
+					Player.ActivePose = Array.isArray(data.Pose)
+						? data.Pose
+						: [data.Pose];
+					CharacterRefresh(Player, false);
 				}
 			}
 		);
@@ -5189,7 +5213,10 @@ async function ForBetterClub() {
 					return;
 				}
 				if (data.Character?.MemberNumber === Player.MemberNumber) {
-					CharacterSetActivePose(Player, data.Character.ActivePose, true);
+					Player.ActivePose = Array.isArray(data.Character.ActivePose)
+						? data.Character.ActivePose
+						: [data.Character.ActivePose];
+					CharacterRefresh(Player, false);
 				}
 			}
 		);
@@ -5603,7 +5630,7 @@ async function ForBetterClub() {
 				newPose = null;
 			}
 			if (JSON.stringify(Player.ActivePose) !== JSON.stringify(newPose)) {
-				SDK.callOriginal("CharacterSetActivePose", [Player, newPose, true]);
+				Player.ActivePose = newPose;
 				needsPoseUpdate = true;
 				needsRefresh = true;
 			}
@@ -5842,7 +5869,7 @@ async function ForBetterClub() {
 				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
-				
+
 							DrawButton(
 								10,
 								890,
@@ -6455,6 +6482,15 @@ async function ForBetterClub() {
 				}
 				return next(args);
 			}
+		);
+
+		SDK.hookFunction(
+			"ServerPlayerIsInChatRoom",
+			HOOK_PRIORITIES.AddBehaviour,
+			/** @type {(args: [], next: (args: []) => boolean) => boolean} */
+			(args, next) =>
+				(inCustomWardrobe && CharacterAppearanceReturnRoom === "ChatRoom") ||
+				next(args)
 		);
 
 		/** @type {(e: KeyboardEvent) => void} */
@@ -7127,6 +7163,7 @@ async function ForBetterClub() {
 					"SunGlassesClear",
 					"CatGlasses",
 					"VGlasses",
+					"GradientSunglasses",
 					"FuturisticVisor",
 					"InteractiveVisor",
 					"InteractiveVRHeadset",
@@ -7277,12 +7314,13 @@ async function ForBetterClub() {
 			return true;
 		}
 
-		/** @type {(sourceCharacter: Character, oldItem: ItemBundle | null, newItem: ItemBundle | null, ignoreLocks: boolean) => { changed: number; prohibited: boolean }} */
+		/** @type {(sourceCharacter: Character, oldItem: ItemBundle | null, newItem: ItemBundle | null, ignoreLocks: boolean, ignoreColors: boolean) => { changed: number; prohibited: boolean }} */
 		function validateSingleItemChange(
 			sourceCharacter,
 			oldItem,
 			newItem,
-			ignoreLocks
+			ignoreLocks,
+			ignoreColors
 		) {
 			const changes = {
 				changed: 0,
@@ -7297,14 +7335,19 @@ async function ForBetterClub() {
 				sourceCharacter.MemberNumber
 			})`;
 
-			/** @type {(item: ItemBundle) => void} */
-			function deleteUnneededLockData(item) {
+			/** @type {(item: ItemBundle) => ItemBundle} */
+			function deleteUnneededMetaData(item) {
 				if (ignoreLocks && item?.Property) {
 					delete item.Property.LockMemberNumber;
 					delete item.Property.LockedBy;
 					delete item.Property.RemoveTimer;
 					delete item.Property.Effect;
 				}
+				if (ignoreColors) {
+					delete item.Color;
+				}
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+				return JSON.parse(JSON.stringify(item));
 			}
 
 			function validateMistressLocks() {
@@ -7374,8 +7417,8 @@ async function ForBetterClub() {
 			}
 			validateMistressLocks();
 
-			deleteUnneededLockData(newItem);
-			deleteUnneededLockData(oldItem);
+			newItem = deleteUnneededMetaData(newItem);
+			oldItem = deleteUnneededMetaData(oldItem);
 
 			if (JSON.stringify(newItem) !== JSON.stringify(oldItem)) {
 				debug(
@@ -7450,6 +7493,9 @@ async function ForBetterClub() {
 				const ignoreLocks = Player.Appearance.some(
 					(a) => a.Asset.Name === "FuturisticCollar"
 				);
+				const ignoreColors =
+					Player.Appearance.some((a) => a.Asset.Name === "FuturisticHarness") ||
+					ignoreLocks;
 				const oldItem = Player.Appearance.find(
 					(i) => i.Asset.Group.Name === data.Item.Group
 				);
@@ -7460,7 +7506,8 @@ async function ForBetterClub() {
 					sourceCharacter,
 					oldItemBundle,
 					data.Item,
-					ignoreLocks
+					ignoreLocks,
+					ignoreColors
 				);
 				if (result.prohibited) {
 					revertChanges(sourceCharacter);
@@ -7535,6 +7582,14 @@ async function ForBetterClub() {
 					Array.from(newItems.values()).some(
 						(i) => i.Name === "FuturisticCollar"
 					);
+				const ignoreColors =
+					(Array.from(oldItems.values()).some(
+						(i) => i.Name === "FuturisticHarness"
+					) &&
+						Array.from(newItems.values()).some(
+							(i) => i.Name === "FuturisticHarness"
+						)) ||
+					ignoreLocks;
 
 				debug(
 					"Anti-Cheat validating bulk change from",
@@ -7558,7 +7613,8 @@ async function ForBetterClub() {
 							sourceCharacter,
 							oldItem,
 							newItem,
-							ignoreLocks
+							ignoreLocks,
+							ignoreColors
 						);
 						changes.prohibited = changes.prohibited || result.prohibited;
 						changes.changed += result.changed;
@@ -8658,6 +8714,20 @@ async function ForBetterClub() {
 			DialogAllowFluids = true;
 		};
 
+		SDK.hookFunction(
+			"StruggleFlexibilityCheck",
+			HOOK_PRIORITIES.OverrideBehaviour,
+			(args, next) => {
+				if (fbcSettings.autoStruggle) {
+					if (StruggleProgressFlexCircles.length > 0) {
+						StruggleProgressFlexCircles.splice(0, 1);
+						return true;
+					}
+				}
+				return next(args);
+			}
+		);
+
 		createTimer(() => {
 			if (!fbcSettings.autoStruggle) {
 				return;
@@ -8669,12 +8739,11 @@ async function ForBetterClub() {
 
 			if (StruggleProgressCurrentMinigame === "Strength") {
 				allowAllDialogExpressions();
-				StruggleStrength(false);
+				StruggleStrengthProcess(false);
 			} else if (StruggleProgressCurrentMinigame === "Flexibility") {
 				if (StruggleProgressFlexCircles?.length > 0) {
 					allowAllDialogExpressions();
-					StruggleFlexibility(false, true);
-					StruggleProgressFlexCircles.splice(0, 1);
+					StruggleFlexibilityProcess(false);
 				}
 			}
 		}, 60);
@@ -8702,7 +8771,7 @@ async function ForBetterClub() {
 				);
 				if (distMult > 0.5) {
 					allowAllDialogExpressions();
-					StruggleDexterity(false);
+					StruggleDexterityProcess();
 				}
 			}
 		}, 0);
