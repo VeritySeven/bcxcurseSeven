@@ -434,20 +434,6 @@ async function ForBetterClub() {
 			description:
 				"Allows you to open menus while bound, even if they're disabled in the settings.",
 		},
-			modifyDifficulty: {
-			label: "Add option to modify difficulty of restraints to layering menu",
-			value: false,
-			sideEffects: (newValue) => {
-				debug("modifyDifficulty", newValue);
-				if (newValue && !fbcSettings.layeringMenu) {
-					fbcSettings.layeringMenu = true;
-					defaultSettings.layeringMenu.sideEffects(true);
-				}
-			},
-			category: "cheats",
-			description:
-				"Adds an option to the layering menu to modify the difficulty of restraints.",
-		},
 		autoStruggle: {
 			label: "Make automatic progress while struggling",
 			value: false,
@@ -6013,17 +5999,8 @@ async function ForBetterClub() {
 			}
 		}
 
-		/** @type {"Priority" | "Difficulty"} */
-		let priorityField = "Priority",
-			prioritySubscreen = false;
+		let prioritySubscreen = false;
 		let layerPage = 0;
-		const FIELDS = Object.freeze({
-			/** @type {"Priority"} */
-			Priority: "Priority",
-			/** @type {"Difficulty"} */
-			Difficulty: "Difficulty",
-		});
-
 
 		const preview = CharacterLoadSimple(
 			`LayeringPreview-${Player.MemberNumber}`
@@ -6210,20 +6187,9 @@ async function ForBetterClub() {
 			HOOK_PRIORITIES.AddBehaviour,
 			(args, next) => {
 				const [C] = args;
-				
+				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
-						
-							DrawButton(
-								10,
-								890,
-								52,
-								52,
-								"",
-								"White",
-								ICONS.TIGHTEN,
-								displayText("Loosen or tighten")
-							);
 						if (
 							colorCopiableAssets.includes(focusItem.Asset.Name) &&
 							Player.CanInteract()
@@ -6254,7 +6220,7 @@ async function ForBetterClub() {
 							displayText("Modify layering priority")
 						);
 					}
-				
+				}
 				return next(args);
 			}
 		);
@@ -6380,15 +6346,7 @@ async function ForBetterClub() {
 						prioritySubscreenClick(C, focusItem);
 						return null;
 					}
-					if (
-						assetWorn(C, focusItem) &&
-						MouseIn(10, 890, 52, 52) &&
-						fbcSettings.modifyDifficulty
-					) {
-						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
-						return null;
-					} 
-					else if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
+					if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
 						prioritySubscreenEnter(C, focusItem);
 						return null;
 					} else if (
