@@ -6201,7 +6201,7 @@ async function ForBetterClub() {
 			HOOK_PRIORITIES.AddBehaviour,
 			(args, next) => {
 				const [C] = args;
-				if (isCharacter(C) && canAccessLayeringMenus()) {
+				
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
 						
@@ -6245,7 +6245,7 @@ async function ForBetterClub() {
 							displayText("Modify layering priority")
 						);
 					}
-				}
+				
 				return next(args);
 			}
 		);
