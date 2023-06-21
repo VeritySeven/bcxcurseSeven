@@ -6371,7 +6371,15 @@ async function ForBetterClub() {
 						prioritySubscreenClick(C, focusItem);
 						return null;
 					}
-					if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
+					if (
+						assetWorn(C, focusItem) &&
+						MouseIn(10, 890, 52, 52) &&
+						fbcSettings.modifyDifficulty
+					) {
+						prioritySubscreenEnter(C, focusItem, FIELDS.Difficulty);
+						return null;
+					} 
+					else if (assetVisible(C, focusItem) && MouseIn(10, 948, 52, 52)) {
 						prioritySubscreenEnter(C, focusItem);
 						return null;
 					} else if (
