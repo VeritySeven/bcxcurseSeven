@@ -434,6 +434,20 @@ async function ForBetterClub() {
 			description:
 				"Allows you to open menus while bound, even if they're disabled in the settings.",
 		},
+			modifyDifficulty: {
+			label: "Add option to modify difficulty of restraints to layering menu",
+			value: false,
+			sideEffects: (newValue) => {
+				debug("modifyDifficulty", newValue);
+				if (newValue && !fbcSettings.layeringMenu) {
+					fbcSettings.layeringMenu = true;
+					defaultSettings.layeringMenu.sideEffects(true);
+				}
+			},
+			category: "cheats",
+			description:
+				"Adds an option to the layering menu to modify the difficulty of restraints.",
+		},
 		autoStruggle: {
 			label: "Make automatic progress while struggling",
 			value: false,
@@ -6190,6 +6204,17 @@ async function ForBetterClub() {
 				if (isCharacter(C) && canAccessLayeringMenus()) {
 					const focusItem = InventoryGet(C, C.FocusGroup?.Name);
 					if (assetWorn(C, focusItem)) {
+						
+							DrawButton(
+								10,
+								890,
+								52,
+								52,
+								"",
+								"White",
+								ICONS.TIGHTEN,
+								displayText("Loosen or tighten")
+							);
 						if (
 							colorCopiableAssets.includes(focusItem.Asset.Name) &&
 							Player.CanInteract()
