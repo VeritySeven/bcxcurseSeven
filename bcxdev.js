@@ -35140,7 +35140,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             WardrobeDoImport(this.character, this.data, a => this.checkAllowChange(smartGetAssetGroup(a)), this.allowLocks ? enabledLocks : false);
         }
         checkAllowChange(group) {
-           
+            
             return enabledSlots.has(group.Name) && !checkImportItemNoChange(group.Name, this.data, this.originalData);
         }
         getGlobalSelectorState(type) {
@@ -35159,11 +35159,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             type === "piercings" ? this.allowPiercings :
                                 type === "collar" ? this.allowCollar :
                                     false;
-            
+  
                 type === "piercings" ? this.piercingsBlockedByLock :
                     type === "collar" ? this.collarBlockedByLock :
-                        false);
-        
+                        false;
+            
             const assetGroupsWithChange = AssetGroups.filter(g => !checkImportItemNoChange(g.Name, this.data, this.originalData));
             let checked = "no";
             const selectedSlots = assetGroupsWithChange.map(g => g.Name).filter(g => enabledSlots.has(g));
@@ -35482,7 +35482,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             collar: false,
             piercings: includeBinds,
         });
-
+        
         let fullMatch = includeBinds;
         if (includeBinds) {
             for (const group of arrayUnique(C.Appearance.filter(Allow).map(item => item.Asset.Group.Name).concat(data.map(item => item.Group)))) {
