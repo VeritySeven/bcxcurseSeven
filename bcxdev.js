@@ -13,7 +13,7 @@ console.debug("BCX: Parse start...");
 (function () {
     'use strict';
 
-    const BCX_VERSION="0.9.4-DEV-20230312000631";const BCX_DEVEL=true;
+    const BCX_VERSION="0.9.6-77de8e35";const BCX_DEVEL=false;
 
     const icon_ExternalLink = `data:image/svg+xml;base64,
 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6
@@ -23,11 +23,8 @@ YXRoIGQ9Ik0xNyAxN0gzVjNoNVYxSDNhMiAyIDAgMCAwLTIgMnYxNGEyIDIgMCAwIDAgMiAyaDE0
 YTIgMiAwIDAgMCAyLTJ2LTVoLTJ6Ii8+DQogIDxwYXRoIGQ9Ik0xOSAxaC04bDMuMjkgMy4yOS01
 LjczIDUuNzMgMS40MiAxLjQyIDUuNzMtNS43M0wxOSA5VjF6Ii8+DQo8L3N2Zz4NCg==
 `.replaceAll("\n", "");
-    // SVG; dimensions: 50x50
     const icon_Typing_base = `m16.224 3.7453 18.537-0.00135c8.045 0.12979 14.142 7.9048 13.74 13.256v5c-0.07394 7.8789-4.2176 15.139-12.946 15.375l-13.663 0.17306-10.992 8.5772-0.13168-8.8861c-4.4316-3.095-9.4592-6.006-9.113-12.266l-0.15485-7.9735c-0.11565-6.8309 6.3297-13.251 14.724-13.255z`;
-    // SVG; dimensions: 50x50
     const icon_Typing_dot = `m15.793 19.891a3.5336 3.5336 0 0 1-2.5515 4.2857 3.5336 3.5336 0 0 1-4.2954-2.5351 3.5336 3.5336 0 0 1 2.5186-4.3051 3.5336 3.5336 0 0 1 4.3147 2.5021`;
-    // SVG; dimensions: 50x50
     const icon_Typing_star = `m11.902 16.017 0.16893 3.7841-3.5814-1.2839-0.64194 1.9934 3.6489 1.0136-2.3313 3.007 1.6893 1.2163 2.1285-3.1421 2.0948 3.1421 1.7231-1.2163-2.365-3.007 3.6489-1.0136-0.64194-1.9934-3.5814 1.2839 0.16893-3.7841z`;
     const icon_NewMessage = `data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGOfPtRkwAAACBjSFJN
@@ -49,15 +46,10 @@ ED69iP2a94psVFdXRx6PhwCQTqfL7zt7roNnHPD8x1dRCvkTgwIk39nJK8iX+dCTnoVCzgj/qwpB
 REQXFxcUCAQokUgwVY+n1ZLU/6cZVbN/TeUl3Wem9jqdjs7OzpQXTSbTRaEX6AwGw2VRb2/vP4W+
 Prq6urb5np6euUgk8m15efmvWCxWQkSPBRI/p9fr5fb29p/Dw8N/c9rnaQ1EA9FANBANRAPRQP5/
 +m8A4sEE5SZccHcAAAAASUVORK5CYII=`.replaceAll("\n", "");
-    // SVG; dimensions: 180x180
     const icon_patreon = `M108.8135992 26.06720125c-26.468266 0-48.00213212 21.53066613-48.00213212 47.99733213 0 26.38653268 21.53386613 47.85426547 48.00213213 47.85426547 26.38639937 0 47.8530655-21.4677328 47.8530655-47.85426547 0-26.466666-21.46666613-47.99733213-47.85306547-47.99733213 M23.333335 153.93333178V26.0666679h23.46666576v127.8666639z`;
-    // SVG; dimensions: 71x55; fill: "#5865F2"
     const icon_discord = `M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z`;
-    // SVG; dimensions: 24x24
     const icon_star = `m12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z`;
-    // SVG; dimensions: 50x50
     const icon_heart = `m14.483 4.5372c-10.063 0.0305-12.109 8.5713-12.008 12.355 0.1628 6.5444 5.4929 11.067 10.223 15.516 4.7684 3.8893 8.5801 8.3608 12.383 12.838 3.8031-4.4771 7.614-8.9486 12.382-12.838 4.7298-4.4488 10.06-8.9712 10.223-15.516 0.10164-3.7842-1.9446-12.325-12.008-12.355-4.9198-0.28718-10.597 6.153-10.597 6.153-1.7777-1.9041-4.833-6.2892-10.598-6.153z`;
-    // SVG; dimensions: 50x50
     const icon_BCX_cross = `m7.3532 5.3725 10.98 19.412-10.98 19.803h15.294l2.3528-5.4898c0.78426 1.8299 1.5685 3.6599 2.3528 5.4898h15.294l-10.98-19.803c3.6599-6.4706 7.3197-12.941 10.98-19.412h-15.294l-2.3528 5.4898-2.3528-5.4898z`;
     const icon_BCX = `data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAAFYAAABWCAQAAAD/X6l8AAAABGdBTUEAALGOfPtRkwAAACBjSFJN
@@ -292,7 +284,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         BCXLoginTimedata = JSON.parse(JSON.stringify(loginData));
     }
     function BCX_setInterval(handler, timeout) {
-        // eslint-disable-next-line no-restricted-globals
         return setInterval(() => {
             const ctx = debugContextStart("BCX internal interval", { root: true, modArea: "BCX" });
             handler();
@@ -300,7 +291,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }, timeout);
     }
     function BCX_setTimeout(handler, timeout) {
-        // eslint-disable-next-line no-restricted-globals
         return setTimeout(() => {
             const ctx = debugContextStart("BCX internal timeout", { root: true, modArea: "BCX" });
             handler();
@@ -308,9 +298,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }, timeout);
     }
     let contextStack = [];
-    /**
-     * @returns Name of mod current context can be traced to, `""` for BC itself, `null` for unknown origin
-     */
     function contextCurrentModArea() {
         if (contextStack.length === 0)
             return null;
@@ -322,7 +309,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             name,
             modArea: modArea !== undefined ? modArea : ((_a = contextCurrentModArea()) !== null && _a !== void 0 ? _a : ""),
             root,
-            extraInfo
+            extraInfo,
         };
         const handle = {
             end: () => {
@@ -339,7 +326,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     const removed = contextStack.splice(index, toRemove);
                     console.warn(`BCX: Debug context end while not on top of the stack (depth ${toRemove})`, removed, new Error());
                 }
-            }
+            },
         };
         if (root && contextStack.length > 0) {
             console.warn(`BCX: Root context when we already have context`, contextStack, new Error());
@@ -378,31 +365,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         return res;
     }
 
-    /* eslint-disable quote-props */
     const VERSION$1 = BCX_VERSION;
     const VERSION_CHECK_BOT = 37685;
-    // Server commit: b894fce7856593d16850721febc44b09c2ec94f7
-    // Game commit: 4a1d8855d0e7c9d062efbabb40dca2b380bb5e80
     const SUPPORTED_BC_VERSIONS = [
-        "R88"
+        "R91",
     ];
     const FUNCTION_HASHES = {
         "Player.CanChangeClothesOn": ["40EF5292"],
-        "Player.GetBlindLevel": ["32BC83FD"],
+        "Player.GetBlindLevel": ["FDE144D9"],
         "Player.GetBlurLevel": ["F6930456", "BFF08A45"],
         "Player.GetDeafLevel": ["42CB6D63"],
         "Player.HasTints": ["E09CA942", "F1F63BF9"],
         "Player.IsSlow": ["6E60F118"],
-        ActivityCheckPrerequisite: ["2B10C903"],
+        ActivityCheckPrerequisite: ["168A7F07"],
         ActivityOrgasmPrepare: ["D49DAC9B"],
-        ActivityOrgasmStart: ["0D463F76"],
-        AppearanceClick: ["09FAC1CB", "BA05C0CB"],
+        ActivityOrgasmStart: ["0BD14BED"],
+        AppearanceClick: ["64C82387"],
         AppearanceExit: ["AA300341"],
         AppearanceGetPreviewImageColor: ["06F02ADE"],
         AppearanceMenuBuild: ["A9809413"],
-        AppearanceMenuClick: ["80444418"],
+        AppearanceMenuClick: ["45018222"],
         AppearanceMenuDraw: ["28FDF65B"],
-        AppearanceRun: ["C65F23EF", "6615AAD9"],
+        AppearanceRun: ["8C0005E2"],
         AsylumEntranceCanWander: ["A85C35F3"],
         AsylumGGTSClick: ["E5660C8C"],
         AsylumGGTSLoad: ["DAB62F12"],
@@ -411,7 +395,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         CharacterAppearanceLoadCharacter: ["387F9BEF"],
         CharacterCanChangeToPose: ["F55FE4B0"],
         CharacterCanKneel: ["A5A325E3"],
-        CharacterLoadCanvas: ["678F3155"],
+        CharacterLoadCanvas: ["BA6AD4FF"],
         CharacterLoadEffect: ["BD6B6B4D"],
         CharacterNickname: ["EB452E5E"],
         ChatAdminClick: ["D4354B95", "A15E13F5"],
@@ -426,81 +410,81 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         ChatRoomAdminAction: ["86DE8F3C"],
         ChatRoomCanAttemptKneel: ["0AA710FA"],
         ChatRoomCanAttemptStand: ["026065D0"],
-        ChatRoomCanBeLeashedBy: ["A05C6F82"],
+        ChatRoomCanBeLeashedBy: ["749EBE4E"],
         ChatRoomCanLeave: ["7065F82F"],
         ChatRoomClearAllElements: ["C49AA2C1"],
         ChatRoomClickCharacter: ["715D92A0"],
         ChatRoomCreateElement: ["AD7CBE68"],
         ChatRoomDrawBackground: ["597B062C"],
         ChatRoomDrawCharacter: ["8ED3DF88"],
-        ChatRoomDrawCharacterOverlay: ["1B280F1F"],
+        ChatRoomDrawCharacterOverlay: ["06FB4CC3"],
         ChatRoomFirstTimeHelp: ["078BEEA9"],
         ChatRoomGetFocusGroupSubstitutions: ["04FB0708"],
         ChatRoomIsOwnedByPlayer: ["82640FF9"],
         ChatRoomKeyDown: ["B4BFDB0C"],
         ChatRoomListUpdate: ["D7FA0EC7"],
         ChatRoomLovershipOptionIs: ["6F5CE6A0"],
-        ChatRoomMenuClick: ["0F32BA38"],
+        ChatRoomMenuClick: ["95171B81"],
         ChatRoomMenuDraw: ["0B8B0944"],
         ChatRoomMessage: ["BBD61334"],
-        ChatRoomMessageDefaultMetadataExtractor: ["9054A0A0", "B9680089"],
+        ChatRoomMessageDefaultMetadataExtractor: ["E8718964"],
         ChatRoomOwnershipOptionIs: ["FE060F0B"],
-        ChatRoomRun: ["685FF69C"],
+        ChatRoomRun: ["7D2E2D71"],
         ChatRoomSendChat: ["7F540ED0"],
         ChatRoomSendEmote: ["6EF53CBA"],
         ChatRoomShouldBlockGaggedOOCMessage: ["16D6AED5"],
         ChatRoomStatusUpdate: ["35DA12E0"],
-        ChatRoomSync: ["EE15739F", "965ED902"],
+        ChatRoomSync: ["BC146A3E"],
         ChatRoomSyncMemberLeave: ["A95EADE6"],
         ChatRoomTarget: ["C76C5E33"],
         ChatRoomUpdateDisplay: ["8DFC494A"],
         ChatSearchJoin: ["22514B80"],
-        ChatSearchLoad: ["8AF12D1C"],
+        ChatSearchLoad: ["05A059CF"],
         ChatSearchNormalDraw: ["66BF1158"],
         ChatSearchRun: ["64BCF8FB"],
         CheatFactor: ["594CFC45"],
         CheatImport: ["26C67608"],
         ColorPickerDraw: ["D1E82FB3"],
         CommandParse: ["6E46F29E"],
-        CommonKeyDown: ["A8EC46AB"],
-        CommonSetScreen: ["17692CD7"],
-        DialogCanUnlock: ["B849E6BC"],
-        DialogClickExpressionMenu: ["5938DDC1"],
-        DialogDrawExpressionMenu: ["EEFB3D22"],
-        DialogDrawItemMenu: ["A85CB52B", "9741F121", "AC41D031"],
+        CommonKeyDown: ["0F27218B"],
+        CommonSetScreen: ["E2AC00F4"],
+        DialogCanUnlock: ["0881FEFF"],
+        DialogClickExpressionMenu: ["BD1C7523"],
+        DialogDrawExpressionMenu: ["A350DE2C"],
+        DialogDrawItemMenu: ["689891E5"],
         DialogDrawPoseMenu: ["30C7A7C3"],
         DialogFindPlayer: ["32851FF2"],
-        DialogInventoryAdd: ["EDB6BC02", "0DD2B515"],
-        DialogInventoryBuild: ["6723E5B6"],
-        DialogItemClick: ["DAA8233C"],
-        DialogLeaveItemMenu: ["B54FD195", "C5A6320D", "FF4E3C83"],
-        DialogMenuButtonBuild: ["ACC00BF5", "84F4B8E8", "EBF6E51A"],
-        DialogMenuButtonClick: ["74C8814C"],
+        DialogInventoryAdd: ["77BEFF8F"],
+        DialogInventoryBuild: ["75F93206"],
+        DialogItemClick: ["639713E6"],
+        DialogLeaveItemMenu: ["2348FCE9"],
+        DialogMenuButtonBuild: ["8F72FA67"],
+        DialogMenuButtonClick: ["D6970391"],
         DrawArousalMeter: ["DC0BB5B4"],
-        DrawCharacter: ["26364B35"],
+        DrawCharacter: ["CA0D50AF"],
         DrawGetImage: ["BEC7B0DA"],
         DrawImageEx: ["3D3D74F5"],
         DrawProcess: ["4B2BE17E"],
         DrawStatus: ["FD747092"],
-        ExtendedItemDrawButton: ["E29E3B51", "AB0C9258"],
+        ExtendedItemDrawButton: ["E1453F3F"],
         FriendListBeepMenuSend: ["B81A695E"],
         FriendListClick: ["6B039C7C"],
         FriendListLoadFriendList: ["1F8A29E2"],
         FriendListRun: ["051E747B"],
         InfiltrationStealItems: ["1F601756"],
         InformationSheetClick: ["E535609B"],
-        InformationSheetExit: ["75521907"],
-        InformationSheetRun: ["D4947525", "676EE812"],
+        InformationSheetExit: ["29FF58C9"],
+        InformationSheetRun: ["E248ADC7"],
         InventoryItemNeckAccessoriesCollarAutoShockUnitDetectSpeech: ["441EAEBF"],
         ItemColorReset: ["8FD17CAC"],
-        ItemColorStateBuild: ["CD03DEEB"],
+        ItemColorStateBuild: ["0CD125D8"],
         LoginMistressItems: ["B58EF410"],
-        LoginResponse: ["2B934255"],
+        LoginResponse: ["DB977132"],
         LoginStableItems: ["EA93FBF7"],
         LogValue: ["6ED63114"],
         MainHallMaidsDisabledBegForMore: ["EA29F2B3"],
         MainHallWalk: ["E52553C4"],
-        ManagementCanBeClubSlave: ["EB05C417"],
+        ManagementCanBeClubSlave: ["2A5CC4E5"],
         ManagementCanBeReleased: ["A2E2CA35"],
         ManagementCanBeReleasedOnline: ["3374263B"],
         ManagementCanBreakDatingLoverOnline: ["366AECAE"],
@@ -513,19 +497,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         PreferenceSubscreenDifficultyClick: ["3882E581"],
         PreferenceSubscreenDifficultyRun: ["65BF560F"],
         PrivateRansomStart: ["511E91C6"],
-        PropertyAutoPunishParseMessage: ["CE0C785F"],
+        PropertyAutoPunishParseMessage: ["B0B55044"],
         ServerAccountBeep: ["F16771D4"],
         ServerPlayerIsInChatRoom: ["E3771112"],
         ServerSend: ["90A61F57"],
         SpeechGarble: ["9D669F73"],
+        SpeechGetTotalGagLevel: ["C55B705A"],
         StruggleDrawStrengthProgress: ["4755C02D"],
-        StruggleStrengthDraw: ["4CEB5A91"],
+        StruggleStrengthDraw: ["4406AD10"],
         TextGet: ["4DDE5794"],
-        ValidationCanAddOrRemoveItem: ["62A8266A"],
-        ValidationResolveModifyDiff: ["1EE695DD"],
+        ValidationCanAddOrRemoveItem: ["80E3D94D"],
+        ValidationResolveModifyDiff: ["5D9FA740"],
         WardrobeClick: ["E96F7F63"],
         WardrobeGroupAccessible: ["2D406A64"],
-        WardrobeRun: ["9616EB3A"]
+        WardrobeRun: ["9616EB3A"],
     };
     const FUNCTION_HASHES_NMOD = {
         ActivityOrgasmPrepare: ["AA5FC17F"],
@@ -577,7 +562,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         ServerAccountBeep: ["0A2C7C78"],
         ServerSend: ["F8627678"],
         WardrobeClick: ["842709D9"],
-        WardrobeRun: ["02775589"]
+        WardrobeRun: ["02775589"],
     };
 
     var Preset;
@@ -608,7 +593,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         [ModuleCategory.Commands]: "Commands",
         [ModuleCategory.Relationships]: "Relationships",
         [ModuleCategory.ExportImport]: "Export-Import",
-        [ModuleCategory.Misc]: "Miscellaneous"
+        [ModuleCategory.Misc]: "Miscellaneous",
     };
     const MODULE_ICONS = {
         [ModuleCategory.Global]: "Icons/General.png",
@@ -619,14 +604,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         [ModuleCategory.Commands]: "Icons/Use.png",
         [ModuleCategory.Relationships]: "Icons/FriendList.png",
         [ModuleCategory.ExportImport]: "Icons/Save.png",
-        [ModuleCategory.Misc]: "Icons/Random.png"
+        [ModuleCategory.Misc]: "Icons/Random.png",
     };
     const TOGGLEABLE_MODULES = [
         ModuleCategory.Log,
         ModuleCategory.Curses,
         ModuleCategory.Rules,
         ModuleCategory.Commands,
-        ModuleCategory.Relationships
+        ModuleCategory.Relationships,
     ];
     var ModuleInitPhase;
     (function (ModuleInitPhase) {
@@ -650,32 +635,25 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         ConditionsLimit[ConditionsLimit["blocked"] = 2] = "blocked";
     })(ConditionsLimit || (ConditionsLimit = {}));
     const defaultBCXEffects = {
-        Effect: []
+        Effect: [],
     };
 
     class BaseModule {
         init() {
-            // Empty
         }
         load(preset) {
-            // Empty
         }
         run() {
-            // Empty
         }
         unload() {
-            // Empty
         }
         reload(preset) {
-            // Empty
         }
         applyPreset(preset) {
-            // Empty
         }
     }
 
     const encoder = new TextEncoder();
-    /* eslint-disable no-bitwise */
     function crc32(str) {
         let crc = 0 ^ -1;
         for (const b of encoder.encode(str)) {
@@ -687,14 +665,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         return ((crc ^ -1) >>> 0).toString(16).padStart(8, "0").toUpperCase();
     }
-    /* eslint-enable no-bitwise */
-    /** Utility function to add CSS */
     function addStyle(styleString) {
         const style = document.createElement("style");
         style.textContent = styleString;
         document.head.append(style);
     }
-    /** Checks if the `obj` is an object (not null, not array) */
     function isObject$1(obj) {
         return !!obj && typeof obj === "object" && !Array.isArray(obj);
     }
@@ -715,21 +690,16 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function capitalizeFirstLetter(str) {
         return str.charAt(0).toLocaleUpperCase() + str.slice(1);
     }
-    /* eslint-disable no-bitwise */
     function uuidv4() {
         return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
     }
-    /* eslint-enable no-bitwise */
     const clipboardAvailable = Boolean(navigator.clipboard);
-    /** Clamp number between two values */
     function clamp$1(value, min, max) {
         return Math.min(Math.max(value, min), max);
     }
-    /** Clamp number between two values, wrapping if necessary */
     function clampWrap(value, min, max) {
         return value < min ? max : value > max ? min : value;
     }
-    /** Formats time in ms into days, hours minutes and seconds - also has a short mode that only shows the largest unit, e.g. 17h */
     function formatTimeInterval(time, mode = "full") {
         let res = "";
         if (time < 0) {
@@ -770,51 +740,26 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         return res;
     }
-    /**
-     * Replaces texts in `text` using data in `dictionary`, adding some default replacements.
-     * Default replacements:
-     *
-     * `PLAYER_NAME` - Name of current Player
-     *
-     * @param text - The text to process
-     * @param dictionary - The dictionary to apply to the `text`
-     * @returns The result of replacements
-     */
     function dictionaryProcess(text, dictionary) {
         for (const [k, v] of Object.entries({
             PLAYER_NAME: Player.Name,
-            ...dictionary
+            ...dictionary,
         })) {
             text = text.replaceAll(k, v);
         }
         return text;
     }
-    /**
-     * Creates a new text input element in the main document.
-     * @param Type - Type of the input tag to create.
-     * @param MaxLength - Maximum input tag of the input to create.
-     * @returns - The created HTML input element
-     */
     function createInputElement(type, maxLength) {
         const input = document.createElement("input");
         input.type = type;
         if (maxLength) {
             input.maxLength = maxLength;
         }
-        input.addEventListener("keydown", KeyDown);
+        input.addEventListener("keydown", GameKeyDown);
         input.className = "HideOnPopup";
         return input;
     }
-    /**
-     * Draws an existing HTML element at a specific position within the document. The element is "centered" on the given coordinates by dividing its height and width by two.
-     * @param ElementID - The id of the input tag to (re-)position.
-     * @param X - Center point of the element on the X axis.
-     * @param Y - Center point of the element on the Y axis.
-     * @param W - Width of the element.
-     * @param H - Height of the element.
-     */
     function positionElement(element, X, Y, W, H) {
-        // Different positions based on the width/height ratio
         const HRatio = MainCanvas.canvas.clientHeight / 1000;
         const WRatio = MainCanvas.canvas.clientWidth / 2000;
         const Font = MainCanvas.canvas.clientWidth <= MainCanvas.canvas.clientHeight * 2 ? MainCanvas.canvas.clientWidth / 50 : MainCanvas.canvas.clientHeight / 25;
@@ -822,7 +767,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         const Width = W * WRatio - 18;
         const Top = MainCanvas.canvas.offsetTop + Y * HRatio - Height / 2;
         const Left = MainCanvas.canvas.offsetLeft + (X - W / 2) * WRatio;
-        // Sets the element style
         Object.assign(element.style, {
             fontSize: `${Font}px`,
             fontFamily: CommonGetFontName(),
@@ -831,14 +775,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             top: `${Top}px`,
             width: `${Width}px`,
             height: `${Height}px`,
-            display: "inline"
+            display: "inline",
         });
     }
-    /**
-     * Escapes regex-special characters
-     * @param string The string to escape
-     * @returns Escaped version of string
-     */
     function escapeRegExp$1(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     }
@@ -850,7 +789,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 minor: Number.parseInt(devMatch[2], 10),
                 patch: Number.parseInt(devMatch[3], 10),
                 extra: devMatch[4],
-                dev: true
+                dev: true,
             };
         }
         const match = /^(\d+).(\d+).(\d+)-([0-f]+)$/.exec(version);
@@ -860,7 +799,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 minor: Number.parseInt(match[2], 10),
                 patch: Number.parseInt(match[3], 10),
                 extra: match[4],
-                dev: false
+                dev: false,
             };
         }
         return null;
@@ -895,10 +834,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         return res;
     })();
-    /**
-     * Shuffles an array in-place
-     * @param array The array to shuffle
-     */
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -954,7 +889,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     	// Bondage Club Mod Development Kit (1.1.0)
     	// For more info see: https://github.com/Jomshir98/bondage-club-mod-sdk
     	/** @type {ModSDKGlobalAPI} */
-    	var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ERROR:\n"+e);const o=new Error(e);throw console.error(o),o}const t=new TextEncoder;function n(e){return !!e&&"object"==typeof e&&!Array.isArray(e)}function r(e){const o=new Set;return e.filter((e=>!o.has(e)&&o.add(e)))}const i=new Map,a=new Set;function d(e){a.has(e)||(a.add(e),console.warn(e));}function s(e){const o=[],t=new Map,n=new Set;for(const r of p.values()){const i=r.patching.get(e.name);if(i){o.push(...i.hooks);for(const[o,a]of i.patches.entries())t.has(o)&&t.get(o)!==a&&d(`ModSDK: Mod '${r.name}' is patching function ${e.name} with same pattern that is already applied by different mod, but with different pattern:\nPattern:\n${o}\nPatch1:\n${t.get(o)||""}\nPatch2:\n${a}`),t.set(o,a),n.add(r.name);}}o.sort(((e,o)=>o.priority-e.priority));const r=function(e,o){if(0===o.size)return e;let t=e.toString().replaceAll("\r\n","\n");for(const[n,r]of o.entries())t.includes(n)||d(`ModSDK: Patching ${e.name}: Patch ${n} not applied`),t=t.replaceAll(n,r);return (0,eval)(`(${t})`)}(e.original,t);let i=function(o){var t,i;const a=null===(i=(t=m.errorReporterHooks).hookChainExit)||void 0===i?void 0:i.call(t,e.name,n),d=r.apply(this,o);return null==a||a(),d};for(let t=o.length-1;t>=0;t--){const n=o[t],r=i;i=function(o){var t,i;const a=null===(i=(t=m.errorReporterHooks).hookEnter)||void 0===i?void 0:i.call(t,e.name,n.mod),d=n.hook.apply(this,[o,e=>{if(1!==arguments.length||!Array.isArray(o))throw new Error(`Mod ${n.mod} failed to call next hook: Expected args to be array, got ${typeof e}`);return r.call(this,e)}]);return null==a||a(),d};}return {hooks:o,patches:t,patchesSources:n,enter:i,final:r}}function c(e,o=!1){let r=i.get(e);if(r)o&&(r.precomputed=s(r));else {let o=window;const a=e.split(".");for(let t=0;t<a.length-1;t++)if(o=o[a[t]],!n(o))throw new Error(`ModSDK: Function ${e} to be patched not found; ${a.slice(0,t+1).join(".")} is not object`);const d=o[a[a.length-1]];if("function"!=typeof d)throw new Error(`ModSDK: Function ${e} to be patched not found`);const c=function(e){let o=-1;for(const n of t.encode(e)){let e=255&(o^n);for(let o=0;o<8;o++)e=1&e?-306674912^e>>>1:e>>>1;o=o>>>8^e;}return ((-1^o)>>>0).toString(16).padStart(8,"0").toUpperCase()}(d.toString().replaceAll("\r\n","\n")),l={name:e,original:d,originalHash:c};r=Object.assign(Object.assign({},l),{precomputed:s(l),router:()=>{},context:o,contextProperty:a[a.length-1]}),r.router=function(e){return function(...o){return e.precomputed.enter.apply(this,[o])}}(r),i.set(e,r),o[r.contextProperty]=r.router;}return r}function l(){const e=new Set;for(const o of p.values())for(const t of o.patching.keys())e.add(t);for(const o of i.keys())e.add(o);for(const o of e)c(o,!0);}function f(){const e=new Map;for(const[o,t]of i)e.set(o,{name:o,original:t.original,originalHash:t.originalHash,sdkEntrypoint:t.router,currentEntrypoint:t.context[t.contextProperty],hookedByMods:r(t.precomputed.hooks.map((e=>e.mod))),patchedByMods:Array.from(t.precomputed.patchesSources)});return e}const p=new Map;function u(e){p.get(e.name)!==e&&o(`Failed to unload mod '${e.name}': Not registered`),p.delete(e.name),e.loaded=!1,l();}function g(e,t,r){"string"==typeof e&&"string"==typeof t&&(alert(`Mod SDK warning: Mod '${e}' is registering in a deprecated way.\nIt will work for now, but please inform author to update.`),e={name:e,fullName:e,version:t},t={allowReplace:!0===r}),e&&"object"==typeof e||o("Failed to register mod: Expected info object, got "+typeof e),"string"==typeof e.name&&e.name||o("Failed to register mod: Expected name to be non-empty string, got "+typeof e.name);let i=`'${e.name}'`;"string"==typeof e.fullName&&e.fullName||o(`Failed to register mod ${i}: Expected fullName to be non-empty string, got ${typeof e.fullName}`),i=`'${e.fullName} (${e.name})'`,"string"!=typeof e.version&&o(`Failed to register mod ${i}: Expected version to be string, got ${typeof e.version}`),e.repository||(e.repository=void 0),void 0!==e.repository&&"string"!=typeof e.repository&&o(`Failed to register mod ${i}: Expected repository to be undefined or string, got ${typeof e.version}`),null==t&&(t={}),t&&"object"==typeof t||o(`Failed to register mod ${i}: Expected options to be undefined or object, got ${typeof t}`);const a=!0===t.allowReplace,d=p.get(e.name);d&&(d.allowReplace&&a||o(`Refusing to load mod ${i}: it is already loaded and doesn't allow being replaced.\nWas the mod loaded multiple times?`),u(d));const s=e=>{"string"==typeof e&&e||o(`Mod ${i} failed to patch a function: Expected function name string, got ${typeof e}`);let t=g.patching.get(e);return t||(t={hooks:[],patches:new Map},g.patching.set(e,t)),t},f={unload:()=>u(g),hookFunction:(e,t,n)=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);const r=s(e);"number"!=typeof t&&o(`Mod ${i} failed to hook function '${e}': Expected priority number, got ${typeof t}`),"function"!=typeof n&&o(`Mod ${i} failed to hook function '${e}': Expected hook function, got ${typeof n}`);const a={mod:g.name,priority:t,hook:n};return r.hooks.push(a),l(),()=>{const e=r.hooks.indexOf(a);e>=0&&(r.hooks.splice(e,1),l());}},patchFunction:(e,t)=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);const r=s(e);n(t)||o(`Mod ${i} failed to patch function '${e}': Expected patches object, got ${typeof t}`);for(const[n,a]of Object.entries(t))"string"==typeof a?r.patches.set(n,a):null===a?r.patches.delete(n):o(`Mod ${i} failed to patch function '${e}': Invalid format of patch '${n}'`);l();},removePatches:e=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);s(e).patches.clear(),l();},callOriginal:(e,t,n)=>(g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`),"string"==typeof e&&e||o(`Mod ${i} failed to call a function: Expected function name string, got ${typeof e}`),Array.isArray(t)||o(`Mod ${i} failed to call a function: Expected args array, got ${typeof t}`),function(e,o,t=window){return c(e).original.apply(t,o)}(e,t,n)),getOriginalHash:e=>("string"==typeof e&&e||o(`Mod ${i} failed to get hash: Expected function name string, got ${typeof e}`),c(e).originalHash)},g={name:e.name,fullName:e.fullName,version:e.version,repository:e.repository,allowReplace:a,api:f,loaded:!0,patching:new Map};return p.set(e.name,g),Object.freeze(f)}function h(){const e=[];for(const o of p.values())e.push({name:o.name,fullName:o.fullName,version:o.version,repository:o.repository});return e}let m;const y=function(){if(void 0===window.bcModSdk)return window.bcModSdk=function(){const o={version:e,apiVersion:1,registerMod:g,getModsInfo:h,getPatchingInfo:f,errorReporterHooks:Object.seal({hookEnter:null,hookChainExit:null})};return m=o,Object.freeze(o)}();if(n(window.bcModSdk)||o("Failed to init Mod SDK: Name already in use"),1!==window.bcModSdk.apiVersion&&o(`Failed to init Mod SDK: Different version already loaded ('1.1.0' vs '${window.bcModSdk.version}')`),window.bcModSdk.version!==e&&(alert(`Mod SDK warning: Loading different but compatible versions ('1.1.0' vs '${window.bcModSdk.version}')\nOne of mods you are using is using an old version of SDK. It will work for now but please inform author to update`),window.bcModSdk.version.startsWith("1.0.")&&void 0===window.bcModSdk._shim10register)){const e=window.bcModSdk,o=Object.freeze(Object.assign(Object.assign({},e),{registerMod:(o,t,n)=>o&&"object"==typeof o&&"string"==typeof o.name&&"string"==typeof o.version?e.registerMod(o.name,o.version,"object"==typeof t&&!!t&&!0===t.allowReplace):e.registerMod(o,t,n),_shim10register:!0}));window.bcModSdk=o;}return window.bcModSdk}();return "undefined"!='object'&&(Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=y),y}();
+    	var bcModSdk=function(){"use strict";const e="1.1.0";function o(e){alert("Mod ERROR:\n"+e);const o=new Error(e);throw console.error(o),o}const t=new TextEncoder;function n(e){return !!e&&"object"==typeof e&&!Array.isArray(e)}function r(e){const o=new Set;return e.filter((e=>!o.has(e)&&o.add(e)))}const i=new Map,a=new Set;function d(e){a.has(e)||(a.add(e),console.warn(e));}function s(e){const o=[],t=new Map,n=new Set;for(const r of p.values()){const i=r.patching.get(e.name);if(i){o.push(...i.hooks);for(const[o,a]of i.patches.entries())t.has(o)&&t.get(o)!==a&&d(`ModSDK: Mod '${r.name}' is patching function ${e.name} with same pattern that is already applied by different mod, but with different pattern:\nPattern:\n${o}\nPatch1:\n${t.get(o)||""}\nPatch2:\n${a}`),t.set(o,a),n.add(r.name);}}o.sort(((e,o)=>o.priority-e.priority));const r=function(e,o){if(0===o.size)return e;let t=e.toString().replaceAll("\r\n","\n");for(const[n,r]of o.entries())t.includes(n)||d(`ModSDK: Patching ${e.name}: Patch ${n} not applied`),t=t.replaceAll(n,r);return (0,eval)(`(${t})`)}(e.original,t);let i=function(o){var t,i;const a=null===(i=(t=m.errorReporterHooks).hookChainExit)||void 0===i?void 0:i.call(t,e.name,n),d=r.apply(this,o);return null==a||a(),d};for(let t=o.length-1;t>=0;t--){const n=o[t],r=i;i=function(o){var t,i;const a=null===(i=(t=m.errorReporterHooks).hookEnter)||void 0===i?void 0:i.call(t,e.name,n.mod),d=n.hook.apply(this,[o,e=>{if(1!==arguments.length||!Array.isArray(o))throw new Error(`Mod ${n.mod} failed to call next hook: Expected args to be array, got ${typeof e}`);return r.call(this,e)}]);return null==a||a(),d};}return {hooks:o,patches:t,patchesSources:n,enter:i,final:r}}function c(e,o=!1){let r=i.get(e);if(r)o&&(r.precomputed=s(r));else {let o=window;const a=e.split(".");for(let t=0;t<a.length-1;t++)if(o=o[a[t]],!n(o))throw new Error(`ModSDK: Function ${e} to be patched not found; ${a.slice(0,t+1).join(".")} is not object`);const d=o[a[a.length-1]];if("function"!=typeof d)throw new Error(`ModSDK: Function ${e} to be patched not found`);const c=function(e){let o=-1;for(const n of t.encode(e)){let e=255&(o^n);for(let o=0;o<8;o++)e=1&e?-306674912^e>>>1:e>>>1;o=o>>>8^e;}return ((-1^o)>>>0).toString(16).padStart(8,"0").toUpperCase()}(d.toString().replaceAll("\r\n","\n")),l={name:e,original:d,originalHash:c};r=Object.assign(Object.assign({},l),{precomputed:s(l),router:()=>{},context:o,contextProperty:a[a.length-1]}),r.router=function(e){return function(...o){return e.precomputed.enter.apply(this,[o])}}(r),i.set(e,r),o[r.contextProperty]=r.router;}return r}function l(){const e=new Set;for(const o of p.values())for(const t of o.patching.keys())e.add(t);for(const o of i.keys())e.add(o);for(const o of e)c(o,!0);}function f(){const e=new Map;for(const[o,t]of i)e.set(o,{name:o,original:t.original,originalHash:t.originalHash,sdkEntrypoint:t.router,currentEntrypoint:t.context[t.contextProperty],hookedByMods:r(t.precomputed.hooks.map((e=>e.mod))),patchedByMods:Array.from(t.precomputed.patchesSources)});return e}const p=new Map;function u(e){p.get(e.name)!==e&&o(`Failed to unload mod '${e.name}': Not registered`),p.delete(e.name),e.loaded=!1,l();}function g(e,t,r){"string"==typeof e&&"string"==typeof t&&(alert(`Mod SDK warning: Mod '${e}' is registering in a deprecated way.\nIt will work for now, but please inform author to update.`),e={name:e,fullName:e,version:t},t={allowReplace:!0===r}),e&&"object"==typeof e||o("Failed to register mod: Expected info object, got "+typeof e),"string"==typeof e.name&&e.name||o("Failed to register mod: Expected name to be non-empty string, got "+typeof e.name);let i=`'${e.name}'`;"string"==typeof e.fullName&&e.fullName||o(`Failed to register mod ${i}: Expected fullName to be non-empty string, got ${typeof e.fullName}`),i=`'${e.fullName} (${e.name})'`,"string"!=typeof e.version&&o(`Failed to register mod ${i}: Expected version to be string, got ${typeof e.version}`),e.repository||(e.repository=void 0),void 0!==e.repository&&"string"!=typeof e.repository&&o(`Failed to register mod ${i}: Expected repository to be undefined or string, got ${typeof e.version}`),null==t&&(t={}),t&&"object"==typeof t||o(`Failed to register mod ${i}: Expected options to be undefined or object, got ${typeof t}`);const a=!0===t.allowReplace,d=p.get(e.name);d&&(d.allowReplace&&a||o(`Refusing to load mod ${i}: it is already loaded and doesn't allow being replaced.\nWas the mod loaded multiple times?`),u(d));const s=e=>{"string"==typeof e&&e||o(`Mod ${i} failed to patch a function: Expected function name string, got ${typeof e}`);let t=g.patching.get(e);return t||(t={hooks:[],patches:new Map},g.patching.set(e,t)),t},f={unload:()=>u(g),hookFunction:(e,t,n)=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);const r=s(e);"number"!=typeof t&&o(`Mod ${i} failed to hook function '${e}': Expected priority number, got ${typeof t}`),"function"!=typeof n&&o(`Mod ${i} failed to hook function '${e}': Expected hook function, got ${typeof n}`);const a={mod:g.name,priority:t,hook:n};return r.hooks.push(a),l(),()=>{const e=r.hooks.indexOf(a);e>=0&&(r.hooks.splice(e,1),l());}},patchFunction:(e,t)=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);const r=s(e);n(t)||o(`Mod ${i} failed to patch function '${e}': Expected patches object, got ${typeof t}`);for(const[n,a]of Object.entries(t))"string"==typeof a?r.patches.set(n,a):null===a?r.patches.delete(n):o(`Mod ${i} failed to patch function '${e}': Invalid format of patch '${n}'`);l();},removePatches:e=>{g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`);s(e).patches.clear(),l();},callOriginal:(e,t,n)=>(g.loaded||o(`Mod ${i} attempted to call SDK function after being unloaded`),"string"==typeof e&&e||o(`Mod ${i} failed to call a function: Expected function name string, got ${typeof e}`),Array.isArray(t)||o(`Mod ${i} failed to call a function: Expected args array, got ${typeof t}`),function(e,o,t=window){return c(e).original.apply(t,o)}(e,t,n)),getOriginalHash:e=>("string"==typeof e&&e||o(`Mod ${i} failed to get hash: Expected function name string, got ${typeof e}`),c(e).originalHash)},g={name:e.name,fullName:e.fullName,version:e.version,repository:e.repository,allowReplace:a,api:f,loaded:!0,patching:new Map};return p.set(e.name,g),Object.freeze(f)}function h(){const e=[];for(const o of p.values())e.push({name:o.name,fullName:o.fullName,version:o.version,repository:o.repository});return e}let m;const y=function(){if(void 0===window.bcModSdk)return window.bcModSdk=function(){const o={version:e,apiVersion:1,registerMod:g,getModsInfo:h,getPatchingInfo:f,errorReporterHooks:Object.seal({hookEnter:null,hookChainExit:null})};return m=o,Object.freeze(o)}();if(n(window.bcModSdk)||o("Failed to init Mod SDK: Name already in use"),1!==window.bcModSdk.apiVersion&&o(`Failed to init Mod SDK: Different version already loaded ('1.1.0' vs '${window.bcModSdk.version}')`),window.bcModSdk.version!==e&&(alert(`Mod SDK warning: Loading different but compatible versions ('1.1.0' vs '${window.bcModSdk.version}')\nOne of mods you are using is using an old version of SDK. It will work for now but please inform author to update`),window.bcModSdk.version.startsWith("1.0.")&&void 0===window.bcModSdk._shim10register)){const e=window.bcModSdk,o=Object.freeze(Object.assign(Object.assign({},e),{registerMod:(o,t,n)=>o&&"object"==typeof o&&"string"==typeof o.name&&"string"==typeof o.version?e.registerMod(o.name,o.version,"object"==typeof t&&!!t&&!0===t.allowReplace):e.registerMod(o,t,n),_shim10register:!0}));window.bcModSdk=o;}return window.bcModSdk}();return "undefined"!='object'&&(Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=y),y}(); 
     } (bcmodsdk));
 
     var bcModSDK = /*@__PURE__*/getDefaultExportFromCjs(bcmodsdk);
@@ -963,7 +898,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         name: "BCX",
         fullName: "Bondage Club Extended",
         version: BCX_VERSION,
-        repository: "https://github.com/Jomshir98/bondage-club-extended"
+        repository: "https://github.com/Jomshir98/bondage-club-extended",
     });
     bcModSDK.errorReporterHooks.hookEnter = (fn, mod) => {
         const ctx = debugContextStart(`Function ${fn} hook from ${mod}`, { modArea: mod });
@@ -974,7 +909,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     bcModSDK.errorReporterHooks.hookChainExit = (fn, mods) => {
         const ctx = debugContextStart(`Function ${fn} hook chain exit`, {
             modArea: mods.size === 0 ? "" : mods.size === 1 ? Array.from(mods).join("") : `[Possibly multiple mods]`,
-            extraInfo: () => mods.size > 0 ? `Patched by: ${Array.from(mods).join(", ")}` : ""
+            extraInfo: () => mods.size > 0 ? `Patched by: ${Array.from(mods).join(", ")}` : "",
         });
         return () => {
             ctx.end();
@@ -1004,13 +939,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             result = {
                 name: target,
                 originalHash,
-                hooks: []
+                hooks: [],
             };
             patchedFunctions.set(target, result);
         }
         return result;
     }
-    /** Track function without adding any hooks - only checking hash */
     function trackFunction(target) {
         initPatchableFunction(target);
     }
@@ -1025,7 +959,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             hook,
             priority,
             module,
-            removeCallback
+            removeCallback,
         });
         data.hooks.sort((a, b) => b.priority - a.priority);
     }
@@ -3336,22 +3270,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return getCurrentSubscreen() === this;
         }
         Load() {
-            // Empty
         }
         Run() {
-            // Empty
         }
         Click() {
-            // Empty
         }
         Exit() {
             setSubscreen(null);
         }
         Unload() {
-            // Empty
         }
         onChange(source) {
-            // Empty
         }
     }
 
@@ -3420,7 +3349,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             setSubscreen(this.back);
         }
         onChange() {
-            // When something changes, we bail from change dialog, because it might no longer be valid
             this.Exit();
         }
     }
@@ -3454,7 +3382,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             setSubscreen(this.back);
         }
         onChange() {
-            // When something changes, we bail from change dialog, because it might no longer be valid
             this.Exit();
         }
     }
@@ -3482,7 +3409,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         Views[Views["ExportImportSelect"] = 92] = "ExportImportSelect";
         Views[Views["Misc"] = 100] = "Misc";
     })(Views || (Views = {}));
-    // TODO
     const HELP_TEXTS = {
         [Views.AuthorityRoles]: "If you are permitted, this screen enables you to view, add, or remove the BCX-only roles 'Owner' " +
             "and 'Mistress', which expand the classic roles of BC such as Bondage Club's Owner and the Lovers. The hierarchy of all " +
@@ -3571,7 +3497,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             "The set custom name replaces the added character's real name / BC-nickname in this player's chat, except within chat commands, which are " +
             "considered OOC. You can also enforce the custom name so that the player is blocked from sending a chat message / whisper that use the " +
             "character's name / BC-nickname while with her. The player cannot have multiple custom names set for a single character. A character who " +
-            "has a custom name set on this screen can always see their own set custom name in this list."
+            "has a custom name set on this screen can always see their own set custom name in this list.",
     };
 
     const PER_PAGE_COUNT$8 = 6;
@@ -3656,13 +3582,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 this.permList.push({
                     separator: true,
-                    name: `${MODULE_NAMES[category]} module permissions`
+                    name: `${MODULE_NAMES[category]} module permissions`,
                 });
                 for (const [k, v] of Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name))) {
                     if (filter.length === 0 && this.permList.length % PER_PAGE_COUNT$8 === 0) {
                         this.permList.push({
                             separator: true,
-                            name: `${MODULE_NAMES[category]} module permissions (continued)`
+                            name: `${MODULE_NAMES[category]} module permissions (continued)`,
                         });
                     }
                     const access = checkPermissionAccessData(v, this.myAccessLevel);
@@ -3670,19 +3596,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         separator: false,
                         permission: k,
                         permissionInfo: v,
-                        editSelf: 
-                        // character must have access to "allow granting/forbidding self access"
-                        (v.self ? access_revokeSelf : access_grantSelf) &&
-                            // Not player must have access to target rule
+                        editSelf: (v.self ? access_revokeSelf : access_grantSelf) &&
                             (isPlayer || access) &&
-                            // "lowest access" set to "Self" forces "self access" to "Yes"
                             (!v.self || v.min !== AccessLevel.self),
-                        editMin: 
-                        // Exception: Player can always lower permissions "Self"->"Owner"
-                        (isPlayer && v.min < AccessLevel.owner) ||
-                            // Character must have access to "allow lowest access modification" &&
-                            // Character must have access to target rule
-                            (access_editMin && access)
+                        editMin: (isPlayer && v.min < AccessLevel.owner) ||
+                            (access_editMin && access),
                     });
                 }
             }
@@ -3703,10 +3621,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.moveTo(1335, 230);
                 MainCanvas.lineTo(1335, 230 + 610);
                 MainCanvas.stroke();
-                // filter
                 DrawText("Filter:", 130, 215, "Black");
                 positionElement(this.filterInput, 550, 210, 600, 64);
-                //reset button
                 if (this.filterInput.value) {
                     MainCanvas.textAlign = "center";
                     DrawButton(870, 182, 64, 64, "X", "White");
@@ -3721,7 +3637,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         continue;
                     const Y = 275 + off * 100;
                     if (e.separator) {
-                        // idea to highlight the section separator
                         MainCanvas.beginPath();
                         MainCanvas.rect(125, Y, 1173, 64);
                         MainCanvas.fillStyle = "#eeeeee";
@@ -3731,24 +3646,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     else {
                         DrawImageEx(MODULE_ICONS[e.permissionInfo.category], 125, Y, {
                             Height: 64,
-                            Width: 64
+                            Width: 64,
                         });
-                        // Permission name
                         MainCanvas.beginPath();
                         MainCanvas.rect(200, Y, 1000, 64);
                         MainCanvas.fillStyle = checkPermissionAccessData(e.permissionInfo, this.myAccessLevel) ? "White" : "#ddd";
                         MainCanvas.fill();
                         MainCanvas.stroke();
                         DrawTextFit(e.permissionInfo.name, 210, Y + 34, 990, "Black");
-                        // Self checkbox
                         DrawButton(1235, Y, 64, 64, "", e.editSelf ? "White" : "#ddd", e.permissionInfo.self ? "Icons/Checked.png" : "", undefined, !e.editSelf);
-                        // Min access
                         MainCanvas.textAlign = "center";
                         DrawButton(1370, Y, 170, 64, getPermissionMinDisplayText(e.permissionInfo.min, this.character), e.editMin ? "White" : "#ddd", undefined, undefined, !e.editMin);
                         MainCanvas.textAlign = "left";
                     }
                 }
-                // Pagination
                 const totalPages = Math.max(1, Math.ceil(this.permList.length / PER_PAGE_COUNT$8));
                 MainCanvas.textAlign = "center";
                 DrawBackNextButton(1605, 800, 300, 90, `${DialogFindPlayer("Page")} ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
@@ -3761,7 +3672,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.textAlign = "center";
                 DrawText("Loading...", 1000, 480, "Black");
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.AuthorityPermissions]);
             }
@@ -3779,11 +3689,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.showHelp = !this.showHelp;
                 return;
             }
-            // Owner list
             if (MouseIn(1815, 305, 90, 90))
                 return setSubscreen(new GuiAuthorityRoles(this.character));
             if (this.permissionData !== null) {
-                //reset button
                 if (MouseIn(870, 182, 64, 64)) {
                     this.filterInput.value = "";
                     this.rebuildList();
@@ -3797,17 +3705,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         continue;
                     const Y = 275 + off * 100;
                     if (!e.separator) {
-                        // Permission name
                         if (MouseIn(200, Y, 1000, 64)) {
-                            // TODO
                         }
-                        // Self checkbox
                         if (MouseIn(1235, Y, 64, 64) && e.editSelf) {
                             if (e.permissionInfo.self &&
                                 this.character.isPlayer() &&
                                 (e.permission === "authority_grant_self" ||
                                     !checkPermissionAccess("authority_grant_self", getPlayerCharacter()))) {
-                                // If Player couldn't switch back on, show warning instead
                                 setSubscreen(new GuiAuthorityDialogSelf(this.character, e.permission, e.permissionInfo, this));
                             }
                             else {
@@ -3815,7 +3719,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             }
                             return;
                         }
-                        // Min access
                         if (MouseIn(1370, Y, 170, 64) && e.editMin) {
                             const access_editMin = this.permissionData.authority_edit_min ?
                                 checkPermissionAccessData(this.permissionData.authority_edit_min, this.myAccessLevel) :
@@ -3825,7 +3728,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }
                     }
                 }
-                // Pagination
                 const totalPages = Math.ceil(this.permList.length / PER_PAGE_COUNT$8);
                 if (MouseIn(1605, 800, 150, 90)) {
                     this.page--;
@@ -3905,21 +3807,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 {
                     type: "Character",
                     memberNumber: this.character.MemberNumber,
-                    name: this.character.Name
-                }
+                    name: this.character.Name,
+                },
             ];
             if (!this.character.isPlayer()) {
                 this.roleList.push({
                     type: "Player",
                     memberNumber: Player.MemberNumber,
-                    name: Player.Name
+                    name: Player.Name,
                 });
             }
             if (typeof ((_a = this.character.Character.Ownership) === null || _a === void 0 ? void 0 : _a.MemberNumber) === "number" && !this.roleList.some(r => { var _a; return r.memberNumber === ((_a = this.character.Character.Ownership) === null || _a === void 0 ? void 0 : _a.MemberNumber); })) {
                 this.roleList.push({
                     type: "Clubowner",
                     memberNumber: this.character.Character.Ownership.MemberNumber,
-                    name: this.character.Character.Ownership.Name
+                    name: this.character.Character.Ownership.Name,
                 });
             }
             for (const owner of this.roleData.owners) {
@@ -3927,7 +3829,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.roleList.push({
                         type: "Owner",
                         memberNumber: owner[0],
-                        name: getCharacterName(owner[0], owner[1] || "[unknown name]")
+                        name: getCharacterName(owner[0], owner[1] || "[unknown name]"),
                     });
                 }
             }
@@ -3937,7 +3839,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         this.roleList.push({
                             type: "Lover",
                             memberNumber: L.MemberNumber,
-                            name: L.Name
+                            name: L.Name,
                         });
                     }
                 }
@@ -3947,28 +3849,24 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.roleList.push({
                         type: "Mistress",
                         memberNumber: mistress[0],
-                        name: getCharacterName(mistress[0], mistress[1] || "[unknown name]")
+                        name: getCharacterName(mistress[0], mistress[1] || "[unknown name]"),
                     });
                 }
             }
-            // Skip if fully blinded and BlindDisableExamine is set
             if (Player.GetBlindLevel() < 3 || !((_b = Player.GameplaySettings) === null || _b === void 0 ? void 0 : _b.BlindDisableExamine)) {
                 const ChatRoomCharacterList = getAllCharactersInRoom();
-                // Only add adjecent characters if only those can be seen
                 if (Player.GetBlindLevel() > 0 && ((_c = Player.ImmersionSettings) === null || _c === void 0 ? void 0 : _c.BlindAdjacent)) {
                     const playerIndex = ChatRoomCharacterList.findIndex(c => c.isPlayer());
-                    // Filter out the characters adjacent to the player index
                     for (let i = 0; i < ChatRoomCharacterList.length; i++) {
                         if (Math.abs(i - playerIndex) === 1 &&
                             !this.roleList.some(r => r.memberNumber === ChatRoomCharacterList[i].MemberNumber)) {
                             this.roleList.push({
                                 type: "in same room",
                                 memberNumber: ChatRoomCharacterList[i].MemberNumber,
-                                name: ChatRoomCharacterList[i].Name
+                                name: ChatRoomCharacterList[i].Name,
                             });
                         }
                     }
-                    // Add the whole room
                 }
                 else {
                     for (const character of ChatRoomCharacterList) {
@@ -3976,7 +3874,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             this.roleList.push({
                                 type: "in same room",
                                 memberNumber: character.MemberNumber,
-                                name: character.Name
+                                name: character.Name,
                             });
                         }
                     }
@@ -3988,7 +3886,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         this.roleList.push({
                             type: "Friend",
                             memberNumber,
-                            name
+                            name,
                         });
                     }
                 }
@@ -4007,10 +3905,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         Run() {
             var _a;
             if (this.roleData !== null) {
-                // filter
                 DrawText("Filter name:", 703, 125, "Black");
                 ElementPosition("BCX_Filter", 1203, 118, 600, 64);
-                //reset button
                 if ((_a = document.getElementById("BCX_Filter")) === null || _a === void 0 ? void 0 : _a.value) {
                     MainCanvas.textAlign = "center";
                     DrawButton(1510, 92, 64, 64, "X", "White");
@@ -4032,7 +3928,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     MainCanvas.stroke();
                     DrawButton(1340, Y, 150, 64, "Select", "White", "");
                 }
-                // Pagination
                 const totalPages = Math.max(1, Math.ceil(this.roleList.length / PER_PAGE_COUNT$7));
                 DrawBackNextButton(1605, 800, 300, 90, `${DialogFindPlayer("Page")} ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
             }
@@ -4064,7 +3959,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (MouseIn(1815, 75, 90, 90))
                 return this.Exit();
             if (this.roleData !== null) {
-                //reset button
                 const elem = document.getElementById("BCX_Filter");
                 if (MouseIn(1510, 92, 64, 64) && elem) {
                     elem.value = "";
@@ -4082,7 +3976,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return;
                     }
                 }
-                // Pagination
                 const totalPages = Math.ceil(this.roleList.length / PER_PAGE_COUNT$7);
                 if (MouseIn(1605, 800, 150, 90)) {
                     this.page--;
@@ -4127,7 +4020,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     `Any character, added to the list on the left as "Mistress"`,
                     `Anyone you have white-listed`,
                     `Anyone you have friend-listed`,
-                    `Anyone, who can use items on you`
+                    `Anyone, who can use items on you`,
                 ] : [
                     `This player - either top or bottom of the hierarchy`,
                     `This player's owner, visible on their character profile`,
@@ -4136,7 +4029,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     `Any character, added to the list on the left as "Mistress"`,
                     `Anyone this player has white-listed`,
                     `Anyone this player has friend-listed`,
-                    `Anyone, who can use items on this player`
+                    `Anyone, who can use items on this player`,
                 ];
         }
         Load() {
@@ -4184,12 +4077,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             this.roleList = this.roleData.owners.map((i) => ({
                 type: "Owner",
                 memberNumber: i[0],
-                name: getCharacterName(i[0], i[1] || null)
+                name: getCharacterName(i[0], i[1] || null),
             }));
             this.roleList.push(...this.roleData.mistresses.map((i) => ({
                 type: "Mistress",
                 memberNumber: i[0],
-                name: getCharacterName(i[0], i[1] || null)
+                name: getCharacterName(i[0], i[1] || null),
             })));
             const totalPages = Math.ceil(this.roleList.length / PER_PAGE_COUNT$6);
             if (this.page < 0) {
@@ -4201,7 +4094,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         Run() {
             DrawText("Hierarchy of roles:", 1336, 95, "Black");
-            // hierarchy background
             MainCanvas.beginPath();
             MainCanvas.moveTo(1450, 134);
             MainCanvas.lineTo(1450 + 150, 134);
@@ -4217,7 +4109,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         break;
                     const e = this.roleList[i];
                     const Y = 210 + off * 95;
-                    // Owner/Mistress list
                     MainCanvas.beginPath();
                     MainCanvas.rect(130, Y, 900, 64);
                     MainCanvas.stroke();
@@ -4245,7 +4136,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     DrawButton(740, 815, 64, 64, "", "White", undefined, `Select member number from list`);
                     DrawImageEx("Icons/Title.png", 742, 815, { Width: 60, Height: 60 });
                 }
-                // Pagination
                 const totalPages = Math.ceil(this.roleList.length / PER_PAGE_COUNT$6);
                 DrawBackNextButton(1430, 800, 300, 90, `Page ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
             }
@@ -4257,13 +4147,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.textAlign = "center";
                 DrawText("Loading...", 800, 480, "Black");
             }
-            // hierarchy roles
             MainCanvas.textAlign = "center";
             DrawButton(1420, 130, 208, 54, this.character.Name, "White", undefined, this.hoveringTextList[0]);
             for (let i = 1; i < 8; i++) {
                 DrawButton(1430, 130 + 80 * i, 188, 54, capitalizeFirstLetter(AccessLevel[i]), "White", undefined, this.hoveringTextList[i]);
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.AuthorityRoles]);
             }
@@ -4309,7 +4197,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.character.editRole("mistress", "add", inputNumber);
                     return;
                 }
-                // Pagination
                 const totalPages = Math.ceil(this.roleList.length / PER_PAGE_COUNT$6);
                 if (MouseIn(1430, 800, 150, 90)) {
                     this.page--;
@@ -4323,7 +4210,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         this.page = 0;
                     }
                 }
-                // member select
                 if (MouseIn(740, 815, 64, 64)) {
                     setSubscreen(new GuiMemberSelect(this.character, this, result => {
                         this.roleAddInputAutofill = result;
@@ -4416,7 +4302,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawCheckbox(150 + 500 * PX, 240 + 110 * PY, 64, 64, "", this.enabledModules.has(module));
                 DrawImageEx(MODULE_ICONS[module], 280 + 500 * PX, 240 + 110 * PY, {
                     Height: 64,
-                    Width: 64
+                    Width: 64,
                 });
                 DrawText(MODULE_NAMES[module], 370 + 500 * PX, 240 + 32 + 110 * PY, "Black");
             }
@@ -4454,47 +4340,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         Exit() {
             setSubscreen(new GuiGlobal(getPlayerCharacter()));
-        }
-    }
-
-    class GuiGlobal extends GuiSubscreen {
-        constructor(character) {
-            super();
-            this.character = character;
-        }
-        Run() {
-            MainCanvas.textAlign = "left";
-            DrawText(`- Global: Configuration for ${this.character.Name} -`, 125, 125, "Black", "Gray");
-            MainCanvas.textAlign = "center";
-            DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png", "BCX main menu");
-            if (!this.character.isPlayer()) {
-                DrawText(`Global configuration is not possible on others`, 1000, 500, "Black");
-                return;
-            }
-            // preset
-            MainCanvas.fillStyle = "#ddd";
-            MainCanvas.fillRect(840, 200, 950, 90);
-            DrawImageEx("Icons/Introduction.png", 840 + 20, 200 + 20, { Height: 50, Width: 50 });
-            DrawTextFit(`Your initially selected BCX preset was: "${capitalizeFirstLetter(Preset[getCurrentPreset()])}"`, 1300, 244, 850, "Black");
-            DrawButton(120, 200, 400, 90, "Manage BCX modules", "White", "", "Enable/Disable individual modules");
-            DrawButton(1490, 800, 300, 90, "Clear all BCX data", "#FF3232", "", "Emergency reset of BCX");
-        }
-        Click() {
-            if (MouseIn(1815, 75, 90, 90))
-                return this.Exit();
-            if (!this.character.isPlayer())
-                return;
-            if (MouseIn(120, 200, 400, 90)) {
-                setSubscreen(new GuiGlobalModuleToggling());
-                return;
-            }
-            if (MouseIn(1490, 800, 300, 90)) {
-                setSubscreen(new GuiGlobalDialogClearData(this));
-                return;
-            }
-        }
-        Exit() {
-            setSubscreen(new GuiMainMenu(this.character));
         }
     }
 
@@ -5018,6 +4863,720 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       return baseIsEqual(value, other);
     }
 
+    /** `Object#toString` result references. */
+    var symbolTag = '[object Symbol]';
+
+    /**
+     * Checks if `value` is classified as a `Symbol` primitive or object.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+     * @example
+     *
+     * _.isSymbol(Symbol.iterator);
+     * // => true
+     *
+     * _.isSymbol('abc');
+     * // => false
+     */
+    function isSymbol(value) {
+      return typeof value == 'symbol' ||
+        (isObjectLike(value) && baseGetTag(value) == symbolTag);
+    }
+
+    /** Used to match property names within property paths. */
+    var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
+        reIsPlainProp = /^\w*$/;
+
+    /**
+     * Checks if `value` is a property name and not a property path.
+     *
+     * @private
+     * @param {*} value The value to check.
+     * @param {Object} [object] The object to query keys on.
+     * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
+     */
+    function isKey(value, object) {
+      if (isArray(value)) {
+        return false;
+      }
+      var type = typeof value;
+      if (type == 'number' || type == 'symbol' || type == 'boolean' ||
+          value == null || isSymbol(value)) {
+        return true;
+      }
+      return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+        (object != null && value in Object(object));
+    }
+
+    /** Error message constants. */
+    var FUNC_ERROR_TEXT$b = 'Expected a function';
+
+    /**
+     * Creates a function that memoizes the result of `func`. If `resolver` is
+     * provided, it determines the cache key for storing the result based on the
+     * arguments provided to the memoized function. By default, the first argument
+     * provided to the memoized function is used as the map cache key. The `func`
+     * is invoked with the `this` binding of the memoized function.
+     *
+     * **Note:** The cache is exposed as the `cache` property on the memoized
+     * function. Its creation may be customized by replacing the `_.memoize.Cache`
+     * constructor with one whose instances implement the
+     * [`Map`](http://ecma-international.org/ecma-262/7.0/#sec-properties-of-the-map-prototype-object)
+     * method interface of `clear`, `delete`, `get`, `has`, and `set`.
+     *
+     * @static
+     * @memberOf _
+     * @since 0.1.0
+     * @category Function
+     * @param {Function} func The function to have its output memoized.
+     * @param {Function} [resolver] The function to resolve the cache key.
+     * @returns {Function} Returns the new memoized function.
+     * @example
+     *
+     * var object = { 'a': 1, 'b': 2 };
+     * var other = { 'c': 3, 'd': 4 };
+     *
+     * var values = _.memoize(_.values);
+     * values(object);
+     * // => [1, 2]
+     *
+     * values(other);
+     * // => [3, 4]
+     *
+     * object.a = 2;
+     * values(object);
+     * // => [1, 2]
+     *
+     * // Modify the result cache.
+     * values.cache.set(object, ['a', 'b']);
+     * values(object);
+     * // => ['a', 'b']
+     *
+     * // Replace `_.memoize.Cache`.
+     * _.memoize.Cache = WeakMap;
+     */
+    function memoize(func, resolver) {
+      if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
+        throw new TypeError(FUNC_ERROR_TEXT$b);
+      }
+      var memoized = function() {
+        var args = arguments,
+            key = resolver ? resolver.apply(this, args) : args[0],
+            cache = memoized.cache;
+
+        if (cache.has(key)) {
+          return cache.get(key);
+        }
+        var result = func.apply(this, args);
+        memoized.cache = cache.set(key, result) || cache;
+        return result;
+      };
+      memoized.cache = new (memoize.Cache || MapCache);
+      return memoized;
+    }
+
+    // Expose `MapCache`.
+    memoize.Cache = MapCache;
+
+    /** Used as the maximum memoize cache size. */
+    var MAX_MEMOIZE_SIZE = 500;
+
+    /**
+     * A specialized version of `_.memoize` which clears the memoized function's
+     * cache when it exceeds `MAX_MEMOIZE_SIZE`.
+     *
+     * @private
+     * @param {Function} func The function to have its output memoized.
+     * @returns {Function} Returns the new memoized function.
+     */
+    function memoizeCapped(func) {
+      var result = memoize(func, function(key) {
+        if (cache.size === MAX_MEMOIZE_SIZE) {
+          cache.clear();
+        }
+        return key;
+      });
+
+      var cache = result.cache;
+      return result;
+    }
+
+    /** Used to match property names within property paths. */
+    var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+
+    /** Used to match backslashes in property paths. */
+    var reEscapeChar = /\\(\\)?/g;
+
+    /**
+     * Converts `string` to a property path array.
+     *
+     * @private
+     * @param {string} string The string to convert.
+     * @returns {Array} Returns the property path array.
+     */
+    var stringToPath = memoizeCapped(function(string) {
+      var result = [];
+      if (string.charCodeAt(0) === 46 /* . */) {
+        result.push('');
+      }
+      string.replace(rePropName, function(match, number, quote, subString) {
+        result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
+      });
+      return result;
+    });
+
+    /**
+     * A specialized version of `_.map` for arrays without support for iteratee
+     * shorthands.
+     *
+     * @private
+     * @param {Array} [array] The array to iterate over.
+     * @param {Function} iteratee The function invoked per iteration.
+     * @returns {Array} Returns the new mapped array.
+     */
+    function arrayMap(array, iteratee) {
+      var index = -1,
+          length = array == null ? 0 : array.length,
+          result = Array(length);
+
+      while (++index < length) {
+        result[index] = iteratee(array[index], index, array);
+      }
+      return result;
+    }
+
+    /** Used as references for various `Number` constants. */
+    var INFINITY$5 = 1 / 0;
+
+    /** Used to convert symbols to primitives and strings. */
+    var symbolProto = Symbol$1 ? Symbol$1.prototype : undefined,
+        symbolToString = symbolProto ? symbolProto.toString : undefined;
+
+    /**
+     * The base implementation of `_.toString` which doesn't convert nullish
+     * values to empty strings.
+     *
+     * @private
+     * @param {*} value The value to process.
+     * @returns {string} Returns the string.
+     */
+    function baseToString(value) {
+      // Exit early for strings to avoid a performance hit in some environments.
+      if (typeof value == 'string') {
+        return value;
+      }
+      if (isArray(value)) {
+        // Recursively convert values (susceptible to call stack limits).
+        return arrayMap(value, baseToString) + '';
+      }
+      if (isSymbol(value)) {
+        return symbolToString ? symbolToString.call(value) : '';
+      }
+      var result = (value + '');
+      return (result == '0' && (1 / value) == -INFINITY$5) ? '-0' : result;
+    }
+
+    /**
+     * Converts `value` to a string. An empty string is returned for `null`
+     * and `undefined` values. The sign of `-0` is preserved.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to convert.
+     * @returns {string} Returns the converted string.
+     * @example
+     *
+     * _.toString(null);
+     * // => ''
+     *
+     * _.toString(-0);
+     * // => '-0'
+     *
+     * _.toString([1, 2, 3]);
+     * // => '1,2,3'
+     */
+    function toString(value) {
+      return value == null ? '' : baseToString(value);
+    }
+
+    /**
+     * Casts `value` to a path array if it's not one.
+     *
+     * @private
+     * @param {*} value The value to inspect.
+     * @param {Object} [object] The object to query keys on.
+     * @returns {Array} Returns the cast property path array.
+     */
+    function castPath(value, object) {
+      if (isArray(value)) {
+        return value;
+      }
+      return isKey(value, object) ? [value] : stringToPath(toString(value));
+    }
+
+    /** Used as references for various `Number` constants. */
+    var INFINITY$4 = 1 / 0;
+
+    /**
+     * Converts `value` to a string key if it's not a string or symbol.
+     *
+     * @private
+     * @param {*} value The value to inspect.
+     * @returns {string|symbol} Returns the key.
+     */
+    function toKey(value) {
+      if (typeof value == 'string' || isSymbol(value)) {
+        return value;
+      }
+      var result = (value + '');
+      return (result == '0' && (1 / value) == -INFINITY$4) ? '-0' : result;
+    }
+
+    /**
+     * The base implementation of `_.get` without support for default values.
+     *
+     * @private
+     * @param {Object} object The object to query.
+     * @param {Array|string} path The path of the property to get.
+     * @returns {*} Returns the resolved value.
+     */
+    function baseGet(object, path) {
+      path = castPath(path, object);
+
+      var index = 0,
+          length = path.length;
+
+      while (object != null && index < length) {
+        object = object[toKey(path[index++])];
+      }
+      return (index && index == length) ? object : undefined;
+    }
+
+    /**
+     * The base implementation of `_.set`.
+     *
+     * @private
+     * @param {Object} object The object to modify.
+     * @param {Array|string} path The path of the property to set.
+     * @param {*} value The value to set.
+     * @param {Function} [customizer] The function to customize path creation.
+     * @returns {Object} Returns `object`.
+     */
+    function baseSet(object, path, value, customizer) {
+      if (!isObject(object)) {
+        return object;
+      }
+      path = castPath(path, object);
+
+      var index = -1,
+          length = path.length,
+          lastIndex = length - 1,
+          nested = object;
+
+      while (nested != null && ++index < length) {
+        var key = toKey(path[index]),
+            newValue = value;
+
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return object;
+        }
+
+        if (index != lastIndex) {
+          var objValue = nested[key];
+          newValue = customizer ? customizer(objValue, key, nested) : undefined;
+          if (newValue === undefined) {
+            newValue = isObject(objValue)
+              ? objValue
+              : (isIndex(path[index + 1]) ? [] : {});
+          }
+        }
+        assignValue(nested, key, newValue);
+        nested = nested[key];
+      }
+      return object;
+    }
+
+    /**
+     * The base implementation of  `_.pickBy` without support for iteratee shorthands.
+     *
+     * @private
+     * @param {Object} object The source object.
+     * @param {string[]} paths The property paths to pick.
+     * @param {Function} predicate The function invoked per property.
+     * @returns {Object} Returns the new object.
+     */
+    function basePickBy(object, paths, predicate) {
+      var index = -1,
+          length = paths.length,
+          result = {};
+
+      while (++index < length) {
+        var path = paths[index],
+            value = baseGet(object, path);
+
+        if (predicate(value, path)) {
+          baseSet(result, castPath(path, object), value);
+        }
+      }
+      return result;
+    }
+
+    /**
+     * The base implementation of `_.hasIn` without support for deep paths.
+     *
+     * @private
+     * @param {Object} [object] The object to query.
+     * @param {Array|string} key The key to check.
+     * @returns {boolean} Returns `true` if `key` exists, else `false`.
+     */
+    function baseHasIn(object, key) {
+      return object != null && key in Object(object);
+    }
+
+    /**
+     * Checks if `path` exists on `object`.
+     *
+     * @private
+     * @param {Object} object The object to query.
+     * @param {Array|string} path The path to check.
+     * @param {Function} hasFunc The function to check properties.
+     * @returns {boolean} Returns `true` if `path` exists, else `false`.
+     */
+    function hasPath(object, path, hasFunc) {
+      path = castPath(path, object);
+
+      var index = -1,
+          length = path.length,
+          result = false;
+
+      while (++index < length) {
+        var key = toKey(path[index]);
+        if (!(result = object != null && hasFunc(object, key))) {
+          break;
+        }
+        object = object[key];
+      }
+      if (result || ++index != length) {
+        return result;
+      }
+      length = object == null ? 0 : object.length;
+      return !!length && isLength(length) && isIndex(key, length) &&
+        (isArray(object) || isArguments(object));
+    }
+
+    /**
+     * Checks if `path` is a direct or inherited property of `object`.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Object
+     * @param {Object} object The object to query.
+     * @param {Array|string} path The path to check.
+     * @returns {boolean} Returns `true` if `path` exists, else `false`.
+     * @example
+     *
+     * var object = _.create({ 'a': _.create({ 'b': 2 }) });
+     *
+     * _.hasIn(object, 'a');
+     * // => true
+     *
+     * _.hasIn(object, 'a.b');
+     * // => true
+     *
+     * _.hasIn(object, ['a', 'b']);
+     * // => true
+     *
+     * _.hasIn(object, 'b');
+     * // => false
+     */
+    function hasIn(object, path) {
+      return object != null && hasPath(object, path, baseHasIn);
+    }
+
+    /**
+     * The base implementation of `_.pick` without support for individual
+     * property identifiers.
+     *
+     * @private
+     * @param {Object} object The source object.
+     * @param {string[]} paths The property paths to pick.
+     * @returns {Object} Returns the new object.
+     */
+    function basePick(object, paths) {
+      return basePickBy(object, paths, function(value, path) {
+        return hasIn(object, path);
+      });
+    }
+
+    /** Built-in value references. */
+    var spreadableSymbol = Symbol$1 ? Symbol$1.isConcatSpreadable : undefined;
+
+    /**
+     * Checks if `value` is a flattenable `arguments` object or array.
+     *
+     * @private
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
+     */
+    function isFlattenable(value) {
+      return isArray(value) || isArguments(value) ||
+        !!(spreadableSymbol && value && value[spreadableSymbol]);
+    }
+
+    /**
+     * The base implementation of `_.flatten` with support for restricting flattening.
+     *
+     * @private
+     * @param {Array} array The array to flatten.
+     * @param {number} depth The maximum recursion depth.
+     * @param {boolean} [predicate=isFlattenable] The function invoked per iteration.
+     * @param {boolean} [isStrict] Restrict to values that pass `predicate` checks.
+     * @param {Array} [result=[]] The initial result value.
+     * @returns {Array} Returns the new flattened array.
+     */
+    function baseFlatten(array, depth, predicate, isStrict, result) {
+      var index = -1,
+          length = array.length;
+
+      predicate || (predicate = isFlattenable);
+      result || (result = []);
+
+      while (++index < length) {
+        var value = array[index];
+        if (depth > 0 && predicate(value)) {
+          if (depth > 1) {
+            // Recursively flatten arrays (susceptible to call stack limits).
+            baseFlatten(value, depth - 1, predicate, isStrict, result);
+          } else {
+            arrayPush(result, value);
+          }
+        } else if (!isStrict) {
+          result[result.length] = value;
+        }
+      }
+      return result;
+    }
+
+    /**
+     * Flattens `array` a single level deep.
+     *
+     * @static
+     * @memberOf _
+     * @since 0.1.0
+     * @category Array
+     * @param {Array} array The array to flatten.
+     * @returns {Array} Returns the new flattened array.
+     * @example
+     *
+     * _.flatten([1, [2, [3, [4]], 5]]);
+     * // => [1, 2, [3, [4]], 5]
+     */
+    function flatten(array) {
+      var length = array == null ? 0 : array.length;
+      return length ? baseFlatten(array, 1) : [];
+    }
+
+    /**
+     * A faster alternative to `Function#apply`, this function invokes `func`
+     * with the `this` binding of `thisArg` and the arguments of `args`.
+     *
+     * @private
+     * @param {Function} func The function to invoke.
+     * @param {*} thisArg The `this` binding of `func`.
+     * @param {Array} args The arguments to invoke `func` with.
+     * @returns {*} Returns the result of `func`.
+     */
+    function apply(func, thisArg, args) {
+      switch (args.length) {
+        case 0: return func.call(thisArg);
+        case 1: return func.call(thisArg, args[0]);
+        case 2: return func.call(thisArg, args[0], args[1]);
+        case 3: return func.call(thisArg, args[0], args[1], args[2]);
+      }
+      return func.apply(thisArg, args);
+    }
+
+    /* Built-in method references for those with the same name as other `lodash` methods. */
+    var nativeMax$g = Math.max;
+
+    /**
+     * A specialized version of `baseRest` which transforms the rest array.
+     *
+     * @private
+     * @param {Function} func The function to apply a rest parameter to.
+     * @param {number} [start=func.length-1] The start position of the rest parameter.
+     * @param {Function} transform The rest array transform.
+     * @returns {Function} Returns the new function.
+     */
+    function overRest(func, start, transform) {
+      start = nativeMax$g(start === undefined ? (func.length - 1) : start, 0);
+      return function() {
+        var args = arguments,
+            index = -1,
+            length = nativeMax$g(args.length - start, 0),
+            array = Array(length);
+
+        while (++index < length) {
+          array[index] = args[start + index];
+        }
+        index = -1;
+        var otherArgs = Array(start + 1);
+        while (++index < start) {
+          otherArgs[index] = args[index];
+        }
+        otherArgs[start] = transform(array);
+        return apply(func, this, otherArgs);
+      };
+    }
+
+    /**
+     * Creates a function that returns `value`.
+     *
+     * @static
+     * @memberOf _
+     * @since 2.4.0
+     * @category Util
+     * @param {*} value The value to return from the new function.
+     * @returns {Function} Returns the new constant function.
+     * @example
+     *
+     * var objects = _.times(2, _.constant({ 'a': 1 }));
+     *
+     * console.log(objects);
+     * // => [{ 'a': 1 }, { 'a': 1 }]
+     *
+     * console.log(objects[0] === objects[1]);
+     * // => true
+     */
+    function constant(value) {
+      return function() {
+        return value;
+      };
+    }
+
+    /**
+     * This method returns the first argument it receives.
+     *
+     * @static
+     * @since 0.1.0
+     * @memberOf _
+     * @category Util
+     * @param {*} value Any value.
+     * @returns {*} Returns `value`.
+     * @example
+     *
+     * var object = { 'a': 1 };
+     *
+     * console.log(_.identity(object) === object);
+     * // => true
+     */
+    function identity(value) {
+      return value;
+    }
+
+    /**
+     * The base implementation of `setToString` without support for hot loop shorting.
+     *
+     * @private
+     * @param {Function} func The function to modify.
+     * @param {Function} string The `toString` result.
+     * @returns {Function} Returns `func`.
+     */
+    var baseSetToString = !defineProperty ? identity : function(func, string) {
+      return defineProperty(func, 'toString', {
+        'configurable': true,
+        'enumerable': false,
+        'value': constant(string),
+        'writable': true
+      });
+    };
+
+    /** Used to detect hot functions by number of calls within a span of milliseconds. */
+    var HOT_COUNT = 800,
+        HOT_SPAN = 16;
+
+    /* Built-in method references for those with the same name as other `lodash` methods. */
+    var nativeNow = Date.now;
+
+    /**
+     * Creates a function that'll short out and invoke `identity` instead
+     * of `func` when it's called `HOT_COUNT` or more times in `HOT_SPAN`
+     * milliseconds.
+     *
+     * @private
+     * @param {Function} func The function to restrict.
+     * @returns {Function} Returns the new shortable function.
+     */
+    function shortOut(func) {
+      var count = 0,
+          lastCalled = 0;
+
+      return function() {
+        var stamp = nativeNow(),
+            remaining = HOT_SPAN - (stamp - lastCalled);
+
+        lastCalled = stamp;
+        if (remaining > 0) {
+          if (++count >= HOT_COUNT) {
+            return arguments[0];
+          }
+        } else {
+          count = 0;
+        }
+        return func.apply(undefined, arguments);
+      };
+    }
+
+    /**
+     * Sets the `toString` method of `func` to return `string`.
+     *
+     * @private
+     * @param {Function} func The function to modify.
+     * @param {Function} string The `toString` result.
+     * @returns {Function} Returns `func`.
+     */
+    var setToString = shortOut(baseSetToString);
+
+    /**
+     * A specialized version of `baseRest` which flattens the rest array.
+     *
+     * @private
+     * @param {Function} func The function to apply a rest parameter to.
+     * @returns {Function} Returns the new function.
+     */
+    function flatRest(func) {
+      return setToString(overRest(func, undefined, flatten), func + '');
+    }
+
+    /**
+     * Creates an object composed of the picked `object` properties.
+     *
+     * @static
+     * @since 0.1.0
+     * @memberOf _
+     * @category Object
+     * @param {Object} object The source object.
+     * @param {...(string|string[])} [paths] The property paths to pick.
+     * @returns {Object} Returns the new object.
+     * @example
+     *
+     * var object = { 'a': 1, 'b': '2', 'c': 3 };
+     *
+     * _.pick(object, ['a', 'c']);
+     * // => { 'a': 1, 'c': 3 }
+     */
+    var pick = flatRest(function(object, paths) {
+      return object == null ? {} : basePick(object, paths);
+    });
+
     var util$1;
     (function (util) {
         util.assertEqual = (val) => val;
@@ -5081,6 +5640,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return value;
         };
     })(util$1 || (util$1 = {}));
+    var objectUtil;
+    (function (objectUtil) {
+        objectUtil.mergeShapes = (first, second) => {
+            return {
+                ...first,
+                ...second, // second overwrites first
+            };
+        };
+    })(objectUtil || (objectUtil = {}));
     const ZodParsedType = util$1.arrayToEnum([
         "string",
         "nan",
@@ -5312,7 +5880,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 break;
             case ZodIssueCode.invalid_string:
                 if (typeof issue.validation === "object") {
-                    if ("startsWith" in issue.validation) {
+                    if ("includes" in issue.validation) {
+                        message = `Invalid input: must include "${issue.validation.includes}"`;
+                        if (typeof issue.validation.position === "number") {
+                            message = `${message} at one or more positions greater than or equal to ${issue.validation.position}`;
+                        }
+                    }
+                    else if ("startsWith" in issue.validation) {
                         message = `Invalid input: must start with "${issue.validation.startsWith}"`;
                     }
                     else if ("endsWith" in issue.validation) {
@@ -5345,7 +5919,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     ? `exactly equal to `
                     : issue.inclusive
                         ? `greater than or equal to `
-                        : `greater than `}${new Date(issue.minimum)}`;
+                        : `greater than `}${new Date(Number(issue.minimum))}`;
                 else
                     message = "Invalid input";
                 break;
@@ -5360,12 +5934,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     : issue.inclusive
                         ? `less than or equal to`
                         : `less than`} ${issue.maximum}`;
+                else if (issue.type === "bigint")
+                    message = `BigInt must be ${issue.exact
+                    ? `exactly`
+                    : issue.inclusive
+                        ? `less than or equal to`
+                        : `less than`} ${issue.maximum}`;
                 else if (issue.type === "date")
                     message = `Date must be ${issue.exact
                     ? `exactly`
                     : issue.inclusive
                         ? `smaller than or equal to`
-                        : `smaller than`} ${new Date(issue.maximum)}`;
+                        : `smaller than`} ${new Date(Number(issue.maximum))}`;
                 else
                     message = "Invalid input";
                 break;
@@ -5502,13 +6082,22 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
 
     class ParseInputLazyPath {
         constructor(parent, value, path, key) {
+            this._cachedPath = [];
             this.parent = parent;
             this.data = value;
             this._path = path;
             this._key = key;
         }
         get path() {
-            return this._path.concat(this._key);
+            if (!this._cachedPath.length) {
+                if (this._key instanceof Array) {
+                    this._cachedPath.push(...this._path, ...this._key);
+                }
+                else {
+                    this._cachedPath.push(...this._path, this._key);
+                }
+            }
+            return this._cachedPath;
         }
     }
     const handleResult = (ctx, result) => {
@@ -5519,8 +6108,16 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (!ctx.common.issues.length) {
                 throw new Error("Validation failed but no issues detected.");
             }
-            const error = new ZodError(ctx.common.issues);
-            return { success: false, error };
+            return {
+                success: false,
+                get error() {
+                    if (this._error)
+                        return this._error;
+                    const error = new ZodError(ctx.common.issues);
+                    this._error = error;
+                    return this._error;
+                },
+            };
         }
     };
     function processCreateParams(params) {
@@ -5793,6 +6390,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
     const cuidRegex = /^c[^\s-]{8,}$/i;
     const cuid2Regex = /^[a-z][a-z0-9]*$/;
+    const ulidRegex = /[0-9A-HJKMNP-TV-Z]{26}/;
     const uuidRegex = /^([a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}|00000000-0000-0000-0000-000000000000)$/i;
     // from https://stackoverflow.com/a/46181/1550155
     // old version: too slow, didn't support unicode
@@ -5800,13 +6398,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     //old email regex
     // const emailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((?!-)([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{1,})[^-<>()[\].,;:\s@"]$/i;
     // eslint-disable-next-line
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|([^-]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}))$/;
-    // interface IsDateStringOptions extends StringDateOptions {
-    /**
-     * Match any configuration
-     */
-    // any?: boolean;
-    // }
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))\])|(\[IPv6:(([a-f0-9]{1,4}:){7}|::([a-f0-9]{1,4}:){0,6}|([a-f0-9]{1,4}:){1}:([a-f0-9]{1,4}:){0,5}|([a-f0-9]{1,4}:){2}:([a-f0-9]{1,4}:){0,4}|([a-f0-9]{1,4}:){3}:([a-f0-9]{1,4}:){0,3}|([a-f0-9]{1,4}:){4}:([a-f0-9]{1,4}:){0,2}|([a-f0-9]{1,4}:){5}:([a-f0-9]{1,4}:){0,1})([a-f0-9]{1,4}|(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2})))\])|([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])*(\.[A-Za-z]{2,})+))$/;
+    // from https://thekevinscott.com/emojis-in-javascript/#writing-a-regular-expression
+    const emojiRegex = /^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u;
+    const ipv4Regex = /^(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))$/;
+    const ipv6Regex = /^(([a-f0-9]{1,4}:){7}|::([a-f0-9]{1,4}:){0,6}|([a-f0-9]{1,4}:){1}:([a-f0-9]{1,4}:){0,5}|([a-f0-9]{1,4}:){2}:([a-f0-9]{1,4}:){0,4}|([a-f0-9]{1,4}:){3}:([a-f0-9]{1,4}:){0,3}|([a-f0-9]{1,4}:){4}:([a-f0-9]{1,4}:){0,2}|([a-f0-9]{1,4}:){5}:([a-f0-9]{1,4}:){0,1})([a-f0-9]{1,4}|(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2})))$/;
     // Adapted from https://stackoverflow.com/a/3143231
     const datetimeRegex = (args) => {
         if (args.precision) {
@@ -5834,6 +6430,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
         }
     };
+    function isValidIP(ip, version) {
+        if ((version === "v4" || !version) && ipv4Regex.test(ip)) {
+            return true;
+        }
+        if ((version === "v6" || !version) && ipv6Regex.test(ip)) {
+            return true;
+        }
+        return false;
+    }
     class ZodString extends ZodType {
         constructor() {
             super(...arguments);
@@ -5850,6 +6455,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             this.trim = () => new ZodString({
                 ...this._def,
                 checks: [...this._def.checks, { kind: "trim" }],
+            });
+            this.toLowerCase = () => new ZodString({
+                ...this._def,
+                checks: [...this._def.checks, { kind: "toLowerCase" }],
+            });
+            this.toUpperCase = () => new ZodString({
+                ...this._def,
+                checks: [...this._def.checks, { kind: "toUpperCase" }],
             });
         }
         _parse(input) {
@@ -5938,6 +6551,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         status.dirty();
                     }
                 }
+                else if (check.kind === "emoji") {
+                    if (!emojiRegex.test(input.data)) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            validation: "emoji",
+                            code: ZodIssueCode.invalid_string,
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
                 else if (check.kind === "uuid") {
                     if (!uuidRegex.test(input.data)) {
                         ctx = this._getOrReturnCtx(input, ctx);
@@ -5965,6 +6589,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ctx = this._getOrReturnCtx(input, ctx);
                         addIssueToContext(ctx, {
                             validation: "cuid2",
+                            code: ZodIssueCode.invalid_string,
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
+                else if (check.kind === "ulid") {
+                    if (!ulidRegex.test(input.data)) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            validation: "ulid",
                             code: ZodIssueCode.invalid_string,
                             message: check.message,
                         });
@@ -6001,6 +6636,23 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 else if (check.kind === "trim") {
                     input.data = input.data.trim();
                 }
+                else if (check.kind === "includes") {
+                    if (!input.data.includes(check.value, check.position)) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            code: ZodIssueCode.invalid_string,
+                            validation: { includes: check.value, position: check.position },
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
+                else if (check.kind === "toLowerCase") {
+                    input.data = input.data.toLowerCase();
+                }
+                else if (check.kind === "toUpperCase") {
+                    input.data = input.data.toUpperCase();
+                }
                 else if (check.kind === "startsWith") {
                     if (!input.data.startsWith(check.value)) {
                         ctx = this._getOrReturnCtx(input, ctx);
@@ -6035,6 +6687,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         status.dirty();
                     }
                 }
+                else if (check.kind === "ip") {
+                    if (!isValidIP(input.data, check.version)) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            validation: "ip",
+                            code: ZodIssueCode.invalid_string,
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
                 else {
                     util$1.assertNever(check);
                 }
@@ -6053,6 +6716,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         url(message) {
             return this._addCheck({ kind: "url", ...errorUtil.errToObj(message) });
         }
+        emoji(message) {
+            return this._addCheck({ kind: "emoji", ...errorUtil.errToObj(message) });
+        }
         uuid(message) {
             return this._addCheck({ kind: "uuid", ...errorUtil.errToObj(message) });
         }
@@ -6061,6 +6727,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         cuid2(message) {
             return this._addCheck({ kind: "cuid2", ...errorUtil.errToObj(message) });
+        }
+        ulid(message) {
+            return this._addCheck({ kind: "ulid", ...errorUtil.errToObj(message) });
+        }
+        ip(options) {
+            return this._addCheck({ kind: "ip", ...errorUtil.errToObj(options) });
         }
         datetime(options) {
             var _a;
@@ -6084,6 +6756,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 kind: "regex",
                 regex: regex,
                 ...errorUtil.errToObj(message),
+            });
+        }
+        includes(value, options) {
+            return this._addCheck({
+                kind: "includes",
+                value: value,
+                position: options === null || options === void 0 ? void 0 : options.position,
+                ...errorUtil.errToObj(options === null || options === void 0 ? void 0 : options.message),
             });
         }
         startsWith(value, message) {
@@ -6130,6 +6810,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         get isURL() {
             return !!this._def.checks.find((ch) => ch.kind === "url");
         }
+        get isEmoji() {
+            return !!this._def.checks.find((ch) => ch.kind === "emoji");
+        }
         get isUUID() {
             return !!this._def.checks.find((ch) => ch.kind === "uuid");
         }
@@ -6138,6 +6821,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         get isCUID2() {
             return !!this._def.checks.find((ch) => ch.kind === "cuid2");
+        }
+        get isULID() {
+            return !!this._def.checks.find((ch) => ch.kind === "ulid");
+        }
+        get isIP() {
+            return !!this._def.checks.find((ch) => ch.kind === "ip");
         }
         get minLength() {
             let min = null;
@@ -6358,6 +7047,19 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 message: errorUtil.toString(message),
             });
         }
+        safe(message) {
+            return this._addCheck({
+                kind: "min",
+                inclusive: true,
+                value: Number.MIN_SAFE_INTEGER,
+                message: errorUtil.toString(message),
+            })._addCheck({
+                kind: "max",
+                inclusive: true,
+                value: Number.MAX_SAFE_INTEGER,
+                message: errorUtil.toString(message),
+            });
+        }
         get minValue() {
             let min = null;
             for (const ch of this._def.checks) {
@@ -6411,6 +7113,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         });
     };
     class ZodBigInt extends ZodType {
+        constructor() {
+            super(...arguments);
+            this.min = this.gte;
+            this.max = this.lte;
+        }
         _parse(input) {
             if (this._def.coerce) {
                 input.data = BigInt(input.data);
@@ -6425,12 +7132,154 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 });
                 return INVALID;
             }
-            return OK(input.data);
+            let ctx = undefined;
+            const status = new ParseStatus();
+            for (const check of this._def.checks) {
+                if (check.kind === "min") {
+                    const tooSmall = check.inclusive
+                        ? input.data < check.value
+                        : input.data <= check.value;
+                    if (tooSmall) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            code: ZodIssueCode.too_small,
+                            type: "bigint",
+                            minimum: check.value,
+                            inclusive: check.inclusive,
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
+                else if (check.kind === "max") {
+                    const tooBig = check.inclusive
+                        ? input.data > check.value
+                        : input.data >= check.value;
+                    if (tooBig) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            code: ZodIssueCode.too_big,
+                            type: "bigint",
+                            maximum: check.value,
+                            inclusive: check.inclusive,
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
+                else if (check.kind === "multipleOf") {
+                    if (input.data % check.value !== BigInt(0)) {
+                        ctx = this._getOrReturnCtx(input, ctx);
+                        addIssueToContext(ctx, {
+                            code: ZodIssueCode.not_multiple_of,
+                            multipleOf: check.value,
+                            message: check.message,
+                        });
+                        status.dirty();
+                    }
+                }
+                else {
+                    util$1.assertNever(check);
+                }
+            }
+            return { status: status.value, value: input.data };
+        }
+        gte(value, message) {
+            return this.setLimit("min", value, true, errorUtil.toString(message));
+        }
+        gt(value, message) {
+            return this.setLimit("min", value, false, errorUtil.toString(message));
+        }
+        lte(value, message) {
+            return this.setLimit("max", value, true, errorUtil.toString(message));
+        }
+        lt(value, message) {
+            return this.setLimit("max", value, false, errorUtil.toString(message));
+        }
+        setLimit(kind, value, inclusive, message) {
+            return new ZodBigInt({
+                ...this._def,
+                checks: [
+                    ...this._def.checks,
+                    {
+                        kind,
+                        value,
+                        inclusive,
+                        message: errorUtil.toString(message),
+                    },
+                ],
+            });
+        }
+        _addCheck(check) {
+            return new ZodBigInt({
+                ...this._def,
+                checks: [...this._def.checks, check],
+            });
+        }
+        positive(message) {
+            return this._addCheck({
+                kind: "min",
+                value: BigInt(0),
+                inclusive: false,
+                message: errorUtil.toString(message),
+            });
+        }
+        negative(message) {
+            return this._addCheck({
+                kind: "max",
+                value: BigInt(0),
+                inclusive: false,
+                message: errorUtil.toString(message),
+            });
+        }
+        nonpositive(message) {
+            return this._addCheck({
+                kind: "max",
+                value: BigInt(0),
+                inclusive: true,
+                message: errorUtil.toString(message),
+            });
+        }
+        nonnegative(message) {
+            return this._addCheck({
+                kind: "min",
+                value: BigInt(0),
+                inclusive: true,
+                message: errorUtil.toString(message),
+            });
+        }
+        multipleOf(value, message) {
+            return this._addCheck({
+                kind: "multipleOf",
+                value,
+                message: errorUtil.toString(message),
+            });
+        }
+        get minValue() {
+            let min = null;
+            for (const ch of this._def.checks) {
+                if (ch.kind === "min") {
+                    if (min === null || ch.value > min)
+                        min = ch.value;
+                }
+            }
+            return min;
+        }
+        get maxValue() {
+            let max = null;
+            for (const ch of this._def.checks) {
+                if (ch.kind === "max") {
+                    if (max === null || ch.value < max)
+                        max = ch.value;
+                }
+            }
+            return max;
         }
     }
     ZodBigInt.create = (params) => {
         var _a;
         return new ZodBigInt({
+            checks: [],
             typeName: ZodFirstPartyTypeKind.ZodBigInt,
             coerce: (_a = params === null || params === void 0 ? void 0 : params.coerce) !== null && _a !== void 0 ? _a : false,
             ...processCreateParams(params),
@@ -6806,22 +7655,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             ...processCreateParams(params),
         });
     };
-    /////////////////////////////////////////
-    /////////////////////////////////////////
-    //////////                     //////////
-    //////////      ZodObject      //////////
-    //////////                     //////////
-    /////////////////////////////////////////
-    /////////////////////////////////////////
-    var objectUtil;
-    (function (objectUtil) {
-        objectUtil.mergeShapes = (first, second) => {
-            return {
-                ...first,
-                ...second, // second overwrites first
-            };
-        };
-    })(objectUtil || (objectUtil = {}));
     function deepPartialify(schema) {
         if (schema instanceof ZodObject) {
             const newShape = {};
@@ -6835,7 +7668,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             });
         }
         else if (schema instanceof ZodArray) {
-            return ZodArray.create(deepPartialify(schema.element));
+            return new ZodArray({
+                ...schema._def,
+                type: deepPartialify(schema.element),
+            });
         }
         else if (schema instanceof ZodOptional) {
             return ZodOptional.create(deepPartialify(schema.unwrap()));
@@ -7067,7 +7903,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             const merged = new ZodObject({
                 unknownKeys: merging._def.unknownKeys,
                 catchall: merging._def.catchall,
-                shape: () => objectUtil.mergeShapes(this._def.shape(), merging._def.shape()),
+                shape: () => ({
+                    ...this._def.shape(),
+                    ...merging._def.shape(),
+                }),
                 typeName: ZodFirstPartyTypeKind.ZodObject,
             });
             return merged;
@@ -7161,6 +8000,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 shape: () => shape,
             });
         }
+        /**
+         * @deprecated
+         */
         deepPartial() {
             return deepPartialify(this);
         }
@@ -8200,10 +9042,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         path: ctx.path,
                         parent: ctx,
                     });
-                    // if (base.status === "aborted") return INVALID;
-                    // if (base.status === "dirty") {
-                    //   return { status: "dirty", value: base.value };
-                    // }
                     if (!isValid(base))
                         return base;
                     const result = effect.transform(base.value, checkCtx);
@@ -8218,10 +9056,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         .then((base) => {
                         if (!isValid(base))
                             return base;
-                        // if (base.status === "aborted") return INVALID;
-                        // if (base.status === "dirty") {
-                        //   return { status: "dirty", value: base.value };
-                        // }
                         return Promise.resolve(effect.transform(base.value, checkCtx)).then((result) => ({ status: status.value, value: result }));
                     });
                 }
@@ -8313,29 +9147,47 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     class ZodCatch extends ZodType {
         _parse(input) {
             const { ctx } = this._processInputParams(input);
+            // newCtx is used to not collect issues from inner types in ctx
+            const newCtx = {
+                ...ctx,
+                common: {
+                    ...ctx.common,
+                    issues: [],
+                },
+            };
             const result = this._def.innerType._parse({
-                data: ctx.data,
-                path: ctx.path,
+                data: newCtx.data,
+                path: newCtx.path,
                 parent: {
-                    ...ctx,
-                    common: {
-                        ...ctx.common,
-                        issues: [], // don't collect issues from inner type
-                    },
+                    ...newCtx,
                 },
             });
             if (isAsync(result)) {
                 return result.then((result) => {
                     return {
                         status: "valid",
-                        value: result.status === "valid" ? result.value : this._def.catchValue(),
+                        value: result.status === "valid"
+                            ? result.value
+                            : this._def.catchValue({
+                                get error() {
+                                    return new ZodError(newCtx.common.issues);
+                                },
+                                input: newCtx.data,
+                            }),
                     };
                 });
             }
             else {
                 return {
                     status: "valid",
-                    value: result.status === "valid" ? result.value : this._def.catchValue(),
+                    value: result.status === "valid"
+                        ? result.value
+                        : this._def.catchValue({
+                            get error() {
+                                return new ZodError(newCtx.common.issues);
+                            },
+                            input: newCtx.data,
+                        }),
                 };
             }
         }
@@ -8445,13 +9297,30 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             });
         }
     }
-    const custom = (check, params = {}, fatal) => {
+    const custom = (check, params = {}, 
+    /*
+     * @deprecated
+     *
+     * Pass `fatal` into the params object instead:
+     *
+     * ```ts
+     * z.string().custom((val) => val.length > 5, { fatal: false })
+     * ```
+     *
+     */
+    fatal) => {
         if (check)
             return ZodAny.create().superRefine((data, ctx) => {
+                var _a, _b;
                 if (!check(data)) {
-                    const p = typeof params === "function" ? params(data) : params;
+                    const p = typeof params === "function"
+                        ? params(data)
+                        : typeof params === "string"
+                            ? { message: params }
+                            : params;
+                    const _fatal = (_b = (_a = p.fatal) !== null && _a !== void 0 ? _a : fatal) !== null && _b !== void 0 ? _b : true;
                     const p2 = typeof p === "string" ? { message: p } : p;
-                    ctx.addIssue({ code: "custom", ...p2, fatal });
+                    ctx.addIssue({ code: "custom", ...p2, fatal: _fatal });
                 }
             });
         return ZodAny.create();
@@ -8501,7 +9370,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     // const instanceOfType = <T extends new (...args: any[]) => any>(
     cls, params = {
         message: `Input not instance of ${cls.name}`,
-    }) => custom((data) => data instanceof cls, params, true);
+    }) => custom((data) => data instanceof cls, params);
     const stringType = ZodString.create;
     const numberType = ZodNumber.create;
     const nanType = ZodNaN.create;
@@ -8551,7 +9420,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     };
     const NEVER = INVALID;
 
-    var mod = /*#__PURE__*/Object.freeze({
+    var z = /*#__PURE__*/Object.freeze({
         __proto__: null,
         defaultErrorMap: errorMap,
         setErrorMap: setErrorMap,
@@ -8568,6 +9437,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         isValid: isValid,
         isAsync: isAsync,
         get util () { return util$1; },
+        get objectUtil () { return objectUtil; },
         ZodParsedType: ZodParsedType,
         getParsedType: getParsedType,
         ZodType: ZodType,
@@ -8584,7 +9454,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         ZodNever: ZodNever,
         ZodVoid: ZodVoid,
         ZodArray: ZodArray,
-        get objectUtil () { return objectUtil; },
         ZodObject: ZodObject,
         ZodUnion: ZodUnion,
         ZodDiscriminatedUnion: ZodDiscriminatedUnion,
@@ -8660,31 +9529,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         ZodError: ZodError
     });
 
-    /** `Object#toString` result references. */
-    var symbolTag = '[object Symbol]';
-
-    /**
-     * Checks if `value` is classified as a `Symbol` primitive or object.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.0.0
-     * @category Lang
-     * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
-     * @example
-     *
-     * _.isSymbol(Symbol.iterator);
-     * // => true
-     *
-     * _.isSymbol('abc');
-     * // => false
-     */
-    function isSymbol(value) {
-      return typeof value == 'symbol' ||
-        (isObjectLike(value) && baseGetTag(value) == symbolTag);
-    }
-
     /** Used as references for various `Number` constants. */
     var NAN$2 = 0 / 0;
 
@@ -8704,57 +9548,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         return NAN$2;
       }
       return +value;
-    }
-
-    /**
-     * A specialized version of `_.map` for arrays without support for iteratee
-     * shorthands.
-     *
-     * @private
-     * @param {Array} [array] The array to iterate over.
-     * @param {Function} iteratee The function invoked per iteration.
-     * @returns {Array} Returns the new mapped array.
-     */
-    function arrayMap(array, iteratee) {
-      var index = -1,
-          length = array == null ? 0 : array.length,
-          result = Array(length);
-
-      while (++index < length) {
-        result[index] = iteratee(array[index], index, array);
-      }
-      return result;
-    }
-
-    /** Used as references for various `Number` constants. */
-    var INFINITY$5 = 1 / 0;
-
-    /** Used to convert symbols to primitives and strings. */
-    var symbolProto = Symbol$1 ? Symbol$1.prototype : undefined,
-        symbolToString = symbolProto ? symbolProto.toString : undefined;
-
-    /**
-     * The base implementation of `_.toString` which doesn't convert nullish
-     * values to empty strings.
-     *
-     * @private
-     * @param {*} value The value to process.
-     * @returns {string} Returns the string.
-     */
-    function baseToString(value) {
-      // Exit early for strings to avoid a performance hit in some environments.
-      if (typeof value == 'string') {
-        return value;
-      }
-      if (isArray(value)) {
-        // Recursively convert values (susceptible to call stack limits).
-        return arrayMap(value, baseToString) + '';
-      }
-      if (isSymbol(value)) {
-        return symbolToString ? symbolToString.call(value) : '';
-      }
-      var result = (value + '');
-      return (result == '0' && (1 / value) == -INFINITY$5) ? '-0' : result;
     }
 
     /**
@@ -8904,7 +9697,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
 
     /** Used as references for various `Number` constants. */
-    var INFINITY$4 = 1 / 0,
+    var INFINITY$3 = 1 / 0,
         MAX_INTEGER = 1.7976931348623157e+308;
 
     /**
@@ -8935,7 +9728,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         return value === 0 ? value : 0;
       }
       value = toNumber(value);
-      if (value === INFINITY$4 || value === -INFINITY$4) {
+      if (value === INFINITY$3 || value === -INFINITY$3) {
         var sign = (value < 0 ? -1 : 1);
         return sign * MAX_INTEGER;
       }
@@ -8976,7 +9769,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
 
     /** Error message constants. */
-    var FUNC_ERROR_TEXT$b = 'Expected a function';
+    var FUNC_ERROR_TEXT$a = 'Expected a function';
 
     /**
      * The opposite of `_.before`; this method creates a function that invokes
@@ -9004,7 +9797,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
      */
     function after(n, func) {
       if (typeof func != 'function') {
-        throw new TypeError(FUNC_ERROR_TEXT$b);
+        throw new TypeError(FUNC_ERROR_TEXT$a);
       }
       n = toInteger(n);
       return function() {
@@ -9012,26 +9805,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
           return func.apply(this, arguments);
         }
       };
-    }
-
-    /**
-     * This method returns the first argument it receives.
-     *
-     * @static
-     * @since 0.1.0
-     * @memberOf _
-     * @category Util
-     * @param {*} value Any value.
-     * @returns {*} Returns `value`.
-     * @example
-     *
-     * var object = { 'a': 1 };
-     *
-     * console.log(_.identity(object) === object);
-     * // => true
-     */
-    function identity(value) {
-      return value;
     }
 
     /** Used to store function metadata. */
@@ -9107,28 +9880,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       return wrapper;
     }
 
-    /**
-     * A faster alternative to `Function#apply`, this function invokes `func`
-     * with the `this` binding of `thisArg` and the arguments of `args`.
-     *
-     * @private
-     * @param {Function} func The function to invoke.
-     * @param {*} thisArg The `this` binding of `func`.
-     * @param {Array} args The arguments to invoke `func` with.
-     * @returns {*} Returns the result of `func`.
-     */
-    function apply(func, thisArg, args) {
-      switch (args.length) {
-        case 0: return func.call(thisArg);
-        case 1: return func.call(thisArg, args[0]);
-        case 2: return func.call(thisArg, args[0], args[1]);
-        case 3: return func.call(thisArg, args[0], args[1], args[2]);
-      }
-      return func.apply(thisArg, args);
-    }
-
     /* Built-in method references for those with the same name as other `lodash` methods. */
-    var nativeMax$g = Math.max;
+    var nativeMax$f = Math.max;
 
     /**
      * Creates an array that is the composition of partially applied arguments,
@@ -9147,7 +9900,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
           holdersLength = holders.length,
           leftIndex = -1,
           leftLength = partials.length,
-          rangeLength = nativeMax$g(argsLength - holdersLength, 0),
+          rangeLength = nativeMax$f(argsLength - holdersLength, 0),
           result = Array(leftLength + rangeLength),
           isUncurried = !isCurried;
 
@@ -9166,7 +9919,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
 
     /* Built-in method references for those with the same name as other `lodash` methods. */
-    var nativeMax$f = Math.max;
+    var nativeMax$e = Math.max;
 
     /**
      * This function is like `composeArgs` except that the arguments composition
@@ -9186,7 +9939,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
           holdersLength = holders.length,
           rightIndex = -1,
           rightLength = partials.length,
-          rangeLength = nativeMax$f(argsLength - holdersLength, 0),
+          rangeLength = nativeMax$e(argsLength - holdersLength, 0),
           result = Array(rangeLength + rightLength),
           isUncurried = !isCurried;
 
@@ -9513,42 +10266,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       return !!data && func === data[0];
     }
 
-    /** Used to detect hot functions by number of calls within a span of milliseconds. */
-    var HOT_COUNT = 800,
-        HOT_SPAN = 16;
-
-    /* Built-in method references for those with the same name as other `lodash` methods. */
-    var nativeNow = Date.now;
-
-    /**
-     * Creates a function that'll short out and invoke `identity` instead
-     * of `func` when it's called `HOT_COUNT` or more times in `HOT_SPAN`
-     * milliseconds.
-     *
-     * @private
-     * @param {Function} func The function to restrict.
-     * @returns {Function} Returns the new shortable function.
-     */
-    function shortOut(func) {
-      var count = 0,
-          lastCalled = 0;
-
-      return function() {
-        var stamp = nativeNow(),
-            remaining = HOT_SPAN - (stamp - lastCalled);
-
-        lastCalled = stamp;
-        if (remaining > 0) {
-          if (++count >= HOT_COUNT) {
-            return arguments[0];
-          }
-        } else {
-          count = 0;
-        }
-        return func.apply(undefined, arguments);
-      };
-    }
-
     /**
      * Sets metadata for `func`.
      *
@@ -9602,58 +10319,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       details = details.join(length > 2 ? ', ' : ' ');
       return source.replace(reWrapComment, '{\n/* [wrapped with ' + details + '] */\n');
     }
-
-    /**
-     * Creates a function that returns `value`.
-     *
-     * @static
-     * @memberOf _
-     * @since 2.4.0
-     * @category Util
-     * @param {*} value The value to return from the new function.
-     * @returns {Function} Returns the new constant function.
-     * @example
-     *
-     * var objects = _.times(2, _.constant({ 'a': 1 }));
-     *
-     * console.log(objects);
-     * // => [{ 'a': 1 }, { 'a': 1 }]
-     *
-     * console.log(objects[0] === objects[1]);
-     * // => true
-     */
-    function constant(value) {
-      return function() {
-        return value;
-      };
-    }
-
-    /**
-     * The base implementation of `setToString` without support for hot loop shorting.
-     *
-     * @private
-     * @param {Function} func The function to modify.
-     * @param {Function} string The `toString` result.
-     * @returns {Function} Returns `func`.
-     */
-    var baseSetToString = !defineProperty ? identity : function(func, string) {
-      return defineProperty(func, 'toString', {
-        'configurable': true,
-        'enumerable': false,
-        'value': constant(string),
-        'writable': true
-      });
-    };
-
-    /**
-     * Sets the `toString` method of `func` to return `string`.
-     *
-     * @private
-     * @param {Function} func The function to modify.
-     * @param {Function} string The `toString` result.
-     * @returns {Function} Returns `func`.
-     */
-    var setToString = shortOut(baseSetToString);
 
     /**
      * The base implementation of `_.findIndex` and `_.findLastIndex` without
@@ -10155,7 +10820,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
 
     /** Error message constants. */
-    var FUNC_ERROR_TEXT$a = 'Expected a function';
+    var FUNC_ERROR_TEXT$9 = 'Expected a function';
 
     /** Used to compose bitmasks for function metadata. */
     var WRAP_BIND_FLAG$2 = 1,
@@ -10166,7 +10831,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         WRAP_PARTIAL_RIGHT_FLAG$1 = 64;
 
     /* Built-in method references for those with the same name as other `lodash` methods. */
-    var nativeMax$e = Math.max;
+    var nativeMax$d = Math.max;
 
     /**
      * Creates a function that either curries or invokes `func` with optional
@@ -10196,14 +10861,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arity) {
       var isBindKey = bitmask & WRAP_BIND_KEY_FLAG$2;
       if (!isBindKey && typeof func != 'function') {
-        throw new TypeError(FUNC_ERROR_TEXT$a);
+        throw new TypeError(FUNC_ERROR_TEXT$9);
       }
       var length = partials ? partials.length : 0;
       if (!length) {
         bitmask &= ~(WRAP_PARTIAL_FLAG$4 | WRAP_PARTIAL_RIGHT_FLAG$1);
         partials = holders = undefined;
       }
-      ary = ary === undefined ? ary : nativeMax$e(toInteger(ary), 0);
+      ary = ary === undefined ? ary : nativeMax$d(toInteger(ary), 0);
       arity = arity === undefined ? arity : toInteger(arity);
       length -= holders ? holders.length : 0;
 
@@ -10230,7 +10895,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       holders = newData[4];
       arity = newData[9] = newData[9] === undefined
         ? (isBindKey ? 0 : func.length)
-        : nativeMax$e(newData[9] - length, 0);
+        : nativeMax$d(newData[9] - length, 0);
 
       if (!arity && bitmask & (WRAP_CURRY_FLAG$2 | WRAP_CURRY_RIGHT_FLAG$1)) {
         bitmask &= ~(WRAP_CURRY_FLAG$2 | WRAP_CURRY_RIGHT_FLAG$1);
@@ -10272,39 +10937,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       n = guard ? undefined : n;
       n = (func && n == null) ? func.length : n;
       return createWrap(func, WRAP_ARY_FLAG$1, undefined, undefined, undefined, undefined, n);
-    }
-
-    /* Built-in method references for those with the same name as other `lodash` methods. */
-    var nativeMax$d = Math.max;
-
-    /**
-     * A specialized version of `baseRest` which transforms the rest array.
-     *
-     * @private
-     * @param {Function} func The function to apply a rest parameter to.
-     * @param {number} [start=func.length-1] The start position of the rest parameter.
-     * @param {Function} transform The rest array transform.
-     * @returns {Function} Returns the new function.
-     */
-    function overRest(func, start, transform) {
-      start = nativeMax$d(start === undefined ? (func.length - 1) : start, 0);
-      return function() {
-        var args = arguments,
-            index = -1,
-            length = nativeMax$d(args.length - start, 0),
-            array = Array(length);
-
-        while (++index < length) {
-          array[index] = args[start + index];
-        }
-        index = -1;
-        var otherArgs = Array(start + 1);
-        while (++index < start) {
-          otherArgs[index] = args[index];
-        }
-        otherArgs[start] = transform(array);
-        return apply(func, this, otherArgs);
-      };
     }
 
     /**
@@ -10526,226 +11158,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       copyObject(source, keys(source), object, customizer);
     });
 
-    /** Used to match property names within property paths. */
-    var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
-        reIsPlainProp = /^\w*$/;
-
-    /**
-     * Checks if `value` is a property name and not a property path.
-     *
-     * @private
-     * @param {*} value The value to check.
-     * @param {Object} [object] The object to query keys on.
-     * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
-     */
-    function isKey(value, object) {
-      if (isArray(value)) {
-        return false;
-      }
-      var type = typeof value;
-      if (type == 'number' || type == 'symbol' || type == 'boolean' ||
-          value == null || isSymbol(value)) {
-        return true;
-      }
-      return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-        (object != null && value in Object(object));
-    }
-
-    /** Error message constants. */
-    var FUNC_ERROR_TEXT$9 = 'Expected a function';
-
-    /**
-     * Creates a function that memoizes the result of `func`. If `resolver` is
-     * provided, it determines the cache key for storing the result based on the
-     * arguments provided to the memoized function. By default, the first argument
-     * provided to the memoized function is used as the map cache key. The `func`
-     * is invoked with the `this` binding of the memoized function.
-     *
-     * **Note:** The cache is exposed as the `cache` property on the memoized
-     * function. Its creation may be customized by replacing the `_.memoize.Cache`
-     * constructor with one whose instances implement the
-     * [`Map`](http://ecma-international.org/ecma-262/7.0/#sec-properties-of-the-map-prototype-object)
-     * method interface of `clear`, `delete`, `get`, `has`, and `set`.
-     *
-     * @static
-     * @memberOf _
-     * @since 0.1.0
-     * @category Function
-     * @param {Function} func The function to have its output memoized.
-     * @param {Function} [resolver] The function to resolve the cache key.
-     * @returns {Function} Returns the new memoized function.
-     * @example
-     *
-     * var object = { 'a': 1, 'b': 2 };
-     * var other = { 'c': 3, 'd': 4 };
-     *
-     * var values = _.memoize(_.values);
-     * values(object);
-     * // => [1, 2]
-     *
-     * values(other);
-     * // => [3, 4]
-     *
-     * object.a = 2;
-     * values(object);
-     * // => [1, 2]
-     *
-     * // Modify the result cache.
-     * values.cache.set(object, ['a', 'b']);
-     * values(object);
-     * // => ['a', 'b']
-     *
-     * // Replace `_.memoize.Cache`.
-     * _.memoize.Cache = WeakMap;
-     */
-    function memoize(func, resolver) {
-      if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
-        throw new TypeError(FUNC_ERROR_TEXT$9);
-      }
-      var memoized = function() {
-        var args = arguments,
-            key = resolver ? resolver.apply(this, args) : args[0],
-            cache = memoized.cache;
-
-        if (cache.has(key)) {
-          return cache.get(key);
-        }
-        var result = func.apply(this, args);
-        memoized.cache = cache.set(key, result) || cache;
-        return result;
-      };
-      memoized.cache = new (memoize.Cache || MapCache);
-      return memoized;
-    }
-
-    // Expose `MapCache`.
-    memoize.Cache = MapCache;
-
-    /** Used as the maximum memoize cache size. */
-    var MAX_MEMOIZE_SIZE = 500;
-
-    /**
-     * A specialized version of `_.memoize` which clears the memoized function's
-     * cache when it exceeds `MAX_MEMOIZE_SIZE`.
-     *
-     * @private
-     * @param {Function} func The function to have its output memoized.
-     * @returns {Function} Returns the new memoized function.
-     */
-    function memoizeCapped(func) {
-      var result = memoize(func, function(key) {
-        if (cache.size === MAX_MEMOIZE_SIZE) {
-          cache.clear();
-        }
-        return key;
-      });
-
-      var cache = result.cache;
-      return result;
-    }
-
-    /** Used to match property names within property paths. */
-    var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
-
-    /** Used to match backslashes in property paths. */
-    var reEscapeChar = /\\(\\)?/g;
-
-    /**
-     * Converts `string` to a property path array.
-     *
-     * @private
-     * @param {string} string The string to convert.
-     * @returns {Array} Returns the property path array.
-     */
-    var stringToPath = memoizeCapped(function(string) {
-      var result = [];
-      if (string.charCodeAt(0) === 46 /* . */) {
-        result.push('');
-      }
-      string.replace(rePropName, function(match, number, quote, subString) {
-        result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
-      });
-      return result;
-    });
-
-    /**
-     * Converts `value` to a string. An empty string is returned for `null`
-     * and `undefined` values. The sign of `-0` is preserved.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.0.0
-     * @category Lang
-     * @param {*} value The value to convert.
-     * @returns {string} Returns the converted string.
-     * @example
-     *
-     * _.toString(null);
-     * // => ''
-     *
-     * _.toString(-0);
-     * // => '-0'
-     *
-     * _.toString([1, 2, 3]);
-     * // => '1,2,3'
-     */
-    function toString(value) {
-      return value == null ? '' : baseToString(value);
-    }
-
-    /**
-     * Casts `value` to a path array if it's not one.
-     *
-     * @private
-     * @param {*} value The value to inspect.
-     * @param {Object} [object] The object to query keys on.
-     * @returns {Array} Returns the cast property path array.
-     */
-    function castPath(value, object) {
-      if (isArray(value)) {
-        return value;
-      }
-      return isKey(value, object) ? [value] : stringToPath(toString(value));
-    }
-
-    /** Used as references for various `Number` constants. */
-    var INFINITY$3 = 1 / 0;
-
-    /**
-     * Converts `value` to a string key if it's not a string or symbol.
-     *
-     * @private
-     * @param {*} value The value to inspect.
-     * @returns {string|symbol} Returns the key.
-     */
-    function toKey(value) {
-      if (typeof value == 'string' || isSymbol(value)) {
-        return value;
-      }
-      var result = (value + '');
-      return (result == '0' && (1 / value) == -INFINITY$3) ? '-0' : result;
-    }
-
-    /**
-     * The base implementation of `_.get` without support for default values.
-     *
-     * @private
-     * @param {Object} object The object to query.
-     * @param {Array|string} path The path of the property to get.
-     * @returns {*} Returns the resolved value.
-     */
-    function baseGet(object, path) {
-      path = castPath(path, object);
-
-      var index = 0,
-          length = path.length;
-
-      while (object != null && index < length) {
-        object = object[toKey(path[index++])];
-      }
-      return (index && index == length) ? object : undefined;
-    }
-
     /**
      * Gets the value at `path` of `object`. If the resolved value is
      * `undefined`, the `defaultValue` is returned in its place.
@@ -10794,85 +11206,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         result[index] = skip ? undefined : get(object, paths[index]);
       }
       return result;
-    }
-
-    /** Built-in value references. */
-    var spreadableSymbol = Symbol$1 ? Symbol$1.isConcatSpreadable : undefined;
-
-    /**
-     * Checks if `value` is a flattenable `arguments` object or array.
-     *
-     * @private
-     * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
-     */
-    function isFlattenable(value) {
-      return isArray(value) || isArguments(value) ||
-        !!(spreadableSymbol && value && value[spreadableSymbol]);
-    }
-
-    /**
-     * The base implementation of `_.flatten` with support for restricting flattening.
-     *
-     * @private
-     * @param {Array} array The array to flatten.
-     * @param {number} depth The maximum recursion depth.
-     * @param {boolean} [predicate=isFlattenable] The function invoked per iteration.
-     * @param {boolean} [isStrict] Restrict to values that pass `predicate` checks.
-     * @param {Array} [result=[]] The initial result value.
-     * @returns {Array} Returns the new flattened array.
-     */
-    function baseFlatten(array, depth, predicate, isStrict, result) {
-      var index = -1,
-          length = array.length;
-
-      predicate || (predicate = isFlattenable);
-      result || (result = []);
-
-      while (++index < length) {
-        var value = array[index];
-        if (depth > 0 && predicate(value)) {
-          if (depth > 1) {
-            // Recursively flatten arrays (susceptible to call stack limits).
-            baseFlatten(value, depth - 1, predicate, isStrict, result);
-          } else {
-            arrayPush(result, value);
-          }
-        } else if (!isStrict) {
-          result[result.length] = value;
-        }
-      }
-      return result;
-    }
-
-    /**
-     * Flattens `array` a single level deep.
-     *
-     * @static
-     * @memberOf _
-     * @since 0.1.0
-     * @category Array
-     * @param {Array} array The array to flatten.
-     * @returns {Array} Returns the new flattened array.
-     * @example
-     *
-     * _.flatten([1, [2, [3, [4]], 5]]);
-     * // => [1, 2, [3, [4]], 5]
-     */
-    function flatten(array) {
-      var length = array == null ? 0 : array.length;
-      return length ? baseFlatten(array, 1) : [];
-    }
-
-    /**
-     * A specialized version of `baseRest` which flattens the rest array.
-     *
-     * @private
-     * @param {Function} func The function to apply a rest parameter to.
-     * @returns {Function} Returns the new function.
-     */
-    function flatRest(func) {
-      return setToString(overRest(func, undefined, flatten), func + '');
     }
 
     /**
@@ -12269,79 +12602,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
       return function(object) {
         return object === source || baseIsMatch(object, source, matchData);
       };
-    }
-
-    /**
-     * The base implementation of `_.hasIn` without support for deep paths.
-     *
-     * @private
-     * @param {Object} [object] The object to query.
-     * @param {Array|string} key The key to check.
-     * @returns {boolean} Returns `true` if `key` exists, else `false`.
-     */
-    function baseHasIn(object, key) {
-      return object != null && key in Object(object);
-    }
-
-    /**
-     * Checks if `path` exists on `object`.
-     *
-     * @private
-     * @param {Object} object The object to query.
-     * @param {Array|string} path The path to check.
-     * @param {Function} hasFunc The function to check properties.
-     * @returns {boolean} Returns `true` if `path` exists, else `false`.
-     */
-    function hasPath(object, path, hasFunc) {
-      path = castPath(path, object);
-
-      var index = -1,
-          length = path.length,
-          result = false;
-
-      while (++index < length) {
-        var key = toKey(path[index]);
-        if (!(result = object != null && hasFunc(object, key))) {
-          break;
-        }
-        object = object[key];
-      }
-      if (result || ++index != length) {
-        return result;
-      }
-      length = object == null ? 0 : object.length;
-      return !!length && isLength(length) && isIndex(key, length) &&
-        (isArray(object) || isArguments(object));
-    }
-
-    /**
-     * Checks if `path` is a direct or inherited property of `object`.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.0.0
-     * @category Object
-     * @param {Object} object The object to query.
-     * @param {Array|string} path The path to check.
-     * @returns {boolean} Returns `true` if `path` exists, else `false`.
-     * @example
-     *
-     * var object = _.create({ 'a': _.create({ 'b': 2 }) });
-     *
-     * _.hasIn(object, 'a');
-     * // => true
-     *
-     * _.hasIn(object, 'a.b');
-     * // => true
-     *
-     * _.hasIn(object, ['a', 'b']);
-     * // => true
-     *
-     * _.hasIn(object, 'b');
-     * // => false
-     */
-    function hasIn(object, path) {
-      return object != null && hasPath(object, path, baseHasIn);
     }
 
     /** Used to compose bitmasks for value comparisons. */
@@ -18011,75 +18271,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     });
 
     /**
-     * The base implementation of `_.set`.
-     *
-     * @private
-     * @param {Object} object The object to modify.
-     * @param {Array|string} path The path of the property to set.
-     * @param {*} value The value to set.
-     * @param {Function} [customizer] The function to customize path creation.
-     * @returns {Object} Returns `object`.
-     */
-    function baseSet(object, path, value, customizer) {
-      if (!isObject(object)) {
-        return object;
-      }
-      path = castPath(path, object);
-
-      var index = -1,
-          length = path.length,
-          lastIndex = length - 1,
-          nested = object;
-
-      while (nested != null && ++index < length) {
-        var key = toKey(path[index]),
-            newValue = value;
-
-        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
-          return object;
-        }
-
-        if (index != lastIndex) {
-          var objValue = nested[key];
-          newValue = customizer ? customizer(objValue, key, nested) : undefined;
-          if (newValue === undefined) {
-            newValue = isObject(objValue)
-              ? objValue
-              : (isIndex(path[index + 1]) ? [] : {});
-          }
-        }
-        assignValue(nested, key, newValue);
-        nested = nested[key];
-      }
-      return object;
-    }
-
-    /**
-     * The base implementation of  `_.pickBy` without support for iteratee shorthands.
-     *
-     * @private
-     * @param {Object} object The source object.
-     * @param {string[]} paths The property paths to pick.
-     * @param {Function} predicate The function invoked per property.
-     * @returns {Object} Returns the new object.
-     */
-    function basePickBy(object, paths, predicate) {
-      var index = -1,
-          length = paths.length,
-          result = {};
-
-      while (++index < length) {
-        var path = paths[index],
-            value = baseGet(object, path);
-
-        if (predicate(value, path)) {
-          baseSet(result, castPath(path, object), value);
-        }
-      }
-      return result;
-    }
-
-    /**
      * Creates an object composed of the `object` properties `predicate` returns
      * truthy for. The predicate is invoked with two arguments: (value, key).
      *
@@ -18898,42 +19089,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     var partition = createAggregator(function(result, value, key) {
       result[key ? 0 : 1].push(value);
     }, function() { return [[], []]; });
-
-    /**
-     * The base implementation of `_.pick` without support for individual
-     * property identifiers.
-     *
-     * @private
-     * @param {Object} object The source object.
-     * @param {string[]} paths The property paths to pick.
-     * @returns {Object} Returns the new object.
-     */
-    function basePick(object, paths) {
-      return basePickBy(object, paths, function(value, path) {
-        return hasIn(object, path);
-      });
-    }
-
-    /**
-     * Creates an object composed of the picked `object` properties.
-     *
-     * @static
-     * @since 0.1.0
-     * @memberOf _
-     * @category Object
-     * @param {Object} object The source object.
-     * @param {...(string|string[])} [paths] The property paths to pick.
-     * @returns {Object} Returns the new object.
-     * @example
-     *
-     * var object = { 'a': 1, 'b': '2', 'c': 3 };
-     *
-     * _.pick(object, ['a', 'c']);
-     * // => { 'a': 1, 'c': 3 }
-     */
-    var pick = flatRest(function(object, paths) {
-      return object == null ? {} : basePick(object, paths);
-    });
 
     /**
      * Creates a clone of the chain sequence planting `value` as the wrapped value.
@@ -23919,7 +24074,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         let result = JSON.stringify({
             __bcxExport: EXPORT_IMPORT_FORMAT_VERSION,
-            [category]: definition.export(character)
+            [category]: definition.export(character),
         });
         if (compress) {
             result = LZString.compressToBase64(result);
@@ -23984,8 +24139,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [true, AccessLevel.mistress],
-                    [Preset.slave]: [true, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [true, AccessLevel.mistress],
+                },
             });
         }
         load() {
@@ -24015,6 +24170,608 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
     }
 
+    const CURSES_TRIGGER_TEXTS = {
+        remove: "PLAYER_NAME's body seems to be cursed and the ASSET_NAME just falls off her body.",
+        add: "The curse on PLAYER_NAME's ASSET_NAME wakes up and the item reappears.",
+        swap: "The curse on PLAYER_NAME's ASSET_NAME wakes up, not allowing the item to be replaced by another item.",
+        update: "The curse on PLAYER_NAME's ASSET_NAME wakes up and undoes all changes to the item.",
+        color: "The curse on PLAYER_NAME's ASSET_NAME wakes up, changing the color of the item back.",
+        autoremove: "The curse on PLAYER_NAME's body becomes dormant and the ASSET_NAME falls off her body.",
+    };
+    const CURSES_TRIGGER_TEXTS_BATCH = {
+        remove: "PLAYER_NAME's body seems to be cursed and several items just fall off her body.",
+        add: "The curses on PLAYER_NAME's body wake up and several items reappear.",
+        swap: "The curses on PLAYER_NAME's body wake up, not allowing several items to be replaced.",
+        update: "The curses on PLAYER_NAME's body wake up and undoes all changes to several items.",
+        color: "The curses on PLAYER_NAME's body wake up, changing the color of several items back.",
+        autoremove: "The curses on PLAYER_NAME's body become dormant and several items fall off her body.",
+    };
+    const CURSES_TRIGGER_LOGS = {
+        remove: "The curse on PLAYER_NAME's body prevented a ASSET_NAME from being added to it",
+        add: "The curse on PLAYER_NAME's ASSET_NAME made the item reappear",
+        swap: "The curse on PLAYER_NAME's ASSET_NAME prevented the item from being replaced",
+        update: "The curse on PLAYER_NAME's ASSET_NAME reverted all changes to the item",
+        color: "The curse on PLAYER_NAME's ASSET_NAME reverted the color of the item",
+    };
+    const CURSES_TRIGGER_LOGS_BATCH = {
+        remove: "The curses on PLAYER_NAME's body prevented several items from being added to it",
+        add: "The curses on PLAYER_NAME's body made several items reappear",
+        swap: "The curses on PLAYER_NAME's body prevented several items from being replaced",
+        update: "The curses on PLAYER_NAME's body reverted all changes to several items",
+        color: "The curses on PLAYER_NAME's body reverted the color of several items",
+    };
+
+    const LOG_ENTRIES_LIMIT = 256;
+    var LogEntryType;
+    (function (LogEntryType) {
+        LogEntryType[LogEntryType["plaintext"] = 0] = "plaintext";
+        LogEntryType[LogEntryType["deleted"] = 1] = "deleted";
+        LogEntryType[LogEntryType["ruleTrigger"] = 2] = "ruleTrigger";
+        LogEntryType[LogEntryType["ruleTriggerAttempt"] = 3] = "ruleTriggerAttempt";
+        LogEntryType[LogEntryType["curseTrigger"] = 4] = "curseTrigger";
+        LogEntryType[LogEntryType["curseTriggerBatch"] = 5] = "curseTriggerBatch";
+    })(LogEntryType || (LogEntryType = {}));
+    var LogAccessLevel;
+    (function (LogAccessLevel) {
+        LogAccessLevel[LogAccessLevel["none"] = 0] = "none";
+        LogAccessLevel[LogAccessLevel["protected"] = 1] = "protected";
+        LogAccessLevel[LogAccessLevel["normal"] = 2] = "normal";
+        LogAccessLevel[LogAccessLevel["everyone"] = 3] = "everyone";
+    })(LogAccessLevel || (LogAccessLevel = {}));
+    function logMessage(category, type, data) {
+        var _a;
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return;
+        const access = (_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a[category];
+        if (access === undefined) {
+            throw new Error(`Attempt to log message with unknown category "${category}"`);
+        }
+        if (access > LogAccessLevel.none) {
+            logMessageAdd(access, type, data);
+        }
+    }
+    function logMessageAdd(access, type, data) {
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return;
+        if (!modStorage.log) {
+            throw new Error("Mod storage log not initialized");
+        }
+        modStorage.log.unshift([Date.now(), access, type, data]);
+        if (modStorage.log.length >= 2 && modStorage.log[0][0] <= modStorage.log[1][0]) {
+            modStorage.log[0][0] = modStorage.log[1][0] + 1;
+        }
+        modStorage.log.splice(LOG_ENTRIES_LIMIT);
+        modStorageSync();
+        notifyOfChange();
+    }
+    function logMessageDelete(time, character) {
+        var _a;
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return false;
+        if (character && !checkPermissionAccess("log_delete", character)) {
+            return false;
+        }
+        const access = (_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a.log_deleted;
+        if (access === undefined) {
+            throw new Error("log_deleted category not found");
+        }
+        if (!modStorage.log) {
+            throw new Error("Mod storage log not initialized");
+        }
+        let changed = false;
+        for (let i = modStorage.log.length - 1; i >= 0; i--) {
+            const e = modStorage.log[i];
+            if ((Array.isArray(time) && time.includes(e[0])) || e[0] === time) {
+                changed = true;
+                if (access === LogAccessLevel.none) {
+                    modStorage.log.splice(i, 1);
+                }
+                else {
+                    e[1] = access;
+                    e[2] = LogEntryType.deleted;
+                    e[3] = null;
+                }
+            }
+        }
+        if (changed) {
+            modStorageSync();
+            notifyOfChange();
+        }
+        return changed;
+    }
+    function logConfigSet(category, accessLevel, character) {
+        var _a;
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return false;
+        if (character && !checkPermissionAccess("log_configure", character)) {
+            return false;
+        }
+        if (((_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a[category]) === undefined) {
+            return false;
+        }
+        if (![LogAccessLevel.none, LogAccessLevel.normal, LogAccessLevel.protected].includes(accessLevel)) {
+            return false;
+        }
+        if (modStorage.logConfig[category] === accessLevel) {
+            return true;
+        }
+        if (character) {
+            logMessage("log_config_change", LogEntryType.plaintext, `${character} changed log configuration "${LOG_CONFIG_NAMES[category]}" ` +
+                `from "${LOG_LEVEL_NAMES[modStorage.logConfig[category]]}" to "${LOG_LEVEL_NAMES[accessLevel]}"`);
+            if (!character.isPlayer()) {
+                ChatRoomSendLocal(`${character.toNicknamedString()} changed log configuration "${LOG_CONFIG_NAMES[category]}" ` +
+                    `from "${LOG_LEVEL_NAMES[modStorage.logConfig[category]]}" to "${LOG_LEVEL_NAMES[accessLevel]}"`, undefined, character.MemberNumber);
+            }
+        }
+        modStorage.logConfig[category] = accessLevel;
+        modStorageSync();
+        notifyOfChange();
+        return true;
+    }
+    function logClear(character) {
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return false;
+        if (character && !checkPermissionAccess("log_delete", character)) {
+            return false;
+        }
+        modStorage.log = [];
+        logMessageAdd(LogAccessLevel.everyone, LogEntryType.plaintext, "The log has been cleared");
+        return true;
+    }
+    function getVisibleLogEntries(character) {
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return [];
+        if (!modStorage.log) {
+            throw new Error("Mod storage log not initialized");
+        }
+        const allow = {
+            [LogAccessLevel.none]: character.isPlayer(),
+            [LogAccessLevel.normal]: checkPermissionAccess("log_view_normal", character),
+            [LogAccessLevel.protected]: checkPermissionAccess("log_view_protected", character),
+            [LogAccessLevel.everyone]: true,
+        };
+        return modStorage.log.filter(e => allow[e[1]]);
+    }
+    function logMessageRender(entry, character) {
+        var _a, _b;
+        if (entry[2] === LogEntryType.plaintext) {
+            const e = entry;
+            return e[3];
+        }
+        else if (entry[2] === LogEntryType.deleted) {
+            return "[Log message deleted]";
+        }
+        else if (entry[2] === LogEntryType.ruleTrigger || entry[2] === LogEntryType.ruleTriggerAttempt) {
+            const data = entry[3];
+            if (!Array.isArray(data) || data.length !== 2 || typeof data[0] !== "string") {
+                return `[ERROR: Bad data for type ${entry[2]}]`;
+            }
+            if (!guard_BCX_Rule(data[0])) {
+                return `[ERROR: Trigger for unknown rule "${data[0]}"]`;
+            }
+            const rule = RulesGetDisplayDefinition(data[0]);
+            const log = entry[2] === LogEntryType.ruleTriggerAttempt ? (_a = rule.triggerTexts) === null || _a === void 0 ? void 0 : _a.attempt_log : (_b = rule.triggerTexts) === null || _b === void 0 ? void 0 : _b.log;
+            return log ? dictionaryProcess(log, { PLAYER_NAME: character.Name, ...data[1] }) : `[ERROR: Missing log text for rule "${data[0]}" trigger]`;
+        }
+        else if (entry[2] === LogEntryType.curseTrigger) {
+            const data = entry[3];
+            if (!Array.isArray(data) ||
+                data.length !== 2 ||
+                data.some(i => typeof i !== "string") ||
+                !Object.keys(CURSES_TRIGGER_LOGS).includes(data[0])) {
+                return `[ERROR: Bad data for type ${entry[2]}]`;
+            }
+            return dictionaryProcess(CURSES_TRIGGER_LOGS[data[0]], { PLAYER_NAME: character.Name, ASSET_NAME: data[1] });
+        }
+        else if (entry[2] === LogEntryType.curseTriggerBatch) {
+            const data = entry[3];
+            if (typeof data !== "string" ||
+                !Object.keys(CURSES_TRIGGER_LOGS_BATCH).includes(data)) {
+                return `[ERROR: Bad data for type ${entry[2]}]`;
+            }
+            return dictionaryProcess(CURSES_TRIGGER_LOGS_BATCH[data], { PLAYER_NAME: character.Name });
+        }
+        return `[ERROR: Unknown entry type ${entry[2]}]`;
+    }
+    const alreadyPraisedBy = new Set();
+    function logGetAllowedActions(character) {
+        var _a;
+        return {
+            configure: checkPermissionAccess("log_configure", character),
+            delete: checkPermissionAccess("log_delete", character),
+            leaveMessage: checkPermissionAccess("log_add_note", character) && !!((_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a.user_note),
+            praise: checkPermissionAccess("log_praise", character) && !alreadyPraisedBy.has(character.MemberNumber),
+        };
+    }
+    function logGetConfig() {
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return {};
+        if (!modStorage.logConfig) {
+            throw new Error("Mod storage log not initialized");
+        }
+        return { ...modStorage.logConfig };
+    }
+    function logPraise(value, message, character) {
+        if (!moduleIsEnabled(ModuleCategory.Log))
+            return false;
+        if (![-1, 0, 1].includes(value)) {
+            throw new Error("Invalid value");
+        }
+        if (value === 0 && !message)
+            return false;
+        const allowed = logGetAllowedActions(character);
+        if (value !== 0 && !allowed.praise)
+            return false;
+        if (message && !allowed.leaveMessage)
+            return false;
+        if (value !== 0) {
+            alreadyPraisedBy.add(character.MemberNumber);
+        }
+        if (value > 0) {
+            if (message) {
+                logMessage("user_note", LogEntryType.plaintext, `Praised by ${character} with note: ${message}`);
+                ChatRoomSendLocal(`${character.toNicknamedString()} praised you with the following note: ${message}`, undefined, character.MemberNumber);
+            }
+            else {
+                logMessage("praise", LogEntryType.plaintext, `Praised by ${character}`);
+                ChatRoomSendLocal(`${character.toNicknamedString()} praised you.`, undefined, character.MemberNumber);
+            }
+        }
+        else if (value < 0) {
+            if (message) {
+                logMessage("user_note", LogEntryType.plaintext, `Scolded by ${character} with note: ${message}`);
+                ChatRoomSendLocal(`${character.toNicknamedString()} scolded you with the following note: ${message}`, undefined, character.MemberNumber);
+            }
+            else {
+                logMessage("praise", LogEntryType.plaintext, `Scolded by ${character}`);
+                ChatRoomSendLocal(`${character.toNicknamedString()} scolded you.`, undefined, character.MemberNumber);
+            }
+        }
+        else if (message) {
+            logMessage("user_note", LogEntryType.plaintext, `${character} attached a note: ${message}`);
+            ChatRoomSendLocal(`${character.toNicknamedString()} put the following note on you: ${message}`, undefined, character.MemberNumber);
+        }
+        return true;
+    }
+    const logConfigDefaults = {
+        log_config_change: LogAccessLevel.protected,
+        log_deleted: LogAccessLevel.normal,
+        praise: LogAccessLevel.normal,
+        user_note: LogAccessLevel.normal,
+        entered_public_room: LogAccessLevel.none,
+        entered_private_room: LogAccessLevel.none,
+        had_orgasm: LogAccessLevel.none,
+        permission_change: LogAccessLevel.protected,
+        curse_change: LogAccessLevel.none,
+        curse_trigger: LogAccessLevel.none,
+        rule_change: LogAccessLevel.none,
+        rule_trigger: LogAccessLevel.none,
+        command_change: LogAccessLevel.none,
+        authority_roles_change: LogAccessLevel.protected,
+        relationships_change: LogAccessLevel.none,
+    };
+    const LOG_CONFIG_NAMES = {
+        log_config_change: "Log changes in logging configuration",
+        log_deleted: "Log deleted log entries",
+        praise: "Log praising or scolding behavior",
+        user_note: "Ability to see attached notes",
+        entered_public_room: "Log which public rooms are entered",
+        entered_private_room: "Log which private rooms are entered",
+        had_orgasm: "Log each single orgasm",
+        permission_change: "Log changes in permission settings",
+        curse_change: "Log each application, removal or change of curses",
+        curse_trigger: "Log every time a triggered curse reapplies an item",
+        rule_change: "Log each addition, removal or change of rules",
+        rule_trigger: "Log every rule violation",
+        command_change: "Log each change of commands limit",
+        authority_roles_change: "Log getting or losing a BCX owner/mistress",
+        relationships_change: "Log each change in relationships module",
+    };
+    const LOG_LEVEL_NAMES = {
+        [LogAccessLevel.everyone]: "[ERROR]",
+        [LogAccessLevel.none]: "No",
+        [LogAccessLevel.protected]: "Protected",
+        [LogAccessLevel.normal]: "Yes",
+    };
+    class ModuleLog extends BaseModule {
+        init() {
+            registerPermission("log_view_normal", {
+                name: "Allow to see normal log entries",
+                category: ModuleCategory.Log,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.mistress],
+                    [Preset.switch]: [true, AccessLevel.mistress],
+                    [Preset.submissive]: [true, AccessLevel.friend],
+                    [Preset.slave]: [true, AccessLevel.public],
+                },
+            });
+            registerPermission("log_view_protected", {
+                name: "Allow to see protected log entries",
+                category: ModuleCategory.Log,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.lover],
+                    [Preset.switch]: [true, AccessLevel.lover],
+                    [Preset.submissive]: [true, AccessLevel.mistress],
+                    [Preset.slave]: [true, AccessLevel.mistress],
+                },
+            });
+            registerPermission("log_configure", {
+                name: "Allow to configure what is logged",
+                category: ModuleCategory.Log,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.self],
+                    [Preset.switch]: [true, AccessLevel.self],
+                    [Preset.submissive]: [true, AccessLevel.owner],
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
+            });
+            registerPermission("log_delete", {
+                name: "Allow deleting log entries",
+                category: ModuleCategory.Log,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.self],
+                    [Preset.switch]: [true, AccessLevel.self],
+                    [Preset.submissive]: [true, AccessLevel.owner],
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
+            });
+            registerPermission("log_praise", {
+                name: "Allow to praise or scold",
+                category: ModuleCategory.Log,
+                defaults: {
+                    [Preset.dominant]: [false, AccessLevel.friend],
+                    [Preset.switch]: [false, AccessLevel.friend],
+                    [Preset.submissive]: [false, AccessLevel.public],
+                    [Preset.slave]: [false, AccessLevel.public],
+                },
+            });
+            registerPermission("log_add_note", {
+                name: "Allow to attach notes to the body",
+                category: ModuleCategory.Log,
+                defaults: {
+                    [Preset.dominant]: [false, AccessLevel.mistress],
+                    [Preset.switch]: [false, AccessLevel.mistress],
+                    [Preset.submissive]: [false, AccessLevel.friend],
+                    [Preset.slave]: [false, AccessLevel.public],
+                },
+            });
+            queryHandlers.logData = (sender) => {
+                return getVisibleLogEntries(sender);
+            };
+            queryHandlers.logDelete = (sender, data) => {
+                if (typeof data === "number" || (Array.isArray(data) && data.every(item => typeof item === "number"))) {
+                    return logMessageDelete(data, sender);
+                }
+                else {
+                    return undefined;
+                }
+            };
+            queryHandlers.logConfigGet = (sender) => {
+                if (sender.isPlayer() || checkPermissionAccess("log_configure", sender)) {
+                    return logGetConfig();
+                }
+                else {
+                    return undefined;
+                }
+            };
+            queryHandlers.logConfigEdit = (sender, data) => {
+                if (!isObject$1(data) ||
+                    typeof data.category !== "string" ||
+                    typeof data.target !== "number") {
+                    console.warn(`BCX: Bad logConfigEdit query from ${sender}`, data);
+                    return undefined;
+                }
+                return logConfigSet(data.category, data.target, sender);
+            };
+            queryHandlers.logClear = (sender) => {
+                return logClear(sender);
+            };
+            queryHandlers.logPraise = (sender, data) => {
+                if (!isObject$1(data) ||
+                    (data.message !== null && typeof data.message !== "string") ||
+                    ![-1, 0, 1].includes(data.value)) {
+                    console.warn(`BCX: Bad logPraise query from ${sender}`, data);
+                    return undefined;
+                }
+                return logPraise(data.value, data.message, sender);
+            };
+            queryHandlers.logGetAllowedActions = (sender) => {
+                return logGetAllowedActions(sender);
+            };
+            registerWhisperCommand("modules", "log", "- Manage the behaviour log", (argv, sender, respond) => {
+                const subcommand = (argv[0] || "").toLocaleLowerCase();
+                if (subcommand === "list") {
+                    const logEntries = getVisibleLogEntries(sender);
+                    if (logEntries.length === 0) {
+                        return respond(`You have no permission to view the log.`);
+                    }
+                    const totalPages = Math.ceil(logEntries.length / 5);
+                    const page = clamp$1(Number.parseInt(argv[1] || "", 10) || 1, 1, totalPages);
+                    let result = `Page ${page} / ${totalPages}:`;
+                    for (let i = 5 * (page - 1); i < Math.min(5 * page, logEntries.length); i++) {
+                        const entry = logEntries[i];
+                        const time = new Date(entry[0]);
+                        result += `\n[${time.toUTCString()}] (${entry[0]})\n  ${logMessageRender(entry, getPlayerCharacter())}`;
+                    }
+                    respond(result);
+                }
+                else if (subcommand === "delete") {
+                    if (!/^[0-9]+$/.test(argv[1] || "")) {
+                        return respond(`Expected number as timestamp.`);
+                    }
+                    const timestamp = Number.parseInt(argv[1], 10);
+                    if (!getVisibleLogEntries(sender).some(logentry => logentry[0] === timestamp)) {
+                        return respond(`No such log entry found`);
+                    }
+                    respond(logMessageDelete(timestamp, sender) ? `Ok.` : COMMAND_GENERIC_ERROR);
+                }
+                else if (subcommand === "praise" || subcommand === "scold") {
+                    if (!checkPermissionAccess("log_praise", sender)) {
+                        return respond(COMMAND_GENERIC_ERROR);
+                    }
+                    respond(logPraise(subcommand === "praise" ? 1 : -1, null, sender) ? `Ok.` :
+                        `The command failed to execute, likely because you already did ${subcommand} recently.`);
+                }
+                else if (subcommand === "config") {
+                    if (!checkPermissionAccess("log_configure", sender)) {
+                        return respond(COMMAND_GENERIC_ERROR);
+                    }
+                    const category = argv[1] || "";
+                    const config = logGetConfig();
+                    if (!category) {
+                        let result = "Current log config:";
+                        for (const [k, v] of Object.entries(config)) {
+                            if (LOG_CONFIG_NAMES[k] !== undefined &&
+                                LOG_LEVEL_NAMES[v] !== undefined) {
+                                result += `\n[${k}]\n  ${LOG_CONFIG_NAMES[k]}: ${LOG_LEVEL_NAMES[v]}`;
+                            }
+                        }
+                        return respond(result);
+                    }
+                    else if (LOG_CONFIG_NAMES[category] === undefined) {
+                        return respond(`Unknown category "${category}".`);
+                    }
+                    else {
+                        const level = (argv[2] || "").toLocaleLowerCase();
+                        if (level !== "yes" && level !== "protected" && level !== "no") {
+                            return respond(`Expected level to be one of:\nno, protected, yes`);
+                        }
+                        return respond(logConfigSet(category, level === "yes" ? LogAccessLevel.normal : level === "protected" ? LogAccessLevel.protected : LogAccessLevel.none, sender) ? `Ok.` : COMMAND_GENERIC_ERROR);
+                    }
+                }
+                else {
+                    respond(Command_fixExclamationMark(sender, `!log usage:\n` +
+                        `!log list [page] - List all visible logs\n` +
+                        `!log delete <timestamp> - Deletes the log with the given <timestamp> (the number in parentheses in list)\n` +
+                        `!log praise - Note that you praised ${Player.Name} in her log\n` +
+                        `!log scold - Note that you scolded ${Player.Name} in her log\n` +
+                        `!log config - Shows the current logging settings for ${Player.Name}\n` +
+                        `!log config <category> <no|protected|yes> - Sets visibility of the given config <category>`));
+                }
+            }, (argv, sender) => {
+                if (argv.length <= 1) {
+                    const c = argv[0].toLocaleLowerCase();
+                    return ["list", "delete", "praise", "scold", "config"].filter(i => i.startsWith(c));
+                }
+                const subcommand = argv[0].toLocaleLowerCase();
+                if (subcommand === "delete") {
+                    if (argv.length === 2) {
+                        return getVisibleLogEntries(sender).map(logentry => logentry[0].toString()).filter(i => i.startsWith(argv[1]));
+                    }
+                }
+                else if (subcommand === "config") {
+                    if (!checkPermissionAccess("log_configure", sender)) {
+                        return [];
+                    }
+                    if (argv.length === 2) {
+                        return Object.keys(logGetConfig()).concat("").filter(i => i.startsWith(argv[1].toLocaleLowerCase()));
+                    }
+                    else if (argv.length === 3) {
+                        return ["no", "protected", "yes"].filter(i => i.startsWith(argv[2].toLocaleLowerCase()));
+                    }
+                }
+                return [];
+            });
+            ExportImportRegisterCategory({
+                category: `logConfig`,
+                name: `Behaviour Log - Configuration`,
+                module: ModuleCategory.Log,
+                export: () => logGetConfig(),
+                import: (data, character) => {
+                    var _a;
+                    let res = "";
+                    for (const [k, v] of Object.entries(data)) {
+                        const category = k;
+                        if (((_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a[category]) === undefined || LOG_CONFIG_NAMES[category] === undefined) {
+                            res += `Skipped unknown log config category '${category}'\n`;
+                            continue;
+                        }
+                        if (!logConfigSet(category, v, character)) {
+                            res += `Error setting category '${LOG_CONFIG_NAMES[category]}'\n`;
+                        }
+                    }
+                    return res + `Done!`;
+                },
+                importPermissions: ["log_configure"],
+                importValidator: z.record(z.nativeEnum(LogAccessLevel)),
+            });
+        }
+        load() {
+            if (!moduleIsEnabled(ModuleCategory.Log)) {
+                delete modStorage.log;
+                delete modStorage.logConfig;
+                return;
+            }
+            if (!Array.isArray(modStorage.log)) {
+                logClear(null);
+            }
+            else if (!modStorage.log.every(e => Array.isArray(e) &&
+                e.length === 4 &&
+                typeof e[0] === "number" &&
+                typeof e[1] === "number" &&
+                typeof e[2] === "number")) {
+                console.error("BCX: Some log entries have invalid format, reseting whole log!");
+                logClear(null);
+            }
+            if (!modStorage.logConfig) {
+                modStorage.logConfig = { ...logConfigDefaults };
+            }
+            else {
+                const transitionDictionary = {
+                    permissionChange: "permission_change",
+                    logConfigChange: "log_config_change",
+                    logDeleted: "log_deleted",
+                    userNote: "user_note",
+                    curseChange: "curse_change",
+                    curseTrigger: "curse_trigger",
+                    hadOrgasm: "had_orgasm",
+                    enteredPublicRoom: "entered_public_room",
+                    enteredPrivateRoom: "entered_private_room",
+                    ownershipChangesBCX: "authority_roles_change",
+                };
+                for (const k of Object.keys(modStorage.logConfig)) {
+                    if (transitionDictionary[k] !== undefined) {
+                        console.info(`BCX: Updating log config name "${k}"->"${transitionDictionary[k]}"`);
+                        modStorage.logConfig[transitionDictionary[k]] = modStorage.logConfig[k];
+                        delete modStorage.logConfig[k];
+                        continue;
+                    }
+                    if (logConfigDefaults[k] === undefined) {
+                        console.info(`BCX: Removing unknown log config category "${k}"`);
+                        delete modStorage.logConfig[k];
+                    }
+                }
+                for (const k of Object.keys(logConfigDefaults)) {
+                    if (modStorage.logConfig[k] === undefined) {
+                        console.info(`BCX: Adding missing log category "${k}"`);
+                        modStorage.logConfig[k] = logConfigDefaults[k];
+                    }
+                }
+            }
+            hookFunction("ActivityOrgasmStart", 0, (args, next) => {
+                const C = args[0];
+                if (C.ID === 0 && (typeof ActivityOrgasmRuined === "undefined" || !ActivityOrgasmRuined)) {
+                    logMessage("had_orgasm", LogEntryType.plaintext, `${Player.Name} had an orgasm`);
+                }
+                return next(args);
+            }, ModuleCategory.Log);
+            hookFunction("ChatRoomSync", 0, (args, next) => {
+                const data = args[0];
+                if (data.Private) {
+                    logMessage("entered_private_room", LogEntryType.plaintext, `${Player.Name} entered private room "${data.Name}"`);
+                }
+                else {
+                    logMessage("entered_public_room", LogEntryType.plaintext, `${Player.Name} entered public room "${data.Name}"`);
+                }
+                return next(args);
+            }, ModuleCategory.Log);
+        }
+        reload() {
+            removeAllHooksByModule(ModuleCategory.Log);
+            this.load();
+        }
+    }
+
     const speechHooks = [];
     function registerSpeechHook(hook) {
         if (moduleInitPhase !== ModuleInitPhase.init) {
@@ -24022,11 +24779,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         speechHooks.push(hook);
     }
-    /**
-     * Alters a message so that it sounds like a faltering voice, including random filler sounds. Does not affect OOC talk.
-     * @param {string} message - The message that will be randomly changed
-     * @returns {string} - Returns the message after studdering and random sounds have been added
-     */
     function falteringSpeech(message) {
         const soundList = ["uuh... ", "uhh... ", "...ah... ", "uhm... ", "mnn... ", "..nn... "];
         let oocMsg = false;
@@ -24035,7 +24787,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         let seed = message.length;
         for (let messageIndex = 0; messageIndex < message.length; messageIndex++) {
             const character = message.charAt(messageIndex).toLowerCase();
-            // from here on out, an out of context part of the message starts that will stay unchanged
             if (character === "(")
                 oocMsg = true;
             if (!oocMsg && !alreadyStudderedWord && /\p{L}/igu.test(character)) {
@@ -24043,7 +24794,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if ((!alreadyStudderedWord && studderFactor >= 6) || firstWord) {
                     message = message.substring(0, messageIndex + 1) + "-" + message.substring(messageIndex, message.length);
                     seed++;
-                    // One third chance to add a sound before a studdered word
                     if (Math.random() < 0.33 && !firstWord) {
                         message = message.substring(0, messageIndex) + soundList[Math.floor(Math.random() * soundList.length)] + message.substring(messageIndex, message.length);
                     }
@@ -24072,11 +24822,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 rawMessage,
                 originalMessage: msg,
                 target: null,
-                hasOOC: true
+                hasOOC: true,
             };
         }
         if (msg.startsWith("*") || (((_a = Player.ChatSettings) === null || _a === void 0 ? void 0 : _a.MuStylePoses) && msg.startsWith(":") && msg.length > 3)) {
-            // Emotes are handled in `ChatRoomSendEmote`
             return null;
         }
         return {
@@ -24085,58 +24834,48 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             originalMessage: msg,
             target: ChatRoomTargetMemberNumber,
             noOOCMessage: msg.replace(/\([^)]*\)*\s?/gs, ""),
-            hasOOC: msg.includes("(")
+            hasOOC: msg.includes("("),
         };
     }
-    /**
-     * @returns The message that should be sent, or `null` if stopped
-     */
     function processMsg(msg) {
-        // Don't modify commands this way
         if (msg.type === "Command") {
             return msg.rawMessage;
         }
         if ((msg.type === "Chat" || msg.type === "Whisper") &&
             ChatRoomShouldBlockGaggedOOCMessage(msg.originalMessage, ChatRoomCharacter.find(C => C.MemberNumber === ChatRoomTargetMemberNumber))) {
-            // The message is to be blocked by BC, block it ourselves to prevent it from being deleted
             ChatRoomMessage({ Content: "ChatRoomBlockGaggedOOC", Type: "Action", Sender: Player.MemberNumber });
             return null;
         }
-        // Let hooks block the messsage
-        let result = 0 /* SpeechHookAllow.ALLOW */;
+        let result = 0;
         for (const hook of speechHooks) {
             if (hook.allowSend) {
                 const hookResult = hook.allowSend(msg);
-                if (hookResult === 2 /* SpeechHookAllow.ALLOW_BYPASS */) {
-                    result = 2 /* SpeechHookAllow.ALLOW_BYPASS */;
+                if (hookResult === 2) {
+                    result = 2;
                 }
-                else if (hookResult === 1 /* SpeechHookAllow.BLOCK */ && result === 0 /* SpeechHookAllow.ALLOW */) {
-                    result = 1 /* SpeechHookAllow.BLOCK */;
+                else if (hookResult === 1 && result === 0) {
+                    result = 1;
                 }
             }
         }
-        if (result === 1 /* SpeechHookAllow.BLOCK */)
+        if (result === 1)
             return null;
         let message = msg.originalMessage;
-        // Let hooks modify the message
         for (const hook of speechHooks) {
             if (hook.modify) {
                 message = hook.modify(msg, message);
             }
         }
-        // Let hooks react to actual message that will be sent
         for (const hook of speechHooks) {
             if (hook.onSend) {
                 hook.onSend(msg, message);
             }
         }
-        // Escape '/' if message starts with it
         if (message.startsWith("/")) {
             message = "/" + message;
         }
         return message;
     }
-    //#region Antigarble
     let antigarble = 0;
     function setAntigarble(value) {
         if (![0, 1, 2].includes(value)) {
@@ -24155,7 +24894,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         antigarble = value;
         return true;
     }
-    //#endregion
     class ModuleSpeech extends BaseModule {
         load() {
             let currentlyProcessedMessage = null;
@@ -24165,13 +24903,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     const info = parseMsg(msg);
                     if (info) {
                         const msg2 = processMsg(info);
-                        // Message is rejected
                         if (msg2 === null) {
-                            // There is rule to force retype of rejected message
                             if (RulesGetRuleState("speech_force_retype").isEnforced) {
-                                // Clear chat
                                 ElementValue("InputChat", "");
-                                // Clear message history if matches
                                 if (ChatRoomLastMessage.length > 0 && ChatRoomLastMessage.at(-1) === msg) {
                                     ChatRoomLastMessage.splice(ChatRoomLastMessage.length - 1, 1);
                                     ChatRoomLastMessageIndex = Math.min(ChatRoomLastMessageIndex, ChatRoomLastMessage.length);
@@ -24183,7 +24917,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         currentlyProcessedMessage = {
                             result: msg2.startsWith("//") ? msg2.substring(1) : msg2,
                             original: info.originalMessage.startsWith("//") ? info.originalMessage.substring(1) : info.originalMessage,
-                            target: info.target
+                            target: info.target,
                         };
                     }
                 }
@@ -24191,7 +24925,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 currentlyProcessedMessage = null;
                 return res;
             });
-            //#region Antigarble for pre-garbled whispers
             hookFunction("ServerSend", 1, (args, next) => {
                 const data = args[1];
                 if (args[0] === "ChatRoomChat" &&
@@ -24226,8 +24959,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 return next(args);
             });
-            //#endregion
-            // Even if not modified by hook, the hash is very important
             hookFunction("CommandParse", 0, (args, next) => next(args));
             hookFunction("ChatRoomSendEmote", 5, (args, next) => {
                 var _a;
@@ -24249,7 +24980,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     originalMessage: msg,
                     target: ChatRoomTargetMemberNumber,
                     noOOCMessage: msg,
-                    hasOOC: false
+                    hasOOC: false,
                 });
                 if (msg2 !== null) {
                     return next(["*" + msg2]);
@@ -24261,14 +24992,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
             });
-            //#region Antigarble
             const ANTIGARBLE_LEVELS = {
                 "0": 0,
                 "1": 1,
                 "2": 2,
                 "normal": 0,
                 "both": 1,
-                "ungarbled": 2
+                "ungarbled": 2,
             };
             const ANTIGARBLE_LEVEL_NAMES = Object.keys(ANTIGARBLE_LEVELS).filter(k => k.length > 1);
             registerCommand$1("cheats", "antigarble", "<level> - Set garble prevention to show [normal|both|ungarbled] messages (only affects received messages!)", value => {
@@ -24293,9 +25023,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     res += ` <> ${args[1]}`;
                 return res;
             });
-            //#endregion
-            //#region Item specific fixes
-            // Teach shock collar and futuristic gag, that commands are OOC
             if (typeof window.InventoryItemNeckAccessoriesCollarAutoShockUnitDetectSpeech === "function") {
                 hookFunction("InventoryItemNeckAccessoriesCollarAutoShockUnitDetectSpeech", 10, (args, next) => {
                     if (ChatRoomLastMessage &&
@@ -24306,14 +25033,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return next(args);
                 });
             }
-            //#endregion
         }
     }
 
-    const RelationshipData_schema = mod.object({
-        memberNumber: mod.number(),
-        nickname: mod.string().refine(isValidNickname),
-        enforceNickname: mod.boolean()
+    const RelationshipData_schema = z.object({
+        memberNumber: z.number(),
+        nickname: z.string().refine(isValidNickname),
+        enforceNickname: z.boolean(),
     });
     const NICKNAME_LENGTH_MAX = 20;
     const NICKNAME_REGEX = /^[\p{L}0-9\p{Z}'-]+$/u;
@@ -24351,8 +25077,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [true, AccessLevel.mistress],
-                    [Preset.slave]: [true, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [true, AccessLevel.mistress],
+                },
             });
             registerPermission("relationships_modify_self", {
                 name: "Allow changing relationship config for herself",
@@ -24361,8 +25087,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [false, AccessLevel.mistress],
-                    [Preset.slave]: [false, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [false, AccessLevel.mistress],
+                },
             });
             registerPermission("relationships_modify_others", {
                 name: "Allow changing relationship config for others",
@@ -24371,8 +25097,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [false, AccessLevel.mistress],
-                    [Preset.slave]: [false, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [false, AccessLevel.mistress],
+                },
             });
             queryHandlers.relatonshipsGet = (sender) => {
                 if (!moduleIsEnabled(ModuleCategory.Relationships) || !modStorage.relationships)
@@ -24382,7 +25108,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     relationships: viewAll ? cloneDeep(modStorage.relationships) : cloneDeep(modStorage.relationships.filter(r => r.memberNumber === sender.MemberNumber)),
                     access_view_all: viewAll,
                     access_modify_self: checkPermissionAccess("relationships_modify_self", sender),
-                    access_modify_others: viewAll && checkPermissionAccess("relationships_modify_others", sender)
+                    access_modify_others: viewAll && checkPermissionAccess("relationships_modify_others", sender),
                 };
             };
             queryHandlers.relationshipsRemove = (sender, data) => {
@@ -24444,7 +25170,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (moduleIsEnabled(ModuleCategory.Relationships) &&
                         modStorage.relationships &&
                         (msg.type === "Chat" || msg.type === "Whisper")) {
-                        // Build the dictionary of allowed and forbidden names
                         const allowed = new Set();
                         const forbiden = new Set();
                         for (const char of getAllCharactersInRoom()) {
@@ -24465,7 +25190,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                 }
                             }
                         }
-                        // Find if bad name was used, but allow has higher priority than forbid
                         const transgression = Array.from(forbiden).find(i => {
                             var _a;
                             return ((_a = msg.noOOCMessage) !== null && _a !== void 0 ? _a : msg.originalMessage).toLocaleLowerCase().match(new RegExp(`([^\\p{L}]|^)${escapeRegExp$1(i.trim())}([^\\p{L}]|$)`, "iu")) &&
@@ -24476,11 +25200,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         });
                         if (transgression !== undefined) {
                             ChatRoomSendLocal(`You are not allowed to use the name '${transgression}'! You need to use the name for her that was given to you!`, 7000);
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
                     }
-                    return 0 /* SpeechHookAllow.ALLOW */;
-                }
+                    return 0;
+                },
             });
             ExportImportRegisterCategory({
                 category: `relationships`,
@@ -24505,7 +25229,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return `Done!`;
                 },
                 importPermissions: ["relationships_view_all", "relationships_modify_self", "relationships_modify_others"],
-                importValidator: mod.array(RelationshipData_schema)
+                importValidator: z.array(RelationshipData_schema),
             });
         }
         load() {
@@ -24566,10 +25290,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return res;
             });
             patchFunction("CommandParse", {
-                'TextGet("WhisperTo") + " " + TargetName + ": " + msg;': 'TextGet("WhisperTo") + " " + (WhisperTarget ? CharacterNickname(WhisperTarget) : TargetName) + ": " + msg;'
+                'TextGet("WhisperTo") + " " + TargetName + ": " + msg;': 'TextGet("WhisperTo") + " " + (WhisperTarget ? CharacterNickname(WhisperTarget) : TargetName) + ": " + msg;',
             });
             patchFunction("ChatRoomTarget", {
-                "TargetName = ChatRoomCharacter[C].Name;": "TargetName = CharacterNickname(ChatRoomCharacter[C]);"
+                "TargetName = ChatRoomCharacter[C].Name;": "TargetName = CharacterNickname(ChatRoomCharacter[C]);",
             });
         }
         reload() {
@@ -24602,7 +25326,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function initRules_bc_alter() {
         registerRule("alt_restrict_hearing", {
             name: "Sensory deprivation: Sound",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "impacts PLAYER_NAME's hearing; adjustable",
             longDescription: "This rule impacts PLAYER_NAME's natural ability to hear in the same way items do, independent of them (strength of deafening can be adjusted).",
@@ -24613,14 +25337,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "listSelect",
                     options: [["light", "Light"], ["medium", "Medium"], ["heavy", "Heavy"]],
                     default: "light",
-                    description: "Hearing impairment:"
-                }
+                    description: "Hearing impairment:",
+                },
             },
             load(state) {
                 const strengthMap = {
                     light: 1,
                     medium: 2,
-                    heavy: 4
+                    heavy: 4,
                 };
                 hookFunction("Player.GetDeafLevel", 1, (args, next) => {
                     var _a;
@@ -24630,11 +25354,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return res;
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("alt_hearing_whitelist", {
             name: "Hearing whitelist",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "of members whom PLAYER_NAME can always understand",
             longDescription: "This rule defines a list of members whose voice can always be understood by PLAYER_NAME - independent of any sensory deprivation items or hearing impairing BCX rules on PLAYER_NAME. There is an additional option to toggle whether PLAYER_NAME can still understand a white-listed member's voice if that member is speech impaired herself (e.g. by being gagged).",
@@ -24647,15 +25371,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     description: "Members numbers still heard while hearing impaired:",
                     Y: 350,
                     options: {
-                        pageSize: 3
-                    }
+                        pageSize: 3,
+                    },
                 },
                 ignoreGaggedMembersToggle: {
                     type: "toggle",
                     default: false,
                     description: "Also understand if those are speech impaired",
-                    Y: 710
-                }
+                    Y: 710,
+                },
             },
             load(state) {
                 let ignoreDeaf = false;
@@ -24672,7 +25396,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-                // depends on the function PreferenceIsPlayerInSensDep()
                 hookFunction("ChatRoomMessage", 9, (args, next) => {
                     const data = args[0];
                     const C = args[0].Sender;
@@ -24683,7 +25406,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             .filter(m => m !== Player.MemberNumber)
                             .includes(C)) {
                         ignoreDeaf = true;
-                        // Handle garbled whispers
                         const orig = Array.isArray(data.Dictionary) && data.Dictionary.find((i) => isObject$1(i) && i.Tag === "BCX_ORIGINAL_MESSAGE" && typeof i.Text === "string");
                         if (orig && state.customData.ignoreGaggedMembersToggle) {
                             data.Content = orig.Text;
@@ -24699,11 +25421,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("alt_restrict_sight", {
             name: "Sensory deprivation: Sight",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "impacts PLAYER_NAME's sight; adjustable",
             longDescription: "This rule impacts PLAYER_NAME's natural ability to see in the same way items do, independent of them (strength of blindness can be adjusted).",
@@ -24714,14 +25436,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "listSelect",
                     options: [["light", "Light"], ["medium", "Medium"], ["heavy", "Heavy"]],
                     default: "light",
-                    description: "Eyesight impairment:"
-                }
+                    description: "Eyesight impairment:",
+                },
             },
             load(state) {
                 const strengthMap = {
                     light: 1,
                     medium: 2,
-                    heavy: 3
+                    heavy: 3,
                 };
                 hookFunction("Player.GetBlindLevel", 1, (args, next) => {
                     var _a, _b;
@@ -24731,11 +25453,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return Math.min(res, ((_b = Player.GameplaySettings) === null || _b === void 0 ? void 0 : _b.SensDepChatLog) === "SensDepLight" ? 2 : 3);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("alt_seeing_whitelist", {
             name: "Seeing whitelist",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "of members whom PLAYER_NAME can always see",
             longDescription: "This rule defines a list of members whose appearance can always be seen normally by PLAYER_NAME - independent of any blinding items or seeing impairing BCX rules on PLAYER_NAME.",
@@ -24745,8 +25467,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 whitelistedMembers: {
                     type: "memberNumberList",
                     default: [],
-                    description: "Members still seen while under blindness:"
-                }
+                    description: "Members still seen while under blindness:",
+                },
             },
             load(state) {
                 let noBlind = false;
@@ -24809,11 +25531,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ChatRoomCharacterCount = ChatRoomCharacterDrawlist.length;
                     }
                 });
-            }
+            },
         });
         registerRule("alt_eyes_fullblind", {
             name: "Fully blind when eyes are closed",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             longDescription: "This rule enforces full blindness when the eyes are closed. (Light sensory deprivation setting is still respected and doesn't blind fully)",
             keywords: ["seeing", "blindness", "eyes", "blindfold", "realistic", "room"],
@@ -24822,14 +25544,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 affectPlayer: {
                     type: "toggle",
                     default: false,
-                    description: "Player sees the effect also on herself"
+                    description: "Player sees the effect also on herself",
                 },
                 hideNames: {
                     type: "toggle",
                     default: false,
                     description: "Hide names and icons during the effect",
-                    Y: 440
-                }
+                    Y: 440,
+                },
             },
             tick(state) {
                 if (state.isEnforced) {
@@ -24874,11 +25596,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return;
                     return next(args);
                 });
-            }
+            },
         });
         registerRule("alt_field_of_vision", {
             name: "Field of vision for eyes",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             longDescription: "This rule blacks out the bottom half of the room view when eyes are looking up and the upper half when eyes are looking down.",
             keywords: ["seeing", "limit", "angle", "room", "blindfold", "partially", "movement", "gaze", "gazing", "teasing", "viewing", "looking"],
@@ -24887,14 +25609,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 affectPlayer: {
                     type: "toggle",
                     default: false,
-                    description: "Player sees the effect also on herself"
+                    description: "Player sees the effect also on herself",
                 },
                 hideNames: {
                     type: "toggle",
                     default: false,
                     description: "Hide names and icons during the effect",
-                    Y: 440
-                }
+                    Y: 440,
+                },
             },
             load(state) {
                 let limitTop = 0;
@@ -25010,26 +25732,27 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 });
-            }
+            },
         });
         registerRule("alt_blindfolds_fullblind", {
             name: "Fully blind when blindfolded",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             longDescription: "This rule enforces full blindness when wearing any item that limits sight in any way. (This rules does NOT respect Light sensory deprivation setting and always forces player to be fully blind. The crafting property 'thin' is not factored in either due to technical limitations. )",
             keywords: ["seeing", "blindness", "limit", "eyes", "realistic", "room", "light"],
             defaultLimit: ConditionsLimit.normal,
             load(state) {
                 hookFunction("Player.GetBlindLevel", 2, (args, next) => {
-                    if (state.isEnforced && ["BlindHeavy", "BlindNormal", "BlindLight"].some(i => Player.Effect.includes(i) && !Player.Effect.includes("VRAvatars")))
+                    const effectsToCheck = ["BlindHeavy", "BlindNormal", "BlindLight"];
+                    if (state.isEnforced && effectsToCheck.some(i => Player.Effect.includes(i) && !Player.Effect.includes("VRAvatars")))
                         return 3;
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("alt_always_slow", {
             name: "Always leave rooms slowly",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             longDescription: "This rule forces PLAYER_NAME to always leave the room slowly, independent of the items she is wearing. WARNING: Due to limitation in Bondage Club itself, only BCX users will be able to stop PLAYER_NAME from leaving the room. This rule will ignore BC's roleplay difficulty setting 'Cannot be slowed down' and slow down PLAYER_NAME regardless!",
             keywords: ["slowness", "limit", "leaving", "permanent", "stopping", "exit", "blocking"],
@@ -25045,11 +25768,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return true;
                     return next(args);
                 });
-            }
+            },
         });
         registerRule("alt_set_leave_slowing", {
             name: "Set slowed leave time",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             longDescription: "This rule can set the time PLAYER_NAME needs to leave the current room, when items or a rule force her to leave it slowly. The time can be set between 1 and 600 seconds (10 mins).",
             keywords: ["slowness", "limit", "leaving", "customized", "increase", "higher", "stopping", "exit", "blocking", "room"],
@@ -25060,10 +25783,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     default: 10,
                     options: {
                         min: 1,
-                        max: 600
+                        max: 600,
                     },
-                    description: "New leave time in seconds:"
-                }
+                    description: "New leave time in seconds:",
+                },
             },
             init(state) {
                 hookFunction("ChatRoomMenuClick", 2, (args, next) => {
@@ -25075,11 +25798,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ChatRoomSlowtimer = CurrentTime + state.customData.leaveTime * 1000;
                     }
                 });
-            }
+            },
         });
         registerRule("alt_control_orgasms", {
             name: "Control ability to orgasm",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "adjustable: only-edge, only-ruin, no-resist",
             longDescription: "This rule impacts PLAYER_NAME's ability to control their orgasms, independent of items. There are three control options, which are: Never cum (always edge, the bar never reaches 100%), force into ruined orgasm (orgasm screen starts, but doesn't let her actually cum) and prevent resisting orgasm (able to enter orgasm screen, but unable to resist it).",
@@ -25090,8 +25813,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "listSelect",
                     default: "edge",
                     options: [["edge", "Edge"], ["ruined", "Ruin"], ["noResist", "Prevent resisting"]],
-                    description: "Orgasm attempts will be fixed to:"
-                }
+                    description: "Orgasm attempts will be fixed to:",
+                },
             },
             load(state) {
                 hookFunction("ServerSend", 0, (args, next) => {
@@ -25133,11 +25856,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("alt_secret_orgasms", {
             name: "Secret orgasm progress",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "unable to see the own arousal meter",
             longDescription: "This rule prevents PLAYER_NAME from seeing their own arousal meter, even while it is active and working. This means, that it is a surprise to them, when the orgasm (quick-time event) happens. Does not effect other characters being able to see the meter, if club settings allow that.",
@@ -25161,12 +25884,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return;
                     return next(args);
                 });
-            }
+            },
         });
         const gaveAdminTo = new Set();
         registerRule("alt_room_admin_transfer", {
             name: "Room admin transfer",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "give admin to defined roles",
             longDescription: "This rule lets you define a minimum role which PLAYER_NAME will automatically give room admin rights to (if she has admin rights in the room). Also has the option to remove admin rights from PLAYER_NAME afterwards.",
@@ -25177,14 +25900,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "roleSelector",
                     default: AccessLevel.owner,
                     description: "Minimum role that gets admin:",
-                    Y: 320
+                    Y: 320,
                 },
                 removeAdminToggle: {
                     type: "toggle",
                     default: false,
                     description: "Player loses admin afterwards",
-                    Y: 470
-                }
+                    Y: 470,
+                },
             },
             load() {
                 hookFunction("ChatRoomSyncMemberLeave", 3, (args, next) => {
@@ -25227,25 +25950,25 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             BlockCategory: ChatRoomData.BlockCategory.slice(),
                             Game: ChatRoomGame,
                             Private: ChatRoomData.Private,
-                            Locked: ChatRoomData.Locked
+                            Locked: ChatRoomData.Locked,
                         };
                         ServerSend("ChatRoomAdmin", { MemberNumber: Player.ID, Room: UpdatedRoom, Action: "Update" });
                         changed = true;
                     }
                 }
                 return changed;
-            }
+            },
         });
         registerRule("alt_room_admin_limit", {
             name: "Limit bound admin power",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "restrict room admin powers while restrained",
             longDescription: "This rule forbids PLAYER_NAME to do any room admin actions (except for kick/ban), when she is restrained. Note: This rule does not affect an admin's ability to bypass locked rooms, if restraints allow it. Tip: This rule can be combined with the rule 'Force ´Return to chatrooms on relog´' to trap PLAYER_NAME in it.",
             keywords: ["restraints", "authority", "suppressing", "bindings", "helpless"],
             defaultLimit: ConditionsLimit.limited,
             triggerTexts: {
-                attempt_infoBeep: "You are forbidden from changing room settings while restrained"
+                attempt_infoBeep: "You are forbidden from changing room settings while restrained",
             },
             load(state) {
                 hookFunction("ChatAdminLoad", 0, (args, next) => {
@@ -25305,11 +26028,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 });
-            }
+            },
         });
         registerRule("alt_set_profile_description", {
             name: "Control profile online description",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "directly sets PLAYER_NAME's description",
             longDescription: "This rule sets PLAYER_NAME's online description (in her profile) to any text entered in the rule config, blocking changes to it. Warning: This rule is editing the actual profile text. This means that after saving a changed text, the original text is lost!",
@@ -25319,8 +26042,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 playersProfileDescription: {
                     type: "textArea",
                     default: () => (Player.Description || ""),
-                    description: "Edit this player's profile description:"
-                }
+                    description: "Edit this player's profile description:",
+                },
             },
             tick(state) {
                 if (state.isEnforced && state.customData) {
@@ -25336,7 +26059,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return false;
-            }
+            },
         });
         function getValidNickname() {
             return (Player.Nickname && isValidNickname(Player.Nickname)) ? Player.Nickname :
@@ -25345,7 +26068,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         registerRule("alt_set_nickname", {
             name: "Control nickname",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "directly sets PLAYER_NAME's nickname",
             longDescription: "This rule sets PLAYER_NAME's nickname (replacing her name in most cases) to any text entered in the rule config, blocking changes to it from BC's nickname menu. You can optionally choose whether the previous BC nickname will be restored while the rule is not in effect.",
@@ -25356,14 +26079,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "string",
                     default: getValidNickname,
                     description: "Set this player's nickname:",
-                    options: /^[\p{L}0-9\p{Z}'-]{0,20}$/u
+                    options: /^[\p{L}0-9\p{Z}'-]{0,20}$/u,
                 },
                 restore: {
                     type: "toggle",
                     description: "Restore the previous nickname at rule end",
                     default: true,
-                    Y: 470
-                }
+                    Y: 470,
+                },
             },
             internalDataValidate: (data) => typeof data === "string",
             internalDataDefault: getValidNickname,
@@ -25402,11 +26125,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return false;
-            }
+            },
         });
         registerRule("alt_force_suitcase_game", {
             name: "Always carry a suitcase",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "from the kidnappers league multiplayer game",
             longDescription: "This rule forces PLAYER_NAME to constantly participate in the kidnappers league's suitcase delivery task, by automatically giving her a new suitcase, whenever the suitcase item slot is empty.",
@@ -25419,11 +26142,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return true;
                 }
                 return false;
-            }
+            },
         });
         registerRule("alt_restrict_leashability", {
             name: "Restrict being leashed by others",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             longDescription: "This rule only allows selected roles to leash PLAYER_NAME, responding with a message about unsuccessful leashing to others when they attempt to do so.",
             keywords: ["limit", "prevent", "leashing", "room"],
@@ -25433,8 +26156,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "roleSelector",
                     default: AccessLevel.owner,
                     description: "Minimum role that is allowed to leash:",
-                    Y: 320
-                }
+                    Y: 320,
+                },
             },
             load(state) {
                 hookFunction("ChatRoomCanBeLeashedBy", 4, (args, next) => {
@@ -25447,17 +26170,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         const character = getChatroomCharacter(sourceMemberNumber);
                         ChatRoomActionMessage(`SourceCharacter's leash seems to be cursed and slips out of TargetCharacterName's hand.`, null, [
                             { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                            { Tag: "TargetCharacterName", MemberNumber: sourceMemberNumber, Text: character ? CharacterNickname(character.Character) : getCharacterName(sourceMemberNumber, "[unknown]") }
+                            { Tag: "TargetCharacterName", MemberNumber: sourceMemberNumber, Text: character ? CharacterNickname(character.Character) : getCharacterName(sourceMemberNumber, "[unknown]") },
                         ]);
                         return false;
                     }
                     return next(args);
                 });
-            }
+            },
         });
         registerRule("alt_hide_friends", {
             name: "Hide online friends if blind",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "also preventing beeps from the friendlist - exceptions settable",
             longDescription: "This rule hides persons on PLAYER_NAME's friend list when she is fully blinded, which also makes sending beeps impossible. Received beeps can still be answered. The rule allows to manage a list of members who can be seen normally.",
@@ -25467,15 +26190,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 allowedMembers: {
                     type: "memberNumberList",
                     default: [],
-                    description: "Members numbers that can always be seen:"
-                }
+                    description: "Members numbers that can always be seen:",
+                },
             },
             load(state) {
                 patchFunction("FriendListLoadFriendList", {
-                    "data.forEach(friend => {": 'data.forEach(friend => { if (typeof friend.MemberNumber !== "number") return;'
+                    "data.forEach(friend => {": 'data.forEach(friend => { if (typeof friend.MemberNumber !== "number") return;',
                 });
                 patchFunction("FriendListLoadFriendList", {
-                    "FriendListContent += `<div class='FriendListLinkColumn' onClick='FriendListBeep(${friend.MemberNumber})'> ${BeepCaption} </div>`;": "if (typeof friend.MemberNumber === 'number') FriendListContent += `<div class='FriendListLinkColumn' onClick='FriendListBeep(${friend.MemberNumber})'> ${BeepCaption} </div>`;"
+                    "FriendListContent += `<div class='FriendListLinkColumn' onClick='FriendListBeep(${friend.MemberNumber})'> ${BeepCaption} </div>`;": "if (typeof friend.MemberNumber === 'number') FriendListContent += `<div class='FriendListLinkColumn' onClick='FriendListBeep(${friend.MemberNumber})'> ${BeepCaption} </div>`;",
                 });
                 hookFunction("FriendListLoadFriendList", 1, (args, next) => {
                     var _a;
@@ -25491,17 +26214,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 });
-            }
+            },
         });
         registerRule("alt_forced_summoning", {
             name: "Ready to be summoned",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "leash PLAYER_NAME from anywhere using a beep with message",
             longDescription: "This rule forces PLAYER_NAME to switch rooms from anywhere in the club to the chat room of the summoner after 15 seconds. It works by sending a beep message with the set text or simply the word 'summon' to PLAYER_NAME. Members who are allowed to summon PLAYER_NAME can be set. NOTES: PLAYER_NAME can always be summoned no matter if she has a leash or is prevented from leaving the room (ignoring restraints or locked rooms). However, if the target room is full or locked, she will end up in the lobby. Summoning will not work if the room name is not included with the beep message!",
             keywords: ["leashing", "room", "calling", "ordering", "move", "moving", "movement", "warping", "beaming", "transporting"],
             triggerTexts: {
-                infoBeep: "You are summoned by TARGET_PLAYER!"
+                infoBeep: "You are summoned by TARGET_PLAYER!",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
@@ -25511,51 +26234,45 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     description: "Members numbers allowed to summon:",
                     Y: 325,
                     options: {
-                        pageSize: 1
-                    }
+                        pageSize: 1,
+                    },
                 },
                 summoningText: {
                     type: "string",
                     default: "Come to my room immediately",
                     description: "The text used for summoning:",
-                    Y: 705
+                    Y: 705,
                 },
                 summonTime: {
                     type: "number",
                     default: 15,
                     description: "Time in seconds before enforcing summon:",
-                    Y: 550
-                }
+                    Y: 550,
+                },
             },
             load(state) {
                 let beep = false;
                 hookFunction("ServerAccountBeep", 7, (args, next) => {
                     const data = args[0];
                     if (isObject$1(data) &&
-                        // Check it is beep from person
                         !data.BeepType &&
                         typeof data.MemberNumber === "number" &&
-                        // Check rule is active
                         state.isEnforced &&
                         state.customData &&
                         state.customData.allowedMembers.includes(data.MemberNumber) &&
-                        // Check the message matches summon message
                         typeof data.Message === "string" &&
                         (data.Message.toLocaleLowerCase().startsWith(state.customData.summoningText.trim().toLocaleLowerCase()) || data.Message.trim().toLocaleLowerCase() === "summon") &&
                         data.ChatRoomName &&
-                        // Check we are allowed into target space
                         ChatSelectGendersAllowed(data.ChatRoomSpace, Player.GetGenders())) {
                         ChatRoomActionMessage(`SourceCharacter received a summon: "${state.customData.summoningText}".`, null, [
-                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                         ]);
                         beep = true;
                         BCX_setTimeout(() => {
-                            // Check if rule is still in effect or if we are already there
                             if (!state.isEnforced || (ServerPlayerIsInChatRoom() && (ChatRoomData === null || ChatRoomData === void 0 ? void 0 : ChatRoomData.Name) === data.ChatRoomName))
                                 return;
-                            // leave
                             ChatRoomActionMessage(`The demand for SourceCharacter's presence is now enforced.`, null, [
-                                { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                             ]);
                             DialogLentLockpicks = false;
                             ChatRoomClearAllElements();
@@ -25564,7 +26281,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             ChatRoomLeashPlayer = null;
                             ChatRoomStart(data.ChatRoomSpace, "", "", "", "Introduction", BackgroundsTagList);
                             CharacterDeleteAllOnline();
-                            // join
                             ChatRoomPlayerCanJoin = true;
                             ServerSend("ChatRoomJoin", { Name: data.ChatRoomName });
                         }, state.customData.summonTime * 1000);
@@ -25574,11 +26290,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         state.triggerAttempt(data.MemberNumber);
                     beep = false;
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("alt_allow_changing_appearance", {
             name: "Allow changing the whole appearance",
-            type: 1 /* RuleType.Alt */,
+            type: 1,
             loggable: false,
             shortDescription: "of PLAYER_NAME - for the defined roles",
             keywords: ["force", "setting", "wardrobe", "body", "modifications"],
@@ -25588,8 +26304,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 minimumRole: {
                     type: "roleSelector",
                     default: AccessLevel.owner,
-                    description: "Minimum role that is allowed:"
-                }
+                    description: "Minimum role that is allowed:",
+                },
             },
             init(state) {
                 queryHandlers.rule_alt_allow_changing_appearance = (sender) => {
@@ -25648,7 +26364,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
     }
 
@@ -25720,7 +26436,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return next(args);
             });
             hookFunction("DialogMenuButtonClick", 5, (args, next) => {
-                // Finds the current icon
                 const C = CharacterGetCurrent();
                 for (let I = 0; I < DialogMenuButton.length; I++) {
                     if ((MouseX >= 1885 - I * 110) && (MouseX <= 1975 - I * 110) && C) {
@@ -25787,24 +26502,26 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     cheatChangeHooks[MiscCheat.GivePandoraKey](true);
                 }
             });
-            // Cheats
             hookFunction("Player.CanChangeClothesOn", 1, (args, next) => (allowMode && args[0].IsPlayer()) || next(args));
             hookFunction("ChatRoomCanLeave", 0, (args, next) => allowMode || next(args));
-            // Anti-stupid-null
             hookFunction("DrawCharacter", 100, (args, next) => {
                 if (args[0] != null)
                     return next(args);
             });
-            patchFunction("DrawGetImage", {
-                "Img.src = Source;": 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = Source;'
+            hookFunction("SpeechGarble", 100, (args, next) => {
+                if (args[1] == null) {
+                    args[1] = "";
+                }
+                return next(args);
             });
-            // fixes a bug in BC
+            patchFunction("DrawGetImage", {
+                "Img.src = Source;": 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = Source;',
+            });
             hookFunction("ServerPlayerIsInChatRoom", 0, (args, next) => {
                 return next(args) || CurrentScreen === "GetUp";
             });
-            // Widen possible nicknames
             patchFunction("CharacterNickname", {
-                "/^[a-zA-Z\\s]*$/": "/^[\\p{L}0-9\\p{Z}'-]+$/u"
+                "/^[a-zA-Z\\s]*$/": "/^[\\p{L}0-9\\p{Z}'-]+$/u",
             });
             ServerCharacterNicknameRegex = NICKNAME_REGEX;
         }
@@ -25822,14 +26539,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         const NMod = isNModClient();
         registerRule("block_remoteuse_self", {
             name: "Forbid using remotes on self",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME using one on PLAYER_NAME",
             longDescription: "This rule forbids PLAYER_NAME to use or trigger a vibrator or similar remote controlled item on her own body. (Others still can use remotes on her)",
             keywords: ["controling", "preventing", "limiting", "vibrating", "vibrations"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use a remote control for items on your body!",
                 attempt_log: "PLAYER_NAME tried to use a remote control on her own body, which was forbidden",
-                log: "PLAYER_NAME used a remote control on her own body, which was forbidden"
+                log: "PLAYER_NAME used a remote control on her own body, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -25868,17 +26585,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_remoteuse_others", {
             name: "Forbid using remotes on others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             longDescription: "This rule forbids PLAYER_NAME to use or trigger a vibrator or similar remote controlled item on other club members.",
             keywords: ["controling", "preventing", "limiting", "vibrating", "vibrations"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use a remote control on other's items!",
                 attempt_log: "PLAYER_NAME tried to use a remote control on TARGET_PLAYER's body, which was forbidden",
-                log: "PLAYER_NAME used a remote control on TARGET_PLAYER's body, which was forbidden"
+                log: "PLAYER_NAME used a remote control on TARGET_PLAYER's body, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -25917,18 +26634,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_keyuse_self", {
             name: "Forbid using keys on self",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME using one on PLAYER_NAME",
             longDescription: "This rule forbids PLAYER_NAME to unlock any locked item on her own body. Note: Despite the name, this rule also blocks unlocking locks that don't require a key (e.g. exclusive lock). However, locks that can be unlocked in other ways (timer locks by removing time, code/password locks by entering correct code) can still be unlocked by PLAYER_NAME. Others can still unlock her items on her normally.",
             keywords: ["controling", "taking", "away", "limiting", "confiscate", "locks"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use a key on items on your body!",
                 attempt_log: "PLAYER_NAME tried to use a key on a worn item, which was forbidden",
-                log: "PLAYER_NAME used a key on a worn item, which was forbidden"
+                log: "PLAYER_NAME used a key on a worn item, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -25959,31 +26676,31 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return false;
                 });
-            }
+            },
         });
         registerRule("block_keyuse_others", {
             name: "Forbid using keys on others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             longDescription: "This rule forbids PLAYER_NAME to unlock any locked item on other club members, with options to still allow unlocking of owner and/or lover locks and items. Note: Despite the name, this rule also blocks unlocking locks that don't require a key (e.g. exclusive lock). However, locks that can be unlocked in other ways (timer locks by removing time, code/password locks by entering correct code) can still be unlocked by PLAYER_NAME.",
             keywords: ["controling", "taking", "away", "limiting", "confiscate", "locks"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use a key on other's items!",
                 attempt_log: "PLAYER_NAME tried to use a key to unlock TARGET_PLAYER's item, which was forbidden",
-                log: "PLAYER_NAME used a key to unlock TARGET_PLAYER's item, which was forbidden"
+                log: "PLAYER_NAME used a key to unlock TARGET_PLAYER's item, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
                 allowOwnerLocks: {
                     type: "toggle",
                     default: false,
-                    description: "Still allow unlocking owner locks or items"
+                    description: "Still allow unlocking owner locks or items",
                 },
                 allowLoverLocks: {
                     type: "toggle",
                     default: false,
                     description: "Still allow unlocking lover locks or items",
-                    Y: 530
-                }
+                    Y: 530,
+                },
             },
             load(state) {
                 let ignore = false;
@@ -26028,18 +26745,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return false;
                 });
-            }
+            },
         });
         registerRule("block_lockpicking_self", {
             name: "Forbid picking locks on self",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME picking one on PLAYER_NAME",
             longDescription: "This rule forbids PLAYER_NAME to lockpick any locked items on her own body. (Others still can pick locks on her normally)",
             keywords: ["controling", "limiting", "secure", "security"],
             triggerTexts: {
                 infoBeep: "You are not allowed to lockpick worn items on your body!",
                 attempt_log: "PLAYER_NAME tried to lockpick a worn item, which was forbidden",
-                log: "PLAYER_NAME lockpicked a worn item, which was forbidden"
+                log: "PLAYER_NAME lockpicked a worn item, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26067,17 +26784,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return false;
                 });
-            }
+            },
         });
         registerRule("block_lockpicking_others", {
             name: "Forbid picking locks on others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             longDescription: "This rule forbids PLAYER_NAME to lockpick any locked items on other club members.",
             keywords: ["controling", "limiting", "secure", "security"],
             triggerTexts: {
                 infoBeep: "You are not allowed to lockpick items on others!",
                 attempt_log: "PLAYER_NAME tried to lockpick an item on TARGET_PLAYER, which was forbidden",
-                log: "PLAYER_NAME lockpicked an item on TARGET_PLAYER, which was forbidden"
+                log: "PLAYER_NAME lockpicked an item on TARGET_PLAYER, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26105,18 +26822,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return false;
                 });
-            }
+            },
         });
         registerRule("block_lockuse_self", {
             name: "Forbid using locks on self",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME using one on PLAYER_NAME",
             longDescription: "This rule forbids PLAYER_NAME to use any kind of lock on her own body. (Others still can add locks on her items normally)",
             keywords: ["controling", "limiting", "locking", "preventing"],
             triggerTexts: {
                 infoBeep: "You are not allowed to lock items on your body!",
                 attempt_log: "PLAYER_NAME tried to lock a worn item, which was forbidden",
-                log: "PLAYER_NAME locked a worn item, which was forbidden"
+                log: "PLAYER_NAME locked a worn item, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26144,17 +26861,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return false;
                 });
-            }
+            },
         });
         registerRule("block_lockuse_others", {
             name: "Forbid using locks on others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             longDescription: "This rule forbids PLAYER_NAME to use any kind of lock on other club members.",
             keywords: ["controling", "limiting", "locking", "preventing"],
             triggerTexts: {
                 infoBeep: "You are not allowed to lock other's items!",
                 attempt_log: "PLAYER_NAME tried to lock TARGET_PLAYER's item, which was forbidden",
-                log: "PLAYER_NAME locked TARGET_PLAYER's item, which was forbidden"
+                log: "PLAYER_NAME locked TARGET_PLAYER's item, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26182,19 +26899,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return false;
                 });
-            }
+            },
         });
-        // TODO: Make it clearer it is blocked by BCX
         registerRule("block_wardrobe_access_self", {
             name: "Forbid wardrobe use on self",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME using PLAYER_NAME's wardrobe",
             longDescription: "This rule forbids PLAYER_NAME to access her own wardrobe. (Others still can change her clothes normally)",
             keywords: ["controling", "limiting", "clothings", "preventing", "changing"],
             triggerTexts: {
                 infoBeep: "You are not allowed to change what you are wearing!",
                 attempt_log: "PLAYER_NAME tried to use their wardrobe, which was forbidden",
-                log: "PLAYER_NAME used their wardrobe, which was forbidden"
+                log: "PLAYER_NAME used their wardrobe, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26212,18 +26928,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
-        // TODO: Make it clearer it is blocked by BCX
         registerRule("block_wardrobe_access_others", {
             name: "Forbid wardrobe use on others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             longDescription: "This rule forbids PLAYER_NAME to use the wardrobe of other club members.",
             keywords: ["controling", "limiting", "clothings", "preventing", "changing"],
             triggerTexts: {
                 infoBeep: "You are not allowed to change what others wear!",
                 attempt_log: "PLAYER_NAME tried to use TARGET_PLAYER's wardrobe, which was forbidden",
-                log: "PLAYER_NAME used TARGET_PLAYER's wardrobe, which was forbidden"
+                log: "PLAYER_NAME used TARGET_PLAYER's wardrobe, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26241,11 +26956,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_restrict_allowed_poses", {
             name: "Restrict allowed body poses",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             longDescription: "Allows to restrict the body poses PLAYER_NAME is able to get into by herself.",
             keywords: ["controling", "limiting", "preventing", "changing"],
@@ -26254,8 +26969,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 poseButtons: {
                     type: "poseSelect",
                     default: [],
-                    description: "Mark poses as being allowed or forbidden:"
-                }
+                    description: "Mark poses as being allowed or forbidden:",
+                },
             },
             load(state) {
                 let bypassPoseChange = false;
@@ -26288,12 +27003,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     bypassPoseChange = false;
                     return res;
                 }, ModuleCategory.Rules);
-            }
+            },
         });
-        // TODO: Triggers on opening chat create *window*, improve to trigger on actual room creation
         registerRule("block_creating_rooms", {
             name: "Forbid creating new rooms",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             longDescription: "This rule forbids PLAYER_NAME to create new rooms.",
             keywords: ["controling", "limiting", "preventing"],
             triggerTexts: {
@@ -26301,11 +27015,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 attempt_log: "PLAYER_NAME tried to create a chatroom, which was forbidden",
                 log: "PLAYER_NAME created a chatroom, which was forbidden",
                 announce: "",
-                attempt_announce: ""
+                attempt_announce: "",
             },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
-                // TODO: Fix for NMod
                 if (!NMod) {
                     hookFunction("ChatSearchRun", 0, (args, next) => {
                         next(args);
@@ -26326,12 +27039,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
-        // TODO: Triggers on attempting to enter room, improve to trigger on actual room entry
         registerRule("block_entering_rooms", {
             name: "Restrict entering rooms",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "only allow entering specific ones",
             longDescription: "This rule forbids PLAYER_NAME to enter all rooms, that are not on an editable whitelist of still allowed ones. NOTE: As safety measure this rule is not in effect while the list is empty. TIP: This rule can be combined with the rule \"Forbid creating new rooms\".",
             keywords: ["controling", "limiting", "preventing", "entry"],
@@ -26340,26 +27052,23 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 attempt_log: "PLAYER_NAME tried to enter a forbidden room",
                 log: "PLAYER_NAME entered a forbidden room",
                 attempt_announce: "",
-                announce: "PLAYER_NAME violated a rule to not enter this room"
+                announce: "PLAYER_NAME violated a rule to not enter this room",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
                 roomList: {
                     type: "stringList",
                     default: [],
-                    description: "Only joining rooms with these names is allowed:"
-                }
+                    description: "Only joining rooms with these names is allowed:",
+                },
             },
             load(state) {
-                // TODO: Fix for NMod
                 if (!NMod) {
                     hookFunction("ChatSearchJoin", 5, (args, next) => {
                         if (state.inEffect && state.customData && state.customData.roomList.length > 0) {
-                            // Scans results
                             let X = 25;
                             let Y = 25;
                             for (let C = ChatSearchResultOffset; C < ChatSearchResult.length && C < (ChatSearchResultOffset + 24); C++) {
-                                // If the player clicked on a valid room
                                 if (MouseIn(X, Y, 630, 85)) {
                                     if (!state.customData.roomList.some(name => name.toLocaleLowerCase() === ChatSearchResult[C].Name.toLocaleLowerCase())) {
                                         if (state.isEnforced) {
@@ -26371,7 +27080,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                         }
                                     }
                                 }
-                                // Moves the next window position
                                 X += 660;
                                 if (X > 1500) {
                                     X = 25;
@@ -26384,7 +27092,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     hookFunction("ChatSearchNormalDraw", 5, (args, next) => {
                         next(args);
                         if (state.isEnforced && state.customData && state.customData.roomList.length > 0) {
-                            // Scans results
                             let X = 25;
                             let Y = 25;
                             for (let C = ChatSearchResultOffset; C < ChatSearchResult.length && C < (ChatSearchResultOffset + 24); C++) {
@@ -26393,7 +27100,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                     DrawTextFit((ChatSearchResult[C].Friends != null && ChatSearchResult[C].Friends.length > 0 ? "(" + ChatSearchResult[C].Friends.length + ") " : "") + ChatSearchMuffle(ChatSearchResult[C].Name) + " - " + ChatSearchMuffle(ChatSearchResult[C].Creator) + " " + ChatSearchResult[C].MemberCount + "/" + ChatSearchResult[C].MemberLimit + "", X + 315, Y + 25, 620, "black");
                                     DrawTextFit(ChatSearchMuffle(ChatSearchResult[C].Description), X + 315, Y + 62, 620, "black");
                                 }
-                                // Moves the next window position
                                 X += 660;
                                 if (X > 1500) {
                                     X = 25;
@@ -26403,18 +27109,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }
                     }, ModuleCategory.Rules);
                 }
-            }
+            },
         });
         registerRule("block_leaving_room", {
             name: "Prevent leaving the room",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "while defined roles are inside",
             longDescription: "This rule prevents PLAYER_NAME from leaving the room they are currently inside while at least one character with the set minimum role or a higher one is present inside. NOTE: Careful when setting the minimum role too low. If it is set to public for instance, it would mean that PLAYER_NAME can only leave the room when they are alone in it.",
             keywords: ["controling", "limiting", "stopping", "exiting"],
             triggerTexts: {
                 infoBeep: "Someone's presence does not allowed you to leave!",
-                attempt_announce: "PLAYER_NAME violated a rule by trying to leave this room"
+                attempt_announce: "PLAYER_NAME violated a rule by trying to leave this room",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
@@ -26422,8 +27128,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "roleSelector",
                     default: AccessLevel.mistress,
                     description: "Minimum role preventing room leaving:",
-                    Y: 320
-                }
+                    Y: 320,
+                },
             },
             load(state) {
                 const active = () => state.isEnforced &&
@@ -26444,26 +27150,26 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_freeing_self", {
             name: "Forbid freeing self",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME removing any items from PLAYER_NAME's body",
-            longDescription: "This rule forbids PLAYER_NAME to remove any items from her own body. Other people can still remove them. The rule has a toggle to optionally still allow to remove items which were given a low difficulty score, such as hand-held items, plushies, etc.",
+            longDescription: "This rule forbids PLAYER_NAME to remove any items from her own body. Other people can still remove them. The rule has a toggle to optionally still allow to remove items which were given a low difficulty score by the original asset maker, such as hand-held items, plushies, etc. This means that custom crafted properties given to an item such as 'decoy' are not factored in.",
             keywords: ["limiting", "untying", "unbinding", "bondage"],
             triggerTexts: {
                 infoBeep: "You are not allowed to remove an item from your body!",
                 attempt_log: "PLAYER_NAME tried to remove a worn item, which was forbidden",
-                log: "PLAYER_NAME removed a worn item, which was forbidden"
+                log: "PLAYER_NAME removed a worn item, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
                 allowEasyItemsToggle: {
                     type: "toggle",
                     default: false,
-                    description: "Still allow removing low difficulty items"
-                }
+                    description: "Still allow removing low difficulty items",
+                },
             },
             load(state) {
                 let score = 999;
@@ -26525,26 +27231,26 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 HookDialogMenuButtonClick("BCX_DismountDisabled", attempt);
                 HookDialogMenuButtonClick("Escape", trigger);
                 HookDialogMenuButtonClick("BCX_EscapeDisabled", attempt);
-            }
+            },
         });
         registerRule("block_tying_others", {
             name: "Forbid tying up others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "either everybody or only more dominant characters",
             longDescription: "This rule forbids PLAYER_NAME to use any items on other characters. Can be set to only affect using items on characters with a higher dominant / lower submissive score than PLAYER_NAME has.",
             keywords: ["limiting", "prevent", "restraints", "bondage"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use an item on TARGET_PLAYER!",
                 attempt_log: "PLAYER_NAME tried to use an item on TARGET_PLAYER, which was forbidden",
-                log: "PLAYER_NAME used an item on TARGET_PLAYER, which was forbidden"
+                log: "PLAYER_NAME used an item on TARGET_PLAYER, which was forbidden",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
                 onlyMoreDominantsToggle: {
                     type: "toggle",
                     default: true,
-                    description: "Only forbid tying people with higher dominance"
-                }
+                    description: "Only forbid tying people with higher dominance",
+                },
             },
             load(state) {
                 hookFunction("DialogItemClick", 5, (args, next) => {
@@ -26572,18 +27278,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_blacklisting", {
             name: "Prevent blacklisting",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "and ghosting of the defined roles",
             longDescription: "This rule prevents PLAYER_NAME from adding characters with the set minimum role or a higher one to their bondage club blacklist and ghostlist.",
             keywords: ["limiting"],
             triggerTexts: {
                 infoBeep: "You are not allowed to blacklist/ghost this person!",
-                attempt_announce: "PLAYER_NAME violated a rule by trying to blacklist TARGET_PLAYER"
+                attempt_announce: "PLAYER_NAME violated a rule by trying to blacklist TARGET_PLAYER",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
@@ -26591,11 +27297,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "roleSelector",
                     default: AccessLevel.mistress,
                     description: "Minimum role forbidden to blacklist:",
-                    Y: 320
-                }
+                    Y: 320,
+                },
             },
             load(state) {
-                // TODO: Fix for NMod
                 if (!NMod) {
                     hookFunction("ChatRoomListUpdate", 6, (args, next) => {
                         const CN = parseInt(args[2], 10);
@@ -26611,22 +27316,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return next(args);
                     }, ModuleCategory.Rules);
                 }
-            }
+            },
         });
         registerRule("block_whitelisting", {
             name: "Prevent whitelisting",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "of roles 'friend' or 'public'",
             longDescription: "This rule prevents PLAYER_NAME from adding characters with a role lower than a BCX Mistress to their bondage club whitelist.",
             keywords: ["limiting"],
             triggerTexts: {
                 infoBeep: "You are not allowed to whitelist this person!",
-                attempt_announce: "PLAYER_NAME violated a rule by trying to whitelist TARGET_PLAYER"
+                attempt_announce: "PLAYER_NAME violated a rule by trying to whitelist TARGET_PLAYER",
             },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
-                // TODO: Fix for NMod
                 if (!NMod) {
                     hookFunction("ChatRoomListUpdate", 6, (args, next) => {
                         const CN = parseInt(args[2], 10);
@@ -26641,32 +27345,31 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return next(args);
                     }, ModuleCategory.Rules);
                 }
-            }
+            },
         });
         registerRule("block_antiblind", {
             name: "Forbid the antiblind command",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "BCX's .antiblind command",
             longDescription: "This rule forbids PLAYER_NAME to use the antiblind command. Antiblind is a BCX feature that enables a BCX user to see the whole chat room and all other characters at all times, even when wearing a blinding item. If PLAYER_NAME should be forbidden to use the command, this rule should be used.",
             keywords: ["limiting", "preventing", "controling"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use the antiblind command!",
                 attempt_log: "PLAYER_NAME tried to use the antiblind command",
-                log: "PLAYER_NAME used the antiblind command"
+                log: "PLAYER_NAME used the antiblind command",
             },
-            defaultLimit: ConditionsLimit.normal
-            // Implemented externally
+            defaultLimit: ConditionsLimit.normal,
         });
         registerRule("block_difficulty_change", {
             name: "Forbid changing difficulty",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "multiplayer difficulty preference",
             longDescription: "This rule forbids PLAYER_NAME to change her Bondage Club multiplayer difficulty, regardless of the current value.",
             keywords: ["limiting", "preventing", "controling"],
             triggerTexts: {
                 infoBeep: "You are not allowed to change your difficulty!",
                 attempt_log: "PLAYER_NAME tried to change her multiplayer difficulty",
-                log: "PLAYER_NAME changed her multiplayer difficulty"
+                log: "PLAYER_NAME changed her multiplayer difficulty",
             },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
@@ -26699,11 +27402,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     next(args);
                 });
-            }
+            },
         });
         registerRule("block_activities", {
             name: "Prevent usage of all activities",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "any action buttons such as kissing or groping",
             longDescription: "This rule forbids PLAYER_NAME to use any (sexual) activities in chat rooms. Other players can still use activities on her, as this rules does not block the arousal & sexual activities system itself, as forcing the according BC setting would.",
@@ -26721,12 +27424,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }
                     }
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_mainhall_maidrescue", {
             name: "Forbid mainhall maid services",
             loggable: false,
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "to get out of any restraints",
             longDescription: "This rule forbids PLAYER_NAME to use a maid's help to get out of restraints in the club's main hall. Recommended to combine with the rule: 'Force 'Cannot enter single-player rooms when restrained' (Existing BC setting)' to prevent NPCs in other rooms from helping.",
             keywords: ["limiting", "preventing", "controling"],
@@ -26734,7 +27437,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             load(state) {
                 hookFunction("LogValue", 5, (args, next) => {
                     if (state.isEnforced && args[0] === "MaidsDisabled" && args[1] === "Maid")
-                        return CurrentTime + 500000000; // 6 days left range for nicest message
+                        return CurrentTime + 500000000;
                     return next(args);
                 }, ModuleCategory.Rules);
                 hookFunction("MainHallMaidsDisabledBegForMore", 5, (args, next) => {
@@ -26742,41 +27445,39 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return false;
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_action", {
             name: "Forbid the action command",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "BCX's .action/.a chat command",
             longDescription: "This rule forbids PLAYER_NAME to use the action command. Action is a BCX feature that enables to format a message to look like a BC chat action. If PLAYER_NAME should be forbidden to use the command to communicate, this rule should be used.",
             keywords: ["limiting", "preventing", "controling"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use the action command!",
                 attempt_log: "PLAYER_NAME tried to use the action command",
-                log: "PLAYER_NAME used the action command"
+                log: "PLAYER_NAME used the action command",
             },
-            defaultLimit: ConditionsLimit.blocked
-            // Implemented externally
+            defaultLimit: ConditionsLimit.blocked,
         });
         registerRule("block_BCX_permissions", {
             name: "Prevent using BCX permissions",
             loggable: false,
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "PLAYER_NAME using her permissions for her own BCX, with some exceptions",
             longDescription: "This rule forbids PLAYER_NAME access to some parts of their own BCX they have permission to use, making it as if they do not have 'self access' (see BCX tutorial on permission system) while the rule is active. This rule still leaves access for all permissions where the lowest permitted role ('lowest access') is also set to PLAYER_NAME (to prevent getting stuck). This rule does not affect PLAYER_NAME's permissions to use another users's BCX.",
             keywords: ["limiting", "preventing", "controlling", "accessing", "self", "rights"],
-            defaultLimit: ConditionsLimit.blocked
-            // Implemented externally
+            defaultLimit: ConditionsLimit.blocked,
         });
         registerRule("block_room_admin_UI", {
             name: "Forbid looking at room admin UI",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "while blindfolded",
             longDescription: "This rule forbids PLAYER_NAME from opening the room admin screen while blindfolded, as this discloses the room background and the member numbers of admins, potentially in the room right now. If PLAYER_NAME is a room admin, she can still use chat commands for altering the room or kicking/banning.",
             keywords: ["limiting", "preventing", "controling", "seeing"],
             triggerTexts: {
-                infoBeep: "A BCX rule prevents you from using this while unable to see!"
+                infoBeep: "A BCX rule prevents you from using this while unable to see!",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
@@ -26801,18 +27502,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_using_ggts", {
             name: "Forbid using GGTS",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "training by GGTS is forbidden",
             longDescription: "This rule forbids PLAYER_NAME to revieve training by the base club's GGTS feature. If the rule is enforced while PLAYER_NAME has remaining GGTS training time, it is removed the moment PLAYER_NAME enters the GGTS room.",
             keywords: ["limiting", "preventing", "controling"],
             triggerTexts: {
                 infoBeep: "You are not allowed to recieve training by GGTS!",
                 attempt_log: "PLAYER_NAME tried to recieve training by GGTS",
-                log: "PLAYER_NAME started training by GGTS"
+                log: "PLAYER_NAME started training by GGTS",
             },
             defaultLimit: ConditionsLimit.limited,
             load(state) {
@@ -26836,11 +27537,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_club_slave_work", {
             name: "Prevent working as club slave",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "the task from the mistress room",
             longDescription: "This rule prevents PLAYER_NAME to work as a club slave by picking up a club slave collar from the club management room.",
@@ -26853,11 +27554,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_using_unowned_items", {
             name: "Prevent using items of others",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "items not bought",
             longDescription: "This rule prevents PLAYER_NAME to use items she does not own herself, but can use on someone because this person owns them.",
@@ -26877,21 +27578,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         C.Inventory = inventoryBackup;
                     }
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("block_changing_emoticon", {
             name: "Prevent changing own emoticon",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             shortDescription: "for just PLAYER_NAME",
             longDescription: "This rule prevents PLAYER_NAME from showing, removing or changing an emoticon (afk, zZZ, etc.) over her head. It also blocks her from using the emoticon command on herself.",
             triggerTexts: {
                 infoBeep: "You are not allowed to change the emoticon!",
                 attempt_log: "PLAYER_NAME tried to use the emoticon command",
-                log: "PLAYER_NAME used the emoticon command"
+                log: "PLAYER_NAME used the emoticon command",
             },
             defaultLimit: ConditionsLimit.normal,
             load(state) {
-                // Partially implemented externally
                 hookFunction("DialogClickExpressionMenu", 5, (args, next) => {
                     const I = DialogFacialExpressions.findIndex(a => a.Appearance.Asset.Group.Name === "Emoticon");
                     if (state.inEffect && MouseIn(20, 185 + 100 * I, 90, 90)) {
@@ -26903,12 +27603,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 });
-            }
+            },
         });
         let changed = false;
         registerRule("block_ui_icons_names", {
             name: "Force-hide UI elements",
-            type: 0 /* RuleType.Block */,
+            type: 0,
             loggable: false,
             shortDescription: "e.g., icons, bars, or names",
             longDescription: "This rule enforces hiding of certain UI elements for PLAYER_NAME over all characters inside the room. Different levels of the effect can be set which follow exactly the behavior of the 'eye'-toggle in the button row above the chat. There is also an option to hide emoticon bubbles over all characters' heads.",
@@ -26919,14 +27619,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "listSelect",
                     default: "icons",
                     options: [["icons", "Icons"], ["arousal", "Icons/Bar"], ["names", "Icons/Bar/Names"]],
-                    description: "Select what shall be hidden:"
+                    description: "Select what shall be hidden:",
                 },
                 alsoHideEmoticons: {
                     type: "toggle",
                     default: false,
                     description: "Also hide emoticons during the effect",
-                    Y: 440
-                }
+                    Y: 440,
+                },
             },
             load(state) {
                 hookFunction("ChatRoomDrawCharacter", 1, (args, next) => {
@@ -26954,7 +27654,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return next(args);
                     const EmoticonStateBackup = Emoticon.Property.Expression;
                     if (state.isEnforced && state.customData && state.customData.alsoHideEmoticons) {
-                        // @ts-expect-error: Expression can be both `undefined` and `null`
                         Emoticon.Property.Expression = null;
                     }
                     next(args);
@@ -26974,7 +27673,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 for (const c of ChatRoomCharacter) {
                     CharacterLoadCanvas(c);
                 }
-            }
+            },
         });
     }
 
@@ -26987,24 +27686,24 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 OnlineSettings: Player.OnlineSettings,
                 OnlineSharedSettings: Player.OnlineSharedSettings,
                 GraphicsSettings: Player.GraphicsSettings,
-                ItemPermission: Player.ItemPermission
+                ItemPermission: Player.ItemPermission,
             });
         }
         function settingHelper(setting, defaultLimit, shortDescription = "Existing BC setting") {
             return {
                 name: `Force '${setting}'`,
-                type: 2 /* RuleType.Setting */,
+                type: 2,
                 loggable: false,
                 shortDescription,
                 keywords: ["control", "settings", "configure", "change"],
                 defaultLimit,
                 longDescription: `This rule forces PLAYER_NAME's base game setting '${setting}' to configurable value and prevents her from changing it.`,
                 triggerTexts: {
-                    infoBeep: `Rule changed your '${setting}' setting`
-                }
+                    infoBeep: `Rule changed your '${setting}' setting`,
+                },
             };
         }
-        function toggleSettingHelper({ id, setting, shortDescription, defaultValue, defaultLimit, get, set }) {
+        function toggleSettingHelper({ id, setting, shortDescription, defaultValue, defaultLimit, get, set, }) {
             return registerRule(id, {
                 ...settingHelper(setting, defaultLimit, shortDescription),
                 longDescription: `This rule forces PLAYER_NAME's base game or BCX setting '${setting}' to the configured value and prevents her from changing it. ` +
@@ -27014,14 +27713,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     value: {
                         type: "toggle",
                         description: setting,
-                        default: defaultValue
+                        default: defaultValue,
                     },
                     restore: {
                         type: "toggle",
                         description: "Restore previous value when rule ends",
                         default: true,
-                        Y: 420
-                    }
+                        Y: 420,
+                    },
                 },
                 internalDataValidate: (data) => typeof data === "boolean",
                 internalDataDefault: () => { var _a; return (_a = get()) !== null && _a !== void 0 ? _a : false; },
@@ -27056,10 +27755,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }
                     }
                     return false;
-                }
+                },
             });
         }
-        // "General" settings
         registerRule("setting_item_permission", {
             ...settingHelper("Item permission", ConditionsLimit.limited),
             dataDefinition: {
@@ -27069,11 +27767,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ["everyone", "Everyone, no exceptions"],
                         ["everyoneBlacklist", "Everyone, except blacklist"],
                         ["dominants", "Owner, Lovers, whitelist & Dominants"],
-                        ["whitelist", "Owner, Lovers and whitelist only"]
+                        ["whitelist", "Owner, Lovers and whitelist only"],
                     ],
                     default: "everyone",
-                    description: "Item permission"
-                }
+                    description: "Item permission",
+                },
             },
             tick(state) {
                 var _a;
@@ -27082,7 +27780,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         everyone: 0,
                         everyoneBlacklist: 1,
                         dominants: 2,
-                        whitelist: 3
+                        whitelist: 3,
                     };
                     const wanted = (_a = VALUE_CONVERSIONS[state.customData.value]) !== null && _a !== void 0 ? _a : 0;
                     if (Player.ItemPermission !== wanted) {
@@ -27093,7 +27791,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return false;
-            }
+            },
         });
         toggleSettingHelper({
             id: "setting_forbid_lockpicking",
@@ -27101,7 +27799,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.limited,
             get: () => { var _a; return (_a = Player.OnlineSharedSettings) === null || _a === void 0 ? void 0 : _a.DisablePickingLocksOnSelf; },
-            set: value => Player.OnlineSharedSettings.DisablePickingLocksOnSelf = value
+            set: value => Player.OnlineSharedSettings.DisablePickingLocksOnSelf = value,
         });
         toggleSettingHelper({
             id: "setting_forbid_SP_rooms",
@@ -27109,7 +27807,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.limited,
             get: () => { var _a; return (_a = Player.GameplaySettings) === null || _a === void 0 ? void 0 : _a.OfflineLockedRestrained; },
-            set: value => Player.GameplaySettings.OfflineLockedRestrained = value
+            set: value => Player.GameplaySettings.OfflineLockedRestrained = value,
         });
         toggleSettingHelper({
             id: "setting_forbid_safeword",
@@ -27117,9 +27815,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: false,
             defaultLimit: ConditionsLimit.limited,
             get: () => { var _a; return (_a = Player.GameplaySettings) === null || _a === void 0 ? void 0 : _a.EnableSafeword; },
-            set: value => Player.GameplaySettings.EnableSafeword = value
+            set: value => Player.GameplaySettings.EnableSafeword = value,
         });
-        // "Arousal" settings
         registerRule("setting_arousal_meter", {
             ...settingHelper("Arousal meter", ConditionsLimit.limited),
             dataDefinition: {
@@ -27130,22 +27827,22 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ["NoMeter", "Allow without a meter"],
                         ["Manual", "Allow with a manual meter"],
                         ["Hybrid", "Allow with a hybrid meter"],
-                        ["Automatic", "Allow with a locked meter"]
+                        ["Automatic", "Allow with a locked meter"],
                     ],
                     default: "Hybrid",
-                    description: "Sexual activities - Activation"
+                    description: "Sexual activities - Activation",
                 },
                 visible: {
                     type: "listSelect",
                     options: [
                         ["All", "Show arousal to everyone"],
                         ["Access", "Show if they have access"],
-                        ["Self", "Show to yourself only"]
+                        ["Self", "Show to yourself only"],
                     ],
                     default: "All",
                     description: "Meter visibility",
-                    Y: 480
-                }
+                    Y: 480,
+                },
             },
             tick(state) {
                 let change = false;
@@ -27164,7 +27861,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return change;
-            }
+            },
         });
         toggleSettingHelper({
             id: "setting_block_vibe_modes",
@@ -27172,7 +27869,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: false,
             defaultLimit: ConditionsLimit.limited,
             get: () => { var _a; return (_a = Player.ArousalSettings) === null || _a === void 0 ? void 0 : _a.DisableAdvancedVibes; },
-            set: value => Player.ArousalSettings.DisableAdvancedVibes = value
+            set: value => Player.ArousalSettings.DisableAdvancedVibes = value,
         });
         registerRule("setting_arousal_stutter", {
             ...settingHelper("Arousal speech stuttering", ConditionsLimit.limited),
@@ -27183,11 +27880,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ["None", "Never stutter"],
                         ["Arousal", "When you're aroused"],
                         ["Vibration", "When you're vibrated"],
-                        ["All", "Aroused & vibrated"]
+                        ["All", "Aroused & vibrated"],
                     ],
                     default: "All",
-                    description: "Speech stuttering"
-                }
+                    description: "Speech stuttering",
+                },
             },
             tick(state) {
                 if (state.isEnforced && state.customData && Player.ArousalSettings) {
@@ -27199,16 +27896,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return false;
-            }
+            },
         });
-        // "Online" settings
         toggleSettingHelper({
             id: "setting_show_afk",
             setting: "Show AFK bubble",
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.OnlineSettings) === null || _a === void 0 ? void 0 : _a.EnableAfkTimer; },
-            set: value => Player.OnlineSettings.EnableAfkTimer = value
+            set: value => Player.OnlineSettings.EnableAfkTimer = value,
         });
         toggleSettingHelper({
             id: "setting_allow_body_mod",
@@ -27216,7 +27912,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.OnlineSharedSettings) === null || _a === void 0 ? void 0 : _a.AllowFullWardrobeAccess; },
-            set: value => Player.OnlineSharedSettings.AllowFullWardrobeAccess = value
+            set: value => Player.OnlineSharedSettings.AllowFullWardrobeAccess = value,
         });
         toggleSettingHelper({
             id: "setting_forbid_cosplay_change",
@@ -27224,9 +27920,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: false,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.OnlineSharedSettings) === null || _a === void 0 ? void 0 : _a.BlockBodyCosplay; },
-            set: value => Player.OnlineSharedSettings.BlockBodyCosplay = value
+            set: value => Player.OnlineSharedSettings.BlockBodyCosplay = value,
         });
-        // "Immersion" settings
         registerRule("setting_sensdep", {
             ...settingHelper("Sensory deprivation setting", ConditionsLimit.blocked),
             dataDefinition: {
@@ -27237,23 +27932,23 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ["Normal", "Normal"],
                         ["SensDepNames", "Hide names"],
                         ["SensDepTotal", "Heavy"],
-                        ["SensDepExtreme", "Total"]
+                        ["SensDepExtreme", "Total"],
                     ],
                     default: "Normal",
-                    description: "Sensory deprivation setting"
+                    description: "Sensory deprivation setting",
                 },
                 disableExamine: {
                     type: "toggle",
                     default: false,
                     description: "Disable examining when blind",
-                    Y: 480
+                    Y: 480,
                 },
                 hideMessages: {
                     type: "toggle",
                     default: false,
                     description: "Hide others' messages",
-                    Y: 580
-                }
+                    Y: 580,
+                },
             },
             tick(state) {
                 let changed = false;
@@ -27281,7 +27976,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return changed;
-            }
+            },
         });
         toggleSettingHelper({
             id: "setting_hide_non_adjecent",
@@ -27289,7 +27984,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.ImmersionSettings) === null || _a === void 0 ? void 0 : _a.BlindAdjacent; },
-            set: value => Player.ImmersionSettings.BlindAdjacent = value
+            set: value => Player.ImmersionSettings.BlindAdjacent = value,
         });
         toggleSettingHelper({
             id: "setting_blind_room_garbling",
@@ -27297,7 +27992,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.ImmersionSettings) === null || _a === void 0 ? void 0 : _a.ChatRoomMuffle; },
-            set: value => Player.ImmersionSettings.ChatRoomMuffle = value
+            set: value => Player.ImmersionSettings.ChatRoomMuffle = value,
         });
         toggleSettingHelper({
             id: "setting_relog_keeps_restraints",
@@ -27305,7 +28000,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.limited,
             get: () => { var _a; return (_a = Player.GameplaySettings) === null || _a === void 0 ? void 0 : _a.DisableAutoRemoveLogin; },
-            set: value => Player.GameplaySettings.DisableAutoRemoveLogin = value
+            set: value => Player.GameplaySettings.DisableAutoRemoveLogin = value,
         });
         toggleSettingHelper({
             id: "setting_leashed_roomchange",
@@ -27313,7 +28008,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.OnlineSharedSettings) === null || _a === void 0 ? void 0 : _a.AllowPlayerLeashing; },
-            set: value => Player.OnlineSharedSettings.AllowPlayerLeashing = value
+            set: value => Player.OnlineSharedSettings.AllowPlayerLeashing = value,
         });
         registerRule("setting_room_rejoin", {
             ...settingHelper("Return to chatrooms on relog", ConditionsLimit.limited),
@@ -27321,14 +28016,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 value: {
                     type: "toggle",
                     default: true,
-                    description: "Return to chatrooms on relog"
+                    description: "Return to chatrooms on relog",
                 },
                 remakeRooms: {
                     type: "toggle",
                     default: false,
                     description: "Auto-remake rooms",
-                    Y: 425
-                }
+                    Y: 425,
+                },
             },
             tick(state) {
                 let changed = false;
@@ -27349,7 +28044,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return changed;
-            }
+            },
         });
         toggleSettingHelper({
             id: "setting_plug_vibe_events",
@@ -27357,7 +28052,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.normal,
             get: () => { var _a; return (_a = Player.ImmersionSettings) === null || _a === void 0 ? void 0 : _a.StimulationEvents; },
-            set: value => Player.ImmersionSettings.StimulationEvents = value
+            set: value => Player.ImmersionSettings.StimulationEvents = value,
         });
         toggleSettingHelper({
             id: "setting_allow_tint_effects",
@@ -27365,16 +28060,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.limited,
             get: () => { var _a; return (_a = Player.ImmersionSettings) === null || _a === void 0 ? void 0 : _a.AllowTints; },
-            set: value => Player.ImmersionSettings.AllowTints = value
+            set: value => Player.ImmersionSettings.AllowTints = value,
         });
-        // "Graphics" settings
         toggleSettingHelper({
             id: "setting_allow_blur_effects",
             setting: "Allow item blur effects",
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.GraphicsSettings) === null || _a === void 0 ? void 0 : _a.AllowBlur; },
-            set: value => Player.GraphicsSettings.AllowBlur = value
+            set: value => Player.GraphicsSettings.AllowBlur = value,
         });
         toggleSettingHelper({
             id: "setting_upsidedown_view",
@@ -27382,9 +28076,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.blocked,
             get: () => { var _a; return (_a = Player.GraphicsSettings) === null || _a === void 0 ? void 0 : _a.InvertRoom; },
-            set: value => Player.GraphicsSettings.InvertRoom = value
+            set: value => Player.GraphicsSettings.InvertRoom = value,
         });
-        // "Misc" module settings
         toggleSettingHelper({
             id: "setting_random_npc_events",
             setting: "Prevent random NPC events",
@@ -27392,24 +28085,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultValue: true,
             defaultLimit: ConditionsLimit.normal,
             get: () => cheatIsEnabled(MiscCheat.BlockRandomEvents),
-            set: value => cheatSetEnabled(MiscCheat.BlockRandomEvents, value)
+            set: value => cheatSetEnabled(MiscCheat.BlockRandomEvents, value),
         });
     }
 
     function initRules_bc_relation_control() {
         registerRule("rc_club_owner", {
             name: "Forbid club owner changes",
-            type: 3 /* RuleType.RC */,
+            type: 3,
             shortDescription: "getting or leaving owner",
             longDescription: "This rule forbids PLAYER_NAME to leave their current club owner or get a new one. Advancing ownership from trial to full ownership is unaffected. Doesn't prevent the club owner from releasing her.",
             keywords: ["prevent", "ownership", "collaring", "break"],
-            // Logs are not implemented
             loggable: false,
-            // triggerTexts: {
-            // 	infoBeep: "You are not allowed to [leave your|get an] owner!",
-            // 	attempt_log: "PLAYER_NAME tried to [leave their|get an] owner, which was forbidden.",
-            // 	log: "PLAYER_NAME [left their|got an] owner, which was forbidden."
-            // },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
                 hookFunction("ChatRoomOwnershipOptionIs", 5, (args, next) => {
@@ -27423,7 +28110,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     "ManagementCanBreakTrialOnline",
                     "ManagementCannotBeReleasedOnline",
                     "ManagementCanBeReleased",
-                    "ManagementCannotBeReleased"
+                    "ManagementCannotBeReleased",
                 ]) {
                     hookFunction(fun, 5, (args, next) => {
                         return !state.isEnforced && next(args);
@@ -27432,20 +28119,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 hookFunction("ManagementCannotBeReleasedExtreme", 5, (args, next) => {
                     return state.isEnforced || next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("rc_lover_new", {
             name: "Forbid getting new lovers",
-            type: 3 /* RuleType.RC */,
+            type: 3,
             longDescription: "This rule forbids PLAYER_NAME to get a new lover. Advancing lovership from dating to engagement or from engagement to marriage is unaffected.",
             keywords: ["prevent", "lovership", "dating"],
-            // Logs are not implemented
             loggable: false,
-            // triggerTexts: {
-            // 	infoBeep: "Due to a rule, you are not allowed to get a new lover!",
-            // 	attempt_log: "PLAYER_NAME tried to get a new lover, TARGET_PLAYER, which was forbidden",
-            // 	log: "PLAYER_NAME got a new lover, TARGET_PLAYER, which was forbidden"
-            // },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
                 hookFunction("ChatRoomLovershipOptionIs", 5, (args, next) => {
@@ -27454,45 +28135,33 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return false;
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("rc_lover_leave", {
             name: "Forbid breaking up with lovers",
-            type: 3 /* RuleType.RC */,
+            type: 3,
             longDescription: "This rule forbids PLAYER_NAME to leave any of their lovers, independent of lovership stage (leaving dating, engaged and married characters is forbidden). Doesn't prevent her lovers from breaking up with her.",
             keywords: ["prevent", "lovership", "dating", "leave", "leaving"],
-            // Logs are not implemented
             loggable: false,
-            // triggerTexts: {
-            // 	infoBeep: "Due to a rule, you are not allowed to leave your lover!",
-            // 	attempt_log: "PLAYER_NAME tried to leave their lover, TARGET_PLAYER, which was forbidden",
-            // 	log: "PLAYER_NAME left their lover, TARGET_PLAYER, which was forbidden"
-            // },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
                 for (const fun of [
                     "ManagementCanBreakDatingLoverOnline",
-                    "ManagementCanBreakUpLoverOnline"
+                    "ManagementCanBreakUpLoverOnline",
                 ]) {
                     hookFunction(fun, 5, (args, next) => {
                         return !state.isEnforced && next(args);
                     }, ModuleCategory.Rules);
                 }
-            }
+            },
         });
         registerRule("rc_sub_new", {
             name: "Forbid taking new submissives",
-            type: 3 /* RuleType.RC */,
+            type: 3,
             shortDescription: "by offering them an ownership trial",
             longDescription: "This rule forbids PLAYER_NAME to start a trial with new submissive. Advancing ownership from trial to full ownership is unaffected.",
             keywords: ["prevent", "subbies", "collaring"],
-            // Logs are not implemented
             loggable: false,
-            // triggerTexts: {
-            // 	infoBeep: "Due to a rule, you are not allowed to own a new submissive!",
-            // 	attempt_log: "PLAYER_NAME tried to collar a new sub, TARGET_PLAYER, which was forbidden",
-            // 	log: "PLAYER_NAME collared a new sub, TARGET_PLAYER, which was forbidden"
-            // },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
                 hookFunction("ChatRoomOwnershipOptionIs", 5, (args, next) => {
@@ -27501,26 +28170,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return false;
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("rc_sub_leave", {
             name: "Forbid disowning submissives",
-            type: 3 /* RuleType.RC */,
+            type: 3,
             longDescription: "This rule forbids PLAYER_NAME to let go of any of their subs. (affects both trial and full ownerships). Doesn't prevent her submissives from breaking the bond.",
             keywords: ["prevent", "subbies", "collar", "freeing", "releasing", "release"],
-            // Logs are not implemented
             loggable: false,
-            // triggerTexts: {
-            // 	infoBeep: "Due to a rule, you are not allowed to let go of any of your submissive!",
-            // 	attempt_log: "PLAYER_NAME tried to let go of their sub, TARGET_PLAYER, which was forbidden",
-            // 	log: "PLAYER_NAME let go of their sub, TARGET_PLAYER, which was forbidden"
-            // },
             defaultLimit: ConditionsLimit.blocked,
             load(state) {
                 hookFunction("ChatRoomIsOwnedByPlayer", 5, (args, next) => {
                     return !state.isEnforced && next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
     }
 
@@ -27553,14 +28216,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function initRules_bc_speech_control() {
         registerRule("speech_specific_sound", {
             name: "Allow specific sounds only",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "such as an animal sound",
             longDescription: "This rule allows PLAYER_NAME to only communicate using a list of specific sound patterns in chat messages and whispers. These patterns cannot be mixed in the same message, though. Only one sound from the list per message is valid. That said, any variation of a sound in the list is allowed as long as the letters are in order. (Example: if the set sound is 'Meow', then this is a valid message: 'Me..ow? meeeow! mmeooowwwwwww?! meow. me.. oo..w ~')",
             keywords: ["filter", "speech", "talking", "letters"],
             triggerTexts: {
                 infoBeep: "You are allowed to speak only using one of the defined sounds!",
                 attempt_log: "PLAYER_NAME tried to break a rule to only speak using specific sound patterns",
-                log: "PLAYER_NAME broke a rule to only speak using specific sound patterns"
+                log: "PLAYER_NAME broke a rule to only speak using specific sound patterns",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
@@ -27569,9 +28232,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     default: [],
                     description: "Set the allowed sounds:",
                     options: {
-                        validate: /^\p{L}*$/iu
-                    }
-                }
+                        validate: /^\p{L}*$/iu,
+                    },
+                },
             },
             init(state) {
                 const check = (msg) => {
@@ -27587,21 +28250,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_garble_whispers", {
             name: "Garble whispers while gagged",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "same as normal messages",
             longDescription: "This rule alters PLAYER_NAME's outgoing whisper messages while gagged to be garbled the same way normal chat messages are. This means, that strength of the effect depends on the type of gag and (OOC text) is not affected. Note: While the rule is in effect, the BC immersion preference 'Prevent OOC & whispers while gagged' is altered, to allow gagged whispers, since those are now garbled by the rule. OOC prevention is not changed.",
@@ -27609,7 +28272,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultLimit: ConditionsLimit.limited,
             init(state) {
                 registerSpeechHook({
-                    modify: (info, message) => state.isEnforced && info.type === "Whisper" ? callOriginal("SpeechGarble", [Player, message, true]) : message
+                    modify: (info, message) => state.isEnforced && info.type === "Whisper" ? callOriginal("SpeechGarble", [Player, message, true]) : message,
                 });
             },
             load(state) {
@@ -27618,18 +28281,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return false;
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("speech_block_gagged_ooc", {
             name: "Block OOC chat while gagged",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "no more misuse of OOC for normal chatting while gagged",
             longDescription: "This rule forbids PLAYER_NAME to use OOC (messages between round brackets) in chat or OOC whisper messages while she is gagged.",
             keywords: ["parentheses", "prevent", "forbid"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use OOC in messages while gagged.",
                 attempt_log: "PLAYER_NAME tried to use OOC in a message while gagged",
-                log: "PLAYER_NAME used OOC in a message while gagged"
+                log: "PLAYER_NAME used OOC in a message while gagged",
             },
             defaultLimit: ConditionsLimit.blocked,
             init(state) {
@@ -27638,28 +28301,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_block_ooc", {
             name: "Block OOC chat",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "blocks use of OOC in messages",
             longDescription: "This rule forbids PLAYER_NAME to use OOC (messages between round brackets) in chat or OOC whisper messages at any moment. This is a very extreme rule and should be used with great caution!",
             keywords: ["parentheses", "prevent", "forbid"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use OOC in messages!",
                 attempt_log: "PLAYER_NAME tried to use OOC in a message",
-                log: "PLAYER_NAME used OOC in a message"
+                log: "PLAYER_NAME used OOC in a message",
             },
             defaultLimit: ConditionsLimit.blocked,
             init(state) {
@@ -27668,28 +28331,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_doll_talk", {
             name: "Doll talk",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "allows only short sentences with simple words",
             longDescription: "This rule forbids PLAYER_NAME to use any words longer than set limit and limits number of words too. Both limits are configurable independently. Doesn't affect OOC text, but does affect whispers. Note: Setting '0' means this part is not limited (∞), as there is another rule to forbid open talking completely.",
             keywords: ["limit", "restrict", "length", "count"],
             triggerTexts: {
                 infoBeep: "You broke the doll talk rule!",
                 attempt_log: "PLAYER_NAME tried to break the doll talk rule",
-                log: "PLAYER_NAME broke the doll talk rule"
+                log: "PLAYER_NAME broke the doll talk rule",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
@@ -27697,14 +28360,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "number",
                     default: 6,
                     description: "Max. character length of any word:",
-                    Y: 420
+                    Y: 420,
                 },
                 maxNumberOfWords: {
                     type: "number",
                     default: 5,
                     description: "Max. number of words per message:",
-                    Y: 570
-                }
+                    Y: 570,
+                },
             },
             init(state) {
                 const check = (msg) => {
@@ -27722,28 +28385,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_ban_words", {
             name: "Forbid saying certain words in chat",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "based on a configurable blacklist",
             longDescription: "This rule forbids PLAYER_NAME to use certain words in the chat. The list of banned words can be configured. Checks are not case sensitive (forbidding 'no' also forbids 'NO' and 'No'). Doesn't affect emotes and OOC text, but does affect whispers.",
             keywords: ["limit", "restrict", "blacklist", "blocklist", "forbidden"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use the word 'USED_WORD'!",
                 attempt_log: "PLAYER_NAME tried to use the banned word 'USED_WORD'",
-                log: "PLAYER_NAME used the banned word 'USED_WORD'"
+                log: "PLAYER_NAME used the banned word 'USED_WORD'",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
@@ -27752,9 +28415,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     default: [],
                     description: "All forbidden words:",
                     options: {
-                        validate: /^[\p{L} ]*$/iu
-                    }
-                }
+                        validate: /^[\p{L} ]*$/iu,
+                    },
+                },
             },
             init(state) {
                 let transgression;
@@ -27772,28 +28435,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg) && transgression !== undefined) {
                             state.triggerAttempt(null, { USED_WORD: transgression });
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg) && transgression !== undefined) {
                             state.trigger(null, { USED_WORD: transgression });
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_ban_words_in_emotes", {
             name: "Forbid saying certain words in emotes",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "based on a configurable blacklist",
             longDescription: "This rule forbids PLAYER_NAME to use certain words as part of any emote messages. The list of banned words can be configured. Checks are not case sensitive (forbidding 'no' also forbids 'NO' and 'No').",
             keywords: ["limit", "restrict", "blacklist", "blocklist", "forbidden"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use the word 'USED_WORD'!",
                 attempt_log: "PLAYER_NAME tried to use the banned word 'USED_WORD'",
-                log: "PLAYER_NAME used the banned word 'USED_WORD'"
+                log: "PLAYER_NAME used the banned word 'USED_WORD'",
             },
             defaultLimit: ConditionsLimit.limited,
             dataDefinition: {
@@ -27802,9 +28465,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     default: [],
                     description: "All forbidden words:",
                     options: {
-                        validate: /^[\p{L} ]*$/iu
-                    }
-                }
+                        validate: /^[\p{L} ]*$/iu,
+                    },
+                },
             },
             init(state) {
                 let transgression;
@@ -27822,28 +28485,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg) && transgression !== undefined) {
                             state.triggerAttempt(null, { USED_WORD: transgression });
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg) && transgression !== undefined) {
                             state.trigger(null, { USED_WORD: transgression });
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_forbid_open_talking", {
             name: "Forbid talking openly",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "in a chat room",
             longDescription: "This rule forbids PLAYER_NAME to send a message to all people inside a chat room. Does not affect whispers or emotes, but does affect OOC.",
             keywords: ["limit", "restrict", "loud", "saying", "speaking", "chatting"],
             triggerTexts: {
                 infoBeep: "You are not allowed to talk openly in chatrooms!",
                 attempt_log: "PLAYER_NAME tried to openly speak in a room",
-                log: "PLAYER_NAME spoke openly in a room"
+                log: "PLAYER_NAME spoke openly in a room",
             },
             defaultLimit: ConditionsLimit.blocked,
             init(state) {
@@ -27852,35 +28515,35 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_limit_open_talking", {
             name: "Limit talking openly",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "only allow a set number of chat messages per minute",
             longDescription: "This rule limits PLAYER_NAME's ability to send a message to all people inside a chat room to only the set number per minute. Does not affect whispers or emotes, but does affect OOC. Note: Setting '0' will have no effect, as there is another rule to forbid open talking completely.",
             keywords: ["limit", "restrict", "loud", "saying", "speaking", "chatting", "slow", "fast"],
             triggerTexts: {
-                infoBeep: "You exceeded the number of allowed chat messages per minute!"
+                infoBeep: "You exceeded the number of allowed chat messages per minute!",
             },
             dataDefinition: {
                 maxNumberOfMsg: {
                     type: "number",
                     default: 42,
                     description: "Maximum allowed number of chat messages per minute (> 0):",
-                    Y: 380
-                }
+                    Y: 380,
+                },
             },
             defaultLimit: ConditionsLimit.blocked,
             init(state) {
@@ -27892,7 +28555,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         if (((_a = state.customData) === null || _a === void 0 ? void 0 : _a.maxNumberOfMsg) && state.customData.maxNumberOfMsg !== 0 && state.isEnforced && !check(msg)) {
                             if (currentCount >= state.customData.maxNumberOfMsg) {
                                 state.triggerAttempt();
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
                             BCX_setTimeout(() => {
                                 if (currentCount > 0) {
@@ -27900,27 +28563,27 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                 }
                             }, 60000);
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         var _a;
                         if (((_a = state.customData) === null || _a === void 0 ? void 0 : _a.maxNumberOfMsg) && state.customData.maxNumberOfMsg !== 0 && state.isEnforced && !check(msg)) {
                             currentCount++;
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_forbid_emotes", {
             name: "Forbid using emotes",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "in a chat room",
             longDescription: "This rule forbids PLAYER_NAME to send an emote (with * or /me) to all people inside a chat room.",
             keywords: ["limit", "restrict", "emoting", "acting"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use emotes in chatrooms!",
                 attempt_log: "PLAYER_NAME tried to use an emote in a room",
-                log: "PLAYER_NAME used an emote in a room"
+                log: "PLAYER_NAME used an emote in a room",
             },
             defaultLimit: ConditionsLimit.blocked,
             init(state) {
@@ -27929,35 +28592,35 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_limit_emotes", {
             name: "Limit using emotes",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "only allow a set number of emotes per minute",
             longDescription: "This rule forbids PLAYER_NAME to send an emote (with * or /me) to all people inside a chat room to only the set number per minute. Note: Setting '0' will have no effect, as there is another rule to forbid using emotes completely.",
             keywords: ["restrict", "emoting", "acting", "slow", "fast"],
             triggerTexts: {
-                infoBeep: "You exceeded the number of allowed emotes per minute!"
+                infoBeep: "You exceeded the number of allowed emotes per minute!",
             },
             dataDefinition: {
                 maxNumberOfEmotes: {
                     type: "number",
                     default: 42,
                     description: "Maximum allowed number of emotes per minute (> 0):",
-                    Y: 380
-                }
+                    Y: 380,
+                },
             },
             defaultLimit: ConditionsLimit.blocked,
             init(state) {
@@ -27969,7 +28632,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         if (((_a = state.customData) === null || _a === void 0 ? void 0 : _a.maxNumberOfEmotes) && state.customData.maxNumberOfEmotes !== 0 && state.isEnforced && !check(msg)) {
                             if (currentCount >= state.customData.maxNumberOfEmotes) {
                                 state.triggerAttempt();
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
                             currentCount++;
                             BCX_setTimeout(() => {
@@ -27978,29 +28641,29 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                 }
                             }, 60000);
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
-                    }
+                        return 0;
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_restrict_whisper_send", {
             name: "Restrict sending whispers",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "except to defined roles",
             longDescription: "This rule forbids PLAYER_NAME to whisper anything to most people inside a chat room, except to the defined roles. Also affects whispered OOC messages.",
             keywords: ["limit", "forbid", "whispering", "allowlist", "block", "whitelist"],
             triggerTexts: {
                 infoBeep: "You are not allowed to whisper to TARGET_PLAYER!",
                 attempt_log: "PLAYER_NAME tried to whisper to TARGET_PLAYER",
-                log: "PLAYER_NAME whispered to TARGET_PLAYER"
+                log: "PLAYER_NAME whispered to TARGET_PLAYER",
             },
             defaultLimit: ConditionsLimit.limited,
             dataDefinition: {
                 minimumPermittedRole: {
                     type: "roleSelector",
                     default: AccessLevel.mistress,
-                    description: "Minimum role whispering is still allowed to:"
-                }
+                    description: "Minimum role whispering is still allowed to:",
+                },
             },
             init(state) {
                 const check = (msg) => {
@@ -28012,21 +28675,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg) && msg.target != null) {
                             state.triggerAttempt(msg.target);
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg) && msg.target != null) {
                             state.trigger(msg.target);
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_restrict_whisper_receive", {
             name: "Restrict receiving whispers",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "except from defined roles",
             longDescription: "This rule prevents PLAYER_NAME from receiving any whispers, except from the defined roles. If someone tries to send PLAYER_NAME a whisper message while this rule blocks them from doing so, they get an auto reply whisper, if the rule has an auto reply set (text field is not empty). PLAYER_NAME won't get any indication that she would have received a whisper unless the rule is not enforced, in which case she will see both the whisper and the auto reply. This rule can also be used (by dommes) to prevent getting unwanted whispers from strangers in public.",
@@ -28037,15 +28700,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "roleSelector",
                     default: AccessLevel.whitelist,
                     description: "Minimum role still allowed to send whisper:",
-                    Y: 480
+                    Y: 480,
                 },
                 autoreplyText: {
                     type: "string",
                     default: "PLAYER_NAME is currently forbidden to receive whispers.",
                     description: "Auto replies blocked sender with this:",
                     Y: 320,
-                    options: /^([^/.*].*)?$/
-                }
+                    options: /^([^/.*].*)?$/,
+                },
             },
             load(state) {
                 hookFunction("ChatRoomMessage", 5, (args, next) => {
@@ -28065,7 +28728,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                 ServerSend("ChatRoomChat", {
                                     Content: msg,
                                     Type: "Whisper",
-                                    Target: data.Sender
+                                    Target: data.Sender,
                                 });
                                 if (!state.isEnforced) {
                                     ChatRoomSendLocal(msg);
@@ -28077,17 +28740,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("speech_restrict_beep_send", {
             name: "Restrict sending beep messages",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "except to selected members",
             longDescription: "This rule forbids PLAYER_NAME to send any beeps with message, except to the defined list of member numbers. Sending beeps without a message is not affected. Optionally, it can be set that PLAYER_NAME is only forbidden to send beeps while she is unable to use her hands (e.g. fixed to a cross).",
             triggerTexts: {
                 infoBeep: "You broke the rule that forbids sending a beep message to TARGET_PLAYER!",
                 attempt_log: "PLAYER_NAME broke a rule by trying to send a beep message to TARGET_PLAYER",
-                log: "PLAYER_NAME broke a rule by sending a beep message to TARGET_PLAYER"
+                log: "PLAYER_NAME broke a rule by sending a beep message to TARGET_PLAYER",
             },
             keywords: ["limit", "forbid", "prevent", "whitelist", "allowlist"],
             defaultLimit: ConditionsLimit.blocked,
@@ -28097,15 +28760,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     default: [],
                     description: "Member numbers still allowed to be beeped:",
                     options: {
-                        pageSize: 2
-                    }
+                        pageSize: 2,
+                    },
                 },
                 onlyWhenBound: {
                     type: "toggle",
                     default: false,
                     description: "Only in effect when unable to use hands",
-                    Y: 700
-                }
+                    Y: 700,
+                },
             },
             load(state) {
                 hookFunction("FriendListBeepMenuSend", 5, (args, next) => {
@@ -28124,11 +28787,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("speech_restrict_beep_receive", {
             name: "Restrict receiving beeps",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "and beep messages, except from selected members",
             longDescription: "This rule prevents PLAYER_NAME from receiving any beep (regardless if the beep carries a message or not), except for beeps from the defined list of member numbers. If someone tries to send PLAYER_NAME a beep message while this rule blocks them from doing so, they get an auto reply beep, if the rule has an auto reply set. PLAYER_NAME won't get any indication that she would have received a beep unless the rule is not enforced, in which case she will see both the beep and the auto reply. Optionally, the rule can be set to only activate while PLAYER_NAME is unable to use her hands (e.g. fixed to a cross).",
@@ -28141,21 +28804,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     description: "Member numbers still allowed to send beeps:",
                     Y: 470,
                     options: {
-                        pageSize: 2
-                    }
+                        pageSize: 2,
+                    },
                 },
                 autoreplyText: {
                     type: "string",
                     default: "PLAYER_NAME is currently forbidden to receive beeps.",
                     description: "Auto replies blocked sender with this:",
-                    Y: 300
+                    Y: 300,
                 },
                 onlyWhenBound: {
                     type: "toggle",
                     default: false,
                     description: "Only in effect when unable to use hands",
-                    Y: 740
-                }
+                    Y: 740,
+                },
             },
             load(state) {
                 hookFunction("ServerAccountBeep", 5, (args, next) => {
@@ -28174,7 +28837,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                 MemberNumber: data.MemberNumber,
                                 BeepType: "",
                                 Message: msg,
-                                IsSecret: true
+                                IsSecret: true,
                             });
                             if (!state.isEnforced) {
                                 ChatRoomSendLocal(msg);
@@ -28185,7 +28848,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                     Sent: true,
                                     Private: false,
                                     Time: new Date(),
-                                    Message: msg
+                                    Message: msg,
                                 });
                             }
                         }
@@ -28194,11 +28857,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return next(args);
                 }, ModuleCategory.Rules);
-            }
+            },
         });
         registerRule("speech_greet_order", {
             name: "Order to greet club",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "when entering it through the login portal",
             longDescription: "PLAYER_NAME will automatically send all defined member numbers (if they are currently online and friends with PLAYER_NAME) a beep the moment PLAYER_NAME joins the club or the moment she start BCX to make her presence known. Disconnects don't count as coming into the club again, as far as detectable. NOTE: Trigger conditions should not be selected when using this rule, as if you for instance select 'when in public room' the rule will only greet when you load BCX in a public room.",
@@ -28206,15 +28869,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             triggerTexts: {
                 infoBeep: "A BCX rule made you greet one or more people (if currently online) with a beep.",
                 attempt_log: "",
-                log: ""
+                log: "",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
                 toGreetMemberNumbers: {
                     type: "memberNumberList",
                     default: [],
-                    description: "Member numbers that will be greeted:"
-                }
+                    description: "Member numbers that will be greeted:",
+                },
             },
             load(state) {
                 if (state.isEnforced && state.customData) {
@@ -28222,7 +28885,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ServerSend("AccountBeep", {
                             MemberNumber: number,
                             BeepType: "",
-                            IsSecret: true
+                            IsSecret: true,
                         });
                     }
                     if (state.customData.toGreetMemberNumbers.length > 0) {
@@ -28231,78 +28894,35 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }, 5000);
                     }
                 }
-            }
+            },
         });
         registerRule("speech_block_antigarble", {
             name: "Forbid the antigarble option",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "BCX's .antigarble command",
             longDescription: "This rule forbids PLAYER_NAME to use the antigarble command. Antigarble is a BCX feature that enables a BCX user to understand muffled voices from other gagged characters or when wearing a deafening item. If PLAYER_NAME should be forbidden to use the command, this rule should be used.",
             keywords: ["limit", "forbid", "prevent", "garbling", "deafness", "gagged", "gagtalk"],
             triggerTexts: {
                 infoBeep: "You are not allowed to use the antigarble command!",
                 attempt_log: "PLAYER_NAME tried to use the antigarble command",
-                log: "PLAYER_NAME used the antigarble command"
-            },
-            defaultLimit: ConditionsLimit.normal
-            // Implemented externally
-        });
-        /* TODO: Implement
-        registerRule("speech_replace_spoken_words", {
-            name: "Replace spoken words",
-            type: RuleType.Speech,
-            loggable: false,
-            shortDescription: "with others in all chat, whisper and OOC messages",
-            longDescription: "Automatically replaces specific words PLAYER_NAME uses in chat messages, whispers and OOC with another set word from a defineable a list of words with a special syntax (e.g. [Clare,Lily;Mistress],[Claudia;the maid],[I;this slut]).",
-            defaultLimit: ConditionsLimit.limited,
-            dataDefinition: {
-                stringWithReplacingSyntax: {
-                    type: "string",
-                    default: "[I,me;this cutie],[spoken_word;replaced_with_this_word]",
-                    description: "List in syntax: [word1;substitute1],[w2,w3,...;s2],...",
-                    options: /^([^/.*()][^()]*)?$/
-                }
-            }
-        });
-        */
-        /* TODO: Implement
-        // TODO: { TARGET_PLAYER: `${msg.target ? getCharacterName(msg.target, "[unknown]") : "[unknown]"} (${msg.target})` }
-        registerRule("speech_using_honorifics", {
-            name: "Using honorifics",
-            type: RuleType.Speech,
-            shortDescription: "in front of specific names in all chat, whisper and OOC messages",
-            longDescription: "Define a listing of words (e.g. Miss, Mistress, ...) where one of them always needs to be typed before any one out of a listing of names (e.g. Julia, Eve, ...) in all chat, whisper and OOC messages. Needs a certain syntax (e.g. [Goddess,Mistress;Lily,Clare],[slut;Mona], ...)",
-            triggerTexts: {
-                infoBeep: "You broke a rule to always use a honorific when speaking TARGET_PLAYER's name!",
-                attempt_log: "PLAYER_NAME almost broke a rule by forgetting to be polite to TARGET_PLAYER",
-                log: "PLAYER_NAME broke a rule by forgetting to be polite to TARGET_PLAYER"
+                log: "PLAYER_NAME used the antigarble command",
             },
             defaultLimit: ConditionsLimit.normal,
-            dataDefinition: {
-                stringWithRuleSyntax: {
-                    type: "string",
-                    default: "",
-                    description: "List in syntax: [honorific1;name1],[h2,h3,...;n2,n3,...],...",
-                    options: /^([^/.*()\s][^()]*)?$/
-                }
-            }
         });
-        */
         registerRule("speech_force_retype", {
             name: "Force to retype",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "if sending a message in chat is rejected by BCX due to a rule violation",
             longDescription: "This rule forces PLAYER_NAME to retype any chat/whisper/emote/OOC message as a punishment when they try to send it and another enforced BCX speech rule determines that there is any rule violation in that message.",
             keywords: ["punish", "retry", "clear", "input", "blocked", "forbidden"],
-            defaultLimit: ConditionsLimit.limited
-            // Implemented externally
+            defaultLimit: ConditionsLimit.limited,
         });
         let alreadyGreeted = false;
         let lastRoomName = "";
         registerRule("greet_room_order", {
             name: "Order to greet room",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "with a settable sentence when entering it newly",
             longDescription: "Sets a specific sentence that PLAYER_NAME must say loud after entering a room that is not empty. The sentence is autopopulating the chat window text input. When to say it is left to PLAYER_NAME, but when the rule is enforced, it is the only thing that can be said in this room after joining it. Emotes can still be used, though, unless toggled to be forbidden. Disconnects don't count as coming into a new room again, as far as detectable.",
             keywords: ["say", "present", "introduce"],
@@ -28310,7 +28930,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 infoBeep: "You broke the rule to greet this room like taught!",
                 attempt_infoBeep: "You need to greet this room like taught!",
                 attempt_log: "PLAYER_NAME almost broke a rule by not greeting the room like taught",
-                log: "PLAYER_NAME broke a rule by not greeting the room like taught"
+                log: "PLAYER_NAME broke a rule by not greeting the room like taught",
             },
             defaultLimit: ConditionsLimit.limited,
             dataDefinition: {
@@ -28318,23 +28938,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "string",
                     default: "",
                     description: "The sentence that has to be used to greet any joined room:",
-                    options: /^([^/.*()\s][^()]*)?$/
+                    options: /^([^/.*()\s][^()]*)?$/,
                 },
                 affectEmotes: {
                     type: "toggle",
                     default: false,
                     description: "Also forbid emote messages before greeting",
-                    Y: 560
-                }
+                    Y: 560,
+                },
             },
             load(state) {
-                // 1. hook ChatRoomSync to set alreadyGreeted to false if the room name is different from the one stored locally
                 hookFunction("ChatRoomSync", 0, (args, next) => {
                     const data = args[0];
                     if (data.Name !== lastRoomName)
                         alreadyGreeted = false;
                     next(args);
-                    // 2. populate chat field with the default text from the rule
                     const chat = document.getElementById("InputChat");
                     if (chat && state.customData && state.inEffect && !alreadyGreeted && data.Name !== lastRoomName) {
                         chat.value = state.customData.greetingSentence;
@@ -28344,7 +28962,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }, ModuleCategory.Rules);
             },
-            // 3. do not allow sending anything else when enforced
             init(state) {
                 const check = (msg) => {
                     var _a, _b;
@@ -28361,18 +28978,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             if (ChatRoomData === null || ChatRoomData === void 0 ? void 0 : ChatRoomData.Name) {
                                 lastRoomName = ChatRoomData.Name;
                             }
-                            // 4. set alreadyGreeted to true and overwrite lastRoomName
                             if (check(msg)) {
                                 alreadyGreeted = true;
-                                return 2 /* SpeechHookAllow.ALLOW_BYPASS */;
+                                return 2;
                             }
                             else {
                                 state.triggerAttempt();
                                 ChatRoomSendLocal(`You are expected to greet the room with "${(_b = state.customData) === null || _b === void 0 ? void 0 : _b.greetingSentence}".`);
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         var _a;
@@ -28387,13 +29003,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             }
                             alreadyGreeted = true;
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("greet_new_guests", {
             name: "Greet new guests",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "when they join the current room",
             longDescription: "Forces PLAYER_NAME to greet people newly entering the current chat room with the set sentence. NOTE: Only PLAYER_NAME and the new guest can see the message not to make it spammy. After a new person has been greeted, she will not be greeted for 10 minutes after she left (including disconnect) the room PLAYER_NAME is in. Setting an emote as a greeting is also supported by starting the set message with one or two '*' characters.",
@@ -28404,8 +29020,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "string",
                     default: "",
                     description: "The sentence that will be used to greet new guests:",
-                    options: /^([^/.].*)?$/
-                }
+                    options: /^([^/.].*)?$/,
+                },
             },
             load(state) {
                 const GREET_DELAY = 600000;
@@ -28448,43 +29064,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }, 5000);
                     }
                 }, ModuleCategory.Rules);
-            }
-        });
-        // Restrained speech:
-        // the wearer is unable to speak freely, she is given a set of sentences/targets allowed and can only use those with the #name talk command.
-        // The given sentences can contain the %target% placeholder to have the target inserted into the sentence. The given sentences can contain
-        // the %self% placeholder which will be replaced by the given "self" attribute. By default it is "I", but could be changed to something else
-        // to avoid having to rewrite all the sentences. WARNING: a target id and a message id always needs to be specified. Therefore, you will be
-        // softlocked/muted if this mode is enabled and you remove all sentences and/or targets.
-        /* TODO: Implement
-        registerRule("speech_restrained_speech", {
-            name: "Restrained speech",
-            type: RuleType.Speech,
-            shortDescription: "only the set sentences are allowed to be spoken",
-            // TODO: needs an updated describing the special wildcards or placeholders that can be used
-            longDescription: "This rule no longer allows PLAYER_NAME to speak freely, she is given a set of sentences allowed and can only use those in chat and whispers. Does not affect OOC.",
-            triggerTexts: {
-                infoBeep: "You broke a rule by not using one of the allowed phrases for you!",
-                attempt_log: "PLAYER_NAME broke a rule by trying to not use one of the allowed phrases",
-                log: "PLAYER_NAME broke a rule by not using one of the allowed phrases"
             },
-            defaultLimit: ConditionsLimit.blocked,
-            dataDefinition: {
-                listOfAllowedSentences: {
-                    type: "stringList",
-                    default: [],
-                    // TODO: needs an update describing the special wildcards or placeholders that can be used
-                    description: "Only these phrases are still allowed:",
-                    options: {
-                        validate: /^([^/.*()][^()]*)?$/ // TODO: adjust
-                    }
-                }
-            }
         });
-        */
         registerRule("speech_alter_faltering", {
             name: "Enforce faltering speech",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             loggable: false,
             shortDescription: "an enhanced studder effect is added to PLAYER_NAME's chat texts",
             longDescription: "Thus rule converts PLAYER_NAME's messages, so she is only able to speak studdering and with random filler sounds, for some [RP] reason (anxiousness, arousal, fear, etc.). Converts the typed chat text automatically. Affects chat messages and whispers, but not OOC.",
@@ -28499,20 +29083,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         else {
                             return text;
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_mandatory_words", {
             name: "Establish mandatory words",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "of which at least one needs to always be included when speaking",
             longDescription: "This rule gives PLAYER_NAME a list of words from which at least one has to always be used in any chat message. The list of mandatory words can be configured. Checks are not case sensitive (adding 'miss' also works for 'MISS' and 'Miss' - Note: 'Miiiiissss' would also match). Doesn't affect whispers, emotes and OOC text. There is a toggle for affecting whispers, too.",
             keywords: ["force", "require", "talking", "saying", "certain", "specific"],
             triggerTexts: {
                 infoBeep: "You forgot to include one of the mandatory words!",
                 attempt_log: "PLAYER_NAME almost forgot to use a mandatory word while talking",
-                log: "PLAYER_NAME did not use a mandatory word while talking"
+                log: "PLAYER_NAME did not use a mandatory word while talking",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
@@ -28522,15 +29106,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     description: "At least one of these words always needs to be used:",
                     options: {
                         validate: /^[\p{L} ]*$/iu,
-                        pageSize: 3
-                    }
+                        pageSize: 3,
+                    },
                 },
                 affectWhispers: {
                     type: "toggle",
                     default: false,
                     description: "Also affect whispered messages",
-                    Y: 740
-                }
+                    Y: 740,
+                },
             },
             init(state) {
                 const check = (msg) => {
@@ -28549,28 +29133,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_mandatory_words_in_emotes", {
             name: "Establish mandatory words in emotes",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "of which at least one needs to always be included",
             longDescription: "This rule gives PLAYER_NAME a list of words from which at least one has to always be used in any emote message. The list of mandatory words can be configured. Checks are not case sensitive (adding 'miss' also works for 'MISS' and 'Miss' - Note: 'Miiiiissss' would also match).",
             keywords: ["force", "require", "talking", "saying", "certain", "specific"],
             triggerTexts: {
                 infoBeep: "You forgot to include one of the mandatory words!",
                 attempt_log: "PLAYER_NAME almost forgot to use a mandatory word while talking",
-                log: "PLAYER_NAME did not use a mandatory word while talking"
+                log: "PLAYER_NAME did not use a mandatory word while talking",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
@@ -28579,9 +29163,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     default: [],
                     description: "At least one of these words always needs to be used:",
                     options: {
-                        validate: /^[\p{L} ]*$/iu
-                    }
-                }
+                        validate: /^[\p{L} ]*$/iu,
+                    },
+                },
             },
             init(state) {
                 const check = (msg) => {
@@ -28599,21 +29183,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     allowSend: (msg) => {
                         if (state.isEnforced && !check(msg)) {
                             state.triggerAttempt();
-                            return 1 /* SpeechHookAllow.BLOCK */;
+                            return 1;
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
+                        return 0;
                     },
                     onSend: (msg) => {
                         if (state.inEffect && !check(msg)) {
                             state.trigger();
                         }
-                    }
+                    },
                 });
-            }
+            },
         });
         registerRule("speech_partial_hearing", {
             name: "Partial hearing",
-            type: 4 /* RuleType.Speech */,
+            type: 4,
             shortDescription: "of muffled speech - random & word list based",
             longDescription: "This rule gives PLAYER_NAME ability to understand parts of a muffled sentence ungarbled, based on a white list of words and/or randomly. On default, applies only to muffled hearing from deafening effects on PLAYER_NAME, but optionally can be enhanced to allow also partially understanding the muffled speech of other persons who are speech impaired. Doesn't affect emotes and OOC text.",
             keywords: ["deafness", "garbling", "antigarble", "understanding", "ungarble", "specific", "words", "whitelist", "allowlist"],
@@ -28626,21 +29210,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     description: "Words that can always be understood:",
                     options: {
                         validate: /^[\p{L}]*$/iu,
-                        pageSize: 3
-                    }
+                        pageSize: 3,
+                    },
                 },
                 randomUnderstanding: {
                     type: "toggle",
                     default: true,
                     description: "Some words are randomly understood",
-                    Y: 650
+                    Y: 650,
                 },
                 affectGaggedMembersToggle: {
                     type: "toggle",
                     default: false,
                     description: "Can also understand gagged persons",
-                    Y: 740
-                }
+                    Y: 740,
+                },
             },
             load(state) {
                 hookFunction("SpeechGarble", 2, (args, next) => {
@@ -28666,7 +29250,44 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }
                     });
                 }, ModuleCategory.Rules);
-            }
+            },
+        });
+        registerRule("speech_garble_while_talking", {
+            name: "Force garbled speech",
+            type: 4,
+            loggable: false,
+            shortDescription: "force PLAYER_NAME to talk as if they were gagged",
+            longDescription: `This rule forces PLAYER_NAME to talk as if they were gagged, automatically garbling all of their speech. This rule does not affect OOC. This rule only affects whispers if the rule "Garble whispers while gagged" is also in effect.`,
+            keywords: ["saying", "talking", "gagtalk", "garbling", "forced"],
+            defaultLimit: ConditionsLimit.normal,
+            dataDefinition: {
+                gagLevel: {
+                    type: "number",
+                    default: 5,
+                    options: {
+                        min: 1,
+                        max: 25,
+                    },
+                    description: "The level of forced garbling",
+                },
+            },
+            init(state) {
+                registerSpeechHook({
+                    modify: (info, message) => state.isEnforced && info.type === "Chat" ? callOriginal("SpeechGarble", [Player, message, true]) : message,
+                });
+            },
+            load(state) {
+                hookFunction("SpeechGetTotalGagLevel", 0, (args, next) => {
+                    var _a;
+                    const gagLevel = next(args);
+                    if (!state.isEnforced || !((_a = state.customData) === null || _a === void 0 ? void 0 : _a.gagLevel) || !args[0].IsPlayer()) {
+                        return gagLevel;
+                    }
+                    else {
+                        return Math.max(gagLevel, state.customData.gagLevel);
+                    }
+                }, ModuleCategory.Rules);
+            },
         });
     }
 
@@ -28679,22 +29300,22 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         registerRule("other_forbid_afk", {
             name: "Forbid going afk",
-            type: 99 /* RuleType.Other */,
+            type: 99,
             enforceable: false,
             shortDescription: "logs whenever PLAYER_NAME is inactive",
             longDescription: "This rule forbids PLAYER_NAME to go afk and logs when the allowed inactivity threshold is overstepped.",
             keywords: ["inactivity", "detect", "record"],
             triggerTexts: {
                 log: "PLAYER_NAME became inactive, which was forbidden",
-                announce: ""
+                announce: "",
             },
             defaultLimit: ConditionsLimit.blocked,
             dataDefinition: {
                 minutesBeforeAfk: {
                     type: "number",
                     default: 10,
-                    description: "Amount of minutes, before being considered inactive:"
-                }
+                    description: "Amount of minutes, before being considered inactive:",
+                },
             },
             load() {
                 AfkTimerEventsList.forEach(e => document.addEventListener(e, afk_reset, true));
@@ -28711,12 +29332,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             },
             unload() {
                 AfkTimerEventsList.forEach(e => document.removeEventListener(e, afk_reset, true));
-            }
+            },
         });
         let lastUpdate = 0;
         registerRule("other_track_time", {
             name: "Track rule effect time",
-            type: 99 /* RuleType.Other */,
+            type: 99,
             enforceable: false,
             loggable: false,
             shortDescription: "counts the time this rule's trigger conditions were fulfilled",
@@ -28729,8 +29350,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 minimumPermittedRole: {
                     type: "roleSelector",
                     default: AccessLevel.lover,
-                    description: "Minimum role able to request counted time:"
-                }
+                    description: "Minimum role able to request counted time:",
+                },
             },
             init(state) {
                 registerWhisperCommand("hidden", "ruletime", null, (argv, sender, respond) => {
@@ -28765,12 +29386,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     state.internalData += change;
                     lastUpdate = Date.now();
                 }
-            }
+            },
         });
         let lastReminder = 0;
         registerRule("other_constant_reminder", {
             name: "Listen to my voice",
-            type: 99 /* RuleType.Other */,
+            type: 99,
             loggable: false,
             enforceable: false,
             shortDescription: "regularly show configurable sentences to PLAYER_NAME",
@@ -28782,14 +29403,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     type: "stringList",
                     default: [],
                     description: "The sentences that will be shown at random:",
-                    Y: 296
+                    Y: 296,
                 },
                 reminderFrequency: {
                     type: "number",
                     default: 15,
                     description: "Frequency of a sentence being shown (in minutes):",
-                    Y: 715
-                }
+                    Y: 715,
+                },
             },
             tick(state) {
                 if (state.inEffect && state.customData && state.customData.reminderText.length > 0 &&
@@ -28800,11 +29421,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return true;
                 }
                 return false;
-            }
+            },
         });
         registerRule("other_log_money", {
             name: "Log money changes",
-            type: 99 /* RuleType.Other */,
+            type: 99,
             enforceable: false,
             shortDescription: "spending and/or getting money",
             longDescription: "This rule logs whenever money is used to buy something. It also shows how much money PLAYER_NAME currently has in the log entry. Optionally, earning money can also be logged. Note: Please be aware that this last option can potentially fill the whole behaviour log rapidly.",
@@ -28812,15 +29433,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             triggerTexts: {
                 infoBeep: "A BCX rule has logged this financial transaction!",
                 log: "PLAYER_NAME TYPE money: AMOUNT $ | new balance: BALANCE $",
-                announce: ""
+                announce: "",
             },
             defaultLimit: ConditionsLimit.normal,
             dataDefinition: {
                 logEarnings: {
                     type: "toggle",
                     default: false,
-                    description: "Also log getting money"
-                }
+                    description: "Also log getting money",
+                },
             },
             internalDataValidate: (data) => typeof data === "number",
             internalDataDefault: () => -1,
@@ -28850,18 +29471,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return returnValue;
-            }
+            },
         });
-        /* TODO: Idea stage
-        registerRule("other_restrict_console_usage", {
-            name: "Restrict console usage",
-            type: RuleType.Other,
-            loggable: false,
-            shortDescription: "to not allow freeing oneself",
-            longDescription: "Makes the player unable to use the browser console to change their own appearance in the club, such as removing restraints.",
-            defaultLimit: ConditionsLimit.blocked
-        });
-        */
         const removeTrackingEntry = (hiddenItems) => {
             for (;;) {
                 const index = hiddenItems.findIndex(a => isObject$1(a) && typeof a.Name === "string" && a.Name.startsWith("GoodGirl") && a.Group === "BCX");
@@ -28879,7 +29490,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         };
         registerRule("other_track_BCX_activation", {
             name: "Track BCX activation",
-            type: 99 /* RuleType.Other */,
+            type: 99,
             enforceable: false,
             shortDescription: "logs if PLAYER_NAME enters the club without BCX",
             longDescription: "This rule observes PLAYER_NAME, logging it as a rule violation if the club was previously entered at least once without BCX active.",
@@ -28887,7 +29498,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             triggerTexts: {
                 infoBeep: "You logged in without starting BCX beforehand!",
                 log: "PLAYER_NAME logged in without starting BCX beforehand at least once",
-                announce: ""
+                announce: "",
             },
             internalDataValidate: (v) => typeof v === "number",
             internalDataDefault: () => Math.floor(Math.random() * 1000000),
@@ -28931,29 +29542,1985 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 return false;
-            }
+            },
         });
     }
 
+    const RULES_ANTILOOP_RESET_INTERVAL = 60000;
+    const RULES_ANTILOOP_THRESHOLD = 10;
+    const RULES_ANTILOOP_SUSPEND_TIME = 600000;
+    const STRING_LIST_MAX_LENGTH = 128;
+    const RULE_ICONS = {
+        [0]: icon_restrictions,
+        [1]: "Icons/Swap.png",
+        [2]: "Icons/Preference.png",
+        [3]: icon_OwnerList,
+        [4]: "Icons/Chat.png",
+        [99]: "Icons/Chest.png",
+    };
+    function guard_BCX_Rule(name) {
+        return typeof name === "string" && rules.has(name);
+    }
+    function guard_RuleCustomData(rule, data) {
+        const descriptor = rules.get(rule);
+        if (!descriptor)
+            return false;
+        if (descriptor.dataDefinition) {
+            if (!isObject$1(data))
+                return false;
+            for (const k of Object.keys(data)) {
+                if (!descriptor.dataDefinition[k])
+                    return false;
+            }
+            for (const [k, def] of Object.entries(descriptor.dataDefinition)) {
+                const handler = ruleCustomDataHandlers[def.type];
+                if (!handler || !handler.validate(data[k], def))
+                    return false;
+            }
+        }
+        else if (data !== undefined) {
+            return false;
+        }
+        return true;
+    }
+    const rules = new Map();
+    const rulesList = [];
+    function registerRule(name, data) {
+        var _a;
+        if (moduleInitPhase !== ModuleInitPhase.init) {
+            throw new Error("Rules can be registered only during init");
+        }
+        if (rules.has(name)) {
+            throw new Error(`Rule "${name}" already defined!`);
+        }
+        if (data.dataDefinition) {
+            for (const [k, v] of Object.entries(data.dataDefinition)) {
+                const handler = ruleCustomDataHandlers[v.type];
+                if (!handler) {
+                    throw new Error(`Unknown handler for ${name}:${k} (${v.type})`);
+                }
+                if (handler.validateOptions && !handler.validateOptions(v.options)) {
+                    throw new Error(`Bad options for ${name}:${k} (${v.type})`);
+                }
+                const defaultValue = typeof v.default === "function" ? v.default() : v.default;
+                if (!handler.validate(defaultValue, v)) {
+                    throw new Error(`Default doesn't validate for ${name}:${k} (${v.type})`);
+                }
+            }
+        }
+        if (data.internalDataValidate) {
+            if (!data.internalDataValidate((_a = data.internalDataDefault) === null || _a === void 0 ? void 0 : _a.call(data))) {
+                throw new Error(`Default internal data doesn't validate for rule ${name}`);
+            }
+        }
+        else if (data.internalDataDefault !== undefined) {
+            throw new Error(`Default internal data for rule ${name} without internal data validation`);
+        }
+        rules.set(name, {
+            ...data,
+            state: new RuleState(name, data),
+        });
+        rulesList.push(name);
+    }
+    function RulesGetDisplayDefinition(rule) {
+        const data = rules.get(rule);
+        if (!data) {
+            throw new Error(`Attempt to get display definition for unknown rule '${rule}'`);
+        }
+        return {
+            name: data.name,
+            type: data.type,
+            shortDescription: data.shortDescription,
+            keywords: data.keywords,
+            longDescription: data.longDescription,
+            triggerTexts: data.triggerTexts,
+            defaultLimit: data.defaultLimit,
+            enforceable: data.enforceable,
+            loggable: data.loggable,
+            dataDefinition: data.dataDefinition,
+        };
+    }
+    function RulesGetRuleState(rule) {
+        const data = rules.get(rule);
+        if (!data) {
+            throw new Error(`Attempt to get state for unknown rule '${rule}'`);
+        }
+        return data.state;
+    }
+    const ruleCustomDataHandlerPage = new Map();
+    let memberNumberListAutoFill = null;
+    const ruleCustomDataHandlers = {
+        listSelect: {
+            validateOptions: options => Array.isArray(options) && options.every(i => Array.isArray(i) && i.length === 2 && i.every(j => typeof j === "string")),
+            validate: (value, def) => typeof value === "string" && def.options.map(i => i[0]).includes(value),
+            run({ def, value, Y, access }) {
+                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
+                const index = def.options.findIndex(i => i[0] === value);
+                if (index < 0) {
+                    throw new Error(`Bad data during listSelect render`);
+                }
+                const next = clampWrap(index + 1, 0, def.options.length - 1);
+                const prev = clampWrap(index - 1, 0, def.options.length - 1);
+                MainCanvas.textAlign = "center";
+                DrawBackNextButton(1050, Y + 36, 250, 60, def.options[index][1], access ? "White" : "#ddd", "", () => def.options[prev][1], () => def.options[next][1], !access);
+                MainCanvas.textAlign = "left";
+            },
+            click({ def, value, Y, access }) {
+                if (!access)
+                    return;
+                const index = def.options.findIndex(i => i[0] === value);
+                if (MouseIn(1050, Y + 36, 125, 60)) {
+                    return def.options[clampWrap(index - 1, 0, def.options.length - 1)][0];
+                }
+                if (MouseIn(1050 + 125, Y + 36, 125, 60)) {
+                    return def.options[clampWrap(index + 1, 0, def.options.length - 1)][0];
+                }
+                return undefined;
+            },
+        },
+        memberNumberList: {
+            validateOptions: options => options === undefined || (Number.isInteger(options === null || options === void 0 ? void 0 : options.pageSize)),
+            validate: value => Array.isArray(value) && value.every(Number.isInteger),
+            onDataChange({ active, key, access }) {
+                let input = document.getElementById(`BCX_RCDH_${key}`);
+                if (!active) {
+                    if (input) {
+                        input.remove();
+                    }
+                    return;
+                }
+                if (!input) {
+                    input = ElementCreateInput(`BCX_RCDH_${key}`, "text", "", "100");
+                    input.inputMode = "numeric";
+                    input.pattern = "[0-9]+";
+                    if (memberNumberListAutoFill !== null) {
+                        input.value = `${memberNumberListAutoFill}`;
+                        memberNumberListAutoFill = null;
+                    }
+                }
+                input.disabled = !access;
+            },
+            run({ def, value, Y, key, access }) {
+                var _a, _b;
+                Y -= 20;
+                const PAGE_SIZE = ((_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) ? def.options.pageSize : 4;
+                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
+                const page = clamp$1((_b = ruleCustomDataHandlerPage.get(key)) !== null && _b !== void 0 ? _b : 0, 0, totalPages - 1);
+                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
+                for (let i = 0; i < PAGE_SIZE; i++) {
+                    const e = page * PAGE_SIZE + i;
+                    if (e >= value.length)
+                        break;
+                    MainCanvas.strokeRect(1050, Y + 26 + i * 70, 766, 64);
+                    const msg = `${getCharacterName(value[e], "[unknown]")} (${value[e]})`;
+                    DrawTextFit(msg, 1060, Y + 26 + i * 70 + 34, 380, "Black");
+                    if (access) {
+                        MainCanvas.textAlign = "center";
+                        DrawButton(1836, Y + 26 + i * 70, 64, 64, "X", "White");
+                        MainCanvas.textAlign = "left";
+                    }
+                }
+                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + PAGE_SIZE * 70 + 43, 360, 60);
+                MainCanvas.textAlign = "center";
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                if (input && document.activeElement === input) {
+                    DrawHoverElements.push(() => {
+                        const val = input.value && Number.parseInt(input.value, 10);
+                        if (!val)
+                            return;
+                        const Left = 580;
+                        const Top = 630;
+                        MainCanvas.fillStyle = "#FFFF88";
+                        MainCanvas.fillRect(Left, Top, 450, 65);
+                        MainCanvas.lineWidth = 2;
+                        MainCanvas.strokeStyle = "black";
+                        MainCanvas.strokeRect(Left, Top, 450, 65);
+                        DrawTextFit(getCharacterName(val, "[unknown]"), Left + 225, Top + 33, 444, "black");
+                    });
+                }
+                DrawButton(1444, Y + PAGE_SIZE * 70 + 43, 64, 64, "", access ? "White" : "#ddd", undefined, undefined, !access);
+                DrawImageEx("Icons/Title.png", 1446, Y + PAGE_SIZE * 70 + 43, { Width: 60, Height: 60 });
+                DrawButton(1530, Y + PAGE_SIZE * 70 + 43, 100, 64, "Add", access ? "White" : "#ddd", undefined, undefined, !access);
+                DrawBackNextButton(1650, Y + PAGE_SIZE * 70 + 43, 250, 64, `Page ${page + 1}/${totalPages}`, "White", undefined, () => "", () => "");
+                MainCanvas.textAlign = "left";
+            },
+            click({ value, Y, key, target, def, access }) {
+                var _a, _b;
+                Y -= 20;
+                const PAGE_SIZE = ((_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) ? def.options.pageSize : 4;
+                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
+                const page = clamp$1((_b = ruleCustomDataHandlerPage.get(key)) !== null && _b !== void 0 ? _b : 0, 0, totalPages - 1);
+                for (let i = 0; i < PAGE_SIZE; i++) {
+                    const e = page * PAGE_SIZE + i;
+                    if (e >= value.length)
+                        break;
+                    if (access && MouseIn(1836, Y + 26 + i * 70, 64, 64)) {
+                        value.splice(e, 1);
+                        return value;
+                    }
+                }
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                const screen = getCurrentSubscreen();
+                if (access && MouseIn(1444, Y + PAGE_SIZE * 70 + 43, 64, 64) && input && screen) {
+                    setSubscreen(new GuiMemberSelect(target, screen, result => {
+                        memberNumberListAutoFill = result;
+                    }, value.slice()));
+                }
+                if (access && MouseIn(1530, Y + PAGE_SIZE * 70 + 43, 100, 64) && input && input.value) {
+                    const num = Number.parseInt(input.value, 10);
+                    if (Number.isInteger(num) && !value.includes(num)) {
+                        value.push(num);
+                        value.sort((a, b) => a - b);
+                        input.value = "";
+                        return value;
+                    }
+                }
+                if (MouseIn(1650, Y + PAGE_SIZE * 70 + 43, 125, 64) && page > 0) {
+                    ruleCustomDataHandlerPage.set(key, page - 1);
+                }
+                else if (MouseIn(1650 + 125, Y + PAGE_SIZE * 70 + 43, 125, 64) && page + 1 < totalPages) {
+                    ruleCustomDataHandlerPage.set(key, page + 1);
+                }
+                return undefined;
+            },
+            unload({ key }) {
+                ElementRemove(`BCX_RCDH_${key}`);
+                ruleCustomDataHandlerPage.delete(key);
+            },
+        },
+        number: {
+            validateOptions: options => options === undefined || (isObject$1(options) &&
+                (options.min === undefined || Number.isInteger(options.min)) &&
+                (options.max === undefined || Number.isInteger(options.max))),
+            validate: (value, def) => {
+                var _a, _b;
+                return (typeof value === "number" && Number.isInteger(value) &&
+                    (((_a = def.options) === null || _a === void 0 ? void 0 : _a.min) === undefined || value >= def.options.min) &&
+                    (((_b = def.options) === null || _b === void 0 ? void 0 : _b.max) === undefined || value <= def.options.max));
+            },
+            onDataChange({ active, key, onInput, value, access }) {
+                let input = document.getElementById(`BCX_RCDH_${key}`);
+                if (!active) {
+                    if (input) {
+                        input.remove();
+                    }
+                    return;
+                }
+                if (!input) {
+                    input = ElementCreateInput(`BCX_RCDH_${key}`, "text", value.toString(10), "50");
+                    input.inputMode = "numeric";
+                    input.pattern = "[0-9]+";
+                    input.oninput = onInput;
+                }
+                else {
+                    input.value = value.toString(10);
+                }
+                input.onblur = () => {
+                    if (input) {
+                        input.value = value.toString(10);
+                    }
+                };
+                input.disabled = !access;
+            },
+            processInput({ key, value, def }) {
+                var _a, _b, _c, _d;
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                if (input && input.value) {
+                    if (/^[0-9]+$/.test(input.value)) {
+                        const res = clamp$1(Number.parseInt(input.value, 10), (_b = (_a = def.options) === null || _a === void 0 ? void 0 : _a.min) !== null && _b !== void 0 ? _b : -Infinity, (_d = (_c = def.options) === null || _c === void 0 ? void 0 : _c.max) !== null && _d !== void 0 ? _d : Infinity);
+                        input.onblur = () => {
+                            input.value = res.toString(10);
+                        };
+                        return res;
+                    }
+                    else {
+                        input.value = value.toString(10);
+                    }
+                }
+                return undefined;
+            },
+            run({ def, Y, key }) {
+                DrawTextFit(def.description, 1050, Y + 0, 850, "Black");
+                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + 26, 425, 60);
+            },
+            unload({ key }) {
+                ElementRemove(`BCX_RCDH_${key}`);
+            },
+        },
+        poseSelect: {
+            validate: value => Array.isArray(value) && value.every(i => typeof i === "string"),
+            run({ def, value, Y, access }) {
+                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
+                const poses = PoseFemale3DCG
+                    .filter(P => (P.AllowMenu || P.AllowMenuTransient))
+                    .map(P => P.Category)
+                    .filter((C, I, Categories) => C && Categories.indexOf(C) === I)
+                    .map(Category => PoseFemale3DCG.filter(P => (P.AllowMenu || P.AllowMenuTransient) && P.Category === Category));
+                for (let I = 0; I < poses.length; I++) {
+                    const OffsetY = Y + 60 + 140 * I;
+                    const PoseGroup = poses[I];
+                    for (let P = 0; P < PoseGroup.length; P++) {
+                        const OffsetX = 1070 + 100 * P;
+                        const IsDisabled = value.includes(PoseGroup[P].Name);
+                        DrawButton(OffsetX, OffsetY, 90, 90, "", IsDisabled ? access ? "Darkred" : "#333" : access ? "White" : "#ddd", "Icons/Poses/" + PoseGroup[P].Name + ".png", "", !access);
+                    }
+                }
+            },
+            click({ value, Y, access }) {
+                if (!access)
+                    return;
+                const poses = PoseFemale3DCG
+                    .filter(P => (P.AllowMenu || P.AllowMenuTransient))
+                    .map(P => P.Category)
+                    .filter((C, I, Categories) => C && Categories.indexOf(C) === I)
+                    .map(Category => PoseFemale3DCG.filter(P => (P.AllowMenu || P.AllowMenuTransient) && P.Category === Category));
+                for (let I = 0; I < poses.length; I++) {
+                    const OffsetY = Y + 60 + 140 * I;
+                    const PoseGroup = poses[I];
+                    for (let P = 0; P < PoseGroup.length; P++) {
+                        const OffsetX = 1070 + 100 * P;
+                        if (MouseIn(OffsetX, OffsetY, 90, 90)) {
+                            if (value.includes(PoseGroup[P].Name)) {
+                                value.splice(value.indexOf(PoseGroup[P].Name), 1);
+                            }
+                            else {
+                                value.push(PoseGroup[P].Name);
+                            }
+                            return value;
+                        }
+                    }
+                }
+                return undefined;
+            },
+        },
+        roleSelector: {
+            validate: value => typeof value === "number" && AccessLevel[value] !== undefined,
+            run({ def, value, Y, access }) {
+                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
+                const roleSelectionNext = value < AccessLevel.public ? value + 1 : AccessLevel.clubowner;
+                const roleSelectionPrev = value > AccessLevel.clubowner ? value - 1 : AccessLevel.public;
+                MainCanvas.textAlign = "center";
+                DrawBackNextButton(1050, Y + 46, 250, 60, capitalizeFirstLetter(AccessLevel[value]) + (value !== AccessLevel.clubowner ? " ↑" : ""), access ? "White" : "#ddd", "", () => capitalizeFirstLetter(AccessLevel[roleSelectionPrev]), () => capitalizeFirstLetter(AccessLevel[roleSelectionNext]), !access);
+                MainCanvas.textAlign = "left";
+            },
+            click({ value, Y, access }) {
+                if (!access)
+                    return;
+                if (MouseIn(1050, Y + 46, 125, 60)) {
+                    return value > AccessLevel.clubowner ? value - 1 : AccessLevel.public;
+                }
+                if (MouseIn(1050 + 125, Y + 46, 125, 60)) {
+                    return value < AccessLevel.public ? value + 1 : AccessLevel.clubowner;
+                }
+                return undefined;
+            },
+        },
+        string: {
+            validateOptions: options => options === undefined || options instanceof RegExp,
+            validate(value, def) {
+                return typeof value === "string" &&
+                    (!def.options || def.options.test(value));
+            },
+            onDataChange({ active, key, onInput, value, access, def }) {
+                let input = document.getElementById(`BCX_RCDH_${key}`);
+                if (!active) {
+                    if (input) {
+                        input.remove();
+                    }
+                    return;
+                }
+                if (!input) {
+                    let lastValue = value;
+                    const createdInput = ElementCreateInput(`BCX_RCDH_${key}`, "text", lastValue, "160");
+                    createdInput.oninput = () => {
+                        if (!def.options || def.options.test(createdInput.value)) {
+                            lastValue = createdInput.value;
+                            onInput();
+                        }
+                        else {
+                            createdInput.value = lastValue;
+                        }
+                    };
+                    input = createdInput;
+                }
+                else {
+                    input.value = value;
+                }
+                input.disabled = !access;
+            },
+            processInput({ key, def }) {
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                return input && (!def.options || def.options.test(input.value)) ? input.value : undefined;
+            },
+            run({ def, Y, key }) {
+                DrawTextFit(def.description, 1050, Y + 0, 850, "Black");
+                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + 26, 850, 60);
+            },
+            unload({ key }) {
+                ElementRemove(`BCX_RCDH_${key}`);
+            },
+        },
+        stringList: {
+            validateOptions: options => options === undefined || (isObject$1(options) &&
+                (options.validate === undefined || options.validate instanceof RegExp)),
+            validate(value, def) {
+                return Array.isArray(value) &&
+                    value.length <= STRING_LIST_MAX_LENGTH &&
+                    value.every(i => { var _a; return typeof i === "string" && (!((_a = def.options) === null || _a === void 0 ? void 0 : _a.validate) || def.options.validate.test(i)); });
+            },
+            onDataChange({ active, key, access, def }) {
+                let input = document.getElementById(`BCX_RCDH_${key}`);
+                if (!active) {
+                    if (input) {
+                        input.remove();
+                    }
+                    return;
+                }
+                if (!input) {
+                    let last = "";
+                    const newInput = ElementCreateInput(`BCX_RCDH_${key}`, "text", "", "120");
+                    newInput.oninput = () => {
+                        var _a;
+                        if (((_a = def.options) === null || _a === void 0 ? void 0 : _a.validate) && !def.options.validate.test(newInput.value)) {
+                            if (newInput.value.length === 1 && def.options.validate.test("")) {
+                                last = "";
+                            }
+                            newInput.value = last;
+                        }
+                        else {
+                            last = newInput.value;
+                        }
+                    };
+                    input = newInput;
+                }
+                input.disabled = !access;
+            },
+            run({ def, value, Y, key, access }) {
+                var _a, _b, _c;
+                Y -= 20;
+                const PAGE_SIZE = (_b = (_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) !== null && _b !== void 0 ? _b : 4;
+                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
+                const page = clamp$1((_c = ruleCustomDataHandlerPage.get(key)) !== null && _c !== void 0 ? _c : 0, 0, totalPages - 1);
+                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
+                for (let i = 0; i < PAGE_SIZE; i++) {
+                    const e = page * PAGE_SIZE + i;
+                    if (e >= value.length)
+                        break;
+                    const msg = value[e];
+                    if (MouseIn(1050, Y + 26 + i * 70, 766, 64)) {
+                        DrawHoverElements.push(() => {
+                            MainCanvas.save();
+                            MainCanvas.fillStyle = "rgba(255, 255, 136, 0.9)";
+                            MainCanvas.fillRect(1050, Y + 26, 766, 70 * PAGE_SIZE);
+                            MainCanvas.strokeStyle = "Black";
+                            MainCanvas.strokeRect(1050, Y + 26, 766, 70 * PAGE_SIZE);
+                            MainCanvas.textAlign = "left";
+                            DrawTextWrap(msg + "   -   [click to copy into the empty input text field]", 1050 - 746 / 2, Y + 30, 756, 70 * PAGE_SIZE - 10, "black", undefined, 5);
+                            MainCanvas.restore();
+                        });
+                    }
+                    MainCanvas.strokeRect(1050, Y + 26 + i * 70, 766, 64);
+                    DrawTextFit(msg.length > 61 ? msg.substr(0, 60) + "\u2026" : msg, 1060, Y + 26 + i * 70 + 34, 750, "Black");
+                    if (access) {
+                        MainCanvas.textAlign = "center";
+                        DrawButton(1836, Y + 26 + i * 70, 64, 64, "X", "White");
+                        MainCanvas.textAlign = "left";
+                    }
+                }
+                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + PAGE_SIZE * 70 + 43, 450, 60);
+                MainCanvas.textAlign = "center";
+                DrawButton(1530, Y + PAGE_SIZE * 70 + 43, 100, 64, "Add", access ? "White" : "#ddd", undefined, undefined, !access);
+                DrawBackNextButton(1650, Y + PAGE_SIZE * 70 + 43, 250, 64, `Page ${page + 1}/${totalPages}`, "White", undefined, () => "", () => "");
+                MainCanvas.textAlign = "left";
+            },
+            click({ value, Y, key, def, access }) {
+                var _a, _b, _c, _d;
+                Y -= 20;
+                const PAGE_SIZE = (_b = (_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) !== null && _b !== void 0 ? _b : 4;
+                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
+                const page = clamp$1((_c = ruleCustomDataHandlerPage.get(key)) !== null && _c !== void 0 ? _c : 0, 0, totalPages - 1);
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                for (let i = 0; i < PAGE_SIZE; i++) {
+                    const e = page * PAGE_SIZE + i;
+                    if (e >= value.length)
+                        break;
+                    if (access && MouseIn(1050, Y + 26 + i * 70, 766, 64) && input && input.value === "") {
+                        input.value = value[e];
+                    }
+                    if (access && MouseIn(1836, Y + 26 + i * 70, 64, 64)) {
+                        value.splice(e, 1);
+                        return value;
+                    }
+                }
+                if (access && MouseIn(1530, Y + PAGE_SIZE * 70 + 43, 100, 64) &&
+                    input && input.value &&
+                    (!((_d = def.options) === null || _d === void 0 ? void 0 : _d.validate) || def.options.validate.test(input.value)) &&
+                    !value.includes(input.value)) {
+                    if (value.length >= STRING_LIST_MAX_LENGTH) {
+                        InfoBeep("Reached the max. number of entries - please delete one first", 10000);
+                        return;
+                    }
+                    value.push(input.value);
+                    value.sort();
+                    input.value = "";
+                    return value;
+                }
+                if (MouseIn(1650, Y + PAGE_SIZE * 70 + 43, 125, 64) && page > 0) {
+                    ruleCustomDataHandlerPage.set(key, page - 1);
+                }
+                else if (MouseIn(1650 + 125, Y + PAGE_SIZE * 70 + 43, 125, 64) && page + 1 < totalPages) {
+                    ruleCustomDataHandlerPage.set(key, page + 1);
+                }
+                return undefined;
+            },
+            unload({ key }) {
+                ElementRemove(`BCX_RCDH_${key}`);
+                ruleCustomDataHandlerPage.delete(key);
+            },
+        },
+        textArea: {
+            validate: value => typeof value === "string",
+            onDataChange({ active, key, onInput, value, access }) {
+                let input = document.getElementById(`BCX_RCDH_${key}`);
+                if (!active) {
+                    if (input) {
+                        input.remove();
+                    }
+                    return;
+                }
+                if (!input) {
+                    input = document.createElement("textarea");
+                    input.id = `BCX_RCDH_${key}`;
+                    input.name = `BCX_RCDH_${key}`;
+                    input.value = value;
+                    input.maxLength = 10000;
+                    input.setAttribute("screen-generated", CurrentScreen);
+                    input.className = "HideOnPopup";
+                    input.oninput = onInput;
+                    document.body.appendChild(input);
+                }
+                else {
+                    input.value = value;
+                }
+                input.disabled = !access;
+            },
+            processInput({ key }) {
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                return input ? input.value : undefined;
+            },
+            run({ def, Y, key }) {
+                DrawTextFit(def.description, 1000, Y + 0, 900, "Black");
+                const input = document.getElementById(`BCX_RCDH_${key}`);
+                if (input && document.activeElement === input) {
+                    ElementPositionFix(`BCX_RCDH_${key}`, 36, 105, 170, 1790, 750);
+                }
+                else {
+                    ElementPositionFix(`BCX_RCDH_${key}`, 28, 1000, Y + 26, 900, 765 - Y);
+                }
+            },
+            unload({ key }) {
+                ElementRemove(`BCX_RCDH_${key}`);
+            },
+        },
+        toggle: {
+            validate: value => typeof value === "boolean",
+            run({ def, value, Y, access }) {
+                DrawCheckbox(1050, Y, 64, 64, def.description, value, !access);
+            },
+            click({ value, Y, access }) {
+                if (!access)
+                    return;
+                if (MouseIn(1050, Y, 64, 64)) {
+                    return !value;
+                }
+                return undefined;
+            },
+        },
+    };
+    function parseRuleName(selector, filter) {
+        selector = selector.toLocaleLowerCase();
+        const rule = Array.from(rules.entries())
+            .filter(r => !filter || filter(r[0]))
+            .find(([ruleName, data]) => ruleName.toLocaleLowerCase() === selector || data.name.toLocaleLowerCase() === selector);
+        return rule ? [true, rule[0]] : [false, `Unknown rule "${selector}".`];
+    }
+    function autocompleteRuleName(selector, filter) {
+        selector = selector.toLocaleLowerCase();
+        let options = Array.from(rules.entries())
+            .filter(r => r[1].name.toLocaleLowerCase().startsWith(selector) && (!filter || filter(r[0])))
+            .map(r => r[1].name);
+        if (options.length === 0) {
+            options = Array.from(rules.entries())
+                .filter(r => r[0].toLocaleLowerCase().startsWith(selector) && (!filter || filter(r[0])))
+                .map(r => r[0]);
+        }
+        return options;
+    }
+    function RulesGetList() {
+        return rulesList.map(rule => [rule, RulesGetDisplayDefinition(rule)]);
+    }
+    function RulesCreate(rule, character) {
+        var _a;
+        if (!moduleIsEnabled(ModuleCategory.Rules))
+            return false;
+        if (character && !ConditionsCheckAccess("rules", rule, character))
+            return false;
+        const definition = rules.get(rule);
+        if (!definition) {
+            throw new Error(`Attempt to create unknown rule '${rule}'`);
+        }
+        if (!ConditionsGetCondition("rules", rule)) {
+            const ruleData = {};
+            if (definition.dataDefinition) {
+                ruleData.customData = {};
+                for (const [k, v] of Object.entries(definition.dataDefinition)) {
+                    ruleData.customData[k] = cloneDeep(typeof v.default === "function" ? v.default() : v.default);
+                }
+            }
+            if (definition.internalDataDefault) {
+                ruleData.internalData = definition.internalDataDefault();
+                if (!((_a = definition.internalDataValidate) === null || _a === void 0 ? void 0 : _a.call(definition, ruleData.internalData))) {
+                    throw new Error(`Failed to create valid internal data for rule '${rule}'`);
+                }
+            }
+            ConditionsSetCondition("rules", rule, ruleData, character);
+            if (character) {
+                logMessage("rule_change", LogEntryType.plaintext, `${character} added a new rule: ${definition.name}`);
+                if (!character.isPlayer()) {
+                    ChatRoomSendLocal(`${character.toNicknamedString()} gave you a new rule: "${definition.name}"`);
+                }
+            }
+        }
+        return true;
+    }
+    function RulesDelete(rule, character) {
+        if (!moduleIsEnabled(ModuleCategory.Rules))
+            return false;
+        if (character && !ConditionsCheckAccess("rules", rule, character))
+            return false;
+        const display = RulesGetDisplayDefinition(rule);
+        if (ConditionsRemoveCondition("rules", rule) && character) {
+            logMessage("rule_change", LogEntryType.plaintext, `${character} removed the rule: ${display.name}`);
+            if (!character.isPlayer()) {
+                ChatRoomSendLocal(`${character.toNicknamedString()} removed your rule "${display.name}"`);
+            }
+        }
+        return true;
+    }
+    class RuleState {
+        get condition() {
+            return ConditionsGetCondition("rules", this.rule);
+        }
+        get inEffect() {
+            return ConditionsIsConditionInEffect("rules", this.rule);
+        }
+        get isEnforced() {
+            const data = this.condition;
+            if (!data || !this.inEffect)
+                return false;
+            return data.data.enforce !== false;
+        }
+        get isLogged() {
+            const data = this.condition;
+            if (!data || !this.inEffect)
+                return false;
+            return data.data.log !== false;
+        }
+        get customData() {
+            var _a;
+            return (_a = this.condition) === null || _a === void 0 ? void 0 : _a.data.customData;
+        }
+        get internalData() {
+            var _a;
+            return cloneDeep((_a = this.condition) === null || _a === void 0 ? void 0 : _a.data.internalData);
+        }
+        set internalData(data) {
+            const condition = this.condition;
+            if (condition && !isEqual(condition.data.internalData, data)) {
+                condition.data.internalData = data;
+                modStorageSync();
+            }
+        }
+        constructor(rule, definition) {
+            this.rule = rule;
+            this.ruleDefinition = definition;
+        }
+        trigger(targetCharacter = null, dictionary = {}) {
+            var _a, _b, _c;
+            const texts = this.ruleDefinition.triggerTexts;
+            if (texts) {
+                let targetName = CharacterNickname(Player);
+                if (targetCharacter != null) {
+                    const targetChar = getChatroomCharacter(targetCharacter);
+                    targetName = targetChar ? CharacterNickname(targetChar.Character) : getCharacterName(targetCharacter, "[unknown]");
+                }
+                if (texts.infoBeep) {
+                    InfoBeep("BCX: " + dictionaryProcess(texts.infoBeep, {
+                        PLAYER_NAME: (_a = RelationshipsGetNickname(Player.MemberNumber)) !== null && _a !== void 0 ? _a : CharacterNickname(Player),
+                        TARGET_PLAYER: (_b = RelationshipsGetNickname(targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber)) !== null && _b !== void 0 ? _b : targetName,
+                        ...dictionary,
+                    }), 7000);
+                }
+                if (this.isLogged) {
+                    const log = texts.log;
+                    if (log) {
+                        logMessage("rule_trigger", LogEntryType.ruleTrigger, [this.rule, dictionary]);
+                    }
+                    const announce = (_c = texts.announce) !== null && _c !== void 0 ? _c : texts.log;
+                    if (announce) {
+                        ChatRoomActionMessage(`${dictionaryProcess(announce, {
+                        PLAYER_NAME: "SourceCharacter",
+                        TARGET_PLAYER: `TargetCharacterName (${targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber})`,
+                        ...dictionary,
+                    })}.`, null, [
+                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
+                            { Tag: "TargetCharacterName", MemberNumber: targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber, Text: targetName },
+                        ]);
+                    }
+                }
+            }
+        }
+        triggerAttempt(targetCharacter = null, dictionary = {}) {
+            var _a, _b, _c, _d;
+            const texts = this.ruleDefinition.triggerTexts;
+            if (texts) {
+                let targetName = CharacterNickname(Player);
+                if (targetCharacter != null) {
+                    const targetChar = getChatroomCharacter(targetCharacter);
+                    targetName = targetChar ? CharacterNickname(targetChar.Character) : getCharacterName(targetCharacter, "[unknown]");
+                }
+                const infoBeep = (_a = texts.attempt_infoBeep) !== null && _a !== void 0 ? _a : texts.infoBeep;
+                if (infoBeep) {
+                    InfoBeep("BCX: " + dictionaryProcess(infoBeep, {
+                        PLAYER_NAME: (_b = RelationshipsGetNickname(Player.MemberNumber)) !== null && _b !== void 0 ? _b : CharacterNickname(Player),
+                        TARGET_PLAYER: (_c = RelationshipsGetNickname(targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber)) !== null && _c !== void 0 ? _c : targetName,
+                        ...dictionary,
+                    }), 7000);
+                }
+                if (this.isLogged) {
+                    const log = texts.attempt_log;
+                    if (log) {
+                        logMessage("rule_trigger", LogEntryType.ruleTriggerAttempt, [this.rule, dictionary]);
+                    }
+                    const announce = (_d = texts.attempt_announce) !== null && _d !== void 0 ? _d : texts.attempt_log;
+                    if (announce) {
+                        ChatRoomActionMessage(`${dictionaryProcess(announce, {
+                        PLAYER_NAME: "SourceCharacter",
+                        TARGET_PLAYER: `TargetCharacterName (${targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber})`,
+                        ...dictionary,
+                    })}.`, null, [
+                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
+                            { Tag: "TargetCharacterName", MemberNumber: targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber, Text: targetName },
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+    class ModuleRules extends BaseModule {
+        constructor() {
+            super(...arguments);
+            this.resetTimer = null;
+            this.triggerCounts = new Map();
+            this.suspendedUntil = null;
+        }
+        init() {
+            registerPermission("rules_normal", {
+                name: "Allows controlling non-limited rules",
+                category: ModuleCategory.Rules,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.lover],
+                    [Preset.switch]: [true, AccessLevel.lover],
+                    [Preset.submissive]: [false, AccessLevel.mistress],
+                    [Preset.slave]: [false, AccessLevel.mistress],
+                },
+            });
+            registerPermission("rules_limited", {
+                name: "Allows controlling limited rules",
+                category: ModuleCategory.Rules,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.owner],
+                    [Preset.switch]: [true, AccessLevel.owner],
+                    [Preset.submissive]: [false, AccessLevel.lover],
+                    [Preset.slave]: [false, AccessLevel.lover],
+                },
+            });
+            registerPermission("rules_global_configuration", {
+                name: "Allows editing the global rules configuration",
+                category: ModuleCategory.Rules,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.owner],
+                    [Preset.switch]: [true, AccessLevel.owner],
+                    [Preset.submissive]: [false, AccessLevel.lover],
+                    [Preset.slave]: [false, AccessLevel.lover],
+                },
+            });
+            registerPermission("rules_change_limits", {
+                name: "Allows to limit/block specific rules",
+                category: ModuleCategory.Rules,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.self],
+                    [Preset.switch]: [true, AccessLevel.self],
+                    [Preset.submissive]: [true, AccessLevel.self],
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
+            });
+            registerPermission("rules_view_originator", {
+                name: "Allow to view who added the rule originally",
+                category: ModuleCategory.Rules,
+                defaults: {
+                    [Preset.dominant]: [true, AccessLevel.self],
+                    [Preset.switch]: [true, AccessLevel.self],
+                    [Preset.submissive]: [true, AccessLevel.mistress],
+                    [Preset.slave]: [true, AccessLevel.mistress],
+                },
+            });
+            queryHandlers.ruleCreate = (sender, data) => {
+                if (guard_BCX_Rule(data)) {
+                    return RulesCreate(data, sender);
+                }
+                else {
+                    return undefined;
+                }
+            };
+            queryHandlers.ruleDelete = (sender, data) => {
+                if (guard_BCX_Rule(data)) {
+                    return RulesDelete(data, sender);
+                }
+                else {
+                    return undefined;
+                }
+            };
+            registerWhisperCommand("modules", "rules", "- Manage rules", (argv, sender, respond) => {
+                if (!moduleIsEnabled(ModuleCategory.Rules)) {
+                    return respond(`Rules module is disabled.`);
+                }
+                const subcommand = (argv[0] || "").toLocaleLowerCase();
+                const rulesInfo = ConditionsGetCategoryPublicData("rules", sender).conditions;
+                if (ConditionsSubcommands.includes(subcommand)) {
+                    return ConditionsRunSubcommand("rules", argv, sender, respond);
+                }
+                else if (subcommand === "list") {
+                    let result = "Current rules:";
+                    for (const [k, v] of Object.entries(rulesInfo)) {
+                        const data = RulesGetDisplayDefinition(k);
+                        const timerText = `Timer: ${v.timer ? formatTimeInterval(v.timer - Date.now(), "short") : "∞"}`;
+                        const resultItem = `\n${data.name} | ${timerText}`;
+                        if (result.length + resultItem.length >= 990) {
+                            result += "\n...";
+                            respond(result);
+                            result = "Current rules (continued):";
+                        }
+                        result += resultItem;
+                    }
+                    respond(result);
+                }
+                else if (subcommand === "listall") {
+                    let result = "All existing rules:";
+                    for (const [k] of RulesGetList()) {
+                        const data = RulesGetDisplayDefinition(k);
+                        const resultItem = `\n${data.name}`;
+                        if (result.length + resultItem.length >= 990) {
+                            result += "\n...";
+                            respond(result);
+                            result = "All rules (continued):";
+                        }
+                        result += resultItem;
+                    }
+                    respond(result);
+                }
+                else if (subcommand === "description") {
+                    const result = parseRuleName(argv[1] || "");
+                    if (!result[0]) {
+                        return respond(result[1]);
+                    }
+                    const data = RulesGetDisplayDefinition(result[1]);
+                    respond(data.longDescription.replaceAll("PLAYER_NAME", Player.Name));
+                }
+                else if (subcommand === "remove") {
+                    const result = parseRuleName(argv[1] || "");
+                    if (!result[0]) {
+                        return respond(result[1]);
+                    }
+                    respond(RulesDelete(result[1], sender) ? `Ok.` : COMMAND_GENERIC_ERROR);
+                }
+                else {
+                    respond(Command_fixExclamationMark(sender, `!rules usage (page 1):\n` +
+                        `!rules list - List the currently added rules\n` +
+                        `!rules listall - List all existing rule names in BCX\n` +
+                        `!rules description <rule> - Show the rule's description\n` +
+                        `!rules remove <rule> - Remove a currently added rule if permitted to\n` +
+                        `\nNote: Adding and setting up rules is only supported via using BCX's graphical user interface yourself.`));
+                    respond(Command_fixExclamationMark(sender, `!rules usage (page 2):\n` +
+                        `!rules setactive <rule> <yes/no> - Switch the rule and its conditions on and off\n` +
+                        `!rules triggers <rule> global <yes/no> - Set the trigger condition of this rule to the global configuration\n` +
+                        `!rules triggers <rule> help - Set the trigger configuration of a rule\n` +
+                        `!rules globaltriggers help - Set global trigger configuration\n` +
+                        `!rules timer <rule> help - Set timer options of a rule\n` +
+                        `!rules defaulttimer help - Set default timer options used on new rules\n` +
+                        `!rules setlimit <rule> <normal/limited/blocked> - Set a limit on certain <rule>\n` +
+                        `\nHint: If an argument contains spaces: "put it in quotes"`));
+                }
+            }, (argv, sender) => {
+                if (!moduleIsEnabled(ModuleCategory.Rules)) {
+                    return [];
+                }
+                if (argv.length <= 1) {
+                    return Command_pickAutocomplete(argv[0], ["list", "listall", "description", "remove", ...ConditionsSubcommands]);
+                }
+                const subcommand = argv[0].toLocaleLowerCase();
+                if (ConditionsSubcommands.includes(subcommand)) {
+                    return ConditionsAutocompleteSubcommand("rules", argv, sender);
+                }
+                return [];
+            });
+            ConditionsRegisterCategory("rules", {
+                category: ModuleCategory.Rules,
+                permission_normal: "rules_normal",
+                permission_limited: "rules_limited",
+                permission_configure: "rules_global_configuration",
+                permission_changeLimits: "rules_change_limits",
+                permission_viewOriginator: "rules_view_originator",
+                loadValidateConditionKey: rule => guard_BCX_Rule(rule),
+                loadValidateCondition: (rule, data) => {
+                    const info = data.data;
+                    const descriptor = rules.get(rule);
+                    if (!descriptor) {
+                        console.error(`BCX: Bad data for rule ${rule}: descriptor not found, removing it`);
+                        return false;
+                    }
+                    if (!isObject$1(info) ||
+                        (info.enforce !== undefined && info.enforce !== false) ||
+                        (info.log !== undefined && info.log !== false)) {
+                        console.error(`BCX: Bad data for rule ${rule}, removing it`, info);
+                        return false;
+                    }
+                    if (descriptor.dataDefinition) {
+                        if (!isObject$1(info.customData)) {
+                            console.warn(`BCX: Missing custom data for rule ${rule}, fixing`);
+                            info.customData = {};
+                        }
+                        for (const k of Object.keys(info.customData)) {
+                            if (!descriptor.dataDefinition[k]) {
+                                console.warn(`BCX: Unknown custom data attribute '${k}' for rule ${rule}, cleaning up`, info.customData[k]);
+                                delete info.customData[k];
+                            }
+                        }
+                        for (const [k, def] of Object.entries(descriptor.dataDefinition)) {
+                            const handler = ruleCustomDataHandlers[def.type];
+                            if (!handler) {
+                                console.error(`BCX: Custom data for rule ${rule} unknown type ${def.type}, removing it`, info);
+                                return false;
+                            }
+                            if (!handler.validate(info.customData[k], def)) {
+                                console.warn(`BCX: Bad custom data ${k} for rule ${rule}, expected type ${def.type}, replacing with default`, info.customData[k]);
+                                info.customData[k] = (typeof def.default === "function" ? def.default() : def.default);
+                            }
+                        }
+                    }
+                    else if (info.customData !== undefined) {
+                        console.error(`BCX: Custom data for rule ${rule} without data definition, removing it`, info);
+                        return false;
+                    }
+                    if (descriptor.internalDataValidate) {
+                        if (!descriptor.internalDataValidate(info.internalData)) {
+                            if (info.internalData === undefined && descriptor.internalDataDefault) {
+                                console.warn(`BCX: Missing internal data for rule ${rule}, fixing`);
+                                info.internalData = descriptor.internalDataDefault();
+                            }
+                            else {
+                                console.error(`BCX: Bad internal data for rule ${rule}, removing it`, info);
+                                return false;
+                            }
+                        }
+                    }
+                    else if (info.internalData !== undefined) {
+                        console.error(`BCX: Internal data for rule ${rule} without validator, removing it`, info);
+                        return false;
+                    }
+                    return true;
+                },
+                loadCategorySpecificGlobalData: () => undefined,
+                stateChangeHandler: this.ruleStateChange.bind(this),
+                tickHandler: this.ruleTick.bind(this),
+                makePublicData: (rule, data) => {
+                    var _a, _b;
+                    return ({
+                        enforce: (_a = data.data.enforce) !== null && _a !== void 0 ? _a : true,
+                        log: (_b = data.data.log) !== null && _b !== void 0 ? _b : true,
+                        customData: cloneDeep(data.data.customData),
+                    });
+                },
+                validateCategorySpecificGlobalData: () => true,
+                validatePublicData: (rule, data) => isObject$1(data) &&
+                    typeof data.enforce === "boolean" &&
+                    typeof data.log === "boolean" &&
+                    guard_RuleCustomData(rule, data.customData),
+                updateCondition: (condition, data, updateData) => {
+                    if (updateData.enforce) {
+                        delete data.data.enforce;
+                    }
+                    else {
+                        data.data.enforce = false;
+                    }
+                    if (updateData.log) {
+                        delete data.data.log;
+                    }
+                    else {
+                        data.data.log = false;
+                    }
+                    if (updateData.customData) {
+                        data.data.customData = cloneDeep(updateData.customData);
+                    }
+                    return true;
+                },
+                parseConditionName: (selector, onlyExisting) => {
+                    return parseRuleName(selector, onlyExisting ? (rule => onlyExisting.includes(rule)) : undefined);
+                },
+                autocompleteConditionName: (selector, onlyExisting) => {
+                    return autocompleteRuleName(selector, onlyExisting ? (rule => onlyExisting.includes(rule)) : undefined);
+                },
+                logLimitChange: (rule, character, newLimit) => {
+                    const definition = RulesGetDisplayDefinition(rule);
+                    logMessage("rule_change", LogEntryType.plaintext, `${character} changed ${Player.Name}'s '${definition.name}' rule permission to ${ConditionsLimit[newLimit]}`);
+                    if (!character.isPlayer()) {
+                        ChatRoomSendLocal(`${character.toNicknamedString()} changed '${definition.name}' rule permission to ${ConditionsLimit[newLimit]}`, undefined, character.MemberNumber);
+                    }
+                },
+                logConditionUpdate: (rule, character, newData, oldData) => {
+                    var _a, _b, _c, _d, _e, _f;
+                    const definition = RulesGetDisplayDefinition(rule);
+                    const visibleName = definition.name;
+                    const didActiveChange = newData.active !== oldData.active;
+                    const didTimerChange = newData.timer !== oldData.timer || newData.timerRemove !== oldData.timerRemove;
+                    const didTriggerChange = !isEqual(newData.requirements, oldData.requirements);
+                    const didEnforcementChange = newData.data.enforce !== oldData.data.enforce;
+                    const didLoggingChange = newData.data.log !== oldData.data.log;
+                    const changeEvents = [];
+                    if (didActiveChange)
+                        changeEvents.push("active state");
+                    if (didTimerChange)
+                        changeEvents.push("timer");
+                    if (didTriggerChange)
+                        changeEvents.push("trigger condition");
+                    if (didEnforcementChange)
+                        changeEvents.push("enforcement");
+                    if (didLoggingChange)
+                        changeEvents.push("logging");
+                    if (definition.dataDefinition) {
+                        for (const [k, def] of Object.entries(definition.dataDefinition)) {
+                            if (!isEqual((_a = oldData.data.customData) === null || _a === void 0 ? void 0 : _a[k], (_b = newData.data.customData) === null || _b === void 0 ? void 0 : _b[k])) {
+                                let descr = def.description;
+                                if (descr.includes(":")) {
+                                    descr = descr.slice(0, descr.lastIndexOf(":"));
+                                }
+                                changeEvents.push(`${changeEvents.length > 0 ? "and " : ""}the value of the setting '${descr}'`);
+                            }
+                        }
+                    }
+                    if (changeEvents.length > 0) {
+                        logMessage("rule_change", LogEntryType.plaintext, `${character} changed the ${changeEvents.join(", ")} of ${Player.Name}'s '${visibleName}' rule`);
+                    }
+                    if (!character.isPlayer()) {
+                        if (didActiveChange) {
+                            ChatRoomSendLocal(`${character.toNicknamedString()} ${newData.active ? "reactivated" : "deactivated"} the '${visibleName}' rule`, undefined, character.MemberNumber);
+                        }
+                        if (newData.timer !== oldData.timer)
+                            if (newData.timer === null) {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} disabled the timer of the '${visibleName}' rule`, undefined, character.MemberNumber);
+                            }
+                            else {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} changed the remaining time of the timer of the '${visibleName}' rule to ${formatTimeInterval(newData.timer - Date.now())}`, undefined, character.MemberNumber);
+                            }
+                        if (newData.timer !== null && newData.timerRemove !== oldData.timerRemove)
+                            ChatRoomSendLocal(`${character.toNicknamedString()} changed the timer behavior of the '${visibleName}' rule to ${newData.timerRemove ? "remove" : "disable"} the rule when time runs out`, undefined, character.MemberNumber);
+                        if (didTriggerChange)
+                            if (newData.requirements === null) {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} set the triggers of '${visibleName}' rule to the global rules configuration`, undefined, character.MemberNumber);
+                            }
+                            else {
+                                const triggers = [];
+                                const r = newData.requirements;
+                                if (r.room) {
+                                    triggers.push(`When ${r.room.inverted ? "not in" : "in"} ${r.room.type} room`);
+                                }
+                                if (r.roomName) {
+                                    triggers.push(`When ${r.roomName.inverted ? "not in" : "in"} room named '${r.roomName.name}'`);
+                                }
+                                if (r.role) {
+                                    const role = capitalizeFirstLetter(AccessLevel[r.role.role]) + (r.role.role !== AccessLevel.clubowner ? " ↑" : "");
+                                    triggers.push(`When ${r.role.inverted ? "not in" : "in"} room with role '${role}'`);
+                                }
+                                if (r.player) {
+                                    const name = getCharacterName(r.player.memberNumber, null);
+                                    triggers.push(`When ${r.player.inverted ? "not in" : "in"} room with member '${r.player.memberNumber}'${name ? ` (${name})` : ""}`);
+                                }
+                                if (triggers.length > 0) {
+                                    ChatRoomSendLocal(`${character.toNicknamedString()} set the '${visibleName}' rule to trigger under following conditions:\n` + triggers.join("\n"), undefined, character.MemberNumber);
+                                }
+                                else {
+                                    ChatRoomSendLocal(`${character.toNicknamedString()} deactivated all trigger conditions of the '${visibleName}' rule. The rule will now always trigger, while it is active`, undefined, character.MemberNumber);
+                                }
+                            }
+                        if (didEnforcementChange) {
+                            ChatRoomSendLocal(`${character.toNicknamedString()} ${newData.data.enforce ? "enabled enforcement" : "stopped enforcement"} of the '${visibleName}' rule`, undefined, character.MemberNumber);
+                        }
+                        if (didLoggingChange) {
+                            ChatRoomSendLocal(`${character.toNicknamedString()} ${newData.data.log ? "enabled logging" : "stopped logging"} of the '${visibleName}' rule`, undefined, character.MemberNumber);
+                        }
+                        if (definition.dataDefinition) {
+                            for (const [k, def] of Object.entries(definition.dataDefinition)) {
+                                if (!isEqual((_c = oldData.data.customData) === null || _c === void 0 ? void 0 : _c[k], (_d = newData.data.customData) === null || _d === void 0 ? void 0 : _d[k])) {
+                                    ChatRoomSendLocal(`${character.toNicknamedString()} changed the '${visibleName}' rule's setting '${def.description}' from '${(_e = oldData.data.customData) === null || _e === void 0 ? void 0 : _e[k]}' to '${(_f = newData.data.customData) === null || _f === void 0 ? void 0 : _f[k]}'`, undefined, character.MemberNumber);
+                                }
+                            }
+                        }
+                    }
+                },
+                logCategoryUpdate: (character, newData, oldData) => {
+                    const didTimerChange = newData.timer !== oldData.timer || newData.timerRemove !== oldData.timerRemove;
+                    const didTriggerChange = !isEqual(newData.requirements, oldData.requirements);
+                    const changeEvents = [];
+                    if (didTimerChange)
+                        changeEvents.push("default timer");
+                    if (didTriggerChange)
+                        changeEvents.push("trigger condition");
+                    if (changeEvents.length > 0) {
+                        logMessage("curse_change", LogEntryType.plaintext, `${character} changed the ${changeEvents.join(", ")} of ${Player.Name}'s global rules config`);
+                    }
+                    if (!character.isPlayer()) {
+                        if (newData.timer !== oldData.timer)
+                            if (newData.timer === null) {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} removed the default timer of the global rules configuration`, undefined, character.MemberNumber);
+                            }
+                            else {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} changed the default timer of the global rules configuration to ${formatTimeInterval(newData.timer)}`, undefined, character.MemberNumber);
+                            }
+                        if (newData.timer !== null && newData.timerRemove !== oldData.timerRemove)
+                            ChatRoomSendLocal(`${character.toNicknamedString()} changed the default timeout behavior of the global rules configuration to ${newData.timerRemove ? "removal of rules" : "disabling rules"} when time runs out`, undefined, character.MemberNumber);
+                        if (didTriggerChange) {
+                            const triggers = [];
+                            const r = newData.requirements;
+                            if (r.room) {
+                                triggers.push(`When ${r.room.inverted ? "not in" : "in"} ${r.room.type} room`);
+                            }
+                            if (r.roomName) {
+                                triggers.push(`When ${r.roomName.inverted ? "not in" : "in"} room named '${r.roomName.name}'`);
+                            }
+                            if (r.role) {
+                                const role = capitalizeFirstLetter(AccessLevel[r.role.role]) + (r.role.role !== AccessLevel.clubowner ? " ↑" : "");
+                                triggers.push(`When ${r.role.inverted ? "not in" : "in"} room with role '${role}'`);
+                            }
+                            if (r.player) {
+                                const name = getCharacterName(r.player.memberNumber, null);
+                                triggers.push(`When ${r.player.inverted ? "not in" : "in"} room with member '${r.player.memberNumber}'${name ? ` (${name})` : ""}`);
+                            }
+                            if (triggers.length > 0) {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} set the global rules configuration to trigger rules under following conditions:\n` + triggers.join("\n"), undefined, character.MemberNumber);
+                            }
+                            else {
+                                ChatRoomSendLocal(`${character.toNicknamedString()} deactivated all trigger conditions for the global rules configuration. Rules set to this default configuration will now always trigger, while active`, undefined, character.MemberNumber);
+                            }
+                        }
+                    }
+                },
+                getDefaultLimits: () => {
+                    const res = {};
+                    for (const [k, v] of rules.entries()) {
+                        res[k] = v.defaultLimit;
+                    }
+                    return res;
+                },
+                commandConditionSelectorHelp: "rule",
+                currentExportImport: {
+                    export(condition, data) {
+                        var _a, _b;
+                        return {
+                            enforce: (_a = data.enforce) !== null && _a !== void 0 ? _a : true,
+                            log: (_b = data.log) !== null && _b !== void 0 ? _b : true,
+                            customData: cloneDeep(data.customData),
+                        };
+                    },
+                    import(condition, data, character) {
+                        var _a;
+                        const validator = z.object({
+                            enforce: z.boolean(),
+                            log: z.boolean(),
+                            customData: z.record(z.any()).optional(),
+                        });
+                        const validationResult = validator.safeParse(data);
+                        if (!validationResult.success) {
+                            return [false, JSON.stringify(validationResult.error.format(), undefined, "\t")];
+                        }
+                        const validatedData = validationResult.data;
+                        const definition = rules.get(condition);
+                        if (!definition) {
+                            return [false, `Unknown rule '${condition}'`];
+                        }
+                        if (!guard_RuleCustomData(condition, validatedData.customData)) {
+                            return [false, `Invalid rule configuration`];
+                        }
+                        const current = ConditionsGetCondition("rules", condition);
+                        const internalData = current ? current.data.internalData :
+                            (_a = definition.internalDataDefault) === null || _a === void 0 ? void 0 : _a.call(definition);
+                        if (definition.internalDataValidate && !definition.internalDataValidate(internalData)) {
+                            return [false, `Failed to validate internal data`];
+                        }
+                        return [true, {
+                                enforce: !validatedData.enforce && definition.enforceable ? false : undefined,
+                                log: !validatedData.log && definition.loggable ? false : undefined,
+                                customData: validatedData.customData,
+                                internalData,
+                            }];
+                    },
+                    importLog(condition, data, character) {
+                        const definition = rules.get(condition);
+                        if (!character || !definition)
+                            return;
+                        logMessage("rule_change", LogEntryType.plaintext, `${character} imported rule '${definition.name}'`);
+                        if (!character.isPlayer()) {
+                            ChatRoomSendLocal(`${character.toNicknamedString()} imported the rule '${definition.name}'`);
+                        }
+                    },
+                    importRemove(condition, character) {
+                        if (!RulesDelete(condition, character)) {
+                            return "Failed.";
+                        }
+                        return true;
+                    },
+                },
+            });
+            initRules_bc_blocks();
+            initRules_bc_alter();
+            initRules_bc_settings();
+            initRules_bc_relation_control();
+            initRules_bc_speech_control();
+            initRules_other();
+            for (const rule of rules.values()) {
+                if (rule.init) {
+                    rule.init(rule.state);
+                }
+            }
+        }
+        load() {
+            if (!moduleIsEnabled(ModuleCategory.Rules)) {
+                return;
+            }
+            for (const rule of rules.values()) {
+                if (rule.load) {
+                    rule.load(rule.state);
+                }
+            }
+        }
+        run() {
+            if (!moduleIsEnabled(ModuleCategory.Rules))
+                return;
+            this.resetTimer = BCX_setInterval(() => {
+                this.triggerCounts.clear();
+            }, RULES_ANTILOOP_RESET_INTERVAL);
+        }
+        unload() {
+            if (this.resetTimer !== null) {
+                clearInterval(this.resetTimer);
+                this.resetTimer = null;
+            }
+            for (const rule of rules.values()) {
+                if (rule.unload) {
+                    rule.unload();
+                }
+            }
+        }
+        reload() {
+            this.unload();
+            this.load();
+            this.run();
+        }
+        ruleStateChange(rule, condition, newState) {
+            var _a;
+            const ruleDefinition = rules.get(rule);
+            if (!ruleDefinition) {
+                throw new Error(`Definition for rule ${rule} not found`);
+            }
+            (_a = ruleDefinition.stateChange) === null || _a === void 0 ? void 0 : _a.call(ruleDefinition, ruleDefinition.state, newState);
+        }
+        ruleTick(rule, condition) {
+            var _a;
+            if (this.suspendedUntil !== null) {
+                if (Date.now() >= this.suspendedUntil) {
+                    this.suspendedUntil = null;
+                    this.triggerCounts.clear();
+                    ChatRoomActionMessage(`All of SourceCharacter's temporarily suspended rules are in effect again.`, null, [
+                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
+                    ]);
+                }
+                else {
+                    return;
+                }
+            }
+            const ruleDefinition = rules.get(rule);
+            if (!ruleDefinition) {
+                throw new Error(`Definition for rule ${rule} not found`);
+            }
+            if (ruleDefinition.tick) {
+                if (ruleDefinition.tick(ruleDefinition.state)) {
+                    const counter = ((_a = this.triggerCounts.get(rule)) !== null && _a !== void 0 ? _a : 0) + 1;
+                    this.triggerCounts.set(rule, counter);
+                    if (counter >= RULES_ANTILOOP_THRESHOLD) {
+                        ChatRoomActionMessage("Protection triggered: The effects of rules have been suspended for 10 minutes. Please refrain from triggering rules so rapidly, as it creates strain on the server and may lead to unwanted side effects! If you believe this message was triggered by a bug, please report it to BCX Discord.");
+                        this.suspendedUntil = Date.now() + RULES_ANTILOOP_SUSPEND_TIME;
+                    }
+                }
+            }
+        }
+    }
+
+    const COMMAND_CATEGORIES_VISIBLE = ["utility", "cheats", "modules", "commands"];
+    const COMMAND_GENERIC_ERROR = `The command failed to execute, likely because you are lacking the permission to give it.`;
+    const commands$1 = new Map();
+    const whisperCommands = new Map();
+    let firstTimeHelp = null;
+    function CommandsShowFirstTimeHelp() {
+        if (!firstTimeHelp && modStorage.chatShouldDisplayFirstTimeHelp) {
+            firstTimeHelp = ChatRoomSendLocal(`[ BCX commands tutorial ]\n` +
+                `BCX also provides helpful chat commands.\n` +
+                `All commands start with a dot ( . )\n` +
+                `The commands also support auto-completion: While writing a command, press 'Tab' to try automatically completing the currently typed word.\n` +
+                `Other club members can also use commands of your BCX, without needing BCX themselves. They will get a list of all commands they have permission using by whispering '!help' ( ! instead of . ) to you.\n` +
+                `Note: Messages colored like this text can only be seen by you and no one else.\n` +
+                `\n` +
+                `To complete this tutorial, use '.help' command by writing '.he' and pressing 'Tab' to complete it to '.help', it will show you list of available BCX commands.`);
+        }
+    }
+    function CommandsCompleteFirstTimeHelp() {
+        if (modStorage.chatShouldDisplayFirstTimeHelp !== undefined) {
+            delete modStorage.chatShouldDisplayFirstTimeHelp;
+            modStorageSync();
+        }
+        if (firstTimeHelp) {
+            firstTimeHelp.remove();
+            firstTimeHelp = null;
+        }
+    }
+    function registerCommand$1(category, name, description, callback, autocomplete = null) {
+        name = name.toLocaleLowerCase();
+        if (commands$1.has(name)) {
+            throw new Error(`Command "${name}" already registered!`);
+        }
+        commands$1.set(name, {
+            parse: false,
+            callback,
+            autocomplete,
+            category,
+            description,
+        });
+    }
+    function aliasCommand(originalName, alias) {
+        originalName = originalName.toLocaleLowerCase();
+        alias = alias.toLocaleLowerCase();
+        const original = commands$1.get(originalName);
+        if (!original) {
+            throw new Error(`Command "${originalName}" to alias not found`);
+        }
+        if (original.parse) {
+            commands$1.set(alias, {
+                parse: true,
+                category: original.category,
+                description: null,
+                callback: original.callback,
+                autocomplete: original.autocomplete,
+            });
+        }
+        else {
+            commands$1.set(alias, {
+                parse: false,
+                category: original.category,
+                description: null,
+                callback: original.callback,
+                autocomplete: original.autocomplete,
+            });
+        }
+    }
+    function registerCommandParsed(category, name, description, callback, autocomplete = null) {
+        name = name.toLocaleLowerCase();
+        if (commands$1.has(name)) {
+            throw new Error(`Command "${name}" already registered!`);
+        }
+        commands$1.set(name, {
+            parse: true,
+            callback,
+            autocomplete,
+            category,
+            description,
+        });
+    }
+    function registerWhisperCommand(category, name, description, callback, autocomplete = null, registerNormal = true) {
+        name = name.toLocaleLowerCase();
+        if (registerNormal) {
+            registerCommandParsed(category, name, description, (argv) => {
+                callback(argv, getPlayerCharacter(), (msg) => ChatRoomSendLocal(msg));
+                return true;
+            }, autocomplete ? (argv) => autocomplete(argv, getPlayerCharacter()) : null);
+        }
+        if (whisperCommands.has(name)) {
+            throw new Error(`Command "${name}" already registered!`);
+        }
+        whisperCommands.set(name, {
+            callback,
+            autocomplete,
+            category,
+            description,
+        });
+    }
+    function CommandParse(msg) {
+        msg = msg.trimStart();
+        const commandMatch = /^(\S+)(?:\s|$)(.*)$/.exec(msg);
+        if (!commandMatch) {
+            return ["", ""];
+        }
+        return [(commandMatch[1] || "").toLocaleLowerCase(), commandMatch[2]];
+    }
+    function CommandParseArguments(args) {
+        return [...args.matchAll(/".*?(?:"|$)|'.*?(?:'|$)|[^ ]+/g)]
+            .map(a => a[0])
+            .map(a => a[0] === '"' || a[0] === "'" ? a.substring(1, a.length > 1 && a[a.length - 1] === a[0] ? a.length - 1 : a.length) : a);
+    }
+    function CommandHasEmptyArgument(args) {
+        const argv = CommandParseArguments(args);
+        return argv.length === 0 || !args.endsWith(argv[argv.length - 1]);
+    }
+    function CommandArgumentNeedsQuotes(arg) {
+        return arg.includes(" ") || arg.includes('"') || arg.startsWith(`'`);
+    }
+    function CommandQuoteArgument(arg, force = false) {
+        if (arg.startsWith(`"`)) {
+            return `'${arg}'`;
+        }
+        else if (arg.startsWith(`'`)) {
+            return `"${arg}"`;
+        }
+        else if (arg.includes(" ") || force) {
+            return arg.includes('"') ? `'${arg}'` : `"${arg}"`;
+        }
+        return arg;
+    }
+    let autocompleteMessage = null;
+    let autocompleteLastQuery = null;
+    let autocompleteLastTarget = null;
+    let autocompleteLastResult = [];
+    let autocompleteNextIndex = 0;
+    function autocompleteClear() {
+        if (autocompleteMessage) {
+            autocompleteMessage.remove();
+            autocompleteMessage = null;
+        }
+        autocompleteLastQuery = null;
+        autocompleteLastTarget = null;
+    }
+    function autocompleteShow(header, options, highlight) {
+        autocompleteClear();
+        if (options.length > 0) {
+            const res = document.createElement("div");
+            res.innerText += `[${header}]\n`;
+            for (let i = 0; i < options.length; i++) {
+                const option = document.createElement("div");
+                option.innerText = options[i];
+                if (i === highlight) {
+                    option.style.background = `#7e7eff54`;
+                }
+                res.appendChild(option);
+            }
+            autocompleteMessage = ChatRoomSendLocal(res, 10000);
+        }
+    }
+    function RunCommand(msg) {
+        autocompleteClear();
+        const [command, args] = CommandParse(msg);
+        const commandInfo = commands$1.get(command);
+        if (!commandInfo) {
+            ChatRoomSendLocal(`Unknown command "${command}"\n` +
+                `To see list of valid commands use '.help'`, 15000);
+            return false;
+        }
+        if (commandInfo.parse) {
+            return commandInfo.callback(CommandParseArguments(args));
+        }
+        else {
+            return commandInfo.callback(args);
+        }
+    }
+    function RunWhisperCommand(msg, sender, respond) {
+        const [command, args] = CommandParse(msg);
+        const commandInfo = whisperCommands.get(command);
+        if (!commandInfo) {
+            respond(`Unknown command "${command}"\n` +
+                `To see list of valid commands whisper '!help'`);
+            return;
+        }
+        return commandInfo.callback(CommandParseArguments(args), sender, respond);
+    }
+    function CommandAutocomplete(msg) {
+        msg = msg.trimStart();
+        const [command, args] = CommandParse(msg);
+        if (msg.length === command.length) {
+            const prefixes = Array.from(commands$1.entries()).filter(c => c[1].description !== null && c[0].startsWith(command)).map(c => c[0] + " ");
+            return prefixes.map(i => [i, i]);
+        }
+        const commandInfo = commands$1.get(command);
+        if (commandInfo && commandInfo.autocomplete) {
+            if (commandInfo.parse) {
+                const argv = CommandParseArguments(args);
+                if (CommandHasEmptyArgument(args)) {
+                    argv.push("");
+                }
+                let lastOptions = commandInfo.autocomplete(argv);
+                const fin = lastOptions.length === 1;
+                if (lastOptions.length === 0) {
+                    lastOptions = [argv[argv.length - 1]];
+                }
+                argv.pop();
+                const needsQuotes = lastOptions.some(CommandArgumentNeedsQuotes);
+                return lastOptions.map(i => [
+                    `${command} ` +
+                        argv
+                            .map(a => CommandQuoteArgument(a))
+                            .concat(needsQuotes ? CommandQuoteArgument(i, true) : i)
+                            .join(" ") +
+                        (fin ? " " : ""),
+                    i,
+                ]);
+            }
+            else {
+                const possibleArgs = commandInfo.autocomplete(args);
+                if (possibleArgs.length === 0) {
+                    return [];
+                }
+                return possibleArgs.map(arg => [`${command} ${arg}`, arg]);
+            }
+        }
+        return [];
+    }
+    function CommandAutocompleteCycle(msg) {
+        if (autocompleteLastQuery === msg && autocompleteLastTarget === null && autocompleteNextIndex < autocompleteLastResult.length) {
+            autocompleteShow("autocomplete hint", autocompleteLastResult.map(i => i[1]), autocompleteNextIndex);
+            const res = autocompleteLastResult[autocompleteNextIndex][0].trim();
+            autocompleteNextIndex = (autocompleteNextIndex + 1) % autocompleteLastResult.length;
+            autocompleteLastQuery = res;
+            return res;
+        }
+        autocompleteClear();
+        autocompleteLastResult = CommandAutocomplete(msg).sort((a, b) => a[1].localeCompare(b[1]));
+        if (autocompleteLastResult.length === 0) {
+            return msg;
+        }
+        else if (autocompleteLastResult.length === 1) {
+            return autocompleteLastResult[0][0];
+        }
+        const best = longestCommonPrefix(autocompleteLastResult.map(i => i[0]));
+        autocompleteShow("autocomplete hint", autocompleteLastResult.map(i => i[1]));
+        autocompleteLastQuery = best;
+        autocompleteLastTarget = null;
+        autocompleteNextIndex = 0;
+        return best;
+    }
+    function WhisperCommandAutocomplete(msg, sender) {
+        msg = msg.trimStart();
+        const [command, args] = CommandParse(msg);
+        if (msg.length === command.length) {
+            const prefixes = Array.from(whisperCommands.entries()).filter(c => c[1].description !== null && c[0].startsWith(command)).map(c => c[0] + " ");
+            return prefixes.map(i => [i, i]);
+        }
+        const commandInfo = whisperCommands.get(command);
+        if (commandInfo && commandInfo.autocomplete) {
+            const argv = CommandParseArguments(args);
+            if (CommandHasEmptyArgument(args)) {
+                argv.push("");
+            }
+            let lastOptions = commandInfo.autocomplete(argv, sender);
+            const fin = lastOptions.length === 1;
+            if (lastOptions.length === 0) {
+                lastOptions = [argv[argv.length - 1]];
+            }
+            argv.pop();
+            const needsQuotes = lastOptions.some(CommandArgumentNeedsQuotes);
+            return lastOptions.map(i => [
+                `${command} ` +
+                    argv
+                        .map(a => CommandQuoteArgument(a))
+                        .concat(needsQuotes ? CommandQuoteArgument(i, true) : i)
+                        .join(" ") +
+                    (fin ? " " : ""),
+                i,
+            ]);
+        }
+        return [];
+    }
+    async function WhisperCommandAutocompleteCycle(chat) {
+        const currentValue = chat.value;
+        const currentTarget = ChatRoomTargetMemberNumber;
+        if (currentTarget == null)
+            return;
+        if (autocompleteLastQuery === currentValue && autocompleteLastTarget === currentTarget && autocompleteNextIndex < autocompleteLastResult.length) {
+            autocompleteShow("remote autocomplete hint", autocompleteLastResult.map(i => i[1]), autocompleteNextIndex);
+            const res = autocompleteLastResult[autocompleteNextIndex][0].trim();
+            autocompleteNextIndex = (autocompleteNextIndex + 1) % autocompleteLastResult.length;
+            autocompleteLastQuery = res;
+            autocompleteLastTarget = currentTarget;
+            chat.value = res;
+            return;
+        }
+        autocompleteClear();
+        const queryResult = await sendQuery("commandHint", currentValue, currentTarget);
+        if (chat.value !== currentValue || ChatRoomTargetMemberNumber !== currentTarget)
+            return;
+        if (!Array.isArray(queryResult) || !queryResult
+            .every(i => Array.isArray(i) &&
+            i.length === 2 &&
+            typeof i[0] === "string" &&
+            typeof i[1] === "string")) {
+            return;
+        }
+        autocompleteLastResult = queryResult.sort((a, b) => a[1].localeCompare(b[1]));
+        if (autocompleteLastResult.length === 0) {
+            return;
+        }
+        else if (autocompleteLastResult.length === 1) {
+            chat.value = autocompleteLastResult[0][0];
+            return;
+        }
+        const best = longestCommonPrefix(autocompleteLastResult.map(i => i[0]));
+        autocompleteShow("remote autocomplete hint", autocompleteLastResult.map(i => i[1]));
+        autocompleteLastQuery = best;
+        autocompleteLastTarget = currentTarget;
+        autocompleteNextIndex = 0;
+        chat.value = best;
+    }
+    function Command_fixExclamationMark(sender, text) {
+        return sender.isPlayer() ? text.replace(/^!/gm, ".") : text;
+    }
+    function Command_pickAutocomplete(selector, options) {
+        selector = selector.toLocaleLowerCase();
+        return options.filter(o => o.toLocaleLowerCase().startsWith(selector));
+    }
+    function Command_selectCharacter(selector) {
+        const characters = getAllCharactersInRoom();
+        if (/^[0-9]+$/.test(selector)) {
+            const MemberNumber = Number.parseInt(selector, 10);
+            const target = characters.find(c => c.MemberNumber === MemberNumber);
+            if (!target) {
+                return `Player #${MemberNumber} not found in the room.`;
+            }
+            return target;
+        }
+        let targets = characters.filter(c => c.Name === selector || isValidNickname(c.Nickname) && c.Nickname === selector);
+        if (targets.length === 0)
+            targets = characters.filter(c => c.Name.toLowerCase() === selector.toLowerCase() || isValidNickname(c.Nickname) && c.Name.toLowerCase() === selector.toLowerCase());
+        if (targets.length === 1) {
+            return targets[0];
+        }
+        else if (targets.length === 0) {
+            return `Player "${selector}" not found in the room.`;
+        }
+        else {
+            return `Multiple players match "${selector}". Please use Member Number instead.`;
+        }
+    }
+    function Command_selectCharacterMemberNumber(selector, allowNotPresent = true) {
+        const character = Command_selectCharacter(selector);
+        if (typeof character === "string" && allowNotPresent && /^[0-9]+$/.test(selector)) {
+            return Number.parseInt(selector, 10);
+        }
+        return typeof character === "string" ? character : character.MemberNumber;
+    }
+    function Command_selectCharacterAutocomplete(selector) {
+        const characters = getAllCharactersInRoom();
+        if (/^[0-9]+$/.test(selector)) {
+            return characters.map(c => { var _a; return (_a = c.MemberNumber) === null || _a === void 0 ? void 0 : _a.toString(10); }).filter(n => n != null && n.startsWith(selector));
+        }
+        return characters
+            .flatMap(c => isValidNickname(c.Nickname) && c.Nickname.toLowerCase() !== c.Name.toLowerCase() ? [c.Nickname, c.Name] : [c.Name])
+            .filter(n => n.toLocaleLowerCase().startsWith(selector.toLowerCase()));
+    }
+    function Command_selectWornItem(character, selector, filter = isBind) {
+        const items = character.Character.Appearance.filter((i) => filter(i));
+        let targets = items.filter(A => A.Asset.Group.Name.toLocaleLowerCase() === selector.toLocaleLowerCase());
+        if (targets.length === 0)
+            targets = items.filter(A => getVisibleGroupName(A.Asset.Group).toLocaleLowerCase() === selector.toLocaleLowerCase());
+        if (targets.length === 0)
+            targets = items.filter(A => A.Asset.Name.toLocaleLowerCase() === selector.toLocaleLowerCase());
+        if (targets.length === 0)
+            targets = items.filter(A => A.Asset.Description.toLocaleLowerCase() === selector.toLocaleLowerCase());
+        if (targets.length === 1) {
+            return targets[0];
+        }
+        else if (targets.length === 0) {
+            return `Item "${selector}" not found on character ${character}. If your item(group) consists of more than one word, please put it in quotes, such as "lower leg".`;
+        }
+        else {
+            return `Multiple items match, please use group name instead. (eg. arms)`;
+        }
+    }
+    function Command_selectWornItemAutocomplete(character, selector, filter = isBind) {
+        const items = character.Character.Appearance.filter((i) => filter(i));
+        let possible = arrayUnique(items.map(A => getVisibleGroupName(A.Asset.Group))
+            .concat(items.map(A => A.Asset.Description))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
+        if (possible.length === 0) {
+            possible = arrayUnique(items.map(A => A.Asset.Group.Name)
+                .concat(items.map(A => A.Asset.Name))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
+        }
+        return possible;
+    }
+    function Command_selectGroup(selector, character, filter) {
+        let targets = AssetGroup.filter(G => G.Name.toLocaleLowerCase() === selector.toLocaleLowerCase() && G.AllowCustomize && (!filter || filter(G)));
+        if (targets.length === 0)
+            targets = AssetGroup.filter(G => getVisibleGroupName(G).toLocaleLowerCase() === selector.toLocaleLowerCase() && (!filter || filter(G)));
+        if (targets.length > 1) {
+            return `Multiple groups match "${selector}", please report this as a bug.`;
+        }
+        else if (targets.length === 1) {
+            return targets[0];
+        }
+        else if (character) {
+            const item = Command_selectWornItem(character, selector, i => (!filter || filter(i.Asset.Group)));
+            return typeof item === "string" ? item : item.Asset.Group;
+        }
+        else {
+            return `Unknown group "${selector}".`;
+        }
+    }
+    function Command_selectGroupAutocomplete(selector, character, filter) {
+        const items = character ? character.Character.Appearance : [];
+        let possible = arrayUnique(AssetGroup
+            .filter(G => G.AllowCustomize && (!filter || filter(G)))
+            .map(G => getVisibleGroupName(G))
+            .concat(items
+            .filter(A => !filter || filter(A.Asset.Group))
+            .map(A => A.Asset.Description))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
+        if (possible.length === 0) {
+            possible = arrayUnique(AssetGroup
+                .filter(G => G.AllowCustomize && (!filter || filter(G)))
+                .map(G => G.Name)
+                .concat(items
+                .filter(A => !filter || filter(A.Asset.Group))
+                .map(A => A.Asset.Name))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
+        }
+        return possible;
+    }
+    function Command_parseTime(selector) {
+        const match = /^([0-9]+)([a-z]+)$/.exec(selector.toLocaleLowerCase());
+        if (!match) {
+            return `Unknown time format "${selector}", please use format 'number+unit' (e.g. 23h 30m)`;
+        }
+        const num = Number.parseInt(match[1], 10);
+        const unit = match[2];
+        if (["d", "day", "days"].includes(unit)) {
+            return num * 24 * 60 * 60 * 1000;
+        }
+        else if (["h", "hour", "hours"].includes(unit)) {
+            return num * 60 * 60 * 1000;
+        }
+        else if (["m", "min", "minute", "minutes"].includes(unit)) {
+            return num * 60 * 1000;
+        }
+        else if (["s", "sec", "second", "seconds"].includes(unit)) {
+            return num * 1000;
+        }
+        return `Unknown time unit "${unit}", please use one of:\n` +
+            `d (day), h (hour), m (minute), s (second)`;
+    }
+    class ModuleCommands extends BaseModule {
+        load() {
+            hookFunction("ChatRoomFirstTimeHelp", 0, (args, next) => {
+                next(args);
+                CommandsShowFirstTimeHelp();
+            });
+            hookFunction("ChatRoomClearAllElements", 1, (args, next) => {
+                firstTimeHelp = null;
+                return next(args);
+            });
+            hookFunction("ChatRoomSendChat", 10, (args, next) => {
+                const chat = document.getElementById("InputChat");
+                let substituteBack = null;
+                if (chat && !firstTimeInit) {
+                    const msg = chat.value.trim();
+                    if (/^[.\s]*$/.test(msg)) {
+                    }
+                    else if (msg.startsWith("..")) {
+                        chat.value = substituteBack = msg.substr(1);
+                    }
+                    else if (msg.startsWith(".")) {
+                        if (RunCommand(msg.substr(1))) {
+                            ChatRoomLastMessage.push(msg);
+                            ChatRoomLastMessageIndex = ChatRoomLastMessage.length;
+                            chat.value = "";
+                        }
+                        return;
+                    }
+                    autocompleteClear();
+                }
+                const result = next(args);
+                if (ChatRoomLastMessage.length > 0 && ChatRoomLastMessage[ChatRoomLastMessage.length - 1] === substituteBack) {
+                    ChatRoomLastMessage[ChatRoomLastMessage.length - 1] = "." + ChatRoomLastMessage[ChatRoomLastMessage.length - 1];
+                }
+                return result;
+            });
+            hookFunction("ChatRoomKeyDown", 10, (args, next) => {
+                var _a, _b;
+                const chat = document.getElementById("InputChat");
+                if (KeyPress === 9 &&
+                    chat &&
+                    chat.value.startsWith(".") &&
+                    !chat.value.startsWith("..") &&
+                    !firstTimeInit) {
+                    const e = (_a = args[0]) !== null && _a !== void 0 ? _a : event;
+                    e === null || e === void 0 ? void 0 : e.preventDefault();
+                    e === null || e === void 0 ? void 0 : e.stopImmediatePropagation();
+                    chat.value = "." + CommandAutocompleteCycle(chat.value.substr(1));
+                }
+                else if (KeyPress === 9 &&
+                    ChatRoomTargetMemberNumber != null &&
+                    chat &&
+                    chat.value.startsWith("!") &&
+                    !chat.value.startsWith("!!") &&
+                    !firstTimeInit) {
+                    const e = (_b = args[0]) !== null && _b !== void 0 ? _b : event;
+                    e === null || e === void 0 ? void 0 : e.preventDefault();
+                    e === null || e === void 0 ? void 0 : e.stopImmediatePropagation();
+                    WhisperCommandAutocompleteCycle(chat)
+                        .catch(() => { });
+                }
+                else {
+                    return next(args);
+                }
+            });
+            hookFunction("ChatRoomMessage", 9, (args, next) => {
+                const data = args[0];
+                const sender = typeof data.Sender === "number" && getChatroomCharacter(data.Sender);
+                if ((data === null || data === void 0 ? void 0 : data.Type) === "Whisper" &&
+                    typeof data.Content === "string" &&
+                    !firstTimeInit &&
+                    sender &&
+                    !sender.isPlayer() &&
+                    sender.hasAccessToPlayer()) {
+                    const orig = Array.isArray(data.Dictionary) && data.Dictionary.find((i) => isObject$1(i) && i.Tag === "BCX_ORIGINAL_MESSAGE" && typeof i.Text === "string");
+                    const text = (orig && orig.Text) || data.Content;
+                    if (data.Content.startsWith("!") &&
+                        !data.Content.startsWith("!!")) {
+                        console.debug(`BCX: Console command from ${sender}: ${text}`, data);
+                        RunWhisperCommand(text.substring(1), sender, (msg) => {
+                            ServerSend("ChatRoomChat", {
+                                Content: `[BCX]\n${msg}`,
+                                Type: "Whisper",
+                                Target: sender.MemberNumber,
+                            });
+                        });
+                        return;
+                    }
+                }
+                return next(args);
+            });
+            hookFunction("PropertyAutoPunishParseMessage", 6, (args, next) => {
+                const msg = args[1];
+                if (typeof msg === "string" && msg.startsWith(".") && !msg.startsWith(".."))
+                    return false;
+                return next(args);
+            });
+            queryHandlers.commandHint = (sender, data) => {
+                if (typeof data !== "string" || !data.startsWith("!") || data.startsWith("!!")) {
+                    return undefined;
+                }
+                return WhisperCommandAutocomplete(data.substring(1), sender)
+                    .map(i => ["!" + i[0], i[1]]);
+            };
+            registerCommand$1("hidden", "help", "- Display this help [alias: . ]", (arg) => {
+                CommandsCompleteFirstTimeHelp();
+                arg = arg.trim().toLocaleLowerCase();
+                if (!arg) {
+                    ChatRoomSendLocal(`BCX commands are organized into categories\n` +
+                        `To view help texts for all commands in a category, use '.help <category>' (e.g. '.help utility')\n` +
+                        `\n` +
+                        `List of categories:\n` +
+                        COMMAND_CATEGORIES_VISIBLE.join("\n"));
+                }
+                else {
+                    const category = COMMAND_CATEGORIES_VISIBLE.find(c => c.toLocaleLowerCase() === arg);
+                    if (category) {
+                        ChatRoomSendLocal(`Available commands in category ${category}:\n` +
+                            Array.from(commands$1.entries())
+                                .filter(c => c[1].description !== null && c[1].category === category)
+                                .map(c => `.${c[0]}` + (c[1].description ? ` ${c[1].description}` : ""))
+                                .sort()
+                                .join("\n"));
+                    }
+                    else {
+                        ChatRoomSendLocal(`Unknown category '${arg}'` +
+                            `\n` +
+                            `List of available categories:\n` +
+                            COMMAND_CATEGORIES_VISIBLE.join("\n"));
+                    }
+                }
+                return true;
+            }, (args) => {
+                return Command_pickAutocomplete(args.trim(), COMMAND_CATEGORIES_VISIBLE);
+            });
+            aliasCommand("help", "?");
+            registerCommand$1("utility", "action", "- Send custom (action) [alias: .a ]", (msg) => {
+                const blockRule = RulesGetRuleState("block_action");
+                if (blockRule.isEnforced) {
+                    blockRule.triggerAttempt();
+                    return false;
+                }
+                else if (blockRule.inEffect) {
+                    blockRule.trigger();
+                }
+                ChatRoomActionMessage(msg);
+                return true;
+            });
+            aliasCommand("action", "a");
+            registerWhisperCommand("hidden", "help", "- Display this help", (argv, sender, respond) => {
+                const result = Array.from(whisperCommands.entries())
+                    .filter(c => c[1].description !== null)
+                    .map(c => `!${c[0]}` + (c[1].description ? ` ${c[1].description}` : ""))
+                    .sort();
+                let response = `Available commands:`;
+                while (result.length > 0) {
+                    const concat = response + "\n" + result[0];
+                    if (concat.length > 990) {
+                        respond(response);
+                        response = result[0];
+                    }
+                    else {
+                        response = concat;
+                    }
+                    result.shift();
+                }
+                respond(response);
+                return true;
+            }, null, false);
+        }
+        unload() {
+            commands$1.clear();
+        }
+    }
+
     const CONDITIONS_CHECK_INTERVAL = 2000;
-    const schema_ConditionsConditionRequirements = mod.lazy(() => mod.object({
-        orLogic: mod.literal(true).optional(),
-        room: mod.object({
-            type: mod.enum(["public", "private"]),
-            inverted: mod.literal(true).optional()
+    const schema_ConditionsConditionRequirements = z.lazy(() => z.object({
+        orLogic: z.literal(true).optional(),
+        room: z.object({
+            type: z.enum(["public", "private"]),
+            inverted: z.literal(true).optional(),
         }).optional(),
-        roomName: mod.object({
-            name: mod.string(),
-            inverted: mod.literal(true).optional()
+        roomName: z.object({
+            name: z.string(),
+            inverted: z.literal(true).optional(),
         }).optional(),
-        role: mod.object({
-            role: mod.nativeEnum(AccessLevel),
-            inverted: mod.literal(true).optional()
+        role: z.object({
+            role: z.nativeEnum(AccessLevel),
+            inverted: z.literal(true).optional(),
         }).optional(),
-        player: mod.object({
-            memberNumber: mod.number(),
-            inverted: mod.literal(true).optional()
-        }).optional()
+        player: z.object({
+            memberNumber: z.number(),
+            inverted: z.literal(true).optional(),
+        }).optional(),
     }));
     function guard_ConditionsConditionRequirements(data) {
         return isObject$1(data) &&
@@ -29045,12 +31612,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         const publicData = ConditionsMakeConditionPublicData(handler, condition, data, null);
                         conditions[condition] = {
                             ...pick(publicData, "active", "timer", "timerRemove", "requirements", "favorite"),
-                            data: currentExportImport.export(condition, data.data)
+                            data: currentExportImport.export(condition, data.data),
                         };
                     }
                     return {
                         categoryConfig,
-                        conditions
+                        conditions,
                     };
                 },
                 import: (data, character) => {
@@ -29058,7 +31625,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (!ConditionsCategoryUpdate(category, data.categoryConfig, character)) {
                         res += `Failed to set global config!\n`;
                     }
-                    // Remove old ones
                     const conditionsData = ConditionsGetCategoryData(category).conditions;
                     for (const condition of Object.keys(conditionsData)) {
                         if (data.conditions[condition] == null) {
@@ -29070,7 +31636,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             }
                         }
                     }
-                    // Import conditions
                     for (const [c, conditionData] of Object.entries(data.conditions)) {
                         const condition = c;
                         if (conditionData == null)
@@ -29107,22 +31672,22 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return res + `Done!`;
                 },
                 importPermissions: [handler.permission_configure, handler.permission_normal, handler.permission_limited],
-                importValidator: mod.object({
-                    categoryConfig: mod.object({
+                importValidator: z.object({
+                    categoryConfig: z.object({
                         requirements: schema_ConditionsConditionRequirements,
-                        timer: mod.number().nullable(),
-                        timerRemove: mod.boolean(),
-                        data: mod.custom((data) => handler.validateCategorySpecificGlobalData(data))
+                        timer: z.number().nullable(),
+                        timerRemove: z.boolean(),
+                        data: z.custom((data) => handler.validateCategorySpecificGlobalData(data)),
                     }),
-                    conditions: mod.record(mod.object({
-                        active: mod.boolean(),
-                        data: mod.unknown().optional(),
-                        timer: mod.number().nullable(),
-                        timerRemove: mod.boolean(),
+                    conditions: z.record(z.object({
+                        active: z.boolean(),
+                        data: z.unknown().optional(),
+                        timer: z.number().nullable(),
+                        timerRemove: z.boolean(),
                         requirements: schema_ConditionsConditionRequirements.nullable(),
-                        favorite: mod.boolean()
-                    }))
-                })
+                        favorite: z.boolean(),
+                    })),
+                }),
             });
         }
         ExportImportRegisterCategory({
@@ -29149,7 +31714,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return res + `Done!`;
             },
             importPermissions: [handler.permission_changeLimits],
-            importValidator: mod.record(mod.nativeEnum(ConditionsLimit))
+            importValidator: z.record(z.nativeEnum(ConditionsLimit)),
         });
     }
     function ConditionsGetCategoryHandler(category) {
@@ -29162,7 +31727,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function ConditionsGetCategoryEnabled(category) {
         return moduleIsEnabled(ConditionsGetCategoryHandler(category).category);
     }
-    /** Unsafe when category is disabled, check before using */
     function ConditionsGetCategoryData(category) {
         var _a;
         if (!conditionHandlers.has(category)) {
@@ -29182,14 +31746,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             timer: (_a = conditionData.timer) !== null && _a !== void 0 ? _a : null,
             timerRemove: (_b = conditionData.timerRemove) !== null && _b !== void 0 ? _b : false,
             requirements: conditionData.requirements ? cloneDeep(conditionData.requirements) : null,
-            favorite: (_c = conditionData.favorite) !== null && _c !== void 0 ? _c : false
+            favorite: (_c = conditionData.favorite) !== null && _c !== void 0 ? _c : false,
         };
         if (requester === null || handler.permission_viewOriginator != null && checkPermissionAccess(handler.permission_viewOriginator, requester)) {
             res.addedBy = conditionData.addedBy;
         }
         return res;
     }
-    /** Unsafe when category is disabled, check before using */
     function ConditionsGetCategoryConfigurableData(category) {
         var _a, _b;
         const data = ConditionsGetCategoryData(category);
@@ -29197,11 +31760,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             timer: (_a = data.timer) !== null && _a !== void 0 ? _a : null,
             timerRemove: (_b = data.timerRemove) !== null && _b !== void 0 ? _b : false,
             data: cloneDeep(data.data),
-            requirements: cloneDeep(data.requirements)
+            requirements: cloneDeep(data.requirements),
         };
         return res;
     }
-    /** Unsafe when category is disabled, check before using */
     function ConditionsGetCategoryPublicData(category, requester) {
         const handler = ConditionsGetCategoryHandler(category);
         const data = ConditionsGetCategoryData(category);
@@ -29215,8 +31777,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             ...ConditionsGetCategoryConfigurableData(category),
             limits: {
                 ...handler.getDefaultLimits(),
-                ...data.limits
-            }
+                ...data.limits,
+            },
         };
         for (const [condition, conditionData] of Object.entries(data.conditions)) {
             res.conditions[condition] = ConditionsMakeConditionPublicData(handler, condition, conditionData, requester);
@@ -29260,7 +31822,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 lastActive: false,
                 timer: categoryData.timer !== undefined ? Date.now() + categoryData.timer : undefined,
                 timerRemove: categoryData.timerRemove,
-                data
+                data,
             };
             if (source) {
                 res.addedBy = source.MemberNumber;
@@ -29317,16 +31879,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return false;
         }
         const data = ConditionsGetCategoryData(category);
-        // No permission is failure
         if (character && !checkPermissionAccess(handler.permission_changeLimits, character)) {
             return false;
         }
         const defaultLimit = (_a = handler.getDefaultLimits()[condition]) !== null && _a !== void 0 ? _a : ConditionsLimit.normal;
         const oldLimit = (_b = data.limits[condition]) !== null && _b !== void 0 ? _b : defaultLimit;
-        // Exit early if no change needed
         if (oldLimit === limit)
             return true;
-        // Condition must not exist to change limit
         if (data.conditions[condition] !== undefined)
             return false;
         if (limit === defaultLimit) {
@@ -29358,7 +31917,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         if (data.requirements) {
             conditionData.requirements = data.requirements;
-            // Default back to "AND", if requirements are empty
             const requirements = conditionData.requirements;
             const hasAnyRequirement = !!(requirements.room || requirements.roomName || requirements.role || requirements.player);
             if (requirements.orLogic && !hasAnyRequirement) {
@@ -29453,7 +32011,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return false;
         const oldData = character && ConditionsGetCategoryPublicData(category, character);
         conditionData.requirements = data.requirements;
-        // Default back to "AND", if requirements are empty
         const requirements = conditionData.requirements;
         const hasAnyRequirement = !!(requirements.room || requirements.roomName || requirements.role || requirements.player);
         if (requirements.orLogic && !hasAnyRequirement) {
@@ -29511,38 +32068,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return true;
         else if (requirements.orLogic)
             return results.includes(true);
-        else // AND logic
+        else
             return !results.includes(false);
     }
     const ConditionsSubcommands = ["setactive", "triggers", "globaltriggers", "timer", "defaulttimer", "setlimit"];
-    /*
-    !curses setactive <condition> <yes/no> - Switch the curse and its conditions on and off
-
-    !curses triggers <condition> global <yes/no> - Set the trigger condition of this curse to the global configuration
-    !curses triggers <condition> <[for each trigger separately]>
-    !curses globaltriggers <[for each trigger separately]>
-
-    !curses timer <condition> <[timer handle]>
-    !curses defaulttimer <[timer handle]>
-
-    !curses setlimit <condition> <normal/limited/blocked> - Set a limit on certain <condition>
-
-    timer handling:
-    disable - Remove the timer and set lifetime to infinite
-    set <time> (time in /[0-9]+d [0-9]+h [0-9]+m [0-9]+s/ format, each part optional) - Set timer to the given amount of days, hours, minutes or seconds (e.g. 23h 30m)
-    autoremove <yes/no> - Set if the curse is removed when the timer runs out or just disables itself
-
-    (global)triggers commands:
-    logic <or/and>							If the logic should be OR or AND logic; defaults to AND
-    room ignore 							Remove the 'room type'-based trigger condition
-    room <is/isnot> <public/private>		Add such a 'room type'-based trigger condition
-    roomname ignore							Remove the 'room name'-based trigger condition
-    roomname <is/isnot> <name>				Add such a 'room name'-based trigger condition
-    role ignore								Remove the role-based trigger condition
-    role <with/notwith> <role>				Add such a role-based trigger condition
-    player ignore							Remove the person-based trigger condition
-    player <with/notwith> <memberNumber>	Add such a person-based trigger condition
-    */
     const ConditionsCommandTriggersKeywords = ["room", "roomname", "role", "player"];
     function ConditionsCommandProcessTriggers(triggers, argv, sender, respond) {
         const trigger = (argv[0] || "").toLocaleLowerCase();
@@ -29573,7 +32102,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             triggers.room = {
                 type: value,
-                inverted
+                inverted,
             };
         }
         else if (trigger === "roomname") {
@@ -29583,7 +32112,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             triggers.roomName = {
                 name: value,
-                inverted
+                inverted,
             };
         }
         else if (trigger === "role") {
@@ -29599,7 +32128,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             triggers.role = {
                 role: level,
-                inverted
+                inverted,
             };
         }
         else if (trigger === "player") {
@@ -29614,7 +32143,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             triggers.player = {
                 memberNumber: target,
-                inverted
+                inverted,
             };
         }
         return false;
@@ -30021,21 +32550,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (!isObject$1(modStorage.conditions)) {
                 modStorage.conditions = {};
             }
-            // cursedItems migration
             if (modStorage.cursedItems) {
                 const curses = modStorage.conditions.curses = {
                     conditions: {},
                     limits: {},
                     requirements: {},
                     data: {
-                        itemRemove: false
-                    }
+                        itemRemove: false,
+                    },
                 };
                 for (const [group, data] of Object.entries(modStorage.cursedItems)) {
                     curses.conditions[group] = {
                         active: true,
                         lastActive: false,
-                        data
+                        data,
                     };
                 }
                 delete modStorage.cursedItems;
@@ -30057,7 +32585,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     console.warn(`BCX: Removing category ${key} invalid timer`, data.timer);
                     delete data.timer;
                 }
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
                 if (data.timerRemove !== undefined && data.timerRemove !== true) {
                     console.warn(`BCX: Removing category ${key} invalid timerRemove`, data.timerRemove);
                     delete data.timerRemove;
@@ -30096,9 +32623,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     else if (typeof conditiondata.active !== "boolean" ||
                         conditiondata.requirements !== undefined && !guard_ConditionsConditionRequirements(conditiondata.requirements) ||
                         conditiondata.timer !== undefined && typeof conditiondata.timer !== "number" ||
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
                         conditiondata.timerRemove !== undefined && conditiondata.timerRemove !== true ||
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
                         conditiondata.favorite !== undefined && conditiondata.favorite !== true) {
                         console.warn(`BCX: Condition ${key}:${condition} has bad data, removing it`);
                         delete data.conditions[condition];
@@ -30130,7 +32655,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         conditions: {},
                         limits: {},
                         requirements: {},
-                        data: handler.loadCategorySpecificGlobalData(undefined)
+                        data: handler.loadCategorySpecificGlobalData(undefined),
                     };
                 }
             }
@@ -30264,2576 +32789,758 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
     }
 
-    const RULES_ANTILOOP_RESET_INTERVAL = 60000;
-    const RULES_ANTILOOP_THRESHOLD = 10;
-    const RULES_ANTILOOP_SUSPEND_TIME = 600000;
-    const STRING_LIST_MAX_LENGTH = 128;
-    const RULE_ICONS = {
-        [0 /* RuleType.Block */]: icon_restrictions,
-        [1 /* RuleType.Alt */]: "Icons/Swap.png",
-        [2 /* RuleType.Setting */]: "Icons/Preference.png",
-        [3 /* RuleType.RC */]: icon_OwnerList,
-        [4 /* RuleType.Speech */]: "Icons/Chat.png",
-        [99 /* RuleType.Other */]: "Icons/Chest.png"
-    };
-    function guard_BCX_Rule(name) {
-        return typeof name === "string" && rules.has(name);
+    const MAX_STACK_SIZE = 15;
+    let firstError = true;
+    let lastReceivedMessageType = "";
+    let lastReceivedMessageTime = 0;
+    let lastSentMessageType = "";
+    let lastSentMessageTime = 0;
+    let logServerMessages = false;
+    function debugSetLogServerMessages(value) {
+        logServerMessages = value;
     }
-    function guard_RuleCustomData(rule, data) {
-        const descriptor = rules.get(rule);
-        if (!descriptor)
-            return false;
-        if (descriptor.dataDefinition) {
-            if (!isObject$1(data))
-                return false;
-            for (const k of Object.keys(data)) {
-                if (!descriptor.dataDefinition[k])
-                    return false;
+    function debugGenerateReport(includeBCX = true) {
+        let res = `----- Debug report -----\n`;
+        res += `Location: ${window.location.href.replace(/\d{4,}/g, "<numbers>")}\n`;
+        res += `UA: ${window.navigator.userAgent}\n`;
+        res += `BC Version: ${GameVersion}\n`;
+        res += `ModSDK Version: ${bcModSDK.version}\n`;
+        res += `Mods:\n` +
+            bcModSDK.getModsInfo()
+                .map(mod => `  - ${mod.fullName} (${mod.name}): ${mod.version}\n` + (mod.repository ? `    repository: ${mod.repository}\n` : ""))
+                .join("");
+        const otherMods = Object.entries(detectOtherMods()).filter(i => i[1]);
+        if (otherMods.length > 0) {
+            res += `Detected legacy mods (NOT USING ModSDK):\n` +
+                otherMods
+                    .map(i => `  - ${i[0]}` + (typeof i[1] !== "boolean" ? `: ${i[1]}` : "") + "\n")
+                    .join("");
+        }
+        else {
+            res += `No known legacy mods detected.\n`;
+        }
+        const now = Date.now();
+        res += `\n----- BC state report -----\n`;
+        res += `Mouse position: ${MouseX} ${MouseY}\n`;
+        res += `Connected to server: ${ServerIsConnected}\n`;
+        res += `Local time: ${now}\n`;
+        res += `Server time: ${CurrentTime} (diff: ${(CurrentTime - now).toFixed(2)})\n`;
+        res += `Screen: ${CurrentModule}/${CurrentScreen}\n`;
+        res += `In chatroom: ${ServerPlayerIsInChatRoom()}\n`;
+        res += `GLVersion: ${GLVersion}\n`;
+        res += `Last received message: ${lastReceivedMessageType} (${lastReceivedMessageTime})\n`;
+        res += `Last sent message: ${lastSentMessageType} (${lastSentMessageTime})\n`;
+        if (includeBCX) {
+            res += `\n----- BCX report -----\n`;
+            res += `Version: ${VERSION$1}\n`;
+            res += `Init state: ${ModuleInitPhase[moduleInitPhase]}\n`;
+            res += `First init: ${firstTimeInit}\n`;
+            res += `Disabled modules: ${getDisabledModules().map(i => ModuleCategory[i]).join(", ") || "[None]"}\n`;
+            try {
+                if (ConditionsGetCategoryEnabled("curses")) {
+                    res += `Curses: ${Object.keys(ConditionsGetCategoryData("curses").conditions).join(", ") || "[None]"}\n`;
+                }
             }
-            for (const [k, def] of Object.entries(descriptor.dataDefinition)) {
-                const handler = ruleCustomDataHandlers[def.type];
-                if (!handler || !handler.validate(data[k], def))
-                    return false;
+            catch (error) {
+                res += `ERROR getting Curses data: ${debugPrettifyError(error)}\n`;
+            }
+            try {
+                if (ConditionsGetCategoryEnabled("rules")) {
+                    res += `Rules: ${Object.keys(ConditionsGetCategoryData("rules").conditions).join(", ") || "[None]"}\n`;
+                }
+            }
+            catch (error) {
+                res += `ERROR getting Rules data: ${debugPrettifyError(error)}\n`;
             }
         }
-        else if (data !== undefined) {
-            return false;
-        }
-        return true;
+        res += "\n" + debugGenerateSDKReport(includeBCX);
+        return res;
     }
-    const rules = new Map();
-    const rulesList = [];
-    function registerRule(name, data) {
-        var _a;
-        if (moduleInitPhase !== ModuleInitPhase.init) {
-            throw new Error("Rules can be registered only during init");
+    function debugGenerateSDKReport(verbose = false) {
+        let res = `----- ModSDK report -----\n`;
+        const patchingInfo = Array.from(bcModSDK.getPatchingInfo().values());
+        let hadWarnings = false;
+        const overwrittenFunctions = patchingInfo.filter(fn => fn.currentEntrypoint !== fn.sdkEntrypoint);
+        if (overwrittenFunctions.length > 0) {
+            hadWarnings = true;
+            res += `Functions overwritten by non-ModSDK mods:\n` +
+                overwrittenFunctions.map(fn => { var _a, _b; return `  - ${fn.name}: ${crc32((_b = (_a = fn.currentEntrypoint) === null || _a === void 0 ? void 0 : _a.toString().replaceAll("\r\n", "\n")) !== null && _b !== void 0 ? _b : "")}\n`; }).join("");
         }
-        if (rules.has(name)) {
-            throw new Error(`Rule "${name}" already defined!`);
+        if (!hadWarnings) {
+            res += `No warnings.\n`;
         }
-        if (data.dataDefinition) {
-            for (const [k, v] of Object.entries(data.dataDefinition)) {
-                const handler = ruleCustomDataHandlers[v.type];
-                if (!handler) {
-                    throw new Error(`Unknown handler for ${name}:${k} (${v.type})`);
-                }
-                if (handler.validateOptions && !handler.validateOptions(v.options)) {
-                    throw new Error(`Bad options for ${name}:${k} (${v.type})`);
-                }
-                const defaultValue = typeof v.default === "function" ? v.default() : v.default;
-                if (!handler.validate(defaultValue, v)) {
-                    throw new Error(`Default doesn't validate for ${name}:${k} (${v.type})`);
-                }
+        const unexpectedHashes = getPatchedFunctionsHashes(false);
+        if (unexpectedHashes.length > 0 && (verbose || SUPPORTED_BC_VERSIONS.includes(GameVersion))) {
+            res += `\n----- BCX Patching report -----\n`;
+            if (unexpectedHashes.length > 0) {
+                res += `Patched functions with unknown checksums:\n` +
+                    unexpectedHashes.map(i => `  - ${i[0]}: ${i[1]}\n`).join("");
             }
         }
-        if (data.internalDataValidate) {
-            if (!data.internalDataValidate((_a = data.internalDataDefault) === null || _a === void 0 ? void 0 : _a.call(data))) {
-                throw new Error(`Default internal data doesn't validate for rule ${name}`);
-            }
+        else if (verbose) {
+            res += `\n----- BCX Patching report -----\n`;
+            res += `No warnings.\n`;
         }
-        else if (data.internalDataDefault !== undefined) {
-            throw new Error(`Default internal data for rule ${name} without internal data validation`);
-        }
-        rules.set(name, {
-            ...data,
-            state: new RuleState(name, data)
-        });
-        rulesList.push(name);
+        return res;
     }
-    function RulesGetDisplayDefinition(rule) {
-        const data = rules.get(rule);
-        if (!data) {
-            throw new Error(`Attempt to get display definition for unknown rule '${rule}'`);
-        }
-        return {
-            name: data.name,
-            type: data.type,
-            shortDescription: data.shortDescription,
-            keywords: data.keywords,
-            longDescription: data.longDescription,
-            triggerTexts: data.triggerTexts,
-            defaultLimit: data.defaultLimit,
-            enforceable: data.enforceable,
-            loggable: data.loggable,
-            dataDefinition: data.dataDefinition
-        };
+    function cleanupErrorLocation(location) {
+        return location
+            .replaceAll(window.location.href.substring(0, window.location.href.lastIndexOf("/")), "<url>")
+            .replace(/https:\/\/[^?/]+\/([^?]+)?bcx.js(?=$|\?|:)/, "<bcx>")
+            .replace(/\/\d{4,}\.html/, "/<numbers>.html")
+            .replace(/[?&]_=\d+(?=$|&|:)/, "");
     }
-    function RulesGetRuleState(rule) {
-        const data = rules.get(rule);
-        if (!data) {
-            throw new Error(`Attempt to get state for unknown rule '${rule}'`);
+    function debugPrettifyError(error) {
+        if (error instanceof Error) {
+            let stack = `${error.stack}`.split("\n");
+            if (stack.length > MAX_STACK_SIZE) {
+                stack = stack.slice(0, MAX_STACK_SIZE).concat("    ...");
+            }
+            return stack.map(cleanupErrorLocation).join("\n");
         }
-        return data.state;
+        return `${error}`;
     }
-    const ruleCustomDataHandlerPage = new Map();
-    // memberNumberList helper variable
-    let memberNumberListAutoFill = null;
-    const ruleCustomDataHandlers = {
-        // element has Y length of 150px (description + element plus offset to the next one)
-        listSelect: {
-            validateOptions: options => Array.isArray(options) && options.every(i => Array.isArray(i) && i.length === 2 && i.every(j => typeof j === "string")),
-            validate: (value, def) => typeof value === "string" && def.options.map(i => i[0]).includes(value),
-            run({ def, value, Y, access }) {
-                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
-                const index = def.options.findIndex(i => i[0] === value);
-                if (index < 0) {
-                    throw new Error(`Bad data during listSelect render`);
-                }
-                const next = clampWrap(index + 1, 0, def.options.length - 1);
-                const prev = clampWrap(index - 1, 0, def.options.length - 1);
-                MainCanvas.textAlign = "center";
-                DrawBackNextButton(1050, Y + 36, 250, 60, def.options[index][1], access ? "White" : "#ddd", "", () => def.options[prev][1], () => def.options[next][1], !access);
-                MainCanvas.textAlign = "left";
-            },
-            click({ def, value, Y, access }) {
-                if (!access)
-                    return;
-                const index = def.options.findIndex(i => i[0] === value);
-                if (MouseIn(1050, Y + 36, 125, 60)) {
-                    return def.options[clampWrap(index - 1, 0, def.options.length - 1)][0];
-                }
-                if (MouseIn(1050 + 125, Y + 36, 125, 60)) {
-                    return def.options[clampWrap(index + 1, 0, def.options.length - 1)][0];
-                }
-                return undefined;
-            }
-        },
-        memberNumberList: {
-            validateOptions: options => options === undefined || (Number.isInteger(options === null || options === void 0 ? void 0 : options.pageSize)),
-            validate: value => Array.isArray(value) && value.every(Number.isInteger),
-            onDataChange({ active, key, access }) {
-                let input = document.getElementById(`BCX_RCDH_${key}`);
-                if (!active) {
-                    if (input) {
-                        input.remove();
-                    }
-                    return;
-                }
-                if (!input) {
-                    input = ElementCreateInput(`BCX_RCDH_${key}`, "text", "", "100");
-                    input.inputMode = "numeric";
-                    input.pattern = "[0-9]+";
-                    if (memberNumberListAutoFill !== null) {
-                        input.value = `${memberNumberListAutoFill}`;
-                        memberNumberListAutoFill = null;
-                    }
-                }
-                input.disabled = !access;
-            },
-            run({ def, value, Y, key, access }) {
-                var _a, _b;
-                Y -= 20;
-                const PAGE_SIZE = ((_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) ? def.options.pageSize : 4;
-                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
-                const page = clamp$1((_b = ruleCustomDataHandlerPage.get(key)) !== null && _b !== void 0 ? _b : 0, 0, totalPages - 1);
-                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
-                for (let i = 0; i < PAGE_SIZE; i++) {
-                    const e = page * PAGE_SIZE + i;
-                    if (e >= value.length)
-                        break;
-                    MainCanvas.strokeRect(1050, Y + 26 + i * 70, 766, 64);
-                    const msg = `${getCharacterName(value[e], "[unknown]")} (${value[e]})`;
-                    DrawTextFit(msg, 1060, Y + 26 + i * 70 + 34, 380, "Black");
-                    if (access) {
-                        MainCanvas.textAlign = "center";
-                        DrawButton(1836, Y + 26 + i * 70, 64, 64, "X", "White");
-                        MainCanvas.textAlign = "left";
-                    }
-                }
-                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + PAGE_SIZE * 70 + 43, 360, 60);
-                MainCanvas.textAlign = "center";
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                if (input && document.activeElement === input) {
-                    DrawHoverElements.push(() => {
-                        const val = input.value && Number.parseInt(input.value, 10);
-                        if (!val)
-                            return;
-                        const Left = 580;
-                        const Top = 630;
-                        MainCanvas.fillStyle = "#FFFF88";
-                        MainCanvas.fillRect(Left, Top, 450, 65);
-                        MainCanvas.lineWidth = 2;
-                        MainCanvas.strokeStyle = "black";
-                        MainCanvas.strokeRect(Left, Top, 450, 65);
-                        DrawTextFit(getCharacterName(val, "[unknown]"), Left + 225, Top + 33, 444, "black");
-                    });
-                }
-                DrawButton(1444, Y + PAGE_SIZE * 70 + 43, 64, 64, "", access ? "White" : "#ddd", undefined, undefined, !access);
-                DrawImageEx("Icons/Title.png", 1446, Y + PAGE_SIZE * 70 + 43, { Width: 60, Height: 60 });
-                DrawButton(1530, Y + PAGE_SIZE * 70 + 43, 100, 64, "Add", access ? "White" : "#ddd", undefined, undefined, !access);
-                DrawBackNextButton(1650, Y + PAGE_SIZE * 70 + 43, 250, 64, `Page ${page + 1}/${totalPages}`, "White", undefined, () => "", () => "");
-                MainCanvas.textAlign = "left";
-            },
-            click({ value, Y, key, target, def, access }) {
-                var _a, _b;
-                Y -= 20;
-                const PAGE_SIZE = ((_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) ? def.options.pageSize : 4;
-                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
-                const page = clamp$1((_b = ruleCustomDataHandlerPage.get(key)) !== null && _b !== void 0 ? _b : 0, 0, totalPages - 1);
-                for (let i = 0; i < PAGE_SIZE; i++) {
-                    const e = page * PAGE_SIZE + i;
-                    if (e >= value.length)
-                        break;
-                    if (access && MouseIn(1836, Y + 26 + i * 70, 64, 64)) {
-                        value.splice(e, 1);
-                        return value;
-                    }
-                }
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                const screen = getCurrentSubscreen();
-                if (access && MouseIn(1444, Y + PAGE_SIZE * 70 + 43, 64, 64) && input && screen) {
-                    setSubscreen(new GuiMemberSelect(target, screen, result => {
-                        memberNumberListAutoFill = result;
-                    }, value.slice()));
-                }
-                if (access && MouseIn(1530, Y + PAGE_SIZE * 70 + 43, 100, 64) && input && input.value) {
-                    const num = Number.parseInt(input.value, 10);
-                    if (Number.isInteger(num) && !value.includes(num)) {
-                        value.push(num);
-                        value.sort((a, b) => a - b);
-                        input.value = "";
-                        return value;
-                    }
-                }
-                if (MouseIn(1650, Y + PAGE_SIZE * 70 + 43, 125, 64) && page > 0) {
-                    ruleCustomDataHandlerPage.set(key, page - 1);
-                }
-                else if (MouseIn(1650 + 125, Y + PAGE_SIZE * 70 + 43, 125, 64) && page + 1 < totalPages) {
-                    ruleCustomDataHandlerPage.set(key, page + 1);
-                }
-                return undefined;
-            },
-            unload({ key }) {
-                ElementRemove(`BCX_RCDH_${key}`);
-                ruleCustomDataHandlerPage.delete(key);
-            }
-        },
-        number: {
-            validateOptions: options => options === undefined || (isObject$1(options) &&
-                (options.min === undefined || Number.isInteger(options.min)) &&
-                (options.max === undefined || Number.isInteger(options.max))),
-            validate: (value, def) => {
-                var _a, _b;
-                return (typeof value === "number" && Number.isInteger(value) &&
-                    (((_a = def.options) === null || _a === void 0 ? void 0 : _a.min) === undefined || value >= def.options.min) &&
-                    (((_b = def.options) === null || _b === void 0 ? void 0 : _b.max) === undefined || value <= def.options.max));
-            },
-            onDataChange({ active, key, onInput, value, access }) {
-                let input = document.getElementById(`BCX_RCDH_${key}`);
-                if (!active) {
-                    if (input) {
-                        input.remove();
-                    }
-                    return;
-                }
-                if (!input) {
-                    input = ElementCreateInput(`BCX_RCDH_${key}`, "text", value.toString(10), "50");
-                    input.inputMode = "numeric";
-                    input.pattern = "[0-9]+";
-                    input.oninput = onInput;
+    function debugGenerateReportErrorEvent(event) {
+        const currentMod = contextCurrentModArea();
+        let res = `----- UNHANDLED ERROR ${currentMod != null ? `(IN ${currentMod || "BC"}) ` : ""}-----\n` +
+            `Message: ${event.message}\n` +
+            `Source: ${cleanupErrorLocation(event.filename)}:${event.lineno}:${event.colno}\n`;
+        res += debugPrettifyError(event.error) + "\n\n";
+        res += debugMakeContextReport();
+        try {
+            res += "\n" + debugGenerateReport(currentMod === "BCX");
+        }
+        catch (error) {
+            res += `----- Debug report -----\nERROR GENERATING DEBUG REPORT!\n${debugPrettifyError(error)}`;
+        }
+        return res;
+    }
+    function debugGenerateReportManualError(description, error) {
+        const currentMod = contextCurrentModArea();
+        let res = `----- ERROR ${currentMod != null ? `(IN ${currentMod || "BC"}) ` : ""}-----\n` +
+            `Description: ${description}\n`;
+        res += debugPrettifyError(error) + "\n\n";
+        res += debugMakeContextReport();
+        try {
+            res += "\n" + debugGenerateReport(currentMod === "BCX");
+        }
+        catch (error2) {
+            res += `----- Debug report -----\nERROR GENERATING DEBUG REPORT!\n${debugPrettifyError(error2)}`;
+        }
+        return res;
+    }
+    function showErrorOverlay(title, description, contents, wrapCodeBlock = true, minTimeout, preContentHook) {
+        var _a, _b;
+        console.info("Error overlay displayed\n", contents);
+        if (wrapCodeBlock) {
+            contents = "```\n" + contents.trim() + "\n```";
+        }
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.inset = "0px";
+        overlay.style.zIndex = "999999";
+        overlay.style.background = "#00000090";
+        const win = document.createElement("div");
+        overlay.appendChild(win);
+        win.style.position = "absolute";
+        win.style.inset = "5%";
+        win.style.background = "white";
+        win.style.display = "flex";
+        win.style.flexDirection = "column";
+        win.style.padding = "1em";
+        const titleElem = document.createElement("h1");
+        win.appendChild(titleElem);
+        titleElem.innerText = title;
+        const descriptionElement = document.createElement("p");
+        win.appendChild(descriptionElement);
+        descriptionElement.innerHTML = description;
+        const contentElem = document.createElement("textarea");
+        if (preContentHook) {
+            preContentHook(win);
+        }
+        else {
+            const copy = document.createElement("button");
+            copy.style.cursor = "pointer";
+            win.appendChild(copy);
+            copy.innerText = "Copy report";
+            copy.onclick = () => {
+                contentElem.focus();
+                contentElem.select();
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(contentElem.value);
                 }
                 else {
-                    input.value = value.toString(10);
-                }
-                input.onblur = () => {
-                    if (input) {
-                        input.value = value.toString(10);
+                    try {
+                        document.execCommand("copy");
                     }
-                };
-                input.disabled = !access;
-            },
-            processInput({ key, value, def }) {
-                var _a, _b, _c, _d;
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                if (input && input.value) {
-                    if (/^[0-9]+$/.test(input.value)) {
-                        const res = clamp$1(Number.parseInt(input.value, 10), (_b = (_a = def.options) === null || _a === void 0 ? void 0 : _a.min) !== null && _b !== void 0 ? _b : -Infinity, (_d = (_c = def.options) === null || _c === void 0 ? void 0 : _c.max) !== null && _d !== void 0 ? _d : Infinity);
-                        input.onblur = () => {
-                            input.value = res.toString(10);
-                        };
-                        return res;
+                    catch (err) {
                     }
-                    else {
-                        input.value = value.toString(10);
-                    }
-                }
-                return undefined;
-            },
-            run({ def, Y, key }) {
-                DrawTextFit(def.description, 1050, Y + 0, 850, "Black");
-                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + 26, 425, 60);
-            },
-            unload({ key }) {
-                ElementRemove(`BCX_RCDH_${key}`);
-            }
-        },
-        poseSelect: {
-            // TODO: stricten
-            validate: value => Array.isArray(value) && value.every(i => typeof i === "string"),
-            run({ def, value, Y, access }) {
-                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
-                const poses = PoseFemale3DCG
-                    .filter(P => (P.AllowMenu || P.AllowMenuTransient))
-                    .map(P => P.Category)
-                    .filter((C, I, Categories) => C && Categories.indexOf(C) === I)
-                    .map(Category => PoseFemale3DCG.filter(P => (P.AllowMenu || P.AllowMenuTransient) && P.Category === Category));
-                for (let I = 0; I < poses.length; I++) {
-                    const OffsetY = Y + 60 + 140 * I;
-                    const PoseGroup = poses[I];
-                    for (let P = 0; P < PoseGroup.length; P++) {
-                        const OffsetX = 1070 + 100 * P;
-                        const IsDisabled = value.includes(PoseGroup[P].Name);
-                        DrawButton(OffsetX, OffsetY, 90, 90, "", IsDisabled ? access ? "Darkred" : "#333" : access ? "White" : "#ddd", "Icons/Poses/" + PoseGroup[P].Name + ".png", "", !access);
-                    }
-                }
-            },
-            click({ value, Y, access }) {
-                if (!access)
-                    return;
-                const poses = PoseFemale3DCG
-                    .filter(P => (P.AllowMenu || P.AllowMenuTransient))
-                    .map(P => P.Category)
-                    .filter((C, I, Categories) => C && Categories.indexOf(C) === I)
-                    .map(Category => PoseFemale3DCG.filter(P => (P.AllowMenu || P.AllowMenuTransient) && P.Category === Category));
-                for (let I = 0; I < poses.length; I++) {
-                    const OffsetY = Y + 60 + 140 * I;
-                    const PoseGroup = poses[I];
-                    for (let P = 0; P < PoseGroup.length; P++) {
-                        const OffsetX = 1070 + 100 * P;
-                        if (MouseIn(OffsetX, OffsetY, 90, 90)) {
-                            if (value.includes(PoseGroup[P].Name)) {
-                                value.splice(value.indexOf(PoseGroup[P].Name), 1);
-                            }
-                            else {
-                                value.push(PoseGroup[P].Name);
-                            }
-                            return value;
-                        }
-                    }
-                }
-                return undefined;
-            }
-        },
-        // element has Y length of 150px (description + element plus offset to the next one)
-        roleSelector: {
-            validate: value => typeof value === "number" && AccessLevel[value] !== undefined,
-            run({ def, value, Y, access }) {
-                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
-                const roleSelectionNext = value < AccessLevel.public ? value + 1 : AccessLevel.clubowner;
-                const roleSelectionPrev = value > AccessLevel.clubowner ? value - 1 : AccessLevel.public;
-                MainCanvas.textAlign = "center";
-                DrawBackNextButton(1050, Y + 46, 250, 60, capitalizeFirstLetter(AccessLevel[value]) + (value !== AccessLevel.clubowner ? " ↑" : ""), access ? "White" : "#ddd", "", () => capitalizeFirstLetter(AccessLevel[roleSelectionPrev]), () => capitalizeFirstLetter(AccessLevel[roleSelectionNext]), !access);
-                MainCanvas.textAlign = "left";
-            },
-            click({ value, Y, access }) {
-                if (!access)
-                    return;
-                if (MouseIn(1050, Y + 46, 125, 60)) {
-                    return value > AccessLevel.clubowner ? value - 1 : AccessLevel.public;
-                }
-                if (MouseIn(1050 + 125, Y + 46, 125, 60)) {
-                    return value < AccessLevel.public ? value + 1 : AccessLevel.clubowner;
-                }
-                return undefined;
-            }
-        },
-        string: {
-            validateOptions: options => options === undefined || options instanceof RegExp,
-            validate(value, def) {
-                return typeof value === "string" &&
-                    (!def.options || def.options.test(value));
-            },
-            onDataChange({ active, key, onInput, value, access, def }) {
-                let input = document.getElementById(`BCX_RCDH_${key}`);
-                if (!active) {
-                    if (input) {
-                        input.remove();
-                    }
-                    return;
-                }
-                if (!input) {
-                    let lastValue = value;
-                    const createdInput = ElementCreateInput(`BCX_RCDH_${key}`, "text", lastValue, "160");
-                    createdInput.oninput = () => {
-                        if (!def.options || def.options.test(createdInput.value)) {
-                            lastValue = createdInput.value;
-                            onInput();
-                        }
-                        else {
-                            createdInput.value = lastValue;
-                        }
-                    };
-                    input = createdInput;
-                }
-                else {
-                    input.value = value;
-                }
-                input.disabled = !access;
-            },
-            processInput({ key, def }) {
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                return input && (!def.options || def.options.test(input.value)) ? input.value : undefined;
-            },
-            run({ def, Y, key }) {
-                DrawTextFit(def.description, 1050, Y + 0, 850, "Black");
-                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + 26, 850, 60);
-            },
-            unload({ key }) {
-                ElementRemove(`BCX_RCDH_${key}`);
-            }
-        },
-        stringList: {
-            validateOptions: options => options === undefined || (isObject$1(options) &&
-                (options.validate === undefined || options.validate instanceof RegExp)),
-            validate(value, def) {
-                return Array.isArray(value) &&
-                    value.length <= STRING_LIST_MAX_LENGTH &&
-                    value.every(i => { var _a; return typeof i === "string" && (!((_a = def.options) === null || _a === void 0 ? void 0 : _a.validate) || def.options.validate.test(i)); });
-            },
-            onDataChange({ active, key, access, def }) {
-                let input = document.getElementById(`BCX_RCDH_${key}`);
-                if (!active) {
-                    if (input) {
-                        input.remove();
-                    }
-                    return;
-                }
-                if (!input) {
-                    let last = "";
-                    const newInput = ElementCreateInput(`BCX_RCDH_${key}`, "text", "", "120");
-                    newInput.oninput = () => {
-                        var _a;
-                        if (((_a = def.options) === null || _a === void 0 ? void 0 : _a.validate) && !def.options.validate.test(newInput.value)) {
-                            if (newInput.value.length === 1 && def.options.validate.test("")) {
-                                last = "";
-                            }
-                            newInput.value = last;
-                        }
-                        else {
-                            last = newInput.value;
-                        }
-                    };
-                    input = newInput;
-                }
-                input.disabled = !access;
-            },
-            run({ def, value, Y, key, access }) {
-                var _a, _b, _c;
-                Y -= 20;
-                const PAGE_SIZE = (_b = (_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) !== null && _b !== void 0 ? _b : 4;
-                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
-                const page = clamp$1((_c = ruleCustomDataHandlerPage.get(key)) !== null && _c !== void 0 ? _c : 0, 0, totalPages - 1);
-                DrawTextFit(def.description, 1050, Y + 0, 900, "Black");
-                for (let i = 0; i < PAGE_SIZE; i++) {
-                    const e = page * PAGE_SIZE + i;
-                    if (e >= value.length)
-                        break;
-                    const msg = value[e];
-                    if (MouseIn(1050, Y + 26 + i * 70, 766, 64)) {
-                        DrawHoverElements.push(() => {
-                            MainCanvas.save();
-                            MainCanvas.fillStyle = "rgba(255, 255, 136, 0.9)";
-                            MainCanvas.fillRect(1050, Y + 26, 766, 70 * PAGE_SIZE);
-                            MainCanvas.strokeStyle = "Black";
-                            MainCanvas.strokeRect(1050, Y + 26, 766, 70 * PAGE_SIZE);
-                            MainCanvas.textAlign = "left";
-                            DrawTextWrap(msg + "   -   [click to copy into the empty input text field]", 1050 - 746 / 2, Y + 30, 756, 70 * PAGE_SIZE - 10, "black", undefined, 5);
-                            MainCanvas.restore();
-                        });
-                    }
-                    MainCanvas.strokeRect(1050, Y + 26 + i * 70, 766, 64);
-                    DrawTextFit(msg.length > 61 ? msg.substr(0, 60) + "\u2026" : msg, 1060, Y + 26 + i * 70 + 34, 750, "Black");
-                    if (access) {
-                        MainCanvas.textAlign = "center";
-                        DrawButton(1836, Y + 26 + i * 70, 64, 64, "X", "White");
-                        MainCanvas.textAlign = "left";
-                    }
-                }
-                ElementPositionFix(`BCX_RCDH_${key}`, 40, 1050, Y + PAGE_SIZE * 70 + 43, 450, 60);
-                MainCanvas.textAlign = "center";
-                DrawButton(1530, Y + PAGE_SIZE * 70 + 43, 100, 64, "Add", access ? "White" : "#ddd", undefined, undefined, !access);
-                DrawBackNextButton(1650, Y + PAGE_SIZE * 70 + 43, 250, 64, `Page ${page + 1}/${totalPages}`, "White", undefined, () => "", () => "");
-                MainCanvas.textAlign = "left";
-            },
-            click({ value, Y, key, def, access }) {
-                var _a, _b, _c, _d;
-                Y -= 20;
-                const PAGE_SIZE = (_b = (_a = def.options) === null || _a === void 0 ? void 0 : _a.pageSize) !== null && _b !== void 0 ? _b : 4;
-                const totalPages = Math.max(1, Math.ceil(value.length / PAGE_SIZE));
-                const page = clamp$1((_c = ruleCustomDataHandlerPage.get(key)) !== null && _c !== void 0 ? _c : 0, 0, totalPages - 1);
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                for (let i = 0; i < PAGE_SIZE; i++) {
-                    const e = page * PAGE_SIZE + i;
-                    if (e >= value.length)
-                        break;
-                    if (access && MouseIn(1050, Y + 26 + i * 70, 766, 64) && input && input.value === "") {
-                        input.value = value[e];
-                    }
-                    if (access && MouseIn(1836, Y + 26 + i * 70, 64, 64)) {
-                        value.splice(e, 1);
-                        return value;
-                    }
-                }
-                if (access && MouseIn(1530, Y + PAGE_SIZE * 70 + 43, 100, 64) &&
-                    input && input.value &&
-                    (!((_d = def.options) === null || _d === void 0 ? void 0 : _d.validate) || def.options.validate.test(input.value)) &&
-                    !value.includes(input.value)) {
-                    if (value.length >= STRING_LIST_MAX_LENGTH) {
-                        InfoBeep("Reached the max. number of entries - please delete one first", 10000);
-                        return;
-                    }
-                    value.push(input.value);
-                    value.sort();
-                    input.value = "";
-                    return value;
-                }
-                if (MouseIn(1650, Y + PAGE_SIZE * 70 + 43, 125, 64) && page > 0) {
-                    ruleCustomDataHandlerPage.set(key, page - 1);
-                }
-                else if (MouseIn(1650 + 125, Y + PAGE_SIZE * 70 + 43, 125, 64) && page + 1 < totalPages) {
-                    ruleCustomDataHandlerPage.set(key, page + 1);
-                }
-                return undefined;
-            },
-            unload({ key }) {
-                ElementRemove(`BCX_RCDH_${key}`);
-                ruleCustomDataHandlerPage.delete(key);
-            }
-        },
-        textArea: {
-            validate: value => typeof value === "string",
-            onDataChange({ active, key, onInput, value, access }) {
-                let input = document.getElementById(`BCX_RCDH_${key}`);
-                if (!active) {
-                    if (input) {
-                        input.remove();
-                    }
-                    return;
-                }
-                if (!input) {
-                    input = document.createElement("textarea");
-                    input.id = `BCX_RCDH_${key}`;
-                    input.name = `BCX_RCDH_${key}`;
-                    input.value = value;
-                    input.maxLength = 10000;
-                    input.setAttribute("screen-generated", CurrentScreen);
-                    input.className = "HideOnPopup";
-                    input.oninput = onInput;
-                    document.body.appendChild(input);
-                }
-                else {
-                    input.value = value;
-                }
-                input.disabled = !access;
-            },
-            processInput({ key }) {
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                return input ? input.value : undefined;
-            },
-            run({ def, Y, key }) {
-                DrawTextFit(def.description, 1000, Y + 0, 900, "Black");
-                const input = document.getElementById(`BCX_RCDH_${key}`);
-                if (input && document.activeElement === input) {
-                    ElementPositionFix(`BCX_RCDH_${key}`, 36, 105, 170, 1790, 750);
-                }
-                else {
-                    ElementPositionFix(`BCX_RCDH_${key}`, 28, 1000, Y + 26, 900, 765 - Y);
-                }
-            },
-            unload({ key }) {
-                ElementRemove(`BCX_RCDH_${key}`);
-            }
-        },
-        toggle: {
-            validate: value => typeof value === "boolean",
-            run({ def, value, Y, access }) {
-                DrawCheckbox(1050, Y, 64, 64, def.description, value, !access);
-            },
-            click({ value, Y, access }) {
-                if (!access)
-                    return;
-                if (MouseIn(1050, Y, 64, 64)) {
-                    return !value;
-                }
-                return undefined;
-            }
-        }
-    };
-    function parseRuleName(selector, filter) {
-        selector = selector.toLocaleLowerCase();
-        const rule = Array.from(rules.entries())
-            .filter(r => !filter || filter(r[0]))
-            .find(([ruleName, data]) => ruleName.toLocaleLowerCase() === selector || data.name.toLocaleLowerCase() === selector);
-        return rule ? [true, rule[0]] : [false, `Unknown rule "${selector}".`];
-    }
-    function autocompleteRuleName(selector, filter) {
-        selector = selector.toLocaleLowerCase();
-        let options = Array.from(rules.entries())
-            .filter(r => r[1].name.toLocaleLowerCase().startsWith(selector) && (!filter || filter(r[0])))
-            .map(r => r[1].name);
-        if (options.length === 0) {
-            options = Array.from(rules.entries())
-                .filter(r => r[0].toLocaleLowerCase().startsWith(selector) && (!filter || filter(r[0])))
-                .map(r => r[0]);
-        }
-        return options;
-    }
-    function RulesGetList() {
-        return rulesList.map(rule => [rule, RulesGetDisplayDefinition(rule)]);
-    }
-    function RulesCreate(rule, character) {
-        var _a;
-        if (!moduleIsEnabled(ModuleCategory.Rules))
-            return false;
-        if (character && !ConditionsCheckAccess("rules", rule, character))
-            return false;
-        const definition = rules.get(rule);
-        if (!definition) {
-            throw new Error(`Attempt to create unknown rule '${rule}'`);
-        }
-        if (!ConditionsGetCondition("rules", rule)) {
-            const ruleData = {};
-            if (definition.dataDefinition) {
-                ruleData.customData = {};
-                for (const [k, v] of Object.entries(definition.dataDefinition)) {
-                    ruleData.customData[k] = cloneDeep(typeof v.default === "function" ? v.default() : v.default);
-                }
-            }
-            if (definition.internalDataDefault) {
-                ruleData.internalData = definition.internalDataDefault();
-                if (!((_a = definition.internalDataValidate) === null || _a === void 0 ? void 0 : _a.call(definition, ruleData.internalData))) {
-                    throw new Error(`Failed to create valid internal data for rule '${rule}'`);
-                }
-            }
-            ConditionsSetCondition("rules", rule, ruleData, character);
-            if (character) {
-                logMessage("rule_change", LogEntryType.plaintext, `${character} added a new rule: ${definition.name}`);
-                if (!character.isPlayer()) {
-                    ChatRoomSendLocal(`${character.toNicknamedString()} gave you a new rule: "${definition.name}"`);
-                }
-            }
-        }
-        return true;
-    }
-    function RulesDelete(rule, character) {
-        if (!moduleIsEnabled(ModuleCategory.Rules))
-            return false;
-        if (character && !ConditionsCheckAccess("rules", rule, character))
-            return false;
-        const display = RulesGetDisplayDefinition(rule);
-        if (ConditionsRemoveCondition("rules", rule) && character) {
-            logMessage("rule_change", LogEntryType.plaintext, `${character} removed the rule: ${display.name}`);
-            if (!character.isPlayer()) {
-                ChatRoomSendLocal(`${character.toNicknamedString()} removed your rule "${display.name}"`);
-            }
-        }
-        return true;
-    }
-    class RuleState {
-        get condition() {
-            return ConditionsGetCondition("rules", this.rule);
-        }
-        get inEffect() {
-            return ConditionsIsConditionInEffect("rules", this.rule);
-        }
-        get isEnforced() {
-            const data = this.condition;
-            if (!data || !this.inEffect)
-                return false;
-            return data.data.enforce !== false;
-        }
-        get isLogged() {
-            const data = this.condition;
-            if (!data || !this.inEffect)
-                return false;
-            return data.data.log !== false;
-        }
-        get customData() {
-            var _a;
-            return (_a = this.condition) === null || _a === void 0 ? void 0 : _a.data.customData;
-        }
-        get internalData() {
-            var _a;
-            return cloneDeep((_a = this.condition) === null || _a === void 0 ? void 0 : _a.data.internalData);
-        }
-        set internalData(data) {
-            const condition = this.condition;
-            if (condition && !isEqual(condition.data.internalData, data)) {
-                condition.data.internalData = data;
-                modStorageSync();
-            }
-        }
-        constructor(rule, definition) {
-            this.rule = rule;
-            this.ruleDefinition = definition;
-        }
-        trigger(targetCharacter = null, dictionary = {}) {
-            var _a, _b, _c;
-            const texts = this.ruleDefinition.triggerTexts;
-            if (texts) {
-                let targetName = CharacterNickname(Player);
-                if (targetCharacter != null) {
-                    const targetChar = getChatroomCharacter(targetCharacter);
-                    targetName = targetChar ? CharacterNickname(targetChar.Character) : getCharacterName(targetCharacter, "[unknown]");
-                }
-                if (texts.infoBeep) {
-                    InfoBeep("BCX: " + dictionaryProcess(texts.infoBeep, {
-                        PLAYER_NAME: (_a = RelationshipsGetNickname(Player.MemberNumber)) !== null && _a !== void 0 ? _a : CharacterNickname(Player),
-                        TARGET_PLAYER: (_b = RelationshipsGetNickname(targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber)) !== null && _b !== void 0 ? _b : targetName,
-                        ...dictionary
-                    }), 7000);
-                }
-                if (this.isLogged) {
-                    const log = texts.log;
-                    if (log) {
-                        logMessage("rule_trigger", LogEntryType.ruleTrigger, [this.rule, dictionary]);
-                    }
-                    const announce = (_c = texts.announce) !== null && _c !== void 0 ? _c : texts.log;
-                    if (announce) {
-                        ChatRoomActionMessage(`${dictionaryProcess(announce, {
-                        PLAYER_NAME: "SourceCharacter",
-                        TARGET_PLAYER: `TargetCharacterName (${targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber})`,
-                        ...dictionary
-                    })}.`, null, [
-                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                            { Tag: "TargetCharacterName", MemberNumber: targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber, Text: targetName }
-                        ]);
-                    }
-                }
-            }
-        }
-        triggerAttempt(targetCharacter = null, dictionary = {}) {
-            var _a, _b, _c, _d;
-            const texts = this.ruleDefinition.triggerTexts;
-            if (texts) {
-                let targetName = CharacterNickname(Player);
-                if (targetCharacter != null) {
-                    const targetChar = getChatroomCharacter(targetCharacter);
-                    targetName = targetChar ? CharacterNickname(targetChar.Character) : getCharacterName(targetCharacter, "[unknown]");
-                }
-                const infoBeep = (_a = texts.attempt_infoBeep) !== null && _a !== void 0 ? _a : texts.infoBeep;
-                if (infoBeep) {
-                    InfoBeep("BCX: " + dictionaryProcess(infoBeep, {
-                        PLAYER_NAME: (_b = RelationshipsGetNickname(Player.MemberNumber)) !== null && _b !== void 0 ? _b : CharacterNickname(Player),
-                        TARGET_PLAYER: (_c = RelationshipsGetNickname(targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber)) !== null && _c !== void 0 ? _c : targetName,
-                        ...dictionary
-                    }), 7000);
-                }
-                if (this.isLogged) {
-                    const log = texts.attempt_log;
-                    if (log) {
-                        logMessage("rule_trigger", LogEntryType.ruleTriggerAttempt, [this.rule, dictionary]);
-                    }
-                    const announce = (_d = texts.attempt_announce) !== null && _d !== void 0 ? _d : texts.attempt_log;
-                    if (announce) {
-                        ChatRoomActionMessage(`${dictionaryProcess(announce, {
-                        PLAYER_NAME: "SourceCharacter",
-                        TARGET_PLAYER: `TargetCharacterName (${targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber})`,
-                        ...dictionary
-                    })}.`, null, [
-                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                            { Tag: "TargetCharacterName", MemberNumber: targetCharacter !== null && targetCharacter !== void 0 ? targetCharacter : Player.MemberNumber, Text: targetName }
-                        ]);
-                    }
-                }
-            }
-        }
-    }
-    class ModuleRules extends BaseModule {
-        constructor() {
-            super(...arguments);
-            this.resetTimer = null;
-            this.triggerCounts = new Map();
-            this.suspendedUntil = null;
-        }
-        init() {
-            registerPermission("rules_normal", {
-                name: "Allows controlling non-limited rules",
-                category: ModuleCategory.Rules,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.lover],
-                    [Preset.switch]: [true, AccessLevel.lover],
-                    [Preset.submissive]: [false, AccessLevel.mistress],
-                    [Preset.slave]: [false, AccessLevel.mistress]
-                }
-            });
-            registerPermission("rules_limited", {
-                name: "Allows controlling limited rules",
-                category: ModuleCategory.Rules,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.owner],
-                    [Preset.switch]: [true, AccessLevel.owner],
-                    [Preset.submissive]: [false, AccessLevel.lover],
-                    [Preset.slave]: [false, AccessLevel.lover]
-                }
-            });
-            registerPermission("rules_global_configuration", {
-                name: "Allows editing the global rules configuration",
-                category: ModuleCategory.Rules,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.owner],
-                    [Preset.switch]: [true, AccessLevel.owner],
-                    [Preset.submissive]: [false, AccessLevel.lover],
-                    [Preset.slave]: [false, AccessLevel.lover]
-                }
-            });
-            registerPermission("rules_change_limits", {
-                name: "Allows to limit/block specific rules",
-                category: ModuleCategory.Rules,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.self],
-                    [Preset.switch]: [true, AccessLevel.self],
-                    [Preset.submissive]: [true, AccessLevel.self],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
-            });
-            registerPermission("rules_view_originator", {
-                name: "Allow to view who added the rule originally",
-                category: ModuleCategory.Rules,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.self],
-                    [Preset.switch]: [true, AccessLevel.self],
-                    [Preset.submissive]: [true, AccessLevel.mistress],
-                    [Preset.slave]: [true, AccessLevel.mistress]
-                }
-            });
-            queryHandlers.ruleCreate = (sender, data) => {
-                if (guard_BCX_Rule(data)) {
-                    return RulesCreate(data, sender);
-                }
-                else {
-                    return undefined;
                 }
             };
-            queryHandlers.ruleDelete = (sender, data) => {
-                if (guard_BCX_Rule(data)) {
-                    return RulesDelete(data, sender);
-                }
-                else {
-                    return undefined;
-                }
-            };
-            registerWhisperCommand("modules", "rules", "- Manage rules", (argv, sender, respond) => {
-                if (!moduleIsEnabled(ModuleCategory.Rules)) {
-                    return respond(`Rules module is disabled.`);
-                }
-                const subcommand = (argv[0] || "").toLocaleLowerCase();
-                const rulesInfo = ConditionsGetCategoryPublicData("rules", sender).conditions;
-                if (ConditionsSubcommands.includes(subcommand)) {
-                    return ConditionsRunSubcommand("rules", argv, sender, respond);
-                }
-                else if (subcommand === "list") {
-                    let result = "Current rules:";
-                    for (const [k, v] of Object.entries(rulesInfo)) {
-                        const data = RulesGetDisplayDefinition(k);
-                        const timerText = `Timer: ${v.timer ? formatTimeInterval(v.timer - Date.now(), "short") : "∞"}`;
-                        const resultItem = `\n${data.name} | ${timerText}`;
-                        if (result.length + resultItem.length >= 990) {
-                            result += "\n...";
-                            respond(result);
-                            result = "Current rules (continued):";
-                        }
-                        result += resultItem;
-                    }
-                    respond(result);
-                }
-                else if (subcommand === "listall") {
-                    let result = "All existing rules:";
-                    for (const [k] of RulesGetList()) {
-                        const data = RulesGetDisplayDefinition(k);
-                        const resultItem = `\n${data.name}`;
-                        if (result.length + resultItem.length >= 990) {
-                            result += "\n...";
-                            respond(result);
-                            result = "All rules (continued):";
-                        }
-                        result += resultItem;
-                    }
-                    respond(result);
-                }
-                else if (subcommand === "description") {
-                    const result = parseRuleName(argv[1] || "");
-                    if (!result[0]) {
-                        return respond(result[1]);
-                    }
-                    const data = RulesGetDisplayDefinition(result[1]);
-                    respond(data.longDescription.replaceAll("PLAYER_NAME", Player.Name));
-                }
-                else if (subcommand === "remove") {
-                    const result = parseRuleName(argv[1] || "");
-                    if (!result[0]) {
-                        return respond(result[1]);
-                    }
-                    respond(RulesDelete(result[1], sender) ? `Ok.` : COMMAND_GENERIC_ERROR);
-                }
-                else {
-                    respond(Command_fixExclamationMark(sender, `!rules usage (page 1):\n` +
-                        `!rules list - List the currently added rules\n` +
-                        `!rules listall - List all existing rule names in BCX\n` +
-                        `!rules description <rule> - Show the rule's description\n` +
-                        `!rules remove <rule> - Remove a currently added rule if permitted to\n` +
-                        `\nNote: Adding and setting up rules is only supported via using BCX's graphical user interface yourself.`));
-                    respond(Command_fixExclamationMark(sender, `!rules usage (page 2):\n` +
-                        `!rules setactive <rule> <yes/no> - Switch the rule and its conditions on and off\n` +
-                        `!rules triggers <rule> global <yes/no> - Set the trigger condition of this rule to the global configuration\n` +
-                        `!rules triggers <rule> help - Set the trigger configuration of a rule\n` +
-                        `!rules globaltriggers help - Set global trigger configuration\n` +
-                        `!rules timer <rule> help - Set timer options of a rule\n` +
-                        `!rules defaulttimer help - Set default timer options used on new rules\n` +
-                        `!rules setlimit <rule> <normal/limited/blocked> - Set a limit on certain <rule>\n` +
-                        `\nHint: If an argument contains spaces: "put it in quotes"`));
-                }
-            }, (argv, sender) => {
-                if (!moduleIsEnabled(ModuleCategory.Rules)) {
-                    return [];
-                }
-                if (argv.length <= 1) {
-                    return Command_pickAutocomplete(argv[0], ["list", "listall", "description", "remove", ...ConditionsSubcommands]);
-                }
-                const subcommand = argv[0].toLocaleLowerCase();
-                if (ConditionsSubcommands.includes(subcommand)) {
-                    return ConditionsAutocompleteSubcommand("rules", argv, sender);
-                }
-                return [];
-            });
-            ConditionsRegisterCategory("rules", {
-                category: ModuleCategory.Rules,
-                permission_normal: "rules_normal",
-                permission_limited: "rules_limited",
-                permission_configure: "rules_global_configuration",
-                permission_changeLimits: "rules_change_limits",
-                permission_viewOriginator: "rules_view_originator",
-                loadValidateConditionKey: rule => guard_BCX_Rule(rule),
-                loadValidateCondition: (rule, data) => {
-                    const info = data.data;
-                    const descriptor = rules.get(rule);
-                    if (!descriptor) {
-                        console.error(`BCX: Bad data for rule ${rule}: descriptor not found, removing it`);
-                        return false;
-                    }
-                    if (!isObject$1(info) ||
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
-                        (info.enforce !== undefined && info.enforce !== false) ||
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
-                        (info.log !== undefined && info.log !== false)) {
-                        console.error(`BCX: Bad data for rule ${rule}, removing it`, info);
-                        return false;
-                    }
-                    if (descriptor.dataDefinition) {
-                        if (!isObject$1(info.customData)) {
-                            console.warn(`BCX: Missing custom data for rule ${rule}, fixing`);
-                            info.customData = {};
-                        }
-                        for (const k of Object.keys(info.customData)) {
-                            if (!descriptor.dataDefinition[k]) {
-                                console.warn(`BCX: Unknown custom data attribute '${k}' for rule ${rule}, cleaning up`, info.customData[k]);
-                                delete info.customData[k];
-                            }
-                        }
-                        for (const [k, def] of Object.entries(descriptor.dataDefinition)) {
-                            const handler = ruleCustomDataHandlers[def.type];
-                            if (!handler) {
-                                console.error(`BCX: Custom data for rule ${rule} unknown type ${def.type}, removing it`, info);
-                                return false;
-                            }
-                            if (!handler.validate(info.customData[k], def)) {
-                                console.warn(`BCX: Bad custom data ${k} for rule ${rule}, expected type ${def.type}, replacing with default`, info.customData[k]);
-                                info.customData[k] = (typeof def.default === "function" ? def.default() : def.default);
-                            }
-                        }
-                    }
-                    else if (info.customData !== undefined) {
-                        console.error(`BCX: Custom data for rule ${rule} without data definition, removing it`, info);
-                        return false;
-                    }
-                    if (descriptor.internalDataValidate) {
-                        if (!descriptor.internalDataValidate(info.internalData)) {
-                            if (info.internalData === undefined && descriptor.internalDataDefault) {
-                                console.warn(`BCX: Missing internal data for rule ${rule}, fixing`);
-                                info.internalData = descriptor.internalDataDefault();
-                            }
-                            else {
-                                console.error(`BCX: Bad internal data for rule ${rule}, removing it`, info);
-                                return false;
-                            }
-                        }
-                    }
-                    else if (info.internalData !== undefined) {
-                        console.error(`BCX: Internal data for rule ${rule} without validator, removing it`, info);
-                        return false;
-                    }
-                    return true;
-                },
-                loadCategorySpecificGlobalData: () => undefined,
-                stateChangeHandler: this.ruleStateChange.bind(this),
-                tickHandler: this.ruleTick.bind(this),
-                makePublicData: (rule, data) => {
-                    var _a, _b;
-                    return ({
-                        enforce: (_a = data.data.enforce) !== null && _a !== void 0 ? _a : true,
-                        log: (_b = data.data.log) !== null && _b !== void 0 ? _b : true,
-                        customData: cloneDeep(data.data.customData)
-                    });
-                },
-                validateCategorySpecificGlobalData: () => true,
-                validatePublicData: (rule, data) => isObject$1(data) &&
-                    typeof data.enforce === "boolean" &&
-                    typeof data.log === "boolean" &&
-                    guard_RuleCustomData(rule, data.customData),
-                updateCondition: (condition, data, updateData) => {
-                    if (updateData.enforce) {
-                        delete data.data.enforce;
-                    }
-                    else {
-                        data.data.enforce = false;
-                    }
-                    if (updateData.log) {
-                        delete data.data.log;
-                    }
-                    else {
-                        data.data.log = false;
-                    }
-                    if (updateData.customData) {
-                        data.data.customData = cloneDeep(updateData.customData);
-                    }
-                    return true;
-                },
-                parseConditionName: (selector, onlyExisting) => {
-                    return parseRuleName(selector, onlyExisting ? (rule => onlyExisting.includes(rule)) : undefined);
-                },
-                autocompleteConditionName: (selector, onlyExisting) => {
-                    return autocompleteRuleName(selector, onlyExisting ? (rule => onlyExisting.includes(rule)) : undefined);
-                },
-                logLimitChange: (rule, character, newLimit) => {
-                    const definition = RulesGetDisplayDefinition(rule);
-                    logMessage("rule_change", LogEntryType.plaintext, `${character} changed ${Player.Name}'s '${definition.name}' rule permission to ${ConditionsLimit[newLimit]}`);
-                    if (!character.isPlayer()) {
-                        ChatRoomSendLocal(`${character.toNicknamedString()} changed '${definition.name}' rule permission to ${ConditionsLimit[newLimit]}`, undefined, character.MemberNumber);
-                    }
-                },
-                logConditionUpdate: (rule, character, newData, oldData) => {
-                    var _a, _b, _c, _d, _e, _f;
-                    const definition = RulesGetDisplayDefinition(rule);
-                    const visibleName = definition.name;
-                    const didActiveChange = newData.active !== oldData.active;
-                    const didTimerChange = newData.timer !== oldData.timer || newData.timerRemove !== oldData.timerRemove;
-                    const didTriggerChange = !isEqual(newData.requirements, oldData.requirements);
-                    const didEnforcementChange = newData.data.enforce !== oldData.data.enforce;
-                    const didLoggingChange = newData.data.log !== oldData.data.log;
-                    const changeEvents = [];
-                    if (didActiveChange)
-                        changeEvents.push("active state");
-                    if (didTimerChange)
-                        changeEvents.push("timer");
-                    if (didTriggerChange)
-                        changeEvents.push("trigger condition");
-                    if (didEnforcementChange)
-                        changeEvents.push("enforcement");
-                    if (didLoggingChange)
-                        changeEvents.push("logging");
-                    if (definition.dataDefinition) {
-                        for (const [k, def] of Object.entries(definition.dataDefinition)) {
-                            if (!isEqual((_a = oldData.data.customData) === null || _a === void 0 ? void 0 : _a[k], (_b = newData.data.customData) === null || _b === void 0 ? void 0 : _b[k])) {
-                                let descr = def.description;
-                                if (descr.includes(":")) {
-                                    descr = descr.slice(0, descr.lastIndexOf(":"));
-                                }
-                                changeEvents.push(`${changeEvents.length > 0 ? "and " : ""}the value of the setting '${descr}'`);
-                            }
-                        }
-                    }
-                    if (changeEvents.length > 0) {
-                        logMessage("rule_change", LogEntryType.plaintext, `${character} changed the ${changeEvents.join(", ")} of ${Player.Name}'s '${visibleName}' rule`);
-                    }
-                    if (!character.isPlayer()) {
-                        if (didActiveChange) {
-                            ChatRoomSendLocal(`${character.toNicknamedString()} ${newData.active ? "reactivated" : "deactivated"} the '${visibleName}' rule`, undefined, character.MemberNumber);
-                        }
-                        if (newData.timer !== oldData.timer)
-                            if (newData.timer === null) {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} disabled the timer of the '${visibleName}' rule`, undefined, character.MemberNumber);
-                            }
-                            else {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} changed the remaining time of the timer of the '${visibleName}' rule to ${formatTimeInterval(newData.timer - Date.now())}`, undefined, character.MemberNumber);
-                            }
-                        if (newData.timer !== null && newData.timerRemove !== oldData.timerRemove)
-                            ChatRoomSendLocal(`${character.toNicknamedString()} changed the timer behavior of the '${visibleName}' rule to ${newData.timerRemove ? "remove" : "disable"} the rule when time runs out`, undefined, character.MemberNumber);
-                        if (didTriggerChange)
-                            if (newData.requirements === null) {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} set the triggers of '${visibleName}' rule to the global rules configuration`, undefined, character.MemberNumber);
-                            }
-                            else {
-                                const triggers = [];
-                                const r = newData.requirements;
-                                if (r.room) {
-                                    triggers.push(`When ${r.room.inverted ? "not in" : "in"} ${r.room.type} room`);
-                                }
-                                if (r.roomName) {
-                                    triggers.push(`When ${r.roomName.inverted ? "not in" : "in"} room named '${r.roomName.name}'`);
-                                }
-                                if (r.role) {
-                                    const role = capitalizeFirstLetter(AccessLevel[r.role.role]) + (r.role.role !== AccessLevel.clubowner ? " ↑" : "");
-                                    triggers.push(`When ${r.role.inverted ? "not in" : "in"} room with role '${role}'`);
-                                }
-                                if (r.player) {
-                                    const name = getCharacterName(r.player.memberNumber, null);
-                                    triggers.push(`When ${r.player.inverted ? "not in" : "in"} room with member '${r.player.memberNumber}'${name ? ` (${name})` : ""}`);
-                                }
-                                if (triggers.length > 0) {
-                                    ChatRoomSendLocal(`${character.toNicknamedString()} set the '${visibleName}' rule to trigger under following conditions:\n` + triggers.join("\n"), undefined, character.MemberNumber);
-                                }
-                                else {
-                                    ChatRoomSendLocal(`${character.toNicknamedString()} deactivated all trigger conditions of the '${visibleName}' rule. The rule will now always trigger, while it is active`, undefined, character.MemberNumber);
-                                }
-                            }
-                        if (didEnforcementChange) {
-                            ChatRoomSendLocal(`${character.toNicknamedString()} ${newData.data.enforce ? "enabled enforcement" : "stopped enforcement"} of the '${visibleName}' rule`, undefined, character.MemberNumber);
-                        }
-                        if (didLoggingChange) {
-                            ChatRoomSendLocal(`${character.toNicknamedString()} ${newData.data.log ? "enabled logging" : "stopped logging"} of the '${visibleName}' rule`, undefined, character.MemberNumber);
-                        }
-                        if (definition.dataDefinition) {
-                            for (const [k, def] of Object.entries(definition.dataDefinition)) {
-                                if (!isEqual((_c = oldData.data.customData) === null || _c === void 0 ? void 0 : _c[k], (_d = newData.data.customData) === null || _d === void 0 ? void 0 : _d[k])) {
-                                    ChatRoomSendLocal(`${character.toNicknamedString()} changed the '${visibleName}' rule's setting '${def.description}' from '${(_e = oldData.data.customData) === null || _e === void 0 ? void 0 : _e[k]}' to '${(_f = newData.data.customData) === null || _f === void 0 ? void 0 : _f[k]}'`, undefined, character.MemberNumber);
-                                }
-                            }
-                        }
-                    }
-                },
-                logCategoryUpdate: (character, newData, oldData) => {
-                    const didTimerChange = newData.timer !== oldData.timer || newData.timerRemove !== oldData.timerRemove;
-                    const didTriggerChange = !isEqual(newData.requirements, oldData.requirements);
-                    const changeEvents = [];
-                    if (didTimerChange)
-                        changeEvents.push("default timer");
-                    if (didTriggerChange)
-                        changeEvents.push("trigger condition");
-                    if (changeEvents.length > 0) {
-                        logMessage("curse_change", LogEntryType.plaintext, `${character} changed the ${changeEvents.join(", ")} of ${Player.Name}'s global rules config`);
-                    }
-                    if (!character.isPlayer()) {
-                        if (newData.timer !== oldData.timer)
-                            if (newData.timer === null) {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} removed the default timer of the global rules configuration`, undefined, character.MemberNumber);
-                            }
-                            else {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} changed the default timer of the global rules configuration to ${formatTimeInterval(newData.timer)}`, undefined, character.MemberNumber);
-                            }
-                        if (newData.timer !== null && newData.timerRemove !== oldData.timerRemove)
-                            ChatRoomSendLocal(`${character.toNicknamedString()} changed the default timeout behavior of the global rules configuration to ${newData.timerRemove ? "removal of rules" : "disabling rules"} when time runs out`, undefined, character.MemberNumber);
-                        if (didTriggerChange) {
-                            const triggers = [];
-                            const r = newData.requirements;
-                            if (r.room) {
-                                triggers.push(`When ${r.room.inverted ? "not in" : "in"} ${r.room.type} room`);
-                            }
-                            if (r.roomName) {
-                                triggers.push(`When ${r.roomName.inverted ? "not in" : "in"} room named '${r.roomName.name}'`);
-                            }
-                            if (r.role) {
-                                const role = capitalizeFirstLetter(AccessLevel[r.role.role]) + (r.role.role !== AccessLevel.clubowner ? " ↑" : "");
-                                triggers.push(`When ${r.role.inverted ? "not in" : "in"} room with role '${role}'`);
-                            }
-                            if (r.player) {
-                                const name = getCharacterName(r.player.memberNumber, null);
-                                triggers.push(`When ${r.player.inverted ? "not in" : "in"} room with member '${r.player.memberNumber}'${name ? ` (${name})` : ""}`);
-                            }
-                            if (triggers.length > 0) {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} set the global rules configuration to trigger rules under following conditions:\n` + triggers.join("\n"), undefined, character.MemberNumber);
-                            }
-                            else {
-                                ChatRoomSendLocal(`${character.toNicknamedString()} deactivated all trigger conditions for the global rules configuration. Rules set to this default configuration will now always trigger, while active`, undefined, character.MemberNumber);
-                            }
-                        }
-                    }
-                },
-                getDefaultLimits: () => {
-                    const res = {};
-                    for (const [k, v] of rules.entries()) {
-                        res[k] = v.defaultLimit;
-                    }
-                    return res;
-                },
-                commandConditionSelectorHelp: "rule",
-                currentExportImport: {
-                    export(condition, data) {
-                        var _a, _b;
-                        return {
-                            enforce: (_a = data.enforce) !== null && _a !== void 0 ? _a : true,
-                            log: (_b = data.log) !== null && _b !== void 0 ? _b : true,
-                            customData: cloneDeep(data.customData)
-                        };
-                    },
-                    import(condition, data, character) {
-                        var _a;
-                        const validator = mod.object({
-                            enforce: mod.boolean(),
-                            log: mod.boolean(),
-                            customData: mod.record(mod.any()).optional()
-                        });
-                        const validationResult = validator.safeParse(data);
-                        if (!validationResult.success) {
-                            return [false, JSON.stringify(validationResult.error.format(), undefined, "\t")];
-                        }
-                        const validatedData = validationResult.data;
-                        const definition = rules.get(condition);
-                        if (!definition) {
-                            return [false, `Unknown rule '${condition}'`];
-                        }
-                        if (!guard_RuleCustomData(condition, validatedData.customData)) {
-                            return [false, `Invalid rule configuration`];
-                        }
-                        const current = ConditionsGetCondition("rules", condition);
-                        const internalData = current ? current.data.internalData :
-                            (_a = definition.internalDataDefault) === null || _a === void 0 ? void 0 : _a.call(definition);
-                        if (definition.internalDataValidate && !definition.internalDataValidate(internalData)) {
-                            return [false, `Failed to validate internal data`];
-                        }
-                        return [true, {
-                                enforce: !validatedData.enforce && definition.enforceable ? false : undefined,
-                                log: !validatedData.log && definition.loggable ? false : undefined,
-                                customData: validatedData.customData,
-                                internalData
-                            }];
-                    },
-                    importLog(condition, data, character) {
-                        const definition = rules.get(condition);
-                        if (!character || !definition)
-                            return;
-                        logMessage("rule_change", LogEntryType.plaintext, `${character} imported rule '${definition.name}'`);
-                        if (!character.isPlayer()) {
-                            ChatRoomSendLocal(`${character.toNicknamedString()} imported the rule '${definition.name}'`);
-                        }
-                    },
-                    importRemove(condition, character) {
-                        if (!RulesDelete(condition, character)) {
-                            return "Failed.";
-                        }
-                        return true;
-                    }
-                }
-            });
-            // Init individual rules
-            initRules_bc_blocks();
-            initRules_bc_alter();
-            initRules_bc_settings();
-            initRules_bc_relation_control();
-            initRules_bc_speech_control();
-            initRules_other();
-            for (const rule of rules.values()) {
-                if (rule.init) {
-                    rule.init(rule.state);
-                }
-            }
         }
-        load() {
-            if (!moduleIsEnabled(ModuleCategory.Rules)) {
+        win.appendChild(contentElem);
+        contentElem.readOnly = true;
+        contentElem.value = contents;
+        contentElem.style.flex = "1";
+        contentElem.style.margin = "0.5em 0";
+        let timeout = minTimeout !== null && minTimeout !== void 0 ? minTimeout : 0;
+        const close = document.createElement("button");
+        win.appendChild(close);
+        close.onclick = () => {
+            if (timeout > 0)
                 return;
+            overlay.remove();
+        };
+        const updateCloseButton = () => {
+            close.innerText = timeout > 0 ? `Close (${timeout})` : "Close";
+            close.disabled = timeout > 0;
+            if (timeout > 0) {
+                BCX_setTimeout(() => {
+                    timeout--;
+                    updateCloseButton();
+                }, 1000);
             }
-            for (const rule of rules.values()) {
-                if (rule.load) {
-                    rule.load(rule.state);
+            else {
+                close.style.cursor = "pointer";
+            }
+        };
+        updateCloseButton();
+        (_b = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.blur) === null || _b === void 0 ? void 0 : _b.call(_a);
+        window.document.body.appendChild(overlay);
+    }
+    let compatibilityCheckTimeout;
+    const COMPATIBILITY_CHECK_INTERVAL = 60000;
+    let didReportCompatibilityIssues = false;
+    function detectCompatibilityProblems() {
+        if (didReportCompatibilityIssues || moduleInitPhase !== ModuleInitPhase.ready)
+            return;
+        const legacyMods = detectOtherMods();
+        let result = "";
+        let wait = 0;
+        if (legacyMods.BcUtil) {
+            wait = 5;
+            result += `----- BC-Util -----\n` +
+                `BCX detected the presence of the incompatible mod BC-Util.\n` +
+                `BC-Util is a useful and high quality mod, which has unfortunately not been updated since September 2021 and doesn't use ModSDK.\n` +
+                `It isn't compatible with BCX due to that and is known to cause problems, including crashes (especially in the wardrobe).\n` +
+                `\n`;
+        }
+        if (legacyMods.QuickAccessMenu) {
+            wait = 5;
+            result += `----- Quick Access Menu (QAM) -----\n` +
+                `BCX detected the presence of the incompatible mod Quick Access Menu.\n` +
+                `This mod is deprecated and is known to conflict with other mods (e.g. BCX or FBC). Continued usage of this mod is not advised.\n` +
+                `Contact its author for more information.\n` +
+                `Error reports while using QAM will not be acted upon.\n` +
+                `\n`;
+        }
+        if (legacyMods.Curse) {
+            result += `----- "Cursed" Script -----\n` +
+                `BCX detected the presence of the obsolete mod Cursed script.\n` +
+                `Curse is the spiritual predecessor of BCX, and can be considered obsolete since BCX has almost the same features (and much more). Curse is no longer updated since September 2021 and doesn't use ModSDK.\n` +
+                `As BCX is meant to supersede Curse, no compatibility can be guaranteed.\n` +
+                `\n`;
+        }
+        const patchingInfo = Array.from(bcModSDK.getPatchingInfo().values());
+        const unexpectedHashes = SUPPORTED_BC_VERSIONS.includes(GameVersion) ? getPatchedFunctionsHashes(false) : [];
+        const overwrittenFunctions = patchingInfo.filter(fn => fn.currentEntrypoint !== fn.sdkEntrypoint);
+        if (Array.from(Object.values(legacyMods)).every(v => !v) && (unexpectedHashes.length > 0 || overwrittenFunctions.length > 0)) {
+            result += `----- Unknown mod not using ModSDK -----\n` +
+                `BCX detected the presence of modifications not done using ModSDK or any known legacy mod.\n` +
+                `If you are not author of the mod, please report what mod caused this warning on the BC Scripting Community Discord server: https://discord.gg/SHJMjEh9VH\n` +
+                `If you are author of the mod triggering this warning, please modify your mod to use ModSDK: https://github.com/Jomshir98/bondage-club-mod-sdk. Feel free to ask for help doing that on the above-mentioned Discord server.\n` +
+                `\n`;
+        }
+        if (result) {
+            result += `----- Detected modifications -----\n` +
+                (unexpectedHashes.length > 0 ? `Patched functions with unknown checksums:\n` + unexpectedHashes.map(i => `  - ${i[0]}: ${i[1]}\n`).join("") : "") +
+                (overwrittenFunctions.length > 0 ? `Overwritten functions:\n` + overwrittenFunctions.map(fn => { var _a, _b; return `  - ${fn.name}: ${crc32((_b = (_a = fn.currentEntrypoint) === null || _a === void 0 ? void 0 : _a.toString().replaceAll("\r\n", "\n")) !== null && _b !== void 0 ? _b : "")}\n`; }).join("") : "") +
+                `\n`;
+        }
+        if (result) {
+            const checksum = crc32(result);
+            if (modStorage.compatibilityCheckerWarningIgnore === checksum)
+                return;
+            didReportCompatibilityIssues = true;
+            showErrorOverlay("BCX Compatibility checker", "BCX's Compatibility checker detected problems with other mods you appear to be using.<br />" +
+                "For reasons stated below please reconsider using mentioned mods.<br />" +
+                "Please note, that this is a warning for you, not meant to be reported. It says that some features are likely to be broken.<br />" +
+                "If you have any questions or think this message is an error, please get in touch with us on <a href='https://discord.gg/SHJMjEh9VH' target='_blank'>BC Scripting Community</a> Discord server.<br />" +
+                "You can use the 'Close' button at the bottom to continue anyway.", result + `Report signature: ${checksum}`, false, wait, (win) => {
+                const doNotShowAgain = document.createElement("button");
+                doNotShowAgain.style.cursor = "pointer";
+                win.appendChild(doNotShowAgain);
+                doNotShowAgain.innerText = "Do not show this report again unless something changes";
+                doNotShowAgain.onclick = () => {
+                    doNotShowAgain.innerText = "This report won't show again unless something changes.";
+                    doNotShowAgain.disabled = true;
+                    modStorage.compatibilityCheckerWarningIgnore = checksum;
+                    modStorageSync();
+                };
+            });
+        }
+        else if (modStorage.compatibilityCheckerWarningIgnore != null) {
+            delete modStorage.compatibilityCheckerWarningIgnore;
+            modStorageSync();
+        }
+    }
+    const sourceBasedErrorMessage = {
+        bcx: "<br /><h3>Whoops... seems like BCX might be to blame this time</h3> Could you please help us by submitting the report below to the <a href='https://discord.gg/SHJMjEh9VH' target='_blank'>BC Scripting Community Discord</a> server?<br />Thank you!</p>",
+        knownMod: (mod) => `<br /><h3>The error seems to come from mod ${mod}</h3> Please submit the report to <a href='https://discord.gg/SHJMjEh9VH' target='_blank'>BC Scripting Community Discord</a> server!`,
+        bc: "<br /><h3>The error seems not to come from any ModSDK mod!</h3> Please submit the report to <a href='https://discord.gg/dkWsEjf' target='_blank'>Bondage Club's Discord</a> server!",
+        unknown: "<br /><h3>Could not detect origin of the error.</h3> Please submit the report to <a href='https://discord.gg/dkWsEjf' target='_blank'>Bondage Club's Discord</a> server!",
+    };
+    function onUnhandledError(event) {
+        if (!firstError)
+            return;
+        firstError = false;
+        const currentMod = contextCurrentModArea();
+        showErrorOverlay("Crash Handler (by ModSDK)", "The Crash Handler provided by ModSDK detected an uncaught error, which most likely crashed the Bondage Club.<br />" +
+            "While reporting this error, please use the information below to help us find the source faster.<br />" +
+            "You can use the 'Close' button at the bottom to continue, however BC may no longer work correctly until you reload the current tab." +
+            (currentMod === "BCX" ? sourceBasedErrorMessage.bcx :
+                currentMod === "" ? sourceBasedErrorMessage.bc :
+                    currentMod == null ? sourceBasedErrorMessage.unknown :
+                        sourceBasedErrorMessage.knownMod(currentMod)), debugGenerateReportErrorEvent(event));
+    }
+    function reportManualError(description, error) {
+        console.error(`BCX: Error report: ${description}\n`, error);
+        if (!firstError)
+            return;
+        firstError = false;
+        const currentMod = contextCurrentModArea();
+        showErrorOverlay("Error Report (by BCX)", "The following error happend in event originating from BCX.<br />" +
+            "While reporting this error, please use the information below to help us find the source faster.<br />" +
+            "You can use the 'Close' button at the bottom to continue, however BC may no longer work correctly until you reload the current tab." +
+            (currentMod === "BCX" ? sourceBasedErrorMessage.bcx :
+                currentMod === "" ? sourceBasedErrorMessage.bc :
+                    currentMod == null ? sourceBasedErrorMessage.unknown :
+                        sourceBasedErrorMessage.knownMod(currentMod)), debugGenerateReportManualError(description, error));
+    }
+    let originalSocketEmit;
+    function bcxSocketEmit(...args) {
+        const message = Array.isArray(args[0]) && typeof args[0][0] === "string" ? args[0][0] : "[unknown]";
+        lastReceivedMessageType = message;
+        lastReceivedMessageTime = Date.now();
+        const parameters = Array.isArray(args[0]) ? args[0].slice(1) : [];
+        if (logServerMessages) {
+            console.log("\u2B07 Receive", message, ...parameters);
+        }
+        const ctx = debugContextStart(`Server message ${message}`, {
+            root: true,
+            modArea: "",
+            extraInfo() {
+                return `Event: ${message}\n` + parameters.map(i => JSON.stringify(i, undefined, "  ")).join("\n");
+            },
+        });
+        const res = originalSocketEmit === null || originalSocketEmit === void 0 ? void 0 : originalSocketEmit.apply(this, args);
+        ctx.end();
+        return res;
+    }
+    let originalClick;
+    function bcxClick(event) {
+        const ctx = debugContextStart(`Canvas click`, {
+            root: true,
+            modArea: "",
+            extraInfo: () => `X: ${MouseX}\nY: ${MouseY}`,
+        });
+        const res = originalClick === null || originalClick === void 0 ? void 0 : originalClick.call(this, event);
+        ctx.end();
+        return res;
+    }
+    let originalRAF;
+    function bcxRaf(fn) {
+        var _a;
+        return (_a = originalRAF === null || originalRAF === void 0 ? void 0 : originalRAF.call(this, (...rafArgs) => {
+            const ctx = debugContextStart(`Animation frame`, {
+                root: true,
+                modArea: "",
+                extraInfo: () => `time: ${rafArgs}`,
+            });
+            const res = fn.apply(window, rafArgs);
+            ctx.end();
+            return res;
+        })) !== null && _a !== void 0 ? _a : 0;
+    }
+    function InitErrorReporter() {
+        var _a;
+        window.addEventListener("error", onUnhandledError);
+        if (originalSocketEmit === undefined && typeof ((_a = ServerSocket === null || ServerSocket === void 0 ? void 0 : ServerSocket.__proto__) === null || _a === void 0 ? void 0 : _a.emitEvent) === "function") {
+            originalSocketEmit = ServerSocket.__proto__.emitEvent;
+            ServerSocket.__proto__.emitEvent = bcxSocketEmit;
+        }
+        const canvas = document.getElementById("MainCanvas");
+        if (canvas) {
+            if (originalClick === undefined && typeof canvas.onclick === "function") {
+                originalClick = canvas.onclick;
+                canvas.onclick = bcxClick;
+            }
+        }
+        if (originalRAF === undefined && typeof window.requestAnimationFrame === "function") {
+            originalRAF = window.requestAnimationFrame;
+            window.requestAnimationFrame = bcxRaf;
+        }
+        hookFunction("ServerSend", 0, (args, next) => {
+            lastSentMessageType = args[0];
+            lastSentMessageTime = Date.now();
+            if (logServerMessages) {
+                console.log("\u2B06 Send", ...args);
+            }
+            return next(args);
+        });
+        if (compatibilityCheckTimeout == null) {
+            compatibilityCheckTimeout = BCX_setInterval(() => {
+                detectCompatibilityProblems();
+            }, COMPATIBILITY_CHECK_INTERVAL);
+            BCX_setTimeout(() => {
+                detectCompatibilityProblems();
+            }, 3000);
+        }
+    }
+    function UnloadErrorReporter() {
+        window.removeEventListener("error", onUnhandledError);
+        if (originalSocketEmit && ServerSocket.__proto__.emitEvent === bcxSocketEmit) {
+            ServerSocket.__proto__.emitEvent = originalSocketEmit;
+            originalSocketEmit = undefined;
+        }
+        const canvas = document.getElementById("MainCanvas");
+        if (canvas && originalClick && canvas.onclick === bcxClick) {
+            canvas.onclick = originalClick;
+            originalClick = undefined;
+        }
+        if (originalRAF && window.requestAnimationFrame === bcxRaf) {
+            window.requestAnimationFrame = originalRAF;
+            originalRAF = undefined;
+        }
+        if (compatibilityCheckTimeout != null) {
+            clearInterval(compatibilityCheckTimeout);
+            compatibilityCheckTimeout = undefined;
+        }
+    }
+
+    function loginInit(C) {
+        if (window.BCX_Loaded || moduleInitPhase !== ModuleInitPhase.construct)
+            return;
+        SetLoadedBeforeLogin(C);
+        init();
+    }
+    function clearCaches() {
+        if (typeof DrawRunMap !== "undefined") {
+            DrawRunMap.clear();
+            DrawScreen = "";
+        }
+        if (typeof CurrentScreenFunctions !== "undefined") {
+            const w = window;
+            CurrentScreenFunctions = {
+                Run: w[`${CurrentScreen}Run`],
+                Click: w[`${CurrentScreen}Click`],
+                Load: typeof w[`${CurrentScreen}Load`] === "function" ? w[`${CurrentScreen}Load`] : undefined,
+                Unload: typeof w[`${CurrentScreen}Unload`] === "function" ? w[`${CurrentScreen}Unload`] : undefined,
+                Resize: typeof w[`${CurrentScreen}Resize`] === "function" ? w[`${CurrentScreen}Resize`] : undefined,
+                KeyDown: typeof w[`${CurrentScreen}KeyDown`] === "function" ? w[`${CurrentScreen}KeyDown`] : undefined,
+                Exit: typeof w[`${CurrentScreen}Exit`] === "function" ? w[`${CurrentScreen}Exit`] : undefined,
+            };
+        }
+    }
+    function init() {
+        if (window.BCX_Loaded || moduleInitPhase !== ModuleInitPhase.construct)
+            return;
+        const ctx = debugContextStart("BCX init", { modArea: "BCX" });
+        InitErrorReporter();
+        if (!init_modules()) {
+            ctx.end();
+            unload();
+            return;
+        }
+        const currentAccount = Player.MemberNumber;
+        if (currentAccount == null) {
+            throw new Error("No player MemberNumber");
+        }
+        hookFunction("LoginResponse", 0, (args, next) => {
+            const response = args[0];
+            if (isObject$1(response) && typeof response.Name === "string" && typeof response.AccountName === "string" && response.MemberNumber !== currentAccount) {
+                alert(`Attempting to load BCX with different account than already loaded (${response.MemberNumber} vs ${currentAccount}). This is not supported, please refresh the page.`);
+                throw new Error("Attempting to load BCX with different account");
+            }
+            return next(args);
+        });
+        clearCaches();
+        const { BondageClubTools } = detectOtherMods();
+        if (BondageClubTools) {
+            console.warn("BCX: Bondage Club Tools detected!");
+            if (window.BCX_BondageClubToolsPatch === true) {
+                console.info("BCX: Bondage Club Tools already patched, skip!");
+            }
+            else {
+                window.BCX_BondageClubToolsPatch = true;
+                const ChatRoomMessageForwarder = ServerSocket.listeners("ChatRoomMessage").find(i => i.toString().includes("window.postMessage"));
+                const AccountBeepForwarder = ServerSocket.listeners("AccountBeep").find(i => i.toString().includes("window.postMessage"));
+                if (!ChatRoomMessageForwarder || !AccountBeepForwarder) {
+                    throw new Error("Failed to patch for Bondage Club Tools!");
                 }
+                ServerSocket.off("ChatRoomMessage", ChatRoomMessageForwarder);
+                ServerSocket.on("ChatRoomMessage", data => {
+                    if ((data === null || data === void 0 ? void 0 : data.Type) !== "Hidden" || data.Content !== "BCXMsg" || typeof data.Sender !== "number") {
+                        ChatRoomMessageForwarder(data);
+                    }
+                });
+                ServerSocket.off("AccountBeep", AccountBeepForwarder);
+                ServerSocket.on("AccountBeep", data => {
+                    var _a;
+                    if (typeof (data === null || data === void 0 ? void 0 : data.BeepType) !== "string" || !["Leash", "BCX"].includes(data.BeepType) || !isObject$1((_a = data.Message) === null || _a === void 0 ? void 0 : _a.BCX)) {
+                        AccountBeepForwarder(data);
+                    }
+                });
             }
+        }
+        window.BCX_Loaded = true;
+        InfoBeep(`BCX loaded! Version: ${VERSION$1.replace(/-[0-f]+$/i, "")}`);
+        console.log(`BCX loaded! Version: ${VERSION$1}`);
+        ctx.end();
+    }
+    function unload() {
+        unload_patches();
+        unload_modules();
+        UnloadErrorReporter();
+        clearCaches();
+        delete window.BCX_Loaded;
+        console.log("BCX: Unloaded.");
+        return true;
+    }
+
+    let nextCheckTimer = null;
+    let versionCheckNewAvailable = null;
+    let versionCheckDidNotify = false;
+    let supporterStatus;
+    let supporterSecret;
+    function setSupporterVisible(visible) {
+        if (visible === !modStorage.supporterHidden)
+            return;
+        if (visible) {
+            delete modStorage.supporterHidden;
+        }
+        else {
+            modStorage.supporterHidden = true;
+        }
+        modStorageSync();
+        announceSelf();
+    }
+    const otherSupporterStatus = new Map();
+    function updateOtherSupporterStatus(memberNumber, status, secret) {
+        if (memberNumber === Player.MemberNumber)
+            return;
+        const current = otherSupporterStatus.get(memberNumber);
+        if (current && current.secret === status && current.secret === secret && current.verified)
+            return;
+        if (status && secret) {
+            otherSupporterStatus.set(memberNumber, {
+                verified: status === undefined,
+                status,
+                secret,
+            });
+            if (status && secret) {
+                sendHiddenBeep("supporterCheck", {
+                    memberNumber,
+                    status,
+                    secret,
+                }, VERSION_CHECK_BOT, true);
+            }
+        }
+        else {
+            otherSupporterStatus.delete(memberNumber);
+        }
+    }
+    function sendVersionCheckBeep() {
+        if (nextCheckTimer !== null) {
+            clearTimeout(nextCheckTimer);
+            nextCheckTimer = null;
+        }
+        sendHiddenBeep("versionCheck", {
+            version: VERSION$1,
+            devel: BCX_DEVEL,
+            GameVersion,
+            Source: (BCXSourceExternal ? "E:" : "") + (BCXSource !== null && BCXSource !== void 0 ? BCXSource : "[UNKNOWN]"),
+            UA: window.navigator.userAgent,
+        }, VERSION_CHECK_BOT, true);
+        nextCheckTimer = BCX_setTimeout(sendVersionCheckBeep, (5 + Math.random()) * 60000);
+    }
+    class ModuleVersionCheck extends BaseModule {
+        load() {
+            hiddenBeepHandlers.set("versionResponse", (sender, message) => {
+                var _a, _b;
+                if (sender !== VERSION_CHECK_BOT) {
+                    console.warn(`BCX: got versionResponse from unexpected sender ${sender}, ignoring`);
+                    return;
+                }
+                if (!isObject$1(message) || typeof message.status !== "string") {
+                    console.warn(`BCX: bad versionResponse`, message);
+                    return;
+                }
+                if (nextCheckTimer !== null) {
+                    clearTimeout(nextCheckTimer);
+                    nextCheckTimer = null;
+                }
+                nextCheckTimer = BCX_setTimeout(sendVersionCheckBeep, (15 + 5 * Math.random()) * 60000);
+                if (message.status === "current") {
+                    versionCheckNewAvailable = false;
+                }
+                else if (message.status === "newAvailable") {
+                    versionCheckNewAvailable = true;
+                    if (!versionCheckDidNotify) {
+                        versionCheckDidNotify = true;
+                        if (ServerPlayerIsInChatRoom()) {
+                            ChatRoomSendLocal("New BCX version is available! You can upgrade by logging in again.");
+                        }
+                        else {
+                            InfoBeep("New BCX version is available! You can upgrade by logging in again.", 10000);
+                        }
+                    }
+                }
+                else if (message.status === "deprecated") {
+                    versionCheckNewAvailable = true;
+                    if (!versionCheckDidNotify) {
+                        versionCheckDidNotify = true;
+                        const overlay = document.createElement("div");
+                        overlay.style.position = "fixed";
+                        overlay.style.top = "0px";
+                        overlay.style.right = "0px";
+                        overlay.style.bottom = "0px";
+                        overlay.style.left = "0px";
+                        overlay.style.background = "#00000090";
+                        overlay.style.display = "flex";
+                        overlay.style.alignItems = "center";
+                        overlay.style.justifyContent = "center";
+                        const win = document.createElement("div");
+                        overlay.appendChild(win);
+                        win.style.background = "white";
+                        win.style.display = "flex";
+                        win.style.flexDirection = "column";
+                        win.style.padding = "1em";
+                        const titleElem = document.createElement("h1");
+                        win.appendChild(titleElem);
+                        titleElem.innerText = "Deprecated BCX version";
+                        const descriptionElement = document.createElement("p");
+                        win.appendChild(descriptionElement);
+                        descriptionElement.innerText = "The BCX version you are using is too old and either contains critical bugs or " +
+                            "is no longer compatible with the current Bondage Club release version.\n" +
+                            "Unless you are using additional mods preventing this, please refresh the page and log into the club again to load the newest version.";
+                        const close = document.createElement("button");
+                        close.style.cursor = "pointer";
+                        win.appendChild(close);
+                        close.innerText = "Close";
+                        close.onclick = () => {
+                            overlay.remove();
+                        };
+                        (_b = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.blur) === null || _b === void 0 ? void 0 : _b.call(_a);
+                        window.document.body.appendChild(overlay);
+                    }
+                }
+                else if (message.status === "unsupported") {
+                    unload();
+                    alert("The BCX version you are trying to load is too old and either contains critical bugs or " +
+                        "is no longer compatible with the current Bondage Club release version. Please update your BCX.");
+                }
+                else {
+                    console.warn(`BCX: bad versionResponse status "${message.status}"`);
+                }
+                if (supporterStatus !== message.supporterStatus || supporterSecret !== message.supporterSecret) {
+                    supporterStatus = message.supporterStatus;
+                    supporterSecret = message.supporterSecret;
+                    announceSelf();
+                }
+            });
+            hiddenBeepHandlers.set("supporterCheckResult", (sender, message) => {
+                if (sender !== VERSION_CHECK_BOT) {
+                    console.warn(`BCX: got supporterCheckResult from unexpected sender ${sender}, ignoring`);
+                    return;
+                }
+                if (!isObject$1(message) || typeof message.memberNumber !== "number" || (message.status !== undefined && typeof message.status !== "string")) {
+                    console.warn(`BCX: bad supporterCheckResult`, message);
+                    return;
+                }
+                const status = otherSupporterStatus.get(message.memberNumber);
+                if (!status) {
+                    console.warn(`BCX: supporterCheckResult unknown memberNumber`, message);
+                    return;
+                }
+                status.status = message.status;
+                status.verified = true;
+            });
+            hookFunction("LoginResponse", 0, (args, next) => {
+                next(args);
+                const response = args[0];
+                if (isObject$1(response) && typeof response.Name === "string" && typeof response.AccountName === "string") {
+                    sendVersionCheckBeep();
+                }
+            });
         }
         run() {
-            if (!moduleIsEnabled(ModuleCategory.Rules))
-                return;
-            this.resetTimer = BCX_setInterval(() => {
-                this.triggerCounts.clear();
-            }, RULES_ANTILOOP_RESET_INTERVAL);
+            sendVersionCheckBeep();
         }
         unload() {
-            if (this.resetTimer !== null) {
-                clearInterval(this.resetTimer);
-                this.resetTimer = null;
-            }
-            for (const rule of rules.values()) {
-                if (rule.unload) {
-                    rule.unload();
-                }
-            }
-        }
-        reload() {
-            this.unload();
-            this.load();
-            this.run();
-        }
-        ruleStateChange(rule, condition, newState) {
-            var _a;
-            const ruleDefinition = rules.get(rule);
-            if (!ruleDefinition) {
-                throw new Error(`Definition for rule ${rule} not found`);
-            }
-            (_a = ruleDefinition.stateChange) === null || _a === void 0 ? void 0 : _a.call(ruleDefinition, ruleDefinition.state, newState);
-        }
-        ruleTick(rule, condition) {
-            var _a;
-            if (this.suspendedUntil !== null) {
-                if (Date.now() >= this.suspendedUntil) {
-                    this.suspendedUntil = null;
-                    this.triggerCounts.clear();
-                    ChatRoomActionMessage(`All of SourceCharacter's temporarily suspended rules are in effect again.`, null, [
-                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
-                    ]);
-                }
-                else {
-                    return;
-                }
-            }
-            const ruleDefinition = rules.get(rule);
-            if (!ruleDefinition) {
-                throw new Error(`Definition for rule ${rule} not found`);
-            }
-            if (ruleDefinition.tick) {
-                if (ruleDefinition.tick(ruleDefinition.state)) {
-                    const counter = ((_a = this.triggerCounts.get(rule)) !== null && _a !== void 0 ? _a : 0) + 1;
-                    this.triggerCounts.set(rule, counter);
-                    if (counter >= RULES_ANTILOOP_THRESHOLD) {
-                        ChatRoomActionMessage("Protection triggered: The effects of rules have been suspended for 10 minutes. Please refrain from triggering rules so rapidly, as it creates strain on the server and may lead to unwanted side effects! If you believe this message was triggered by a bug, please report it to BCX Discord.");
-                        this.suspendedUntil = Date.now() + RULES_ANTILOOP_SUSPEND_TIME;
-                    }
-                }
+            if (nextCheckTimer !== null) {
+                clearTimeout(nextCheckTimer);
+                nextCheckTimer = null;
             }
         }
     }
 
-    const COMMAND_CATEGORIES_VISIBLE = ["utility", "cheats", "modules", "commands"];
-    const COMMAND_GENERIC_ERROR = `The command failed to execute, likely because you are lacking the permission to give it.`;
-    const commands$1 = new Map();
-    const whisperCommands = new Map();
-    let firstTimeHelp = null;
-    function CommandsShowFirstTimeHelp() {
-        if (!firstTimeHelp && modStorage.chatShouldDisplayFirstTimeHelp) {
-            firstTimeHelp = ChatRoomSendLocal(`[ BCX commands tutorial ]\n` +
-                `BCX also provides helpful chat commands.\n` +
-                `All commands start with a dot ( . )\n` +
-                `The commands also support auto-completion: While writing a command, press 'Tab' to try automatically completing the currently typed word.\n` +
-                `Other club members can also use commands of your BCX, without needing BCX themselves. They will get a list of all commands they have permission using by whispering '!help' ( ! instead of . ) to you.\n` +
-                `Note: Messages colored like this text can only be seen by you and no one else.\n` +
-                `\n` +
-                `To complete this tutorial, use '.help' command by writing '.he' and pressing 'Tab' to complete it to '.help', it will show you list of available BCX commands.`);
-        }
-    }
-    function CommandsCompleteFirstTimeHelp() {
-        if (modStorage.chatShouldDisplayFirstTimeHelp !== undefined) {
-            delete modStorage.chatShouldDisplayFirstTimeHelp;
-            modStorageSync();
-        }
-        if (firstTimeHelp) {
-            firstTimeHelp.remove();
-            firstTimeHelp = null;
-        }
-    }
-    function registerCommand$1(category, name, description, callback, autocomplete = null) {
-        name = name.toLocaleLowerCase();
-        if (commands$1.has(name)) {
-            throw new Error(`Command "${name}" already registered!`);
-        }
-        commands$1.set(name, {
-            parse: false,
-            callback,
-            autocomplete,
-            category,
-            description
-        });
-    }
-    function aliasCommand(originalName, alias) {
-        originalName = originalName.toLocaleLowerCase();
-        alias = alias.toLocaleLowerCase();
-        const original = commands$1.get(originalName);
-        if (!original) {
-            throw new Error(`Command "${originalName}" to alias not found`);
-        }
-        if (original.parse) {
-            commands$1.set(alias, {
-                parse: true,
-                category: original.category,
-                description: null,
-                callback: original.callback,
-                autocomplete: original.autocomplete
-            });
-        }
-        else {
-            commands$1.set(alias, {
-                parse: false,
-                category: original.category,
-                description: null,
-                callback: original.callback,
-                autocomplete: original.autocomplete
-            });
-        }
-    }
-    function registerCommandParsed(category, name, description, callback, autocomplete = null) {
-        name = name.toLocaleLowerCase();
-        if (commands$1.has(name)) {
-            throw new Error(`Command "${name}" already registered!`);
-        }
-        commands$1.set(name, {
-            parse: true,
-            callback,
-            autocomplete,
-            category,
-            description
-        });
-    }
-    function registerWhisperCommand(category, name, description, callback, autocomplete = null, registerNormal = true) {
-        name = name.toLocaleLowerCase();
-        if (registerNormal) {
-            registerCommandParsed(category, name, description, (argv) => {
-                callback(argv, getPlayerCharacter(), (msg) => ChatRoomSendLocal(msg));
-                return true;
-            }, autocomplete ? (argv) => autocomplete(argv, getPlayerCharacter()) : null);
-        }
-        if (whisperCommands.has(name)) {
-            throw new Error(`Command "${name}" already registered!`);
-        }
-        whisperCommands.set(name, {
-            callback,
-            autocomplete,
-            category,
-            description
-        });
-    }
-    function CommandParse(msg) {
-        msg = msg.trimStart();
-        const commandMatch = /^(\S+)(?:\s|$)(.*)$/.exec(msg);
-        if (!commandMatch) {
-            return ["", ""];
-        }
-        return [(commandMatch[1] || "").toLocaleLowerCase(), commandMatch[2]];
-    }
-    function CommandParseArguments(args) {
-        return [...args.matchAll(/".*?(?:"|$)|'.*?(?:'|$)|[^ ]+/g)]
-            .map(a => a[0])
-            .map(a => a[0] === '"' || a[0] === "'" ? a.substring(1, a.length > 1 && a[a.length - 1] === a[0] ? a.length - 1 : a.length) : a);
-    }
-    function CommandHasEmptyArgument(args) {
-        const argv = CommandParseArguments(args);
-        return argv.length === 0 || !args.endsWith(argv[argv.length - 1]);
-    }
-    function CommandArgumentNeedsQuotes(arg) {
-        return arg.includes(" ") || arg.includes('"') || arg.startsWith(`'`);
-    }
-    function CommandQuoteArgument(arg, force = false) {
-        if (arg.startsWith(`"`)) {
-            return `'${arg}'`;
-        }
-        else if (arg.startsWith(`'`)) {
-            return `"${arg}"`;
-        }
-        else if (arg.includes(" ") || force) {
-            return arg.includes('"') ? `'${arg}'` : `"${arg}"`;
-        }
-        return arg;
-    }
-    let autocompleteMessage = null;
-    let autocompleteLastQuery = null;
-    let autocompleteLastTarget = null;
-    let autocompleteLastResult = [];
-    let autocompleteNextIndex = 0;
-    function autocompleteClear() {
-        if (autocompleteMessage) {
-            autocompleteMessage.remove();
-            autocompleteMessage = null;
-        }
-        autocompleteLastQuery = null;
-        autocompleteLastTarget = null;
-    }
-    function autocompleteShow(header, options, highlight) {
-        autocompleteClear();
-        if (options.length > 0) {
-            const res = document.createElement("div");
-            res.innerText += `[${header}]\n`;
-            for (let i = 0; i < options.length; i++) {
-                const option = document.createElement("div");
-                option.innerText = options[i];
-                if (i === highlight) {
-                    option.style.background = `#7e7eff54`;
-                }
-                res.appendChild(option);
-            }
-            autocompleteMessage = ChatRoomSendLocal(res, 10000);
-        }
-    }
-    function RunCommand(msg) {
-        autocompleteClear();
-        const [command, args] = CommandParse(msg);
-        const commandInfo = commands$1.get(command);
-        if (!commandInfo) {
-            // Command not found
-            ChatRoomSendLocal(`Unknown command "${command}"\n` +
-                `To see list of valid commands use '.help'`, 15000);
-            return false;
-        }
-        if (commandInfo.parse) {
-            return commandInfo.callback(CommandParseArguments(args));
-        }
-        else {
-            return commandInfo.callback(args);
-        }
-    }
-    function RunWhisperCommand(msg, sender, respond) {
-        const [command, args] = CommandParse(msg);
-        const commandInfo = whisperCommands.get(command);
-        if (!commandInfo) {
-            // Command not found
-            respond(`Unknown command "${command}"\n` +
-                `To see list of valid commands whisper '!help'`);
-            return;
-        }
-        return commandInfo.callback(CommandParseArguments(args), sender, respond);
-    }
-    function CommandAutocomplete(msg) {
-        msg = msg.trimStart();
-        const [command, args] = CommandParse(msg);
-        if (msg.length === command.length) {
-            const prefixes = Array.from(commands$1.entries()).filter(c => c[1].description !== null && c[0].startsWith(command)).map(c => c[0] + " ");
-            return prefixes.map(i => [i, i]);
-        }
-        const commandInfo = commands$1.get(command);
-        if (commandInfo && commandInfo.autocomplete) {
-            if (commandInfo.parse) {
-                const argv = CommandParseArguments(args);
-                if (CommandHasEmptyArgument(args)) {
-                    argv.push("");
-                }
-                let lastOptions = commandInfo.autocomplete(argv);
-                const fin = lastOptions.length === 1;
-                if (lastOptions.length === 0) {
-                    lastOptions = [argv[argv.length - 1]];
-                }
-                argv.pop();
-                const needsQuotes = lastOptions.some(CommandArgumentNeedsQuotes);
-                return lastOptions.map(i => [
-                    `${command} ` +
-                        argv
-                            .map(a => CommandQuoteArgument(a))
-                            .concat(needsQuotes ? CommandQuoteArgument(i, true) : i)
-                            .join(" ") +
-                        (fin ? " " : ""),
-                    i
-                ]);
-            }
-            else {
-                const possibleArgs = commandInfo.autocomplete(args);
-                if (possibleArgs.length === 0) {
-                    return [];
-                }
-                return possibleArgs.map(arg => [`${command} ${arg}`, arg]);
-            }
-        }
-        return [];
-    }
-    function CommandAutocompleteCycle(msg) {
-        if (autocompleteLastQuery === msg && autocompleteLastTarget === null && autocompleteNextIndex < autocompleteLastResult.length) {
-            autocompleteShow("autocomplete hint", autocompleteLastResult.map(i => i[1]), autocompleteNextIndex);
-            const res = autocompleteLastResult[autocompleteNextIndex][0].trim();
-            autocompleteNextIndex = (autocompleteNextIndex + 1) % autocompleteLastResult.length;
-            autocompleteLastQuery = res;
-            return res;
-        }
-        autocompleteClear();
-        autocompleteLastResult = CommandAutocomplete(msg).sort((a, b) => a[1].localeCompare(b[1]));
-        if (autocompleteLastResult.length === 0) {
-            return msg;
-        }
-        else if (autocompleteLastResult.length === 1) {
-            return autocompleteLastResult[0][0];
-        }
-        const best = longestCommonPrefix(autocompleteLastResult.map(i => i[0]));
-        autocompleteShow("autocomplete hint", autocompleteLastResult.map(i => i[1]));
-        autocompleteLastQuery = best;
-        autocompleteLastTarget = null;
-        autocompleteNextIndex = 0;
-        return best;
-    }
-    function WhisperCommandAutocomplete(msg, sender) {
-        msg = msg.trimStart();
-        const [command, args] = CommandParse(msg);
-        if (msg.length === command.length) {
-            const prefixes = Array.from(whisperCommands.entries()).filter(c => c[1].description !== null && c[0].startsWith(command)).map(c => c[0] + " ");
-            return prefixes.map(i => [i, i]);
-        }
-        const commandInfo = whisperCommands.get(command);
-        if (commandInfo && commandInfo.autocomplete) {
-            const argv = CommandParseArguments(args);
-            if (CommandHasEmptyArgument(args)) {
-                argv.push("");
-            }
-            let lastOptions = commandInfo.autocomplete(argv, sender);
-            const fin = lastOptions.length === 1;
-            if (lastOptions.length === 0) {
-                lastOptions = [argv[argv.length - 1]];
-            }
-            argv.pop();
-            const needsQuotes = lastOptions.some(CommandArgumentNeedsQuotes);
-            return lastOptions.map(i => [
-                `${command} ` +
-                    argv
-                        .map(a => CommandQuoteArgument(a))
-                        .concat(needsQuotes ? CommandQuoteArgument(i, true) : i)
-                        .join(" ") +
-                    (fin ? " " : ""),
-                i
-            ]);
-        }
-        return [];
-    }
-    async function WhisperCommandAutocompleteCycle(chat) {
-        const currentValue = chat.value;
-        const currentTarget = ChatRoomTargetMemberNumber;
-        if (currentTarget == null)
-            return;
-        if (autocompleteLastQuery === currentValue && autocompleteLastTarget === currentTarget && autocompleteNextIndex < autocompleteLastResult.length) {
-            autocompleteShow("remote autocomplete hint", autocompleteLastResult.map(i => i[1]), autocompleteNextIndex);
-            const res = autocompleteLastResult[autocompleteNextIndex][0].trim();
-            autocompleteNextIndex = (autocompleteNextIndex + 1) % autocompleteLastResult.length;
-            autocompleteLastQuery = res;
-            autocompleteLastTarget = currentTarget;
-            chat.value = res;
-            return;
-        }
-        autocompleteClear();
-        const queryResult = await sendQuery("commandHint", currentValue, currentTarget);
-        if (chat.value !== currentValue || ChatRoomTargetMemberNumber !== currentTarget)
-            return;
-        if (!Array.isArray(queryResult) || !queryResult
-            .every(i => Array.isArray(i) &&
-            i.length === 2 &&
-            typeof i[0] === "string" &&
-            typeof i[1] === "string")) {
-            return;
-        }
-        autocompleteLastResult = queryResult.sort((a, b) => a[1].localeCompare(b[1]));
-        if (autocompleteLastResult.length === 0) {
-            return;
-        }
-        else if (autocompleteLastResult.length === 1) {
-            chat.value = autocompleteLastResult[0][0];
-            return;
-        }
-        const best = longestCommonPrefix(autocompleteLastResult.map(i => i[0]));
-        autocompleteShow("remote autocomplete hint", autocompleteLastResult.map(i => i[1]));
-        autocompleteLastQuery = best;
-        autocompleteLastTarget = currentTarget;
-        autocompleteNextIndex = 0;
-        chat.value = best;
-    }
-    function Command_fixExclamationMark(sender, text) {
-        return sender.isPlayer() ? text.replace(/^!/gm, ".") : text;
-    }
-    function Command_pickAutocomplete(selector, options) {
-        selector = selector.toLocaleLowerCase();
-        return options.filter(o => o.toLocaleLowerCase().startsWith(selector));
-    }
-    function Command_selectCharacter(selector) {
-        const characters = getAllCharactersInRoom();
-        if (/^[0-9]+$/.test(selector)) {
-            const MemberNumber = Number.parseInt(selector, 10);
-            const target = characters.find(c => c.MemberNumber === MemberNumber);
-            if (!target) {
-                return `Player #${MemberNumber} not found in the room.`;
-            }
-            return target;
-        }
-        let targets = characters.filter(c => c.Name === selector || isValidNickname(c.Nickname) && c.Nickname === selector);
-        if (targets.length === 0)
-            targets = characters.filter(c => c.Name.toLowerCase() === selector.toLowerCase() || isValidNickname(c.Nickname) && c.Name.toLowerCase() === selector.toLowerCase());
-        if (targets.length === 1) {
-            return targets[0];
-        }
-        else if (targets.length === 0) {
-            return `Player "${selector}" not found in the room.`;
-        }
-        else {
-            return `Multiple players match "${selector}". Please use Member Number instead.`;
-        }
-    }
-    function Command_selectCharacterMemberNumber(selector, allowNotPresent = true) {
-        const character = Command_selectCharacter(selector);
-        if (typeof character === "string" && allowNotPresent && /^[0-9]+$/.test(selector)) {
-            return Number.parseInt(selector, 10);
-        }
-        return typeof character === "string" ? character : character.MemberNumber;
-    }
-    function Command_selectCharacterAutocomplete(selector) {
-        const characters = getAllCharactersInRoom();
-        if (/^[0-9]+$/.test(selector)) {
-            return characters.map(c => { var _a; return (_a = c.MemberNumber) === null || _a === void 0 ? void 0 : _a.toString(10); }).filter(n => n != null && n.startsWith(selector));
-        }
-        return characters
-            .flatMap(c => isValidNickname(c.Nickname) && c.Nickname.toLowerCase() !== c.Name.toLowerCase() ? [c.Nickname, c.Name] : [c.Name])
-            .filter(n => n.toLocaleLowerCase().startsWith(selector.toLowerCase()));
-    }
-    function Command_selectWornItem(character, selector, filter = isBind) {
-        const items = character.Character.Appearance.filter((i) => filter(i));
-        let targets = items.filter(A => A.Asset.Group.Name.toLocaleLowerCase() === selector.toLocaleLowerCase());
-        if (targets.length === 0)
-            targets = items.filter(A => getVisibleGroupName(A.Asset.Group).toLocaleLowerCase() === selector.toLocaleLowerCase());
-        if (targets.length === 0)
-            targets = items.filter(A => A.Asset.Name.toLocaleLowerCase() === selector.toLocaleLowerCase());
-        if (targets.length === 0)
-            targets = items.filter(A => A.Asset.Description.toLocaleLowerCase() === selector.toLocaleLowerCase());
-        if (targets.length === 1) {
-            return targets[0];
-        }
-        else if (targets.length === 0) {
-            return `Item "${selector}" not found on character ${character}. If your item(group) consists of more than one word, please put it in quotes, such as "lower leg".`;
-        }
-        else {
-            return `Multiple items match, please use group name instead. (eg. arms)`;
-        }
-    }
-    function Command_selectWornItemAutocomplete(character, selector, filter = isBind) {
-        const items = character.Character.Appearance.filter((i) => filter(i));
-        let possible = arrayUnique(items.map(A => getVisibleGroupName(A.Asset.Group))
-            .concat(items.map(A => A.Asset.Description))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
-        if (possible.length === 0) {
-            possible = arrayUnique(items.map(A => A.Asset.Group.Name)
-                .concat(items.map(A => A.Asset.Name))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
-        }
-        return possible;
-    }
-    function Command_selectGroup(selector, character, filter) {
-        let targets = AssetGroup.filter(G => G.Name.toLocaleLowerCase() === selector.toLocaleLowerCase() && G.AllowCustomize && (!filter || filter(G)));
-        if (targets.length === 0)
-            targets = AssetGroup.filter(G => getVisibleGroupName(G).toLocaleLowerCase() === selector.toLocaleLowerCase() && (!filter || filter(G)));
-        if (targets.length > 1) {
-            return `Multiple groups match "${selector}", please report this as a bug.`;
-        }
-        else if (targets.length === 1) {
-            return targets[0];
-        }
-        else if (character) {
-            const item = Command_selectWornItem(character, selector, i => (!filter || filter(i.Asset.Group)));
-            return typeof item === "string" ? item : item.Asset.Group;
-        }
-        else {
-            return `Unknown group "${selector}".`;
-        }
-    }
-    function Command_selectGroupAutocomplete(selector, character, filter) {
-        const items = character ? character.Character.Appearance : [];
-        let possible = arrayUnique(AssetGroup
-            .filter(G => G.AllowCustomize && (!filter || filter(G)))
-            .map(G => getVisibleGroupName(G))
-            .concat(items
-            .filter(A => !filter || filter(A.Asset.Group))
-            .map(A => A.Asset.Description))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
-        if (possible.length === 0) {
-            possible = arrayUnique(AssetGroup
-                .filter(G => G.AllowCustomize && (!filter || filter(G)))
-                .map(G => G.Name)
-                .concat(items
-                .filter(A => !filter || filter(A.Asset.Group))
-                .map(A => A.Asset.Name))).filter(i => i.toLocaleLowerCase().startsWith(selector.toLocaleLowerCase()));
-        }
-        return possible;
-    }
-    function Command_parseTime(selector) {
-        const match = /^([0-9]+)([a-z]+)$/.exec(selector.toLocaleLowerCase());
-        if (!match) {
-            return `Unknown time format "${selector}", please use format 'number+unit' (e.g. 23h 30m)`;
-        }
-        const num = Number.parseInt(match[1], 10);
-        const unit = match[2];
-        if (["d", "day", "days"].includes(unit)) {
-            return num * 24 * 60 * 60 * 1000;
-        }
-        else if (["h", "hour", "hours"].includes(unit)) {
-            return num * 60 * 60 * 1000;
-        }
-        else if (["m", "min", "minute", "minutes"].includes(unit)) {
-            return num * 60 * 1000;
-        }
-        else if (["s", "sec", "second", "seconds"].includes(unit)) {
-            return num * 1000;
-        }
-        return `Unknown time unit "${unit}", please use one of:\n` +
-            `d (day), h (hour), m (minute), s (second)`;
-    }
-    class ModuleCommands extends BaseModule {
-        load() {
-            hookFunction("ChatRoomFirstTimeHelp", 0, (args, next) => {
-                next(args);
-                CommandsShowFirstTimeHelp();
-            });
-            hookFunction("ChatRoomClearAllElements", 1, (args, next) => {
-                firstTimeHelp = null;
-                return next(args);
-            });
-            hookFunction("ChatRoomSendChat", 10, (args, next) => {
-                const chat = document.getElementById("InputChat");
-                let substituteBack = null;
-                if (chat && !firstTimeInit) {
-                    const msg = chat.value.trim();
-                    if (/^[.\s]*$/.test(msg)) {
-                        // Do not process as command
-                    }
-                    else if (msg.startsWith("..")) {
-                        chat.value = substituteBack = msg.substr(1);
-                    }
-                    else if (msg.startsWith(".")) {
-                        if (RunCommand(msg.substr(1))) {
-                            // Keeps the chat log in memory so it can be accessed with pageup/pagedown
-                            ChatRoomLastMessage.push(msg);
-                            ChatRoomLastMessageIndex = ChatRoomLastMessage.length;
-                            chat.value = "";
-                        }
-                        return;
-                    }
-                    autocompleteClear();
-                }
-                const result = next(args);
-                // Reverse substitution for starting with ..
-                if (ChatRoomLastMessage.length > 0 && ChatRoomLastMessage[ChatRoomLastMessage.length - 1] === substituteBack) {
-                    ChatRoomLastMessage[ChatRoomLastMessage.length - 1] = "." + ChatRoomLastMessage[ChatRoomLastMessage.length - 1];
-                }
-                return result;
-            });
-            hookFunction("ChatRoomKeyDown", 10, (args, next) => {
-                var _a, _b;
-                const chat = document.getElementById("InputChat");
-                // Tab for command completion
-                if (KeyPress === 9 &&
-                    chat &&
-                    chat.value.startsWith(".") &&
-                    !chat.value.startsWith("..") &&
-                    !firstTimeInit) {
-                    const e = (_a = args[0]) !== null && _a !== void 0 ? _a : event;
-                    e === null || e === void 0 ? void 0 : e.preventDefault();
-                    e === null || e === void 0 ? void 0 : e.stopImmediatePropagation();
-                    chat.value = "." + CommandAutocompleteCycle(chat.value.substr(1));
-                }
-                else if (KeyPress === 9 &&
-                    ChatRoomTargetMemberNumber != null &&
-                    chat &&
-                    chat.value.startsWith("!") &&
-                    !chat.value.startsWith("!!") &&
-                    !firstTimeInit) {
-                    const e = (_b = args[0]) !== null && _b !== void 0 ? _b : event;
-                    e === null || e === void 0 ? void 0 : e.preventDefault();
-                    e === null || e === void 0 ? void 0 : e.stopImmediatePropagation();
-                    WhisperCommandAutocompleteCycle(chat)
-                        .catch(() => { });
-                }
-                else {
-                    return next(args);
-                }
-            });
-            hookFunction("ChatRoomMessage", 9, (args, next) => {
-                const data = args[0];
-                const sender = typeof data.Sender === "number" && getChatroomCharacter(data.Sender);
-                if ((data === null || data === void 0 ? void 0 : data.Type) === "Whisper" &&
-                    typeof data.Content === "string" &&
-                    !firstTimeInit &&
-                    sender &&
-                    !sender.isPlayer() &&
-                    sender.hasAccessToPlayer()) {
-                    const orig = Array.isArray(data.Dictionary) && data.Dictionary.find((i) => isObject$1(i) && i.Tag === "BCX_ORIGINAL_MESSAGE" && typeof i.Text === "string");
-                    const text = (orig && orig.Text) || data.Content;
-                    if (data.Content.startsWith("!") &&
-                        !data.Content.startsWith("!!")) {
-                        console.debug(`BCX: Console command from ${sender}: ${text}`, data);
-                        RunWhisperCommand(text.substring(1), sender, (msg) => {
-                            ServerSend("ChatRoomChat", {
-                                Content: `[BCX]\n${msg}`,
-                                Type: "Whisper",
-                                Target: sender.MemberNumber
-                            });
-                        });
-                        return;
-                    }
-                }
-                return next(args);
-            });
-            hookFunction("PropertyAutoPunishParseMessage", 6, (args, next) => {
-                const msg = args[1];
-                if (typeof msg === "string" && msg.startsWith(".") && !msg.startsWith(".."))
-                    return false;
-                return next(args);
-            });
-            queryHandlers.commandHint = (sender, data) => {
-                if (typeof data !== "string" || !data.startsWith("!") || data.startsWith("!!")) {
-                    return undefined;
-                }
-                return WhisperCommandAutocomplete(data.substring(1), sender)
-                    .map(i => ["!" + i[0], i[1]]);
-            };
-            registerCommand$1("hidden", "help", "- Display this help [alias: . ]", (arg) => {
-                CommandsCompleteFirstTimeHelp();
-                arg = arg.trim().toLocaleLowerCase();
-                if (!arg) {
-                    ChatRoomSendLocal(`BCX commands are organized into categories\n` +
-                        `To view help texts for all commands in a category, use '.help <category>' (e.g. '.help utility')\n` +
-                        `\n` +
-                        `List of categories:\n` +
-                        COMMAND_CATEGORIES_VISIBLE.join("\n"));
-                }
-                else {
-                    const category = COMMAND_CATEGORIES_VISIBLE.find(c => c.toLocaleLowerCase() === arg);
-                    if (category) {
-                        ChatRoomSendLocal(`Available commands in category ${category}:\n` +
-                            Array.from(commands$1.entries())
-                                .filter(c => c[1].description !== null && c[1].category === category)
-                                .map(c => `.${c[0]}` + (c[1].description ? ` ${c[1].description}` : ""))
-                                .sort()
-                                .join("\n"));
-                    }
-                    else {
-                        ChatRoomSendLocal(`Unknown category '${arg}'` +
-                            `\n` +
-                            `List of available categories:\n` +
-                            COMMAND_CATEGORIES_VISIBLE.join("\n"));
-                    }
-                }
-                return true;
-            }, (args) => {
-                return Command_pickAutocomplete(args.trim(), COMMAND_CATEGORIES_VISIBLE);
-            });
-            aliasCommand("help", "?");
-            registerCommand$1("utility", "action", "- Send custom (action) [alias: .a ]", (msg) => {
-                const blockRule = RulesGetRuleState("block_action");
-                if (blockRule.isEnforced) {
-                    blockRule.triggerAttempt();
-                    return false;
-                }
-                else if (blockRule.inEffect) {
-                    blockRule.trigger();
-                }
-                ChatRoomActionMessage(msg);
-                return true;
-            });
-            aliasCommand("action", "a");
-            registerWhisperCommand("hidden", "help", "- Display this help", (argv, sender, respond) => {
-                const result = Array.from(whisperCommands.entries())
-                    .filter(c => c[1].description !== null)
-                    .map(c => `!${c[0]}` + (c[1].description ? ` ${c[1].description}` : ""))
-                    .sort();
-                let response = `Available commands:`;
-                while (result.length > 0) {
-                    const concat = response + "\n" + result[0];
-                    if (concat.length > 990) {
-                        respond(response);
-                        response = result[0];
-                    }
-                    else {
-                        response = concat;
-                    }
-                    result.shift();
-                }
-                respond(response);
-                return true;
-            }, null, false);
-        }
-        unload() {
-            commands$1.clear();
-        }
-    }
-
-    const CURSES_TRIGGER_TEXTS = {
-        remove: "PLAYER_NAME's body seems to be cursed and the ASSET_NAME just falls off her body.",
-        add: "The curse on PLAYER_NAME's ASSET_NAME wakes up and the item reappears.",
-        swap: "The curse on PLAYER_NAME's ASSET_NAME wakes up, not allowing the item to be replaced by another item.",
-        update: "The curse on PLAYER_NAME's ASSET_NAME wakes up and undoes all changes to the item.",
-        color: "The curse on PLAYER_NAME's ASSET_NAME wakes up, changing the color of the item back.",
-        autoremove: "The curse on PLAYER_NAME's body becomes dormant and the ASSET_NAME falls off her body."
-    };
-    const CURSES_TRIGGER_TEXTS_BATCH = {
-        remove: "PLAYER_NAME's body seems to be cursed and several items just fall off her body.",
-        add: "The curses on PLAYER_NAME's body wake up and several items reappear.",
-        swap: "The curses on PLAYER_NAME's body wake up, not allowing several items to be replaced.",
-        update: "The curses on PLAYER_NAME's body wake up and undoes all changes to several items.",
-        color: "The curses on PLAYER_NAME's body wake up, changing the color of several items back.",
-        autoremove: "The curses on PLAYER_NAME's body become dormant and several items fall off her body."
-    };
-    const CURSES_TRIGGER_LOGS = {
-        remove: "The curse on PLAYER_NAME's body prevented a ASSET_NAME from being added to it",
-        add: "The curse on PLAYER_NAME's ASSET_NAME made the item reappear",
-        swap: "The curse on PLAYER_NAME's ASSET_NAME prevented the item from being replaced",
-        update: "The curse on PLAYER_NAME's ASSET_NAME reverted all changes to the item",
-        color: "The curse on PLAYER_NAME's ASSET_NAME reverted the color of the item"
-    };
-    const CURSES_TRIGGER_LOGS_BATCH = {
-        remove: "The curses on PLAYER_NAME's body prevented several items from being added to it",
-        add: "The curses on PLAYER_NAME's body made several items reappear",
-        swap: "The curses on PLAYER_NAME's body prevented several items from being replaced",
-        update: "The curses on PLAYER_NAME's body reverted all changes to several items",
-        color: "The curses on PLAYER_NAME's body reverted the color of several items"
-    };
-
-    const LOG_ENTRIES_LIMIT = 256;
-    var LogEntryType;
-    (function (LogEntryType) {
-        LogEntryType[LogEntryType["plaintext"] = 0] = "plaintext";
-        LogEntryType[LogEntryType["deleted"] = 1] = "deleted";
-        LogEntryType[LogEntryType["ruleTrigger"] = 2] = "ruleTrigger";
-        LogEntryType[LogEntryType["ruleTriggerAttempt"] = 3] = "ruleTriggerAttempt";
-        LogEntryType[LogEntryType["curseTrigger"] = 4] = "curseTrigger";
-        LogEntryType[LogEntryType["curseTriggerBatch"] = 5] = "curseTriggerBatch";
-    })(LogEntryType || (LogEntryType = {}));
-    var LogAccessLevel;
-    (function (LogAccessLevel) {
-        LogAccessLevel[LogAccessLevel["none"] = 0] = "none";
-        LogAccessLevel[LogAccessLevel["protected"] = 1] = "protected";
-        LogAccessLevel[LogAccessLevel["normal"] = 2] = "normal";
-        LogAccessLevel[LogAccessLevel["everyone"] = 3] = "everyone";
-    })(LogAccessLevel || (LogAccessLevel = {}));
-    function logMessage(category, type, data) {
-        var _a;
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return;
-        const access = (_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a[category];
-        if (access === undefined) {
-            throw new Error(`Attempt to log message with unknown category "${category}"`);
-        }
-        if (access > LogAccessLevel.none) {
-            logMessageAdd(access, type, data);
-        }
-    }
-    function logMessageAdd(access, type, data) {
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return;
-        if (!modStorage.log) {
-            throw new Error("Mod storage log not initialized");
-        }
-        modStorage.log.unshift([Date.now(), access, type, data]);
-        // Time must be unique
-        if (modStorage.log.length >= 2 && modStorage.log[0][0] <= modStorage.log[1][0]) {
-            modStorage.log[0][0] = modStorage.log[1][0] + 1;
-        }
-        modStorage.log.splice(LOG_ENTRIES_LIMIT);
-        modStorageSync();
-        notifyOfChange();
-    }
-    function logMessageDelete(time, character) {
-        var _a;
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return false;
-        if (character && !checkPermissionAccess("log_delete", character)) {
-            return false;
-        }
-        const access = (_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a.log_deleted;
-        if (access === undefined) {
-            throw new Error("log_deleted category not found");
-        }
-        if (!modStorage.log) {
-            throw new Error("Mod storage log not initialized");
-        }
-        let changed = false;
-        for (let i = modStorage.log.length - 1; i >= 0; i--) {
-            const e = modStorage.log[i];
-            if ((Array.isArray(time) && time.includes(e[0])) || e[0] === time) {
-                changed = true;
-                if (access === LogAccessLevel.none) {
-                    modStorage.log.splice(i, 1);
-                }
-                else {
-                    e[1] = access;
-                    e[2] = LogEntryType.deleted;
-                    e[3] = null;
-                }
-            }
-        }
-        if (changed) {
-            modStorageSync();
-            notifyOfChange();
-        }
-        return changed;
-    }
-    function logConfigSet(category, accessLevel, character) {
-        var _a;
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return false;
-        if (character && !checkPermissionAccess("log_configure", character)) {
-            return false;
-        }
-        if (((_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a[category]) === undefined) {
-            return false;
-        }
-        if (![LogAccessLevel.none, LogAccessLevel.normal, LogAccessLevel.protected].includes(accessLevel)) {
-            return false;
-        }
-        if (modStorage.logConfig[category] === accessLevel) {
-            return true;
-        }
-        if (character) {
-            logMessage("log_config_change", LogEntryType.plaintext, `${character} changed log configuration "${LOG_CONFIG_NAMES[category]}" ` +
-                `from "${LOG_LEVEL_NAMES[modStorage.logConfig[category]]}" to "${LOG_LEVEL_NAMES[accessLevel]}"`);
-            if (!character.isPlayer()) {
-                ChatRoomSendLocal(`${character.toNicknamedString()} changed log configuration "${LOG_CONFIG_NAMES[category]}" ` +
-                    `from "${LOG_LEVEL_NAMES[modStorage.logConfig[category]]}" to "${LOG_LEVEL_NAMES[accessLevel]}"`, undefined, character.MemberNumber);
-            }
-        }
-        modStorage.logConfig[category] = accessLevel;
-        modStorageSync();
-        notifyOfChange();
-        return true;
-    }
-    function logClear(character) {
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return false;
-        if (character && !checkPermissionAccess("log_delete", character)) {
-            return false;
-        }
-        modStorage.log = [];
-        logMessageAdd(LogAccessLevel.everyone, LogEntryType.plaintext, "The log has been cleared");
-        return true;
-    }
-    function getVisibleLogEntries(character) {
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return [];
-        if (!modStorage.log) {
-            throw new Error("Mod storage log not initialized");
-        }
-        const allow = {
-            [LogAccessLevel.none]: character.isPlayer(),
-            [LogAccessLevel.normal]: checkPermissionAccess("log_view_normal", character),
-            [LogAccessLevel.protected]: checkPermissionAccess("log_view_protected", character),
-            [LogAccessLevel.everyone]: true
-        };
-        return modStorage.log.filter(e => allow[e[1]]);
-    }
-    function logMessageRender(entry, character) {
-        var _a, _b;
-        if (entry[2] === LogEntryType.plaintext) {
-            const e = entry;
-            return e[3];
-        }
-        else if (entry[2] === LogEntryType.deleted) {
-            return "[Log message deleted]";
-        }
-        else if (entry[2] === LogEntryType.ruleTrigger || entry[2] === LogEntryType.ruleTriggerAttempt) {
-            const data = entry[3];
-            if (!Array.isArray(data) || data.length !== 2 || typeof data[0] !== "string") {
-                return `[ERROR: Bad data for type ${entry[2]}]`;
-            }
-            if (!guard_BCX_Rule(data[0])) {
-                return `[ERROR: Trigger for unknown rule "${data[0]}"]`;
-            }
-            const rule = RulesGetDisplayDefinition(data[0]);
-            const log = entry[2] === LogEntryType.ruleTriggerAttempt ? (_a = rule.triggerTexts) === null || _a === void 0 ? void 0 : _a.attempt_log : (_b = rule.triggerTexts) === null || _b === void 0 ? void 0 : _b.log;
-            return log ? dictionaryProcess(log, { PLAYER_NAME: character.Name, ...data[1] }) : `[ERROR: Missing log text for rule "${data[0]}" trigger]`;
-        }
-        else if (entry[2] === LogEntryType.curseTrigger) {
-            const data = entry[3];
-            if (!Array.isArray(data) ||
-                data.length !== 2 ||
-                data.some(i => typeof i !== "string") ||
-                !Object.keys(CURSES_TRIGGER_LOGS).includes(data[0])) {
-                return `[ERROR: Bad data for type ${entry[2]}]`;
-            }
-            return dictionaryProcess(CURSES_TRIGGER_LOGS[data[0]], { PLAYER_NAME: character.Name, ASSET_NAME: data[1] });
-        }
-        else if (entry[2] === LogEntryType.curseTriggerBatch) {
-            const data = entry[3];
-            if (typeof data !== "string" ||
-                !Object.keys(CURSES_TRIGGER_LOGS_BATCH).includes(data)) {
-                return `[ERROR: Bad data for type ${entry[2]}]`;
-            }
-            return dictionaryProcess(CURSES_TRIGGER_LOGS_BATCH[data], { PLAYER_NAME: character.Name });
-        }
-        return `[ERROR: Unknown entry type ${entry[2]}]`;
-    }
-    const alreadyPraisedBy = new Set();
-    function logGetAllowedActions(character) {
-        var _a;
-        return {
-            configure: checkPermissionAccess("log_configure", character),
-            delete: checkPermissionAccess("log_delete", character),
-            leaveMessage: checkPermissionAccess("log_add_note", character) && !!((_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a.user_note),
-            praise: checkPermissionAccess("log_praise", character) && !alreadyPraisedBy.has(character.MemberNumber)
-        };
-    }
-    function logGetConfig() {
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return {};
-        if (!modStorage.logConfig) {
-            throw new Error("Mod storage log not initialized");
-        }
-        return { ...modStorage.logConfig };
-    }
-    function logPraise(value, message, character) {
-        if (!moduleIsEnabled(ModuleCategory.Log))
-            return false;
-        if (![-1, 0, 1].includes(value)) {
-            throw new Error("Invalid value");
-        }
-        if (value === 0 && !message)
-            return false;
-        const allowed = logGetAllowedActions(character);
-        // allowed.praise implies not alreadyPraisedBy
-        if (value !== 0 && !allowed.praise)
-            return false;
-        if (message && !allowed.leaveMessage)
-            return false;
-        if (value !== 0) {
-            alreadyPraisedBy.add(character.MemberNumber);
-        }
-        if (value > 0) {
-            if (message) {
-                logMessage("user_note", LogEntryType.plaintext, `Praised by ${character} with note: ${message}`);
-                ChatRoomSendLocal(`${character.toNicknamedString()} praised you with the following note: ${message}`, undefined, character.MemberNumber);
-            }
-            else {
-                logMessage("praise", LogEntryType.plaintext, `Praised by ${character}`);
-                ChatRoomSendLocal(`${character.toNicknamedString()} praised you.`, undefined, character.MemberNumber);
-            }
-        }
-        else if (value < 0) {
-            if (message) {
-                logMessage("user_note", LogEntryType.plaintext, `Scolded by ${character} with note: ${message}`);
-                ChatRoomSendLocal(`${character.toNicknamedString()} scolded you with the following note: ${message}`, undefined, character.MemberNumber);
-            }
-            else {
-                logMessage("praise", LogEntryType.plaintext, `Scolded by ${character}`);
-                ChatRoomSendLocal(`${character.toNicknamedString()} scolded you.`, undefined, character.MemberNumber);
-            }
-        }
-        else if (message) {
-            logMessage("user_note", LogEntryType.plaintext, `${character} attached a note: ${message}`);
-            ChatRoomSendLocal(`${character.toNicknamedString()} put the following note on you: ${message}`, undefined, character.MemberNumber);
-        }
-        return true;
-    }
-    const logConfigDefaults = {
-        log_config_change: LogAccessLevel.protected,
-        log_deleted: LogAccessLevel.normal,
-        praise: LogAccessLevel.normal,
-        user_note: LogAccessLevel.normal,
-        entered_public_room: LogAccessLevel.none,
-        entered_private_room: LogAccessLevel.none,
-        had_orgasm: LogAccessLevel.none,
-        permission_change: LogAccessLevel.protected,
-        curse_change: LogAccessLevel.none,
-        curse_trigger: LogAccessLevel.none,
-        rule_change: LogAccessLevel.none,
-        rule_trigger: LogAccessLevel.none,
-        command_change: LogAccessLevel.none,
-        authority_roles_change: LogAccessLevel.protected,
-        relationships_change: LogAccessLevel.none
-    };
-    const LOG_CONFIG_NAMES = {
-        log_config_change: "Log changes in logging configuration",
-        log_deleted: "Log deleted log entries",
-        praise: "Log praising or scolding behavior",
-        user_note: "Ability to see attached notes",
-        entered_public_room: "Log which public rooms are entered",
-        entered_private_room: "Log which private rooms are entered",
-        had_orgasm: "Log each single orgasm",
-        permission_change: "Log changes in permission settings",
-        curse_change: "Log each application, removal or change of curses",
-        curse_trigger: "Log every time a triggered curse reapplies an item",
-        rule_change: "Log each addition, removal or change of rules",
-        rule_trigger: "Log every rule violation",
-        command_change: "Log each change of commands limit",
-        authority_roles_change: "Log getting or losing a BCX owner/mistress",
-        relationships_change: "Log each change in relationships module"
-    };
-    const LOG_LEVEL_NAMES = {
-        [LogAccessLevel.everyone]: "[ERROR]",
-        [LogAccessLevel.none]: "No",
-        [LogAccessLevel.protected]: "Protected",
-        [LogAccessLevel.normal]: "Yes"
-    };
-    class ModuleLog extends BaseModule {
-        init() {
-            registerPermission("log_view_normal", {
-                name: "Allow to see normal log entries",
-                category: ModuleCategory.Log,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.mistress],
-                    [Preset.switch]: [true, AccessLevel.mistress],
-                    [Preset.submissive]: [true, AccessLevel.friend],
-                    [Preset.slave]: [true, AccessLevel.public]
-                }
-            });
-            registerPermission("log_view_protected", {
-                name: "Allow to see protected log entries",
-                category: ModuleCategory.Log,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.lover],
-                    [Preset.switch]: [true, AccessLevel.lover],
-                    [Preset.submissive]: [true, AccessLevel.mistress],
-                    [Preset.slave]: [true, AccessLevel.mistress]
-                }
-            });
-            registerPermission("log_configure", {
-                name: "Allow to configure what is logged",
-                category: ModuleCategory.Log,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.self],
-                    [Preset.switch]: [true, AccessLevel.self],
-                    [Preset.submissive]: [true, AccessLevel.owner],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
-            });
-            registerPermission("log_delete", {
-                name: "Allow deleting log entries",
-                category: ModuleCategory.Log,
-                defaults: {
-                    [Preset.dominant]: [true, AccessLevel.self],
-                    [Preset.switch]: [true, AccessLevel.self],
-                    [Preset.submissive]: [true, AccessLevel.owner],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
-            });
-            registerPermission("log_praise", {
-                name: "Allow to praise or scold",
-                category: ModuleCategory.Log,
-                defaults: {
-                    [Preset.dominant]: [false, AccessLevel.friend],
-                    [Preset.switch]: [false, AccessLevel.friend],
-                    [Preset.submissive]: [false, AccessLevel.public],
-                    [Preset.slave]: [false, AccessLevel.public]
-                }
-            });
-            registerPermission("log_add_note", {
-                name: "Allow to attach notes to the body",
-                category: ModuleCategory.Log,
-                defaults: {
-                    [Preset.dominant]: [false, AccessLevel.mistress],
-                    [Preset.switch]: [false, AccessLevel.mistress],
-                    [Preset.submissive]: [false, AccessLevel.friend],
-                    [Preset.slave]: [false, AccessLevel.public]
-                }
-            });
-            queryHandlers.logData = (sender) => {
-                return getVisibleLogEntries(sender);
-            };
-            queryHandlers.logDelete = (sender, data) => {
-                if (typeof data === "number" || (Array.isArray(data) && data.every(item => typeof item === "number"))) {
-                    return logMessageDelete(data, sender);
-                }
-                else {
-                    return undefined;
-                }
-            };
-            queryHandlers.logConfigGet = (sender) => {
-                if (sender.isPlayer() || checkPermissionAccess("log_configure", sender)) {
-                    return logGetConfig();
-                }
-                else {
-                    return undefined;
-                }
-            };
-            queryHandlers.logConfigEdit = (sender, data) => {
-                if (!isObject$1(data) ||
-                    typeof data.category !== "string" ||
-                    typeof data.target !== "number") {
-                    console.warn(`BCX: Bad logConfigEdit query from ${sender}`, data);
-                    return undefined;
-                }
-                return logConfigSet(data.category, data.target, sender);
-            };
-            queryHandlers.logClear = (sender) => {
-                return logClear(sender);
-            };
-            queryHandlers.logPraise = (sender, data) => {
-                if (!isObject$1(data) ||
-                    (data.message !== null && typeof data.message !== "string") ||
-                    ![-1, 0, 1].includes(data.value)) {
-                    console.warn(`BCX: Bad logPraise query from ${sender}`, data);
-                    return undefined;
-                }
-                return logPraise(data.value, data.message, sender);
-            };
-            queryHandlers.logGetAllowedActions = (sender) => {
-                return logGetAllowedActions(sender);
-            };
-            registerWhisperCommand("modules", "log", "- Manage the behaviour log", (argv, sender, respond) => {
-                const subcommand = (argv[0] || "").toLocaleLowerCase();
-                if (subcommand === "list") {
-                    const logEntries = getVisibleLogEntries(sender);
-                    if (logEntries.length === 0) {
-                        return respond(`You have no permission to view the log.`);
-                    }
-                    const totalPages = Math.ceil(logEntries.length / 5);
-                    const page = clamp$1(Number.parseInt(argv[1] || "", 10) || 1, 1, totalPages);
-                    let result = `Page ${page} / ${totalPages}:`;
-                    for (let i = 5 * (page - 1); i < Math.min(5 * page, logEntries.length); i++) {
-                        const entry = logEntries[i];
-                        const time = new Date(entry[0]);
-                        result += `\n[${time.toUTCString()}] (${entry[0]})\n  ${logMessageRender(entry, getPlayerCharacter())}`;
-                    }
-                    respond(result);
-                }
-                else if (subcommand === "delete") {
-                    if (!/^[0-9]+$/.test(argv[1] || "")) {
-                        return respond(`Expected number as timestamp.`);
-                    }
-                    const timestamp = Number.parseInt(argv[1], 10);
-                    if (!getVisibleLogEntries(sender).some(logentry => logentry[0] === timestamp)) {
-                        return respond(`No such log entry found`);
-                    }
-                    respond(logMessageDelete(timestamp, sender) ? `Ok.` : COMMAND_GENERIC_ERROR);
-                }
-                else if (subcommand === "praise" || subcommand === "scold") {
-                    if (!checkPermissionAccess("log_praise", sender)) {
-                        return respond(COMMAND_GENERIC_ERROR);
-                    }
-                    respond(logPraise(subcommand === "praise" ? 1 : -1, null, sender) ? `Ok.` :
-                        `The command failed to execute, likely because you already did ${subcommand} recently.`);
-                }
-                else if (subcommand === "config") {
-                    if (!checkPermissionAccess("log_configure", sender)) {
-                        return respond(COMMAND_GENERIC_ERROR);
-                    }
-                    const category = argv[1] || "";
-                    const config = logGetConfig();
-                    if (!category) {
-                        let result = "Current log config:";
-                        for (const [k, v] of Object.entries(config)) {
-                            if (LOG_CONFIG_NAMES[k] !== undefined &&
-                                LOG_LEVEL_NAMES[v] !== undefined) {
-                                result += `\n[${k}]\n  ${LOG_CONFIG_NAMES[k]}: ${LOG_LEVEL_NAMES[v]}`;
-                            }
-                        }
-                        return respond(result);
-                    }
-                    else if (LOG_CONFIG_NAMES[category] === undefined) {
-                        return respond(`Unknown category "${category}".`);
-                    }
-                    else {
-                        const level = (argv[2] || "").toLocaleLowerCase();
-                        if (level !== "yes" && level !== "protected" && level !== "no") {
-                            return respond(`Expected level to be one of:\nno, protected, yes`);
-                        }
-                        return respond(logConfigSet(category, level === "yes" ? LogAccessLevel.normal : level === "protected" ? LogAccessLevel.protected : LogAccessLevel.none, sender) ? `Ok.` : COMMAND_GENERIC_ERROR);
-                    }
-                }
-                else {
-                    respond(Command_fixExclamationMark(sender, `!log usage:\n` +
-                        `!log list [page] - List all visible logs\n` +
-                        `!log delete <timestamp> - Deletes the log with the given <timestamp> (the number in parentheses in list)\n` +
-                        `!log praise - Note that you praised ${Player.Name} in her log\n` +
-                        `!log scold - Note that you scolded ${Player.Name} in her log\n` +
-                        `!log config - Shows the current logging settings for ${Player.Name}\n` +
-                        `!log config <category> <no|protected|yes> - Sets visibility of the given config <category>`));
-                }
-            }, (argv, sender) => {
-                if (argv.length <= 1) {
-                    const c = argv[0].toLocaleLowerCase();
-                    return ["list", "delete", "praise", "scold", "config"].filter(i => i.startsWith(c));
-                }
-                const subcommand = argv[0].toLocaleLowerCase();
-                if (subcommand === "delete") {
-                    if (argv.length === 2) {
-                        return getVisibleLogEntries(sender).map(logentry => logentry[0].toString()).filter(i => i.startsWith(argv[1]));
-                    }
-                }
-                else if (subcommand === "config") {
-                    if (!checkPermissionAccess("log_configure", sender)) {
-                        return [];
-                    }
-                    if (argv.length === 2) {
-                        return Object.keys(logGetConfig()).concat("").filter(i => i.startsWith(argv[1].toLocaleLowerCase()));
-                    }
-                    else if (argv.length === 3) {
-                        return ["no", "protected", "yes"].filter(i => i.startsWith(argv[2].toLocaleLowerCase()));
-                    }
-                }
-                return [];
-            });
-            ExportImportRegisterCategory({
-                category: `logConfig`,
-                name: `Behaviour Log - Configuration`,
-                module: ModuleCategory.Log,
-                export: () => logGetConfig(),
-                import: (data, character) => {
-                    var _a;
-                    let res = "";
-                    for (const [k, v] of Object.entries(data)) {
-                        const category = k;
-                        if (((_a = modStorage.logConfig) === null || _a === void 0 ? void 0 : _a[category]) === undefined || LOG_CONFIG_NAMES[category] === undefined) {
-                            res += `Skipped unknown log config category '${category}'\n`;
-                            continue;
-                        }
-                        if (!logConfigSet(category, v, character)) {
-                            res += `Error setting category '${LOG_CONFIG_NAMES[category]}'\n`;
-                        }
-                    }
-                    return res + `Done!`;
-                },
-                importPermissions: ["log_configure"],
-                importValidator: mod.record(mod.nativeEnum(LogAccessLevel))
-            });
-        }
-        load() {
-            if (!moduleIsEnabled(ModuleCategory.Log)) {
-                delete modStorage.log;
-                delete modStorage.logConfig;
+    class GuiGlobal extends GuiSubscreen {
+        constructor(character) {
+            super();
+            this.character = character;
+        }
+        Run() {
+            MainCanvas.textAlign = "left";
+            DrawText(`- Global: Configuration for ${this.character.Name} -`, 125, 125, "Black", "Gray");
+            MainCanvas.textAlign = "center";
+            DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png", "BCX main menu");
+            if (!this.character.isPlayer()) {
+                DrawText(`Global configuration is not possible on others`, 1000, 500, "Black");
                 return;
             }
-            if (!Array.isArray(modStorage.log)) {
-                logClear(null);
+            MainCanvas.fillStyle = "#ddd";
+            MainCanvas.fillRect(840, 200, 950, 90);
+            DrawImageEx("Icons/Introduction.png", 840 + 20, 200 + 20, { Height: 50, Width: 50 });
+            DrawTextFit(`Your initially selected BCX preset was: "${capitalizeFirstLetter(Preset[getCurrentPreset()])}"`, 1300, 244, 850, "Black");
+            DrawButton(120, 200, 400, 90, "Manage BCX modules", "White", "", "Enable/Disable individual modules");
+            DrawButton(1490, 800, 300, 90, "Clear all BCX data", "#FF3232", "", "Emergency reset of BCX");
+            MainCanvas.textAlign = "left";
+            DrawCheckbox(125, 350, 64, 64, "Show BCX icons above characters in chatroom", !modStorage.chatroomIconHidden);
+            const isSupporter = supporterStatus !== undefined;
+            DrawCheckbox(125, 450, 64, 64, "Show your BCX Supporter Heart to all BCX users", isSupporter && !modStorage.supporterHidden, !isSupporter);
+        }
+        Click() {
+            if (MouseIn(1815, 75, 90, 90))
+                return this.Exit();
+            if (!this.character.isPlayer())
+                return;
+            if (MouseIn(120, 200, 400, 90)) {
+                setSubscreen(new GuiGlobalModuleToggling());
+                return;
             }
-            else if (!modStorage.log.every(e => Array.isArray(e) &&
-                e.length === 4 &&
-                typeof e[0] === "number" &&
-                typeof e[1] === "number" &&
-                typeof e[2] === "number")) {
-                console.error("BCX: Some log entries have invalid format, reseting whole log!");
-                logClear(null);
+            if (MouseIn(1490, 800, 300, 90)) {
+                setSubscreen(new GuiGlobalDialogClearData(this));
+                return;
             }
-            if (!modStorage.logConfig) {
-                modStorage.logConfig = { ...logConfigDefaults };
-            }
-            else {
-                const transitionDictionary = {
-                    permissionChange: "permission_change",
-                    logConfigChange: "log_config_change",
-                    logDeleted: "log_deleted",
-                    userNote: "user_note",
-                    curseChange: "curse_change",
-                    curseTrigger: "curse_trigger",
-                    hadOrgasm: "had_orgasm",
-                    enteredPublicRoom: "entered_public_room",
-                    enteredPrivateRoom: "entered_private_room",
-                    ownershipChangesBCX: "authority_roles_change"
-                };
-                for (const k of Object.keys(modStorage.logConfig)) {
-                    if (transitionDictionary[k] !== undefined) {
-                        console.info(`BCX: Updating log config name "${k}"->"${transitionDictionary[k]}"`);
-                        modStorage.logConfig[transitionDictionary[k]] = modStorage.logConfig[k];
-                        delete modStorage.logConfig[k];
-                        continue;
-                    }
-                    if (logConfigDefaults[k] === undefined) {
-                        console.info(`BCX: Removing unknown log config category "${k}"`);
-                        delete modStorage.logConfig[k];
-                    }
-                }
-                for (const k of Object.keys(logConfigDefaults)) {
-                    if (modStorage.logConfig[k] === undefined) {
-                        console.info(`BCX: Adding missing log category "${k}"`);
-                        modStorage.logConfig[k] = logConfigDefaults[k];
-                    }
-                }
-            }
-            hookFunction("ActivityOrgasmStart", 0, (args, next) => {
-                const C = args[0];
-                if (C.ID === 0 && (typeof ActivityOrgasmRuined === "undefined" || !ActivityOrgasmRuined)) {
-                    logMessage("had_orgasm", LogEntryType.plaintext, `${Player.Name} had an orgasm`);
-                }
-                return next(args);
-            }, ModuleCategory.Log);
-            hookFunction("ChatRoomSync", 0, (args, next) => {
-                const data = args[0];
-                if (data.Private) {
-                    logMessage("entered_private_room", LogEntryType.plaintext, `${Player.Name} entered private room "${data.Name}"`);
+            if (MouseIn(125, 350, 64, 64)) {
+                if (modStorage.chatroomIconHidden != null) {
+                    delete modStorage.chatroomIconHidden;
                 }
                 else {
-                    logMessage("entered_public_room", LogEntryType.plaintext, `${Player.Name} entered public room "${data.Name}"`);
+                    modStorage.chatroomIconHidden = true;
                 }
-                return next(args);
-            }, ModuleCategory.Log);
+                modStorageSync();
+                return;
+            }
+            const isSupporter = supporterStatus !== undefined;
+            if (isSupporter && MouseIn(125, 450, 64, 64)) {
+                setSupporterVisible(!!modStorage.supporterHidden);
+                return;
+            }
         }
-        reload() {
-            removeAllHooksByModule(ModuleCategory.Log);
-            this.load();
+        Exit() {
+            setSubscreen(new GuiMainMenu(this.character));
         }
     }
 
@@ -32866,7 +33573,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             Promise.all([
                 this.character.getLogConfig(),
                 this.character.getPermissionAccess("log_delete"),
-                this.character.getPermissionAccess("log_configure")
+                this.character.getPermissionAccess("log_configure"),
             ]).then(res => {
                 this.config = res[0];
                 this.allowDelete = res[1];
@@ -32902,7 +33609,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.configList.push({
                         category: k,
                         access: v,
-                        name: LOG_CONFIG_NAMES[k]
+                        name: LOG_CONFIG_NAMES[k],
                     });
                 }
             }
@@ -32917,10 +33624,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         Run() {
             if (this.config !== null) {
-                // filter
                 DrawText("Filter:", 130, 215, "Black");
                 positionElement(this.filterInput, 550, 210, 600, 64);
-                //reset button
                 if (this.filterInput.value) {
                     MainCanvas.textAlign = "center";
                     DrawButton(870, 182, 64, 64, "X", "White");
@@ -32932,10 +33637,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         break;
                     const e = this.configList[i];
                     const Y = 290 + off * 100;
-                    // Config name
                     DrawButton(130, Y, 1070, 64, "", "White");
                     DrawTextFit(e.name, 140, Y + 34, 1060, "Black");
-                    // Config access
                     MainCanvas.textAlign = "center";
                     if (this.allowConfigure) {
                         DrawBackNextButton(1270, Y, 170, 64, LOG_LEVEL_NAMES[e.access], "White", "", () => (e.access > 0 ? LOG_LEVEL_NAMES[(e.access - 1)] : ""), () => (e.access < 2 ? LOG_LEVEL_NAMES[(e.access + 1)] : ""));
@@ -32945,7 +33648,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     MainCanvas.textAlign = "left";
                 }
-                // Pagination
                 const totalPages = Math.max(1, Math.ceil(this.configList.length / PER_PAGE_COUNT$5));
                 MainCanvas.textAlign = "center";
                 DrawBackNextButton(1605, 800, 300, 90, `${DialogFindPlayer("Page")} ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
@@ -32964,7 +33666,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (this.allowDelete) {
                 DrawButton(1525, 690, 380, 64, "Delete all log entries", "White");
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.LogConfig]);
             }
@@ -32979,7 +33680,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return;
             }
             if (this.config !== null) {
-                //reset button
                 if (MouseIn(870, 182, 64, 64)) {
                     this.filterInput.value = "";
                     this.rebuildList();
@@ -32999,14 +33699,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return;
                     }
                 }
-                // Clear log button
                 if (MouseIn(1525, 690, 380, 64) && this.allowDelete) {
                     this.character.logClear().then(() => {
                         setSubscreen(new GuiLog(this.character));
                     });
                     return;
                 }
-                // Pagination
                 const totalPages = Math.ceil(this.configList.length / PER_PAGE_COUNT$5);
                 if (MouseIn(1605, 800, 150, 90)) {
                     this.page--;
@@ -33061,7 +33759,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         requestData() {
             Promise.all([
                 this.character.getLogEntries(),
-                this.character.logGetAllowedActions()
+                this.character.logGetAllowedActions(),
             ]).then(res => {
                 this.logData = res[0];
                 this.allowDeletion = res[1].delete;
@@ -33113,10 +33811,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         Run() {
             if (this.logData !== null) {
-                // filter
                 DrawText("Filter:", 130, 215, "Black");
                 positionElement(this.filterInput, 550, 210, 600, 64);
-                //reset and delete all button
                 if (this.filterInput.value) {
                     MainCanvas.textAlign = "center";
                     DrawButton(870, 182, 64, 64, "X", "White");
@@ -33130,10 +33826,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         break;
                     const e = this.logEntries[i];
                     const Y = 290 + off * 95;
-                    // Log message
                     DrawImageEx(e[1] === LogAccessLevel.protected ? "Icons/Security.png" : "Icons/Public.png", 125, Y, {
                         Height: 64,
-                        Width: 64
+                        Width: 64,
                     });
                     MainCanvas.textAlign = "left";
                     const msg = logMessageRender(e, this.character);
@@ -33164,7 +33859,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         DrawButtonHover(125, Y, 64, 64, e[1] === LogAccessLevel.protected ? "Protected visibility" : "Normal visibility");
                     }
                 }
-                // Message field
                 if (this.allowLeaveMessage) {
                     MainCanvas.textAlign = "left";
                     DrawText("Attach", 130, 831, "Black");
@@ -33172,19 +33866,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     ElementPosition("BCX_NoteField", 580, 842, 660, 64);
                 }
                 MainCanvas.textAlign = "center";
-                // Praise button
                 if (this.allowPraise) {
                     DrawButton(950, 815, 150, 64, "Praise", "White");
                 }
-                // Leave message button
                 if (this.allowLeaveMessage) {
                     DrawButton(1150, 815, 200, 64, "Only note", "White");
                 }
-                // Scold button
                 if (this.allowPraise) {
                     DrawButton(1400, 815, 150, 64, "Scold", "White");
                 }
-                // Pagination
                 const totalPages = Math.max(1, Math.ceil(this.logEntries.length / PER_PAGE_COUNT$4));
                 DrawBackNextButton(1605, 800, 300, 90, `${DialogFindPlayer("Page")} ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
             }
@@ -33196,7 +33886,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.textAlign = "center";
                 DrawText("Loading...", 1000, 480, "Black");
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.Log]);
             }
@@ -33217,12 +33906,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (MouseIn(1815, 305, 90, 90) && this.allowConfiguration)
                 return setSubscreen(new GuiLogConfig(this.character));
             if (this.logData !== null) {
-                //reset button
                 if (MouseIn(870, 182, 64, 64)) {
                     this.filterInput.value = "";
                     this.refreshScreen();
                 }
-                // Clear all filtered logs button
                 if (MouseIn(1270, 182, 420, 64) && this.allowDeletion) {
                     this.character.logMessageDelete(this.logEntries.map(e => e[0]));
                     return;
@@ -33250,17 +33937,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const field = document.getElementById("BCX_NoteField");
                 const msg = (field === null || field === void 0 ? void 0 : field.value) || null;
                 let didPraise = false;
-                // Praise button
                 if (this.allowPraise && MouseIn(950, 815, 150, 64)) {
                     this.character.logPraise(1, msg);
                     didPraise = true;
                 }
-                // Leave message button
                 if (this.allowLeaveMessage && MouseIn(1150, 815, 200, 64) && msg) {
                     this.character.logPraise(0, msg);
                     didPraise = true;
                 }
-                // Scold button
                 if (this.allowPraise && MouseIn(1400, 815, 150, 64)) {
                     this.character.logPraise(-1, msg);
                     didPraise = true;
@@ -33272,7 +33956,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return;
                 }
-                // Pagination
                 const totalPages = Math.ceil(this.logEntries.length / PER_PAGE_COUNT$4);
                 if (MouseIn(1605, 800, 150, 90)) {
                     this.showMore.fill(false);
@@ -33349,7 +34032,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             else if (this.page === 1) {
                 DrawCheckbox(125, 200, 64, 64, "Use the extended wardrobe importer as default", (_a = modStorage.wardrobeDefaultExtended) !== null && _a !== void 0 ? _a : true);
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.Misc]);
             }
@@ -33562,7 +34244,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawTextFit(e.name, 250 + 530 * PX, 235 + 120 * PY, 390, "Black");
             }
             MainCanvas.textAlign = "left";
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.ExportImportMain]);
             }
@@ -33645,7 +34326,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 memberNumber: entry.memberNumber,
                 name: getCharacterName(entry.memberNumber, null),
                 newName: entry.nickname,
-                enforced: entry.enforceNickname
+                enforced: entry.enforceNickname,
             }));
             this.page = clamp$1(this.page, 0, Math.ceil(this.relationshipsList.length / PER_PAGE_COUNT$3));
         }
@@ -33655,7 +34336,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.textAlign = "center";
             DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png", "BCX main menu");
             DrawButton(1815, 190, 90, 90, "", "White", "Icons/Question.png");
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.Relationships]);
             }
@@ -33677,14 +34357,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const e = this.relationshipsList[i];
                 const Y = 305 + off * 95;
                 const allow = e.memberNumber === Player.MemberNumber ? this.relationshipsData.access_modify_self : this.relationshipsData.access_modify_others;
-                // Relationships list
                 MainCanvas.strokeRect(130, Y, 700, 64);
                 const name = `${e.name === null ? "[unknown name]" : e.name} (${e.memberNumber})`;
                 DrawTextFit(name, 140, Y + 34, 680, "Black");
                 DrawCheckbox(880, Y, 64, 64, "", e.enforced, !allow);
                 MainCanvas.strokeRect(994, Y, 500, 64);
                 DrawTextFit(e.newName, 1004, Y + 34, 480, "Black");
-                // hover text for toggle
                 MainCanvas.textAlign = "center";
                 if (MouseIn(880, Y, 64, 64))
                     DrawButtonHover(930, Y, 4, 64, `${this.character.Name} can only say the custom name`);
@@ -33703,7 +34381,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             DrawButton(740, 815, 64, 64, "", this.relationshipsData.access_modify_others ? "White" : "#ddd", undefined, undefined, !this.relationshipsData.access_modify_others);
             DrawImageEx("Icons/Title.png", 742, 815, { Width: 60, Height: 60 });
-            // hover text for member selector
             MainCanvas.textAlign = "center";
             if (MouseIn(740, 815, 64, 64))
                 DrawButtonHover(580, 890, 4, 64, `Select member number from list`);
@@ -33720,7 +34397,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 Input_NewNameAdd &&
                 isValidNickname(Input_NewNameAdd.value);
             DrawButton(1375, 815, 90, 64, "Add", allowAdd ? "White" : "#ddd", undefined, undefined, !allowAdd);
-            // Pagination
             const totalPages = Math.max(Math.ceil(this.relationshipsList.length / PER_PAGE_COUNT$3), 1);
             DrawBackNextButton(1605, 800, 300, 90, `Page ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
         }
@@ -33745,7 +34421,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.character.relationshipsSet({
                         memberNumber: e.memberNumber,
                         nickname: e.newName,
-                        enforceNickname: !e.enforced
+                        enforceNickname: !e.enforced,
                     });
                     return;
                 }
@@ -33771,18 +34447,16 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.character.relationshipsSet({
                     memberNumber: inputNumber,
                     nickname: inputText_2,
-                    enforceNickname: (_d = (_c = this.relationshipsList.find(r => r.memberNumber === inputNumber)) === null || _c === void 0 ? void 0 : _c.enforced) !== null && _d !== void 0 ? _d : false
+                    enforceNickname: (_d = (_c = this.relationshipsList.find(r => r.memberNumber === inputNumber)) === null || _c === void 0 ? void 0 : _c.enforced) !== null && _d !== void 0 ? _d : false,
                 });
                 return;
             }
-            // member select
             if (MouseIn(740, 815, 64, 64) && this.relationshipsData.access_modify_others) {
                 setSubscreen(new GuiMemberSelect(this.character, this, result => {
                     this.memberNumberPrefill = result;
                 }, this.relationshipsData.access_modify_self ? undefined : [getPlayerCharacter().MemberNumber]));
                 return;
             }
-            // Pagination
             const totalPages = Math.ceil(this.relationshipsList.length / PER_PAGE_COUNT$3);
             if (MouseIn(1605, 800, 150, 90)) {
                 this.page--;
@@ -33817,28 +34491,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     const CATEGORIES_BASE = {
         clothes: {
             title: "clothing",
-            filter: (g) => isCloth(g, false)
+            filter: (g) => isCloth(g, false),
         },
         cosplay: {
             title: "cosplay items",
-            filter: (g) => isCosplay(g)
+            filter: (g) => isCosplay(g),
         },
         body: {
             title: "body parts",
-            filter: (g) => isBody(g)
+            filter: (g) => isBody(g),
         },
         items: {
             title: "items",
-            filter: (g) => isBind(g, ["ItemNeckRestraints", "ItemNipplesPiercings", "ItemVulvaPiercings"])
+            filter: (g) => isBind(g, ["ItemNeckRestraints", "ItemNipplesPiercings", "ItemVulvaPiercings"]),
         },
         piercings: {
             title: "piercings",
-            filter: (g) => isBind(g, []) && ["ItemNipplesPiercings", "ItemVulvaPiercings"].includes(g.Name)
+            filter: (g) => isBind(g, []) && ["ItemNipplesPiercings", "ItemVulvaPiercings"].includes(g.Name),
         },
         collar: {
             title: "collar and accessories",
-            filter: (g) => isBind(g, []) && ["ItemNeck", "ItemNeckAccessories", "ItemNeckRestraints"].includes(g.Name)
-        }
+            filter: (g) => isBind(g, []) && ["ItemNeck", "ItemNeckAccessories", "ItemNeckRestraints"].includes(g.Name),
+        },
     };
     const CATEGORIES$1 = CATEGORIES_BASE;
     const BACKGROUND_SELECTION = [
@@ -33846,7 +34520,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         "Introduction",
         "BrickWall",
         "grey",
-        "White"
+        "White",
     ];
     let LOCK_TYPES_LIST = [];
     let backgroundIndex = 0;
@@ -33865,7 +34539,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
     }
     class GuiWardrobeExtended extends GuiSubscreen {
-        constructor(exitCallback, character, allowBinds, data) {
+        constructor(exitCallback, character, allowBinds, data, clothesOnly) {
             var _a, _b;
             super();
             this.screenState = ScreenState.main;
@@ -33877,6 +34551,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             this.exitCallback = exitCallback;
             this.character = character;
             this.allowBindsBase = allowBinds;
+            this.clothesOnly = clothesOnly;
+            allowBinds && (allowBinds = !clothesOnly);
             this.allowBinds = allowBinds;
             this.bindsBlockedByLock = false;
             this.allowPiercings = allowBinds;
@@ -33898,7 +34574,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         Load() {
             var _a;
-            // On screen load
             for (const el of Array.from(document.getElementsByClassName("HideOnPopup"))) {
                 if (el instanceof HTMLElement && el.style.display !== "none") {
                     this.hiddenElements.add(el);
@@ -33907,7 +34582,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             this.originalAppearance = CharacterAppearanceStringify(this.character);
             this.originalData = this.character.Appearance.map(WardrobeAssetBundle);
-            // Do fixups on imported data - add missing bodyparts and remove blocked/limited items
             this.skippedBlockedCount = 0;
             for (let i = this.data.length - 1; i >= 0; i--) {
                 const item = this.data[i];
@@ -33932,7 +34606,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 body: false,
                 binds: true,
                 collar: false,
-                piercings: false
+                piercings: false,
             }))) {
                 this.allowBinds = false;
                 this.bindsBlockedByLock = true;
@@ -33943,7 +34617,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 body: false,
                 binds: true,
                 collar: false,
-                piercings: true
+                piercings: true,
             }))) {
                 this.allowPiercings = false;
                 this.piercingsBlockedByLock = true;
@@ -33954,7 +34628,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 body: false,
                 binds: false,
                 collar: true,
-                piercings: false
+                piercings: false,
             }))) {
                 this.allowCollar = false;
                 this.collarBlockedByLock = true;
@@ -33962,7 +34636,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             this.refresh();
         }
         Unload() {
-            // On screen unload
             for (const el of this.hiddenElements) {
                 el.style.display = "";
             }
@@ -33973,8 +34646,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
         }
         Run() {
-            // On each frame
-            // Custom background
             backgroundIndex = clampWrap(backgroundIndex, 0, BACKGROUND_SELECTION.length - 1);
             const background = BACKGROUND_SELECTION[backgroundIndex];
             if (background) {
@@ -34117,7 +34788,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (this.skippedBlockedCount > 0) {
                     warning = `Skipped ${this.skippedBlockedCount} blocked/limited item${this.skippedBlockedCount > 1 ? "s" : ""}`;
                 }
-                else if (!this.allowBindsBase) {
+                else if (!this.allowBindsBase && !this.clothesOnly) {
                     warning = `You do not have permission to import items.`;
                 }
                 if (warning) {
@@ -34273,7 +34944,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
         }
         Click() {
-            // On click
             if (MouseIn(1420, 45, 50, 50) || (MouseIn(25, 300, 340, 450) && this.showHelp)) {
                 this.showHelp = !this.showHelp;
                 return;
@@ -34290,7 +34960,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         InfoBeep(parsedData, 5000);
                         return;
                     }
-                    this.exitCallback(new GuiWardrobeExtended(this.exitCallback, this.character, this.allowBindsBase, parsedData));
+                    this.exitCallback(new GuiWardrobeExtended(this.exitCallback, this.character, this.allowBindsBase, parsedData, false));
                 }, 0);
                 return;
             }
@@ -34302,17 +34972,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return this.Exit();
             }
             if (MouseIn(25, 25, 170, 90)) {
-                // back
                 backgroundIndex = clampWrap(backgroundIndex - 1, 0, BACKGROUND_SELECTION.length - 1);
                 return;
             }
             else if (MouseIn(195, 25, 170, 90)) {
-                // forward
                 backgroundIndex = clampWrap(backgroundIndex + 1, 0, BACKGROUND_SELECTION.length - 1);
                 return;
             }
             if (this.screenState === ScreenState.main) {
-                // check boxes
                 if (MouseIn(1000, 250, 50, 50)) {
                     const current = this.getGlobalSelectorState("clothes");
                     if (!current.disabled) {
@@ -34473,18 +35140,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             WardrobeDoImport(this.character, this.data, a => this.checkAllowChange(smartGetAssetGroup(a)), this.allowLocks ? enabledLocks : false);
         }
         checkAllowChange(group) {
-
+           
             return enabledSlots.has(group.Name) && !checkImportItemNoChange(group.Name, this.data, this.originalData);
         }
         getGlobalSelectorState(type) {
             const category = CATEGORIES$1[type];
             const AssetGroups = AssetGroup.filter(category.filter);
-            // Detect if all match
             if (checkImportTypeNoChange(type, this.data, this.originalData))
                 return {
                     checked: "no",
                     color: "#88c",
-                    disabled: true
+                    disabled: true,
                 };
             const allowed = type === "clothes" ? true :
                 type === "cosplay" ? this.allowCosplay :
@@ -34497,7 +35163,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 type === "piercings" ? this.piercingsBlockedByLock :
                     type === "collar" ? this.collarBlockedByLock :
                         false);
-
+        
             const assetGroupsWithChange = AssetGroups.filter(g => !checkImportItemNoChange(g.Name, this.data, this.originalData));
             let checked = "no";
             const selectedSlots = assetGroupsWithChange.map(g => g.Name).filter(g => enabledSlots.has(g));
@@ -34507,7 +35173,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return {
                 checked,
                 color: this.data.some(bi => AssetGroups.some(g => g.Name === bi.Group)) ? "#ffb" : "#fff",
-                disabled: false
+                disabled: false,
             };
         }
         getLocksState() {
@@ -34519,18 +35185,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     ((_a = AssetGet(this.character.AssetFamily, "ItemMisc", g.Property.LockedBy)) === null || _a === void 0 ? void 0 : _a.IsLock) === true;
             })
                 .map(g => g.Property.LockedBy));
-            // Detect no locks to import
             if (lockTypes.size === 0)
                 return {
                     checked: "no",
                     color: "#88c",
-                    disabled: true
+                    disabled: true,
                 };
             if (!this.allowLocks)
                 return {
                     checked: "no",
                     color: "#ccc",
-                    disabled: true
+                    disabled: true,
                 };
             let checked = "no";
             const selectedLocks = Array.from(lockTypes).filter(l => enabledLocks.has(l));
@@ -34540,7 +35205,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return {
                 checked,
                 color: "#ffb",
-                disabled: false
+                disabled: false,
             };
         }
     }
@@ -34576,11 +35241,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             body: true,
             binds: includeBinds,
             collar: includeBinds,
-            piercings: includeBinds
+            piercings: includeBinds,
         }))
             .map((i) => ({
             ...WardrobeAssetBundle(i),
-            Craft: ValidationVerifyCraftData(i.Craft, i.Asset).result
+            Craft: ValidationVerifyCraftData(i.Craft, i.Asset).result,
         }));
         return LZString.compressToBase64(JSON.stringify(save));
     }
@@ -34604,10 +35269,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return "Import error: Bad data";
         }
     }
-    function itemMergeProperties(sourceProperty, targetProperty, { includeNoncursableProperties = false, lockAssignMemberNumber } = {}) {
+    function itemMergeProperties(sourceProperty, targetProperty, { includeNoncursableProperties = false, lockAssignMemberNumber, } = {}) {
         const itemProperty = cloneDeep(sourceProperty !== null && sourceProperty !== void 0 ? sourceProperty : {});
         targetProperty = cloneDeep(targetProperty !== null && targetProperty !== void 0 ? targetProperty : {});
-        // Lock assignment MemberNumber can be overridden if locks are being applied
         if (lockAssignMemberNumber != null) {
             if (targetProperty.LockedBy) {
                 if (itemProperty.LockedBy === targetProperty.LockedBy && typeof itemProperty.LockMemberNumber === "number") {
@@ -34622,13 +35286,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
         }
         for (const key of arrayUnique(Object.keys(targetProperty).concat(Object.keys(itemProperty)))) {
-            // Effects are handled separately
             if (key === "Effect")
                 continue;
-            // Curses skip some properties
             if (!includeNoncursableProperties && CURSE_IGNORED_PROPERTIES.includes(key))
                 continue;
-            // Update base properties
             if (targetProperty[key] === undefined) {
                 if (itemProperty[key] !== undefined) {
                     delete itemProperty[key];
@@ -34639,7 +35300,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 itemProperty[key] = cloneDeep(targetProperty[key]);
             }
         }
-        // Update effects
         const itemIgnoredEffects = !Array.isArray(itemProperty.Effect) ? [] :
             itemProperty.Effect.filter(i => !includeNoncursableProperties && CURSE_IGNORED_EFFECTS.includes(i));
         const itemEffects = !Array.isArray(itemProperty.Effect) ? [] :
@@ -34657,13 +35317,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function WardrobeImportCheckChangesLockedItem(C, data, allowReplace) {
         var _a, _b, _c, _d;
         if (C.Appearance.some(a => { var _a, _b; return isBind(a) && ((_b = (_a = a.Property) === null || _a === void 0 ? void 0 : _a.Effect) === null || _b === void 0 ? void 0 : _b.includes("Lock")); })) {
-            // Looks for all locked items and items blocked by locked items and checks, that none of those change by the import
-            // First find which groups should match
             const matchedGroups = new Set();
             const test = (item) => {
                 var _a;
                 if (isBind(item)) {
-                    // For each blocked group
                     for (const block of (item.Asset.Block || []).concat(Array.isArray((_a = item.Property) === null || _a === void 0 ? void 0 : _a.Block) ? item.Property.Block : [])) {
                         if (matchedGroups.has(block) || !AssetGroup.some(g => g.Name === block))
                             continue;
@@ -34681,7 +35338,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     test(a);
                 }
             }
-            // Then test all required groups to match
             for (const testedGroup of matchedGroups) {
                 const currentItem = C.Appearance.find(a => a.Asset.Group.Name === testedGroup);
                 const newItem = data.find(b => b.Group === testedGroup);
@@ -34700,7 +35356,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     !itemColorsEquals(currentItem.Color, newItem.Color) ||
                     !isEqual((_c = currentItem.Property) !== null && _c !== void 0 ? _c : {}, (_d = itemMergeProperties(currentItem.Property, newItem.Property, {
                         includeNoncursableProperties: true,
-                        lockAssignMemberNumber: Player.MemberNumber
+                        lockAssignMemberNumber: Player.MemberNumber,
                     })) !== null && _d !== void 0 ? _d : {})) {
                     return true;
                 }
@@ -34708,7 +35364,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         return false;
     }
-    function WardrobeImportMakeFilterFunction({ cloth, cosplay, body, binds, collar, piercings }) {
+    function WardrobeImportMakeFilterFunction({ cloth, cosplay, body, binds, collar, piercings, }) {
         return (a) => ((cloth && isCloth(a, false)) ||
             (cosplay && isCosplay(a)) ||
             (body && isBody(a)) ||
@@ -34726,13 +35382,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (Craft === undefined) {
             return {
                 result: undefined,
-                messages: []
+                messages: [],
             };
         }
         if (!isObject$1(Craft)) {
             return {
                 result: undefined,
-                messages: [`Expected object, got ${typeof Craft}`]
+                messages: [`Expected object, got ${typeof Craft}`],
             };
         }
         const saved = console.warn;
@@ -34746,14 +35402,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             const result = CraftingValidate(Craft, Asset, true);
             return {
                 result: result > CraftingStatusType.CRITICAL_ERROR ? Craft : undefined,
-                messages
+                messages,
             };
         }
         catch (error) {
             saved("BCX: Failed crafted data validation because of crash:", error);
             return {
                 result: undefined,
-                messages: [`Validation failed: ${error}`]
+                messages: [`Validation failed: ${error}`],
             };
         }
         finally {
@@ -34787,7 +35443,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                     ValidationCanAccessCheck(C, "ItemMisc", cloth.Property.LockedBy, undefined) &&
                                     (!C.IsPlayer() || !InventoryIsPermissionBlocked(C, cloth.Property.LockedBy, "ItemMisc")) &&
                                     (includeLocks === true || (typeof includeLocks !== "boolean" && includeLocks.has(cloth.Property.LockedBy)))),
-                                lockAssignMemberNumber: Player.MemberNumber
+                                lockAssignMemberNumber: Player.MemberNumber,
                             });
                         }
                         const craftValidation = ValidationVerifyCraftData(cloth.Craft, A);
@@ -34824,10 +35480,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             body: false,
             binds: includeBinds,
             collar: false,
-            piercings: includeBinds
+            piercings: includeBinds,
         });
-  
-        // Check if everything (except ignored properties) matches
+
         let fullMatch = includeBinds;
         if (includeBinds) {
             for (const group of arrayUnique(C.Appearance.filter(Allow).map(item => item.Asset.Group.Name).concat(data.map(item => item.Group)))) {
@@ -34916,7 +35571,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         var _a;
         return ((_a = modStorage.wardrobeDefaultExtended) !== null && _a !== void 0 ? _a : false) !== holdingShift;
     }
-    function openExtendedImport(data, baseAllowBinds = true) {
+    function openExtendedImport(data, clothesOnly = false) {
         const parsedData = Array.isArray(data) ? data : parseWardrobeImportData(data);
         if (typeof parsedData === "string")
             return parsedData;
@@ -34924,8 +35579,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (!C) {
             return "Import error: No character";
         }
-        const allowBinds = baseAllowBinds && C.MemberNumber === j_WardrobeBindsAllowedCharacter;
-        setAppearanceOverrideScreen(new GuiWardrobeExtended(setAppearanceOverrideScreen, C, allowBinds, parsedData));
+        const allowBinds = C.MemberNumber === j_WardrobeBindsAllowedCharacter;
+        setAppearanceOverrideScreen(new GuiWardrobeExtended(setAppearanceOverrideScreen, C, allowBinds, parsedData, clothesOnly));
         return null;
     }
     function setAppearanceOverrideScreen(newScreen) {
@@ -34947,8 +35602,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.whitelist],
                     [Preset.switch]: [true, AccessLevel.friend],
                     [Preset.submissive]: [true, AccessLevel.friend],
-                    [Preset.slave]: [true, AccessLevel.friend]
-                }
+                    [Preset.slave]: [true, AccessLevel.friend],
+                },
             });
             ExtendedWardrobeInit();
         }
@@ -34982,13 +35637,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return next(args);
             });
             patchFunction("AppearanceRun", {
-                'DrawButton(1820, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 160, 65, "Save"': 'DrawButton(1860, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 120, 65, "Save"'
+                'DrawButton(1820, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 160, 65, "Save"': 'DrawButton(1860, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 120, 65, "Save"',
             });
             patchFunction("AppearanceRun", {
-                "DrawButton(1300, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 500,": "DrawButton(1385, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 455,"
+                "DrawButton(1300, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 500,": "DrawButton(1385, 430 + (W - CharacterAppearanceWardrobeOffset) * 95, 455,",
             });
             patchFunction("AppearanceRun", {
-                "1550, 463 + (W - CharacterAppearanceWardrobeOffset) * 95, 496,": "1614, 463 + (W - CharacterAppearanceWardrobeOffset) * 95, 446,"
+                "1550, 463 + (W - CharacterAppearanceWardrobeOffset) * 95, 496,": "1614, 463 + (W - CharacterAppearanceWardrobeOffset) * 95, 446,",
             });
             hookFunction("AppearanceRun", 7, (args, next) => {
                 if (appearanceOverrideScreen) {
@@ -35028,10 +35683,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
             });
             patchFunction("AppearanceClick", {
-                "(MouseX >= 1300) && (MouseX < 1800)": "(MouseX >= 1385) && (MouseX < 1385 + 455)"
+                "(MouseX >= 1300) && (MouseX < 1800)": "(MouseX >= 1385) && (MouseX < 1385 + 455)",
             });
             patchFunction("AppearanceClick", {
-                "(MouseX >= 1820) && (MouseX < 1975)": "(MouseX >= 1860) && (MouseX < 1980)"
+                "(MouseX >= 1820) && (MouseX < 1975)": "(MouseX >= 1860) && (MouseX < 1980)",
             });
             hookFunction("AppearanceClick", 7, (args, next) => {
                 if (appearanceOverrideScreen) {
@@ -35043,17 +35698,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (CharacterAppearanceMode === "Wardrobe" || NModWardrobe && AppearanceMode === "Wardrobe") {
                     if (clipboardAvailable) {
                         const Y = NModWardrobe ? 265 : 125;
-                        // Help text toggle
                         if (MouseIn(1380, Y, 50, 50) || (MouseIn(30, 190, 1240, 780) && j_ShowHelp)) {
                             j_ShowHelp = !j_ShowHelp;
                             return;
                         }
-                        // Restraints toggle
                         if (MouseIn(1457, Y, 50, 50)) {
                             j_WardrobeIncludeBinds = !j_WardrobeIncludeBinds;
                             return;
                         }
-                        // Export
                         if (MouseIn(1534, Y, 207, 50)) {
                             BCX_setTimeout(async () => {
                                 await navigator.clipboard.writeText(j_WardrobeExportSelectionClothes(j_WardrobeIncludeBinds));
@@ -35061,7 +35713,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             }, 0);
                             return;
                         }
-                        // Import
                         if (MouseIn(1768, Y, 207, 50)) {
                             BCX_setTimeout(async () => {
                                 if (typeof navigator.clipboard.readText !== "function") {
@@ -35082,11 +35733,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             if (MouseYIn(430 + (W - CharacterAppearanceWardrobeOffset) * 95, 65)) {
                                 let slot = Player.Wardrobe[W];
                                 if (Array.isArray(slot)) {
-                                    // NMod unpack
                                     if (slot.some(i => Array.isArray(i)) && typeof WardrobeExtractBundle === "function") {
                                         slot = slot.map(i => Array.isArray(i) ? WardrobeExtractBundle(i) : i);
                                     }
-                                    if (slot.every(i => isObject$1(i)) && openExtendedImport(slot, false) === null) {
+                                    if (slot.every(i => isObject$1(i)) && openExtendedImport(slot, true) === null) {
                                         return;
                                     }
                                 }
@@ -35141,17 +35791,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             hookFunction("WardrobeClick", 2, (args, next) => {
                 if (clipboardAvailable) {
                     const Y = 90;
-                    // Help text toggle
                     if (MouseIn(1000, Y, 50, 50) || (MouseIn(30, 190, 1240, 780) && j_ShowHelp)) {
                         j_ShowHelp = !j_ShowHelp;
                         return;
                     }
-                    // Restraints toggle
                     if (MouseIn(425, Y, 50, 50)) {
                         j_WardrobeIncludeBinds = !j_WardrobeIncludeBinds;
                         return;
                     }
-                    // Export
                     if (MouseIn(750, Y, 225, 50)) {
                         BCX_setTimeout(async () => {
                             await navigator.clipboard.writeText(j_WardrobeExportSelectionClothes(j_WardrobeIncludeBinds));
@@ -35159,7 +35806,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }, 0);
                         return;
                     }
-                    // Import
                     if (MouseIn(500, Y, 225, 50)) {
                         BCX_setTimeout(async () => {
                             if (typeof navigator.clipboard.readText !== "function") {
@@ -35180,7 +35826,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             document.addEventListener("paste", PasteListener$1);
             document.addEventListener("keydown", KeyChangeListener, { capture: true, passive: true });
             document.addEventListener("keyup", KeyChangeListener, { capture: true, passive: true });
-            //#region Search bar
             RedirectGetImage("Icons/BCX_Search.png", "Icons/Search.png");
             RedirectGetImage("Icons/BCX_SearchExit.png", "Icons/Remove.png");
             hookFunction("TextGet", 0, (args, next) => {
@@ -35264,7 +35909,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 next(args);
             });
-            //#endregion
             registerCommandParsed("utility", "wardrobe", "- Several convenience wardrobe shortcuts. Use '.wardrobe' for more help", (args) => {
                 const subcommand = (args[0] || "").toLowerCase();
                 if (subcommand === "export") {
@@ -35345,23 +35989,63 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
     }
 
+    class TypedEventEmitter {
+        constructor() {
+            this._listeners = new Map();
+            this._allListeners = new Set();
+        }
+        onAny(listener) {
+            this._allListeners.add(listener);
+            return () => {
+                this._allListeners.delete(listener);
+            };
+        }
+        on(event, listener) {
+            let listeners = this._listeners.get(event);
+            if (!listeners) {
+                listeners = new Set();
+                this._listeners.set(event, listeners);
+            }
+            listeners.add(listener);
+            return () => {
+                listeners.delete(listener);
+                if (listeners.size === 0) {
+                    this._listeners.delete(event);
+                }
+            };
+        }
+        emit(event, value) {
+            var _a;
+            (_a = this._listeners.get(event)) === null || _a === void 0 ? void 0 : _a.forEach((observer) => observer(value));
+            const eventData = {
+                event,
+                data: value,
+            };
+            this._allListeners.forEach((observer) => observer(eventData));
+        }
+    }
+    class BCXGlobalEventSystemClass extends TypedEventEmitter {
+        emitEvent(event, value) {
+            this.emit(event, value);
+        }
+    }
+    const BCXGlobalEventSystem = new BCXGlobalEventSystemClass();
+
     const CURSES_ANTILOOP_RESET_INTERVAL = 60000;
     const CURSES_ANTILOOP_THRESHOLD = 10;
     const CURSES_ANTILOOP_SUSPEND_TIME = 600000;
     const CURSE_IGNORED_PROPERTIES_CUSTOM = [
-        "HeartRate" // Futuristic bra
+        "HeartRate",
     ];
     const CURSE_IGNORED_PROPERTIES = ValidationModifiableProperties.concat(CURSE_IGNORED_PROPERTIES_CUSTOM);
     const CURSE_IGNORED_EFFECTS = ["Lock"];
-    // Ignore slave collars, as they are forced by BC
     const CURSE_IGNORED_ITEMS = ["SlaveCollar", "ClubSlaveCollar"];
-    /** Screens on which curses don't trigger at all */
     const CURSE_INACTIVE_SCREENS = [
         "Appearance",
         "Wardrobe",
         "ChatSelect",
         "ChatSearch",
-        "ChatCreate"
+        "ChatCreate",
     ];
     function curseMakeSavedProperty(properties) {
         const result = {};
@@ -35379,7 +36063,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
                 else if (!CURSE_IGNORED_PROPERTIES.includes(key) && properties[key] !== undefined) {
-                    // @ts-expect-error: Copying member between same type objects
                     result[key] = cloneDeep(properties[key]);
                 }
             }
@@ -35393,7 +36076,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             Difficulty: item.Difficulty || undefined,
             Color: (item.Color && item.Color !== "Default") ? cloneDeep(item.Color) : undefined,
             Property: curseMakeSavedProperty(item.Property),
-            Craft: ValidationVerifyCraftData(item.Craft, item.Asset).result
+            Craft: ValidationVerifyCraftData(item.Craft, item.Asset).result,
         };
         if (Object.keys(result.Property).length === 0) {
             delete result.Property;
@@ -35411,11 +36094,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function curseDefaultItemCurseProperty(asset) {
         var _a;
         return curseAllowItemCurseProperty(asset) &&
-            // Only extended items make sense to curse properties of
             asset.Extended &&
-            // Only typed and modular items are allowed as they don't have extra logic by themselves
             ["typed", "modular"].includes((_a = asset.Archetype) !== null && _a !== void 0 ? _a : "") &&
-            // Do not curse items that can change by themselves
             !asset.DynamicScriptDraw;
     }
     function curseItem(Group, curseProperty, character) {
@@ -35566,7 +36246,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 swap: [],
                 update: [],
                 color: [],
-                autoremove: []
+                autoremove: [],
             };
         }
         init() {
@@ -35577,8 +36257,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.lover],
                     [Preset.switch]: [true, AccessLevel.lover],
                     [Preset.submissive]: [false, AccessLevel.mistress],
-                    [Preset.slave]: [false, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [false, AccessLevel.mistress],
+                },
             });
             registerPermission("curses_limited", {
                 name: "Allows handling curses on limited object slots",
@@ -35587,8 +36267,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.owner],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [false, AccessLevel.lover],
-                    [Preset.slave]: [false, AccessLevel.lover]
-                }
+                    [Preset.slave]: [false, AccessLevel.lover],
+                },
             });
             registerPermission("curses_global_configuration", {
                 name: "Allows editing the global curses configuration",
@@ -35597,8 +36277,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.owner],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [false, AccessLevel.lover],
-                    [Preset.slave]: [false, AccessLevel.lover]
-                }
+                    [Preset.slave]: [false, AccessLevel.lover],
+                },
             });
             registerPermission("curses_change_limits", {
                 name: "Allows to limit/block individual curse object slots",
@@ -35607,8 +36287,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.self],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
             });
             registerPermission("curses_color", {
                 name: "Allow changing colors of cursed objects",
@@ -35617,8 +36297,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.lover],
                     [Preset.switch]: [true, AccessLevel.lover],
                     [Preset.submissive]: [true, AccessLevel.mistress],
-                    [Preset.slave]: [false, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [false, AccessLevel.mistress],
+                },
             });
             registerPermission("curses_view_originator", {
                 name: "Allow to view who added the curse originally",
@@ -35627,8 +36307,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.mistress],
-                    [Preset.slave]: [true, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [true, AccessLevel.mistress],
+                },
             });
             queryHandlers.curseItem = (sender, data) => {
                 if (isObject$1(data) && typeof data.Group === "string" && (typeof data.curseProperties === "boolean" || data.curseProperties === null)) {
@@ -35931,7 +36611,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (!isObject$1(data)) {
                         console.warn("BCX: Bad curses global data, resetting");
                         data = {
-                            itemRemove: false
+                            itemRemove: false,
                         };
                     }
                     if (typeof data.itemRemove !== "boolean") {
@@ -35950,7 +36630,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return {
                         Name: data.data.Name,
                         curseProperties: data.data.curseProperty,
-                        itemRemove: (_a = data.data.itemRemove) !== null && _a !== void 0 ? _a : false
+                        itemRemove: (_a = data.data.itemRemove) !== null && _a !== void 0 ? _a : false,
                     };
                 },
                 validateCategorySpecificGlobalData: data => isObject$1(data) && typeof data.itemRemove === "boolean",
@@ -35968,10 +36648,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     const group = AssetGroupGet(Player.AssetFamily, condition);
                     if (!group)
                         return false;
-                    // Update cannot change cursed item
                     if (((_a = data.data) === null || _a === void 0 ? void 0 : _a.Name) !== (updateData === null || updateData === void 0 ? void 0 : updateData.Name))
                         return false;
-                    // Nothing to update on empty slot
                     if (!data.data || !updateData)
                         return true;
                     const asset = AssetGet(Player.AssetFamily, condition, data.data.Name);
@@ -36148,14 +36826,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         return data;
                     },
                     import(condition, data, character) {
-                        const validator = mod.object({
-                            Name: mod.string(),
-                            curseProperty: mod.boolean(),
-                            Color: mod.union([mod.string(), mod.array(mod.string())]).optional(),
-                            Difficulty: mod.number().optional(),
-                            Property: mod.custom(isObject$1).optional(),
-                            Craft: mod.any(),
-                            itemRemove: mod.literal(true).optional()
+                        const validator = z.object({
+                            Name: z.string(),
+                            curseProperty: z.boolean(),
+                            Color: z.union([z.string(), z.array(z.string())]).optional(),
+                            Difficulty: z.number().optional(),
+                            Property: z.custom(isObject$1).optional(),
+                            Craft: z.any(),
+                            itemRemove: z.literal(true).optional(),
                         }).nullable();
                         const validationResult = validator.safeParse(data);
                         if (!validationResult.success) {
@@ -36190,8 +36868,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             return "Failed.";
                         }
                         return true;
-                    }
-                }
+                    },
+                },
             });
         }
         load() {
@@ -36226,12 +36904,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (Callback === ItemColorOnPickerChange) {
                     args[5] = (color) => {
                         if (ItemColorCharacter === Player && ItemColorItem) {
-                            // Original code
                             const newColors = ItemColorState.colors.slice();
                             ItemColorPickerIndices.forEach(i => newColors[i] = color);
                             ItemColorItem.Color = newColors;
                             CharacterLoadCanvas(ItemColorCharacter);
-                            // Curse color change code
                             const condition = ConditionsGetCondition("curses", ItemColorItem.Asset.Group.Name);
                             const curse = condition === null || condition === void 0 ? void 0 : condition.data;
                             if (curse &&
@@ -36286,19 +36962,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.suspendedUntil.delete(group);
                     this.triggerCounts.clear();
                     ChatRoomActionMessage(`The dormant curse on SourceCharacter's ${getVisibleGroupName(assetGroup)} wakes up again.`, null, [
-                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                     ]);
                 }
                 else {
                     return;
                 }
             }
-            // Pause curses on certain screens and when talking with NPC altogether
             if (CURSE_INACTIVE_SCREENS.includes(CurrentScreen) || (CurrentCharacter === null || CurrentCharacter === void 0 ? void 0 : CurrentCharacter.IsNpc()))
                 return;
             const curse = condition.data;
             let currentItem = InventoryGet(Player, group);
-            // Ignore slave collars
             if ((currentItem && CURSE_IGNORED_ITEMS.includes(currentItem.Asset.Name)) ||
                 (curse && CURSE_IGNORED_ITEMS.includes(curse.Name))) {
                 return;
@@ -36309,7 +36983,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     CharacterRefresh(Player, true);
                     ChatRoomCharacterUpdate(Player);
                     this.pendingMessages.remove.push(currentItem.Asset.Description);
-                    return;
+                    BCXGlobalEventSystem.emitEvent("curseTrigger", {
+                        action: "remove",
+                        group,
+                    });
                 }
                 return;
             }
@@ -36318,7 +36995,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 console.error(`BCX: Asset not found for curse ${group}:${curse.Name}`, curse);
                 return;
             }
-            // Check we are not bypassing limits
             if (!callOriginal("CharacterAppearanceGenderAllowed", [asset]))
                 return;
             let changeType = "";
@@ -36333,7 +37009,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     Color: curse.Color != null ? cloneDeep(curse.Color) : "Default",
                     Property: curse.Property != null ? cloneDeep(curse.Property) : {},
                     Craft: ValidationVerifyCraftData(curse.Craft, asset).result,
-                    Difficulty: curse.Difficulty != null ? curse.Difficulty : 0
+                    Difficulty: curse.Difficulty != null ? curse.Difficulty : 0,
                 };
                 Player.Appearance.push(currentItem);
                 if (!changeType)
@@ -36379,7 +37055,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             else {
                 curse.Property = curseCreateCurseItemInfo(currentItem).Property;
             }
-            // Crafted properties are always cursed
             const validatedCurseCraft = ValidationVerifyCraftData(curse.Craft, asset).result;
             if (!isEqual(ValidationVerifyCraftData(currentItem.Craft, currentItem.Asset).result, validatedCurseCraft)) {
                 if (validatedCurseCraft === undefined) {
@@ -36388,7 +37063,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 else {
                     currentItem.Craft = {
                         ...(isObject$1(currentItem.Craft) ? currentItem.Craft : {}),
-                        ...validatedCurseCraft
+                        ...validatedCurseCraft,
                     };
                 }
                 if (!changeType)
@@ -36408,11 +37083,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 CharacterRefresh(Player, true);
                 ChatRoomCharacterUpdate(Player);
                 this.pendingMessages[changeType].push(asset.Description);
+                BCXGlobalEventSystem.emitEvent("curseTrigger", {
+                    action: changeType,
+                    group,
+                });
                 const counter = ((_c = this.triggerCounts.get(group)) !== null && _c !== void 0 ? _c : 0) + 1;
                 this.triggerCounts.set(group, counter);
                 if (counter >= CURSES_ANTILOOP_THRESHOLD) {
                     ChatRoomActionMessage(`Protection triggered: Curses on SourceCharacter's ${getVisibleGroupName(assetGroup)} have been disabled for 10 minutes. Please refrain from triggering curses so rapidly, as it creates strain on the server and may lead to unwanted side effects! If you believe this message was triggered by a bug, please report it to BCX Discord.`, null, [
-                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                     ]);
                     this.suspendedUntil.set(group, Date.now() + CURSES_ANTILOOP_SUSPEND_TIME);
                 }
@@ -36425,7 +37104,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     continue;
                 if (list.length >= 3) {
                     ChatRoomActionMessage(dictionaryProcess(CURSES_TRIGGER_TEXTS_BATCH[changeType], { PLAYER_NAME: "SourceCharacter" }), null, [
-                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                     ]);
                     if (changeType !== "autoremove") {
                         logMessage("curse_trigger", LogEntryType.curseTriggerBatch, changeType);
@@ -36434,7 +37113,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 else {
                     for (const item of list) {
                         ChatRoomActionMessage(dictionaryProcess(CURSES_TRIGGER_TEXTS[changeType], { PLAYER_NAME: "SourceCharacter", ASSET_NAME: item }), null, [
-                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                            { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                         ]);
                         if (changeType !== "autoremove") {
                             logMessage("curse_trigger", LogEntryType.curseTrigger, [changeType, item]);
@@ -36451,15 +37130,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 data.data &&
                 (data.requirements ? data.data.itemRemove : (_a = ConditionsGetCategoryData("curses").data) === null || _a === void 0 ? void 0 : _a.itemRemove) &&
                 (group === null || group === void 0 ? void 0 : group.AllowNone)) {
-                // Removal of cursed item when curse becomes inactive
                 const currentItem = InventoryGet(Player, curse);
-                // Only remove if it is the cursed item and it is not locked
                 if (currentItem &&
                     currentItem.Asset.Name === data.data.Name &&
                     InventoryGetLock(currentItem) == null) {
                     InventoryRemove(Player, curse, true);
                     ChatRoomCharacterUpdate(Player);
                     this.pendingMessages.autoremove.push(currentItem.Asset.Description);
+                    BCXGlobalEventSystem.emitEvent("curseTrigger", {
+                        action: "autoremove",
+                        group: curse,
+                    });
                 }
             }
         }
@@ -36637,10 +37318,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             const useGlobalCategorySetting = !data.requirements;
             const access = this.checkAccess();
             const disabled = !access || useGlobalCategorySetting;
-            // favorite toggle
             const color = !access ? "#ddd" : data.favorite ? "Yellow" : "White";
             drawIcon(MainCanvas, icon_star, 105, 91, 60, 60, 24, 1, 1.5, color, access && MouseIn(93, 80, 85, 80) ? "Cyan" : "black");
-            // Spacer
             MainCanvas.beginPath();
             MainCanvas.moveTo(98, 272);
             MainCanvas.lineTo(960, 272);
@@ -36650,10 +37329,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.moveTo(98, 540);
             MainCanvas.lineTo(960, 540);
             MainCanvas.stroke();
-            // on-off toggle
             MainCanvas.textAlign = "left";
             DrawCheckbox(125, 180, 64, 64, `This ${this.conditionCategory.slice(0, -1)} is active and can trigger`, data.active, !access);
-            // global-category-configuration-is-active highlighting
             if (useGlobalCategorySetting) {
                 MainCanvas.fillStyle = "#0052A3";
                 MainCanvas.fillRect(526, 546, 418, 68);
@@ -36662,7 +37339,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillRect(120, 775, 74, 74);
                 MainCanvas.fillRect(120, 855, 74, 74);
             }
-            ////// status and timer area
             MainCanvas.textAlign = "center";
             let statusText;
             if (data.timer === null) {
@@ -36689,7 +37365,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     DrawCheckbox(125, 450, 64, 64, `Delete the ${this.conditionCategory.slice(0, -1)} when timer runs out`, data.timerRemove, !access);
                 }
             }
-            ////// condition factors area
             DrawText(`${capitalizeFirstLetter(this.conditionCategory.slice(0, -1))} trigger conditions:`, 130, 580, "Black", "");
             MainCanvas.textAlign = "center";
             const hasAnyRequirement = !!(requirements.room || requirements.roomName || requirements.role || requirements.player);
@@ -36697,7 +37372,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.textAlign = "left";
             MainCanvas.fillStyle = ConditionsEvaluateRequirements(requirements, this.conditionCategoryData.highestRoleInRoom) ? "#00FF22" : "#AA0000";
             MainCanvas.fillRect(80, 620, 15, 304);
-            // In room
             DrawCheckbox(125, 620, 64, 64, "when", !!requirements.room, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 622, 115, 60, ((_d = requirements.room) === null || _d === void 0 ? void 0 : _d.inverted) ? "not in" : "in", disabled || !requirements.room ? "#ddd" : "White", "", "", disabled || !requirements.room);
@@ -36712,7 +37386,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillStyle = (requirements.room.inverted ? !res : res) ? "#00FF22" : "#AA0000";
                 MainCanvas.fillRect(95, 620, 15, 64);
             }
-            // In room named
             DrawCheckbox(125, 700, 64, 64, "when", !!requirements.roomName, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 702, 115, 60, ((_f = requirements.roomName) === null || _f === void 0 ? void 0 : _f.inverted) ? "not in" : "in", disabled || !requirements.roomName ? "#ddd" : "White", "", "", disabled || !requirements.roomName);
@@ -36728,7 +37401,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillStyle = (requirements.roomName.inverted ? !res : res) ? "#00FF22" : "#AA0000";
                 MainCanvas.fillRect(95, 700, 15, 64);
             }
-            // In presence of role
             DrawCheckbox(125, 780, 64, 64, "when", !!requirements.role, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 782, 115, 60, ((_g = requirements.role) === null || _g === void 0 ? void 0 : _g.inverted) ? "not in" : "in", disabled || !requirements.role ? "#ddd" : "White", "", "", disabled || !requirements.role);
@@ -36743,7 +37415,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillStyle = (requirements.role.inverted ? !res : res) ? "#00FF22" : "#AA0000";
                 MainCanvas.fillRect(95, 780, 15, 64);
             }
-            // In presence of player
             DrawCheckbox(125, 860, 64, 64, "when", !!requirements.player, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 862, 115, 60, ((_k = requirements.player) === null || _k === void 0 ? void 0 : _k.inverted) ? "not in" : "in", disabled || !requirements.player ? "#ddd" : "White", "", "", disabled || !requirements.player);
@@ -36774,7 +37445,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     });
                 }
             }
-            ////// global category configuration toggle
             MainCanvas.beginPath();
             MainCanvas.rect(1190, 830, 720, 104);
             MainCanvas.strokeStyle = "#0052A3";
@@ -36786,19 +37456,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.fill();
             DrawImageEx("Icons/General.png", 1877 + 10, 800 + 7, {
                 Height: 46,
-                Width: 46
+                Width: 46,
             });
-            // hover text for timer behavior toggle
             MainCanvas.textAlign = "center";
             if (data.timer !== null && MouseIn(125, 450, 80, 64))
                 DrawButtonHover(125, 450, 64, 64, `Removes ${this.conditionCategory.slice(0, -1)} instead of only deactivating it `);
-            // hover text for global configuration category toggle
             if (MouseIn(1190, 830, 100, 104))
                 DrawButtonHover(1786, 854, 64, 64, `Overwrites current trigger conditions`);
-            // hover text for member selector
             if (MouseIn(950, 862, 64, 64))
                 DrawButtonHover(950, 782, 4, 64, `Select member number from list`);
-            // hover text for favorite toggle
             if (MouseIn(93, 80, 85, 80))
                 DrawButtonHover(93, 80, 80, 80, `Favorite: Listed first in overview`);
             return false;
@@ -36813,12 +37479,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.Exit();
                 return true;
             }
-            // Cancel
             if (this.changes && MouseIn(1815, 190, 90, 90)) {
                 this.Exit();
                 return true;
             }
-            // help text
             if (MouseIn(1815, 190, 90, 90)) {
                 this.showHelp = !this.showHelp;
                 return true;
@@ -36828,7 +37492,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (!this.checkAccess())
                 return false;
             const data = (_a = this.changes) !== null && _a !== void 0 ? _a : this.conditionData;
-            // on-off toggle
             if (MouseIn(125, 180, 64, 64)) {
                 this.changes = this.makeChangesData();
                 this.changes.active = !this.changes.active;
@@ -36836,15 +37499,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.timerRemove = false;
                 return true;
             }
-            // favorite toggle
             if (MouseIn(93, 80, 85, 80)) {
                 this.changes = this.makeChangesData();
                 this.changes.favorite = !this.changes.favorite;
                 return true;
             }
-            ////// status and timer area
             if (data.timer === null) {
-                // Enable timer
                 if (MouseIn(120, 360, 820, 160)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer = Date.now() + 5 * 60 * 1000;
@@ -36852,57 +37512,48 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
             }
             else {
-                // -1d
                 if (MouseIn(120, 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer -= 1 * 24 * 60 * 60 * 1000;
                     return true;
                 }
-                // -1h
                 if (MouseIn(120 + 125, 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer -= 1 * 60 * 60 * 1000;
                     return true;
                 }
-                // -5m
                 if (MouseIn(120 + 2 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer -= 5 * 60 * 1000;
                     return true;
                 }
-                // Disable timer
                 if (MouseIn(120 + 3 * (125), 360, 70, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer = null;
                     this.changes.timerRemove = false;
                     return true;
                 }
-                // +5m
                 if (MouseIn(105 + 4 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer += 5 * 60 * 1000;
                     return true;
                 }
-                // +1h
                 if (MouseIn(105 + 5 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer += 1 * 60 * 60 * 1000;
                     return true;
                 }
-                // +1d
                 if (MouseIn(105 + 6 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer += 1 * 24 * 60 * 60 * 1000;
                     return true;
                 }
-                // Timer remove toggle
                 if (MouseIn(125, 450, 64, 64) && data.active) {
                     this.changes = this.makeChangesData();
                     this.changes.timerRemove = !this.changes.timerRemove;
                     return true;
                 }
             }
-            ////// condition factors area
             const useGlobalCategorySetting = !(this.changes ? this.changes.requirements : this.conditionData.requirements);
             const requirements = (_b = (this.changes ? this.changes.requirements : this.conditionData.requirements)) !== null && _b !== void 0 ? _b : this.conditionCategoryData.requirements;
             if (MouseIn(530, 550, 410, 60) && !useGlobalCategorySetting) {
@@ -36910,7 +37561,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.orLogic = this.changes.requirements.orLogic ? undefined : true;
                 return true;
             }
-            // In room
             if (MouseIn(125, 620, 64, 64) && !useGlobalCategorySetting) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.room = this.changes.requirements.room ? undefined : { type: "public" };
@@ -36926,7 +37576,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.room.type = this.changes.requirements.room.type === "public" ? "private" : "public";
                 return true;
             }
-            // In room named
             if (MouseIn(125, 700, 64, 64) && !useGlobalCategorySetting) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.roomName = this.changes.requirements.roomName ? undefined : { name: "" };
@@ -36938,7 +37587,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.roomName.inverted = this.changes.requirements.roomName.inverted ? undefined : true;
                 return true;
             }
-            // In presence of role
             if (MouseIn(125, 780, 64, 64) && !useGlobalCategorySetting) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.role = this.changes.requirements.role ? undefined : { role: AccessLevel.mistress };
@@ -36960,7 +37608,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.role.role = roleSelection < AccessLevel.public ? roleSelection + 1 : AccessLevel.clubowner;
                 return true;
             }
-            // In presence of player
             if (MouseIn(125, 860, 64, 64) && !useGlobalCategorySetting) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.player = this.changes.requirements.player ? undefined : { memberNumber: 0 };
@@ -36979,7 +37626,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }));
                 return true;
             }
-            ////// global category configuration toggle
             if (MouseIn(1210, 850, 64, 64)) {
                 this.changes = this.makeChangesData();
                 this.setUseGlobal(!!this.changes.requirements);
@@ -37043,7 +37689,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             const itemRemove = !!(useGlobalCategorySetting ? this.conditionCategoryData.data.itemRemove : (_b = data.data) === null || _b === void 0 ? void 0 : _b.itemRemove);
             const access = this.checkAccess();
             MainCanvas.textAlign = "left";
-            ////// right side: special curse category options
             if (data.data) {
                 if (useGlobalCategorySetting) {
                     MainCanvas.fillStyle = "#0052A3";
@@ -37072,7 +37717,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     MainCanvas.restore();
                 }
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.ConditionsEditCurses]);
             }
@@ -37120,7 +37764,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 requirements: cloneDeep(this.conditionCategoryData.requirements),
                 timer: this.conditionCategoryData.timer,
                 timerRemove: this.conditionCategoryData.timerRemove,
-                data: cloneDeep(this.conditionCategoryData.data)
+                data: cloneDeep(this.conditionCategoryData.data),
             };
         }
         Load() {
@@ -37242,7 +37886,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             const requirements = data.requirements;
             const access = this.checkAccess();
             const disabled = !access;
-            // Spacer
             MainCanvas.beginPath();
             MainCanvas.moveTo(98, 272);
             MainCanvas.lineTo(960, 272);
@@ -37252,7 +37895,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.moveTo(98, 540);
             MainCanvas.lineTo(960, 540);
             MainCanvas.stroke();
-            ////// status and timer area
             MainCanvas.textAlign = "center";
             let statusText;
             if (data.timer === null) {
@@ -37277,7 +37919,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.textAlign = "left";
                 DrawCheckbox(125, 450, 64, 64, `Remove the ${this.conditionCategory.slice(0, -1)} when timer runs out`, data.timerRemove, !access);
             }
-            ////// condition factors area
             DrawText(`${capitalizeFirstLetter(this.conditionCategory.slice(0, -1))} trigger conditions:`, 130, 580, "Black", "");
             MainCanvas.textAlign = "center";
             const hasAnyRequirement = !!(requirements.room || requirements.roomName || requirements.role || requirements.player);
@@ -37285,7 +37926,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.textAlign = "left";
             MainCanvas.fillStyle = ConditionsEvaluateRequirements(requirements, this.conditionCategoryData.highestRoleInRoom) ? "#00FF22" : "#AA0000";
             MainCanvas.fillRect(75, 620, 15, 304);
-            // In room
             DrawCheckbox(125, 620, 64, 64, "when", !!requirements.room, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 622, 115, 60, ((_b = requirements.room) === null || _b === void 0 ? void 0 : _b.inverted) ? "not in" : "in", disabled || !requirements.room ? "#ddd" : "White", "", "", disabled || !requirements.room);
@@ -37300,7 +37940,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillStyle = (requirements.room.inverted ? !res : res) ? "#00FF22" : "#AA0000";
                 MainCanvas.fillRect(95, 620, 15, 64);
             }
-            // In room named
             DrawCheckbox(125, 700, 64, 64, "when", !!requirements.roomName, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 702, 115, 60, ((_d = requirements.roomName) === null || _d === void 0 ? void 0 : _d.inverted) ? "not in" : "in", disabled || !requirements.roomName ? "#ddd" : "White", "", "", disabled || !requirements.roomName);
@@ -37316,7 +37955,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillStyle = (requirements.roomName.inverted ? !res : res) ? "#00FF22" : "#AA0000";
                 MainCanvas.fillRect(95, 700, 15, 64);
             }
-            // In presence of role
             DrawCheckbox(125, 780, 64, 64, "when", !!requirements.role, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 782, 115, 60, ((_e = requirements.role) === null || _e === void 0 ? void 0 : _e.inverted) ? "not in" : "in", disabled || !requirements.role ? "#ddd" : "White", "", "", disabled || !requirements.role);
@@ -37331,7 +37969,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MainCanvas.fillStyle = (requirements.role.inverted ? !res : res) ? "#00FF22" : "#AA0000";
                 MainCanvas.fillRect(95, 780, 15, 64);
             }
-            // In presence of player
             DrawCheckbox(125, 860, 64, 64, "when", !!requirements.player, disabled);
             MainCanvas.textAlign = "center";
             DrawButton(324, 862, 115, 60, ((_h = requirements.player) === null || _h === void 0 ? void 0 : _h.inverted) ? "not in" : "in", disabled || !requirements.player ? "#ddd" : "White", "", "", disabled || !requirements.player);
@@ -37360,7 +37997,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     });
                 }
             }
-            // hover text for timer behavior toggle
             MainCanvas.textAlign = "center";
             if (data.timer !== null && MouseIn(125, 450, 80, 64))
                 DrawButtonHover(125, 450, 64, 64, `Removes ${this.conditionCategory.slice(0, -1)} instead of only deactivating it `);
@@ -37376,12 +38012,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.Exit();
                 return true;
             }
-            // Cancel
             if (this.changes && MouseIn(1815, 190, 90, 90)) {
                 this.Exit();
                 return true;
             }
-            // help text
             if (MouseIn(1815, 190, 90, 90)) {
                 this.showHelp = !this.showHelp;
                 return true;
@@ -37391,9 +38025,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (!this.checkAccess())
                 return false;
             const data = (_a = this.changes) !== null && _a !== void 0 ? _a : this.conditionCategoryData;
-            ////// status and timer area
             if (data.timer === null) {
-                // Enable timer
                 if (MouseIn(120, 360, 820, 160)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer = 5 * 60 * 1000;
@@ -37401,64 +38033,54 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
             }
             else {
-                // -1d
                 if (MouseIn(120, 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer -= 1 * 24 * 60 * 60 * 1000;
                     return true;
                 }
-                // -1h
                 if (MouseIn(120 + 125, 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer -= 1 * 60 * 60 * 1000;
                     return true;
                 }
-                // -5m
                 if (MouseIn(120 + 2 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer -= 5 * 60 * 1000;
                     return true;
                 }
-                // Disable timer
                 if (MouseIn(120 + 3 * (125), 360, 70, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer = null;
                     this.changes.timerRemove = false;
                     return true;
                 }
-                // +5m
                 if (MouseIn(105 + 4 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer += 5 * 60 * 1000;
                     return true;
                 }
-                // +1h
                 if (MouseIn(105 + 5 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer += 1 * 60 * 60 * 1000;
                     return true;
                 }
-                // +1d
                 if (MouseIn(105 + 6 * (125), 360, 85, 60)) {
                     this.changes = this.makeChangesData();
                     this.changes.timer += 1 * 24 * 60 * 60 * 1000;
                     return true;
                 }
-                // Timer remove toggle
                 if (MouseIn(125, 450, 64, 64)) {
                     this.changes = this.makeChangesData();
                     this.changes.timerRemove = !this.changes.timerRemove;
                     return true;
                 }
             }
-            ////// condition factors area
             const requirements = data.requirements;
             if (MouseIn(530, 550, 410, 60)) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.orLogic = this.changes.requirements.orLogic ? undefined : true;
                 return true;
             }
-            // In room
             if (MouseIn(125, 620, 64, 64)) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.room = this.changes.requirements.room ? undefined : { type: "public" };
@@ -37474,7 +38096,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.room.type = this.changes.requirements.room.type === "public" ? "private" : "public";
                 return true;
             }
-            // In room named
             if (MouseIn(125, 700, 64, 64)) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.roomName = this.changes.requirements.roomName ? undefined : { name: "" };
@@ -37486,7 +38107,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.roomName.inverted = this.changes.requirements.roomName.inverted ? undefined : true;
                 return true;
             }
-            // In presence of role
             if (MouseIn(125, 780, 64, 64)) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.role = this.changes.requirements.role ? undefined : { role: AccessLevel.mistress };
@@ -37508,7 +38128,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.changes.requirements.role.role = roleSelection < AccessLevel.public ? roleSelection + 1 : AccessLevel.clubowner;
                 return true;
             }
-            // In presence of player
             if (MouseIn(125, 860, 64, 64)) {
                 this.changes = this.makeChangesData();
                 this.changes.requirements.player = this.changes.requirements.player ? undefined : { memberNumber: 0 };
@@ -37546,7 +38165,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             DrawText(`Note: Settings are applied to new curses and all existing ones set to the global config.`, 130, 210, "Black", "");
             const data = (_a = this.changes) !== null && _a !== void 0 ? _a : this.conditionCategoryData;
             const access = this.checkAccess();
-            ////// right side: special curse category options
             if (data.data) {
                 DrawCheckbox(1050, 267, 64, 64, "Remove the item when the curse", data.data.itemRemove, !access);
                 MainCanvas.save();
@@ -37555,7 +38173,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawText("triggering - does not remove locked items", 1152, 387, "Black");
                 MainCanvas.restore();
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.ConditionsGlobalCurses]);
             }
@@ -37645,7 +38262,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     access,
                     data,
                     displayName: res[0],
-                    extra: res[1]
+                    extra: res[1],
                 });
             }
             this.conditionEntries = this.sortEntries(this.conditionEntries);
@@ -37673,7 +38290,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawText(this.failed ? `Failed to get data from ${this.character.Name}. Maybe you have no access?` : "Loading...", 1000, 480, "Black");
                 return true;
             }
-            // Column separator
             MainCanvas.beginPath();
             MainCanvas.moveTo(953, 160);
             MainCanvas.lineTo(953, 780);
@@ -37686,9 +38302,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const Y = 170 + (off % PER_COLUMN_COUNT) * 90;
                 const X = 120 + Math.floor(off / PER_COLUMN_COUNT) * 865;
                 const useGlobalCategorySetting = !e.data.requirements;
-                // description detailed hover text
-                if ((off + 1) % PER_COLUMN_COUNT === 0 || // smaller click area for an element at the end of a full column
-                    i === this.conditionEntries.length - 1 ? // smaller click area for the last element on the list
+                if ((off + 1) % PER_COLUMN_COUNT === 0 ||
+                    i === this.conditionEntries.length - 1 ?
                     MouseIn(X, Y, 440, 60) : MouseIn(X, Y, 440, 90)) {
                     DrawHoverElements.push(() => {
                         this.showDetailedDescriptionBackground(off < PER_COLUMN_COUNT ? 985 : 120);
@@ -37697,12 +38312,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         }
                     });
                 }
-                // description
                 MainCanvas.textAlign = "left";
                 DrawButton(X, Y, 440, 60, "", "White");
                 this.drawCategoryImage(X, Y, e);
                 DrawTextFit(e.displayName, X + 65, Y + 30, 365, "Black");
-                // config button info
                 MainCanvas.textAlign = "center";
                 DrawButton(X + 470, Y, 240, 60, "", e.data.active ? "#d8fed7" : "White");
                 if (useGlobalCategorySetting) {
@@ -37713,9 +38326,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 DrawImageEx("Icons/General.png", X + 480, Y + 7, {
                     Height: 46,
-                    Width: 46
+                    Width: 46,
                 });
-                // shows time left (XXd -> XXh -> XXm -> XXs) or ∞
                 let timeLeftText = "n/a";
                 if (e.data.timer === null) {
                     timeLeftText = "∞";
@@ -37725,7 +38337,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 DrawText(timeLeftText, X + 570, Y + 30, "Black", "");
                 this.drawEntryExtra(X, Y, e);
-                // remove curse
                 if (e.access) {
                     DrawButton(X + 740, Y, 60, 60, "X", "White", "", this.removeLabel);
                 }
@@ -37741,7 +38352,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
             }
             MainCanvas.textAlign = "center";
-            // activate/deactivate buttons
             const accessFull = this.conditionCategoryData.access_normal && this.conditionCategoryData.access_limited;
             DrawButton(678, 820, 170, 50, "", accessFull ? "White" : "#ddd", "", accessFull ? `Switch all added ${this.conditionCategory} to active` : "You have no permission to use this", !accessFull);
             DrawTextFit(`Activate all`, 680 + 170 / 2, 820 + 25, 145, "Black", "");
@@ -37753,7 +38363,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.fill();
             DrawImageEx("Icons/General.png", 675 + 120, 885 + 1, {
                 Height: 44,
-                Width: 44
+                Width: 44,
             });
             DrawButton(870, 820, 170, 50, "Deactivate all", accessFull ? "White" : "#ddd", "", accessFull ? `Switch all added ${this.conditionCategory} to inactive` : "You have no permission to use this", !accessFull);
             DrawButton(870, 885, 170, 46, "", accessFull ? "White" : "#ddd", "", accessFull ? `Deactivate only global config ${this.conditionCategory}` : "You have no permission to use this", !accessFull);
@@ -37764,9 +38374,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.fill();
             DrawImageEx("Icons/General.png", 868 + 120, 885 + 1, {
                 Height: 44,
-                Width: 44
+                Width: 44,
             });
-            // change global config button
             DrawButton(1068, 820, 505, 90, "", this.conditionCategoryData.access_configure ? "White" : "#ddd", "", this.conditionCategoryData.access_configure ? `Existing ${this.conditionCategory} set to global ${this.conditionCategory} config are also changed` : "You have no permission to use this", !this.conditionCategoryData.access_configure);
             DrawTextFit(`Change global ${this.conditionCategory} config`, 1018 + 680 / 2, 865, 400, "Black", "");
             MainCanvas.beginPath();
@@ -37775,23 +38384,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MainCanvas.fill();
             DrawImageEx("Icons/General.png", 1068 + 10, 820 + 10, {
                 Height: 70,
-                Width: 70
+                Width: 70,
             });
-            // filter
             MainCanvas.textAlign = "left";
             positionElement(this.filterInput, 1200, 110, 500, 64);
-            // reset button
             MainCanvas.textAlign = "center";
             if (this.filterInput.value) {
                 DrawButton(1470, 82, 64, 64, "X", "White");
             }
-            // sort toggle
             DrawButton(1583, 82, 64, 64, "", "White");
             DrawImageEx("Icons/Accept.png", 1583 + 3, 82 + 3, { Alpha: activeSort ? 1 : 0.2, Width: 58, Height: 58 });
-            // A-Z toggle
             DrawButton(1683, 82, 64, 64, "", "White");
             DrawTextFit("A-Z", 1683 + 32, 82 + 32 + 1, 64 - 4, alphabeticalSort$2 ? "black" : "#bbb");
-            // Pagination
             const totalPages = Math.ceil(this.conditionEntries.length / PER_PAGE_COUNT$2);
             DrawBackNextButton(1605, 820, 300, 90, `Page ${this.page + 1} / ${Math.max(totalPages, 1)}`, "White", "", () => "", () => "");
             return false;
@@ -37801,7 +38405,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 this.Exit();
                 return true;
             }
-            // help text
             if (MouseIn(1815, 190, 90, 90)) {
                 this.showHelp = !this.showHelp;
                 return true;
@@ -37815,11 +38418,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const e = this.conditionEntries[i];
                 const Y = 170 + (off % PER_COLUMN_COUNT) * 90;
                 const X = 120 + Math.floor(off / PER_COLUMN_COUNT) * 865;
-                // description
                 if (MouseIn(X, Y, 440, 60)) {
                     this.onDescriptionTextClick(e.condition, e);
                 }
-                // config button info
                 if (MouseIn(X + 470, Y, 240, 60)) {
                     this.openEditSubscreen(e.condition);
                     return true;
@@ -37829,7 +38430,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return true;
                 }
             }
-            // activate/deactivate buttons
             const accessFull = this.conditionCategoryData.access_normal && this.conditionCategoryData.access_limited;
             if (accessFull && MouseIn(678, 820, 170, 50)) {
                 this.character.conditionUpdateMultiple(this.conditionCategory, Object.entries(this.conditionCategoryData.conditions)
@@ -37855,27 +38455,22 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     .map(([c, d]) => c), { active: false });
                 return true;
             }
-            // change global config button
             if (this.conditionCategoryData.access_configure && MouseIn(1068, 820, 505, 90)) {
                 this.openGlobalConfig();
                 return true;
             }
-            // reset button
             if (MouseIn(1470, 82, 64, 64)) {
                 this.filterInput.value = "";
                 this.onDataChange();
             }
-            // sort toggle
             if (MouseIn(1583, 82, 64, 64)) {
                 activeSort = !activeSort;
                 this.onDataChange();
             }
-            // A-Z toggle
             if (MouseIn(1683, 82, 64, 64)) {
                 alphabeticalSort$2 = !alphabeticalSort$2;
                 this.onDataChange();
             }
-            // Pagination
             const totalPages = Math.ceil(this.conditionEntries.length / PER_PAGE_COUNT$2);
             if (MouseIn(1605, 800, 150, 90)) {
                 this.page--;
@@ -37905,18 +38500,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         {
             title: "Items",
             filter: g => g.Category === "Item",
-            batchType: "items"
+            batchType: "items",
         },
         {
             title: "Clothing",
             filter: g => g.Category === "Appearance" && g.Clothing,
-            batchType: "clothes"
+            batchType: "clothes",
         },
         {
             title: "Body",
             filter: g => g.Category === "Appearance" && !g.Clothing && g.AllowCustomize,
-            batchType: "body"
-        }
+            batchType: "body",
+        },
     ];
     class GuiCursesAdd extends GuiSubscreen {
         constructor(character) {
@@ -38004,7 +38599,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     DrawButton(xOffset + 106 + 281 * column, 240 + 69 * row, 265, 54, getVisibleGroupName(group), color, undefined, text, itemIsCursed || !allowCurse || this.permissionMode);
                 }
             }
-            // permission mode legend
             if (this.permissionMode) {
                 MainCanvas.fillStyle = "#50ff56";
                 MainCanvas.fillRect(1284, 75, 166, 64);
@@ -38017,13 +38611,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawText(`Limited`, 1284 + 1 * 166 + 166 / 2, 75 + 34, "Black");
                 DrawText(`Blocked`, 1284 + 2 * 166 + 166 / 2, 75 + 34, "Black");
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[this.permissionMode ? Views.CursesAddPermissionMode : Views.CursesAdd]);
             }
-            // Pagination
             const totalPages = Math.ceil(CATEGORIES.length / 2);
-            DrawBackNextButton(1605, 820, 300, 90, `Page ${this.page + 1} / ${Math.max(totalPages, 1)}`, "White", "", () => "", () => "");
+            DrawBackNextButton(1605, 865, 300, 90, `Page ${this.page + 1} / ${Math.max(totalPages, 1)}`, "White", "", () => "", () => "");
         }
         Click() {
             var _a;
@@ -38035,7 +38627,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             if (this.curseData === null)
                 return;
-            // Permission mode
             if (MouseIn(1815, 305, 90, 90)) {
                 this.permissionMode = this.curseData.access_changeLimits && !this.permissionMode;
                 return;
@@ -38073,13 +38664,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                 }
             }
-            // Pagination
             const totalPages = Math.ceil(CATEGORIES.length / 2);
-            if (MouseIn(1605, 800, 150, 90)) {
+            if (MouseIn(1605, 865, 150, 90)) {
                 this.page = clampWrap(this.page - 1, 0, totalPages - 1);
                 return true;
             }
-            else if (MouseIn(1755, 800, 150, 90)) {
+            else if (MouseIn(1755, 865, 150, 90)) {
                 this.page = clampWrap(this.page + 1, 0, totalPages - 1);
                 return true;
             }
@@ -38100,7 +38690,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             DrawButton(120, 820, 250, 90, "Add new curse", "White", "", "Place new curses on body, items or clothes");
             const access = this.conditionCategoryData.access_normal || this.conditionCategoryData.access_limited;
             DrawButton(400, 820, 250, 90, "Lift all curses", access ? "White" : "#ddd", "", access ? "Remove all curses on body, items or clothes" : "You have no permission to use this", !access);
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.ConditionsViewCurses]);
             }
@@ -38123,7 +38712,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         drawCategoryImage(X, Y, data) {
             DrawImageEx(data.extra.type === "body" ? "Icons/Character.png" : data.extra.type === "clothing" ? "Icons/Dress.png" : "Assets/Female3DCG/ItemArms/Preview/NylonRope.png", X + 6, Y + 6, {
                 Height: 50,
-                Width: 50
+                Width: 50,
             });
         }
         drawEntryExtra(X, Y, data) {
@@ -38134,7 +38723,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawImageEx("Icons/Remove.png", X + 610, Y + 10, {
                     Height: 40,
                     Width: 40,
-                    Alpha: itemRemove ? 1 : 0.2
+                    Alpha: itemRemove ? 1 : 0.2,
                 });
                 if (MouseIn(X + 610, Y + 6, 44, 44)) {
                     DrawHoverElements.push(() => {
@@ -38146,7 +38735,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawImageEx(data.extra.propertiesCursed ? "Icons/Lock.png" : "Icons/Unlock.png", X + 660, Y + 10, {
                     Height: 40,
                     Width: 40,
-                    Alpha: data.extra.propertiesCursed ? 1 : 0.2
+                    Alpha: data.extra.propertiesCursed ? 1 : 0.2,
                 });
                 if (MouseIn(X + 660, Y + 6, 44, 44)) {
                     DrawHoverElements.push(() => {
@@ -38167,7 +38756,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             if (data.data === null) {
                 return [`Blocked: ${getVisibleGroupName(group)}`, {
-                        type: group.Category === "Item" ? "item" : group.Clothing ? "clothing" : "body"
+                        type: group.Category === "Item" ? "item" : group.Clothing ? "clothing" : "body",
                     }];
             }
             else {
@@ -38175,7 +38764,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return [`${(_a = item === null || item === void 0 ? void 0 : item.Description) !== null && _a !== void 0 ? _a : data.data.Name} (${getVisibleGroupName(group)})`, {
                         type: group.Category === "Item" ? "item" : group.Clothing ? "clothing" : "body",
                         propertiesCursed: data.data.curseProperties,
-                        propertiesCursedShow: data.data.curseProperties || !item || curseAllowItemCurseProperty(item)
+                        propertiesCursedShow: data.data.curseProperties || !item || curseAllowItemCurseProperty(item),
                     }];
             }
         }
@@ -38225,7 +38814,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             this.processInputs();
                         },
                         value: (_c = data === null || data === void 0 ? void 0 : data.data.customData[k]) !== null && _c !== void 0 ? _c : (typeof v.default === "function" ? v.default() : v.default),
-                        access
+                        access,
                     });
                 }
             }
@@ -38239,7 +38828,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         const res = handler.processInput({
                             def: v,
                             key: k,
-                            value: this.changes.data.customData[k]
+                            value: this.changes.data.customData[k],
                         });
                         if (res !== undefined) {
                             if (!handler.validate(res, v)) {
@@ -38260,7 +38849,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             const access = this.checkAccess();
             MainCanvas.textAlign = "left";
             let Y = 175;
-            ////// right side: special rules category options
             if (this.definition.enforceable !== false) {
                 DrawCheckbox(1050, Y, 64, 64, "Enforce this rule", data.data.enforce, !access);
                 Y += 100;
@@ -38279,11 +38867,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         Y: (_b = v.Y) !== null && _b !== void 0 ? _b : Y,
                         key: k,
                         target: this.character,
-                        access
+                        access,
                     });
                 }
             }
-            // help text
             if (this.showHelp) {
                 MainCanvas.fillStyle = "#ffff88";
                 MainCanvas.fillRect(95, 80, 800, 600);
@@ -38328,7 +38915,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             Y: (_b = v.Y) !== null && _b !== void 0 ? _b : Y,
                             key: k,
                             target: this.character,
-                            access
+                            access,
                         });
                         if (access && res !== undefined) {
                             this.changes = this.makeChangesData();
@@ -38347,7 +38934,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (handler.unload) {
                         handler.unload({
                             def: v,
-                            key: k
+                            key: k,
                         });
                     }
                 }
@@ -38368,7 +38955,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return true;
             MainCanvas.textAlign = "left";
             DrawText(`Note: Settings are applied to new rules and all existing ones set to the global config.`, 130, 210, "Black", "");
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.ConditionsGlobalRules]);
             }
@@ -38508,7 +39094,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     continue;
                 this.ruleList.push({
                     name: entry[0],
-                    definition: entry[1]
+                    definition: entry[1],
                 });
             }
             const data = this.rulesData;
@@ -38543,36 +39129,30 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             DrawButton(1815, 305, 90, 90, "", this.rulesData.access_changeLimits ? "White" : "#ddd", this.permissionMode ? "Icons/Reset.png" : "Icons/Preference.png", this.rulesData.access_changeLimits ?
                 (this.permissionMode ? "Leave permission mode" : "Edit rules permissions") :
                 "You have no permission to change limits", !this.rulesData.access_changeLimits);
-            // filter
             MainCanvas.textAlign = "left";
             DrawText("Filter:", 130, 215, "Black");
             positionElement(this.filterInput, 550, 210, 600, 64);
-            // reset button
             MainCanvas.textAlign = "center";
             if (this.filterInput.value) {
                 DrawButton(870, 182, 64, 64, "X", "White");
             }
-            // filter buttons
             DrawButton(1083, 182, 64, 64, "ALL", this.filterRuleType != null ? "White" : "#FEC5C5");
-            DrawButton(1183, 82, 64, 64, "", this.filterRuleType === 0 /* RuleType.Block */ ? "#FEC5C5" : "White");
-            DrawImageEx(RULE_ICONS[0 /* RuleType.Block */], 1183 + 3, 82 + 3, { Width: 58, Height: 58 });
-            DrawButton(1283, 82, 64, 64, "", this.filterRuleType === 1 /* RuleType.Alt */ ? "#FEC5C5" : "White");
-            DrawImageEx(RULE_ICONS[1 /* RuleType.Alt */], 1283 + 3, 82 + 3, { Width: 58, Height: 58 });
-            DrawButton(1383, 82, 64, 64, "", this.filterRuleType === 2 /* RuleType.Setting */ ? "#FEC5C5" : "White");
-            DrawImageEx(RULE_ICONS[2 /* RuleType.Setting */], 1383 + 3, 82 + 3, { Width: 58, Height: 58 });
-            DrawButton(1183, 182, 64, 64, "", this.filterRuleType === 3 /* RuleType.RC */ ? "#FEC5C5" : "White");
-            DrawImageEx(RULE_ICONS[3 /* RuleType.RC */], 1183 + 3, 182 + 3, { Width: 58, Height: 58 });
-            DrawButton(1283, 182, 64, 64, "", this.filterRuleType === 4 /* RuleType.Speech */ ? "#FEC5C5" : "White");
-            DrawImageEx(RULE_ICONS[4 /* RuleType.Speech */], 1283 + 3, 182 + 3, { Width: 58, Height: 58 });
-            DrawButton(1383, 182, 64, 64, "", this.filterRuleType === 99 /* RuleType.Other */ ? "#FEC5C5" : "White");
-            DrawImageEx(RULE_ICONS[99 /* RuleType.Other */], 1383 + 3, 182 + 3, { Width: 58, Height: 58 });
-            // sort toggle
+            DrawButton(1183, 82, 64, 64, "", this.filterRuleType === 0 ? "#FEC5C5" : "White");
+            DrawImageEx(RULE_ICONS[0], 1183 + 3, 82 + 3, { Width: 58, Height: 58 });
+            DrawButton(1283, 82, 64, 64, "", this.filterRuleType === 1 ? "#FEC5C5" : "White");
+            DrawImageEx(RULE_ICONS[1], 1283 + 3, 82 + 3, { Width: 58, Height: 58 });
+            DrawButton(1383, 82, 64, 64, "", this.filterRuleType === 2 ? "#FEC5C5" : "White");
+            DrawImageEx(RULE_ICONS[2], 1383 + 3, 82 + 3, { Width: 58, Height: 58 });
+            DrawButton(1183, 182, 64, 64, "", this.filterRuleType === 3 ? "#FEC5C5" : "White");
+            DrawImageEx(RULE_ICONS[3], 1183 + 3, 182 + 3, { Width: 58, Height: 58 });
+            DrawButton(1283, 182, 64, 64, "", this.filterRuleType === 4 ? "#FEC5C5" : "White");
+            DrawImageEx(RULE_ICONS[4], 1283 + 3, 182 + 3, { Width: 58, Height: 58 });
+            DrawButton(1383, 182, 64, 64, "", this.filterRuleType === 99 ? "#FEC5C5" : "White");
+            DrawImageEx(RULE_ICONS[99], 1383 + 3, 182 + 3, { Width: 58, Height: 58 });
             DrawButton(1483, 132, 64, 64, "", "White", undefined, "Toggle availability-based sorting");
             DrawImageEx("Icons/LockMenu.png", 1483 + 3, 132 + 3, { Alpha: availabilitySort$1 ? 1 : 0.2, Width: 58, Height: 58 });
-            // A-Z toggle
             DrawButton(1583, 132, 64, 64, "", "white", undefined, "Toggle alphabetical sorting");
             DrawTextFit("A-Z", 1583 + 32, 132 + 32 + 1, 64 - 4, alphabeticalSort$1 ? "black" : "#bbb");
-            // Actual rules
             MainCanvas.textAlign = "left";
             for (let off = 0; off < PER_PAGE_COUNT$1; off++) {
                 const i = this.page * PER_PAGE_COUNT$1 + off;
@@ -38587,7 +39167,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const allowAccess = this.HasAccess(e);
                 DrawImageEx(RULE_ICONS[e.definition.type], 125, Y, {
                     Height: 64,
-                    Width: 64
+                    Width: 64,
                 });
                 let color;
                 let text;
@@ -38601,7 +39181,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     text = ruleIsCreated ? "Already applied" :
                         !allowAccess ? "You don't have permission to use this rule" : "";
                 }
-                // Rule name
                 DrawButton(200, Y, 1350, 64, "", color, "", "", ruleIsCreated || this.permissionMode);
                 let description = e.definition.name;
                 if (e.definition.shortDescription) {
@@ -38614,11 +39193,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     });
                 }
             }
-            // Pagination
             const totalPages = Math.max(1, Math.ceil(this.ruleList.length / PER_PAGE_COUNT$1));
             MainCanvas.textAlign = "center";
             DrawBackNextButton(1605, 800, 300, 90, `${DialogFindPlayer("Page")} ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
-            // permission mode legend
             if (this.permissionMode) {
                 MainCanvas.fillStyle = "#50ff56";
                 MainCanvas.fillRect(1739, 574, 166, 64);
@@ -38631,7 +39208,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawText(`Limited`, 1739 + 166 / 2, 638 + 34, "Black");
                 DrawText(`Blocked`, 1739 + 166 / 2, 702 + 34, "Black");
             }
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[this.permissionMode ? Views.RulesAddPermissionMode : Views.RulesAdd]);
             }
@@ -38646,56 +39222,50 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             if (this.rulesData === null)
                 return;
-            // Permission mode
             if (MouseIn(1815, 305, 90, 90)) {
                 this.permissionMode = this.rulesData.access_changeLimits && !this.permissionMode;
                 return;
             }
-            // reset button
             if (MouseIn(870, 182, 64, 64)) {
                 this.filterInput.value = "";
                 this.rebuildList();
             }
-            // filter buttons
             if (MouseIn(1083, 182, 64, 64)) {
                 this.filterRuleType = null;
                 this.rebuildList();
             }
             if (MouseIn(1183, 82, 64, 64)) {
-                this.filterRuleType = 0 /* RuleType.Block */;
+                this.filterRuleType = 0;
                 this.rebuildList();
             }
             if (MouseIn(1283, 82, 64, 64)) {
-                this.filterRuleType = 1 /* RuleType.Alt */;
+                this.filterRuleType = 1;
                 this.rebuildList();
             }
             if (MouseIn(1383, 82, 64, 64)) {
-                this.filterRuleType = 2 /* RuleType.Setting */;
+                this.filterRuleType = 2;
                 this.rebuildList();
             }
             if (MouseIn(1183, 182, 64, 64)) {
-                this.filterRuleType = 3 /* RuleType.RC */;
+                this.filterRuleType = 3;
                 this.rebuildList();
             }
             if (MouseIn(1283, 182, 64, 64)) {
-                this.filterRuleType = 4 /* RuleType.Speech */;
+                this.filterRuleType = 4;
                 this.rebuildList();
             }
             if (MouseIn(1383, 182, 64, 64)) {
-                this.filterRuleType = 99 /* RuleType.Other */;
+                this.filterRuleType = 99;
                 this.rebuildList();
             }
-            // sort toggle
             if (MouseIn(1483, 132, 64, 64)) {
                 availabilitySort$1 = !availabilitySort$1;
                 this.rebuildList();
             }
-            // A-Z toggle
             if (MouseIn(1583, 132, 64, 64)) {
                 alphabeticalSort$1 = !alphabeticalSort$1;
                 this.rebuildList();
             }
-            // Actual rules
             for (let off = 0; off < PER_PAGE_COUNT$1; off++) {
                 const i = this.page * PER_PAGE_COUNT$1 + off;
                 if (i >= this.ruleList.length)
@@ -38707,7 +39277,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const ruleIsCreated = this.rulesData.conditions[e.name] !== undefined;
                 const accessLevel = (_a = this.rulesData.limits[e.name]) !== null && _a !== void 0 ? _a : ConditionsLimit.normal;
                 const allowAccess = [this.rulesData.access_normal, this.rulesData.access_limited, false][accessLevel];
-                // Rule name
                 if (MouseIn(200, Y, 1350, 64)) {
                     const ruleName = e.name;
                     if (this.permissionMode) {
@@ -38719,7 +39288,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return;
                 }
             }
-            // Pagination
             const totalPages = Math.ceil(this.ruleList.length / PER_PAGE_COUNT$1);
             if (MouseIn(1605, 800, 150, 90)) {
                 this.page--;
@@ -38759,7 +39327,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (super.Run() || this.conditionCategoryData === null)
                 return true;
             DrawButton(120, 820, 384, 90, "Add new rule", "White", "", "...from the list of yet unestablished rules");
-            // help text
             if (this.showHelp) {
                 showHelp(HELP_TEXTS[Views.ConditionsViewRules]);
             }
@@ -38777,7 +39344,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         drawCategoryImage(X, Y, entry) {
             DrawImageEx(RULE_ICONS[entry.extra.definition.type], X + 6, Y + 6, {
                 Height: 50,
-                Width: 50
+                Width: 50,
             });
         }
         drawEntryExtra(X, Y, entry) {
@@ -38785,7 +39352,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawImageEx("Icons/Management.png", X + 610, Y + 10, {
                     Height: 40,
                     Width: 40,
-                    Alpha: entry.data.data.enforce ? 1 : 0.2
+                    Alpha: entry.data.data.enforce ? 1 : 0.2,
                 });
                 if (MouseIn(X + 610, Y + 6, 44, 44)) {
                     DrawHoverElements.push(() => {
@@ -38797,7 +39364,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawImageEx("Icons/Title.png", X + 660, Y + 10, {
                     Height: 40,
                     Width: 40,
-                    Alpha: entry.data.data.log ? 1 : 0.2
+                    Alpha: entry.data.data.log ? 1 : 0.2,
                 });
                 if (MouseIn(X + 660, Y + 6, 44, 44)) {
                     DrawHoverElements.push(() => {
@@ -38928,7 +39495,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 setSubscreen(new GuiTutorial(this.character, true));
         }
         Exit() {
-            // Empty
         }
     }
 
@@ -38944,11 +39510,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawText(`Dear ${Player.Name},`, 285, 510, "Black");
                 DrawTextWrap(`we are happy you are interested in our extension for the Bondage Club (BC) in which we invest a lot of our free time and love. If you have any questions, suggestions, or encounter any bugs, please feel free to get in touch with us on Discord. A button linking to it is in the main menu.`, 285 - 940 / 2, 544, 940, 160, "black");
                 MainCanvas.restore();
-            }
+            },
         },
         {
             name: "Quick overview",
-            image: "quick_overview.png"
+            image: "quick_overview.png",
         },
         {
             name: "New chat room icons",
@@ -38960,79 +39526,79 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (tick < 4000 || tick > 6000 && tick < 9000) {
                     drawTypingIndicatorSpeechBubble(MainCanvas, 450, 128, 50, 48, 1);
                 }
-            }
+            },
         },
         {
             name: "Introduction to roles and permissions",
-            image: "basic_roles_permissions.png"
+            image: "basic_roles_permissions.png",
         },
         {
             name: "End of introduction",
             image: "basic_end.png",
             afterDraw() {
                 DrawCharacter(Player, 220, 160, 0.78, true, MainCanvas);
-            }
+            },
         },
         {
             name: "Logging module screen",
-            image: "log_part1.png"
+            image: "log_part1.png",
         },
         {
             name: "Logging configuration screen",
-            image: "log_part2.png"
+            image: "log_part2.png",
         },
         {
             name: "Curses module overview",
-            image: "curses1.png"
+            image: "curses1.png",
         },
         {
             name: "Adding curses",
-            image: "curses2.png"
+            image: "curses2.png",
         },
         {
             name: "Rules module overview",
-            image: "rules1.png"
+            image: "rules1.png",
         },
         {
             name: "Adding a rule",
-            image: "rules2.png"
+            image: "rules2.png",
         },
         {
             name: "Limiting curse slots / rules",
-            image: "limit_system.png"
+            image: "limit_system.png",
         },
         {
             name: "Commands module overview",
-            image: "commands.png"
+            image: "commands.png",
         },
         {
             name: "Trigger conditions",
-            image: "trigger_conditions.png"
+            image: "trigger_conditions.png",
         },
         {
             name: "Permission system overview",
-            image: "permissions1.png"
+            image: "permissions1.png",
         },
         {
             name: "Permission system base principles",
-            image: "permissions2.png"
+            image: "permissions2.png",
         },
         {
             name: "General permission examples",
-            image: "permissions3.png"
+            image: "permissions3.png",
         },
         {
             name: "Permission setup example 1",
-            image: "permissions4.png"
+            image: "permissions4.png",
         },
         {
             name: "Permission setup example 2",
-            image: "permissions5.png"
+            image: "permissions5.png",
         },
         {
             name: "Chat commands",
-            image: "chat_commands.png"
-        }
+            image: "chat_commands.png",
+        },
     ];
     const TUTORIAL_BASIC_END = TUTORIAL_PAGES.findIndex(i => i.name === "End of introduction");
     class GuiTutorial extends GuiSubscreen {
@@ -39072,705 +39638,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         Exit() {
             setSubscreen(this.firstRun ? new GuiWelcomeSelection(this.character) : new GuiMainMenu(this.character));
-        }
-    }
-
-    const MAX_STACK_SIZE = 15;
-    let firstError = true;
-    let lastReceivedMessageType = "";
-    let lastReceivedMessageTime = 0;
-    let lastSentMessageType = "";
-    let lastSentMessageTime = 0;
-    let logServerMessages = false;
-    function debugSetLogServerMessages(value) {
-        logServerMessages = value;
-    }
-    function debugGenerateReport(includeBCX = true) {
-        let res = `----- Debug report -----\n`;
-        res += `Location: ${window.location.href.replace(/\d{4,}/g, "<numbers>")}\n`;
-        res += `UA: ${window.navigator.userAgent}\n`;
-        res += `BC Version: ${GameVersion}\n`;
-        res += `ModSDK Version: ${bcModSDK.version}\n`;
-        res += `Mods:\n` +
-            bcModSDK.getModsInfo()
-                .map(mod => `  - ${mod.fullName} (${mod.name}): ${mod.version}\n` + (mod.repository ? `    repository: ${mod.repository}\n` : ""))
-                .join("");
-        const otherMods = Object.entries(detectOtherMods()).filter(i => i[1]);
-        if (otherMods.length > 0) {
-            res += `Detected legacy mods (NOT USING ModSDK):\n` +
-                otherMods
-                    .map(i => `  - ${i[0]}` + (typeof i[1] !== "boolean" ? `: ${i[1]}` : "") + "\n")
-                    .join("");
-        }
-        else {
-            res += `No known legacy mods detected.\n`;
-        }
-        const now = Date.now();
-        res += `\n----- BC state report -----\n`;
-        res += `Mouse position: ${MouseX} ${MouseY}\n`;
-        res += `Connected to server: ${ServerIsConnected}\n`;
-        res += `Local time: ${now}\n`;
-        res += `Server time: ${CurrentTime} (diff: ${(CurrentTime - now).toFixed(2)})\n`;
-        res += `Screen: ${CurrentModule}/${CurrentScreen}\n`;
-        res += `In chatroom: ${ServerPlayerIsInChatRoom()}\n`;
-        res += `GLVersion: ${GLVersion}\n`;
-        res += `Last received message: ${lastReceivedMessageType} (${lastReceivedMessageTime})\n`;
-        res += `Last sent message: ${lastSentMessageType} (${lastSentMessageTime})\n`;
-        if (includeBCX) {
-            res += `\n----- BCX report -----\n`;
-            res += `Version: ${VERSION$1}\n`;
-            res += `Init state: ${ModuleInitPhase[moduleInitPhase]}\n`;
-            res += `First init: ${firstTimeInit}\n`;
-            res += `Disabled modules: ${getDisabledModules().map(i => ModuleCategory[i]).join(", ") || "[None]"}\n`;
-            try {
-                if (ConditionsGetCategoryEnabled("curses")) {
-                    res += `Curses: ${Object.keys(ConditionsGetCategoryData("curses").conditions).join(", ") || "[None]"}\n`;
-                }
-            }
-            catch (error) {
-                res += `ERROR getting Curses data: ${debugPrettifyError(error)}\n`;
-            }
-            try {
-                if (ConditionsGetCategoryEnabled("rules")) {
-                    res += `Rules: ${Object.keys(ConditionsGetCategoryData("rules").conditions).join(", ") || "[None]"}\n`;
-                }
-            }
-            catch (error) {
-                res += `ERROR getting Rules data: ${debugPrettifyError(error)}\n`;
-            }
-        }
-        // SDK report
-        res += "\n" + debugGenerateSDKReport(includeBCX);
-        return res;
-    }
-    function debugGenerateSDKReport(verbose = false) {
-        let res = `----- ModSDK report -----\n`;
-        const patchingInfo = Array.from(bcModSDK.getPatchingInfo().values());
-        let hadWarnings = false;
-        const overwrittenFunctions = patchingInfo.filter(fn => fn.currentEntrypoint !== fn.sdkEntrypoint);
-        if (overwrittenFunctions.length > 0) {
-            hadWarnings = true;
-            res += `Functions overwritten by non-ModSDK mods:\n` +
-                overwrittenFunctions.map(fn => { var _a, _b; return `  - ${fn.name}: ${crc32((_b = (_a = fn.currentEntrypoint) === null || _a === void 0 ? void 0 : _a.toString().replaceAll("\r\n", "\n")) !== null && _b !== void 0 ? _b : "")}\n`; }).join("");
-        }
-        if (!hadWarnings) {
-            res += `No warnings.\n`;
-        }
-        const unexpectedHashes = getPatchedFunctionsHashes(false);
-        if (unexpectedHashes.length > 0 && (verbose || SUPPORTED_BC_VERSIONS.includes(GameVersion))) {
-            res += `\n----- BCX Patching report -----\n`;
-            if (unexpectedHashes.length > 0) {
-                res += `Patched functions with unknown checksums:\n` +
-                    unexpectedHashes.map(i => `  - ${i[0]}: ${i[1]}\n`).join("");
-            }
-        }
-        else if (verbose) {
-            res += `\n----- BCX Patching report -----\n`;
-            res += `No warnings.\n`;
-        }
-        return res;
-    }
-    function cleanupErrorLocation(location) {
-        return location
-            .replaceAll(window.location.href.substring(0, window.location.href.lastIndexOf("/")), "<url>")
-            .replace(/https:\/\/[^?/]+\/([^?]+)?bcx.js(?=$|\?|:)/, "<bcx>")
-            .replace(/\/\d{4,}\.html/, "/<numbers>.html")
-            .replace(/[?&]_=\d+(?=$|&|:)/, "");
-    }
-    function debugPrettifyError(error) {
-        if (error instanceof Error) {
-            let stack = `${error.stack}`.split("\n");
-            if (stack.length > MAX_STACK_SIZE) {
-                stack = stack.slice(0, MAX_STACK_SIZE).concat("    ...");
-            }
-            return stack.map(cleanupErrorLocation).join("\n");
-        }
-        return `${error}`;
-    }
-    function debugGenerateReportErrorEvent(event) {
-        const currentMod = contextCurrentModArea();
-        let res = `----- UNHANDLED ERROR ${currentMod != null ? `(IN ${currentMod || "BC"}) ` : ""}-----\n` +
-            `Message: ${event.message}\n` +
-            `Source: ${cleanupErrorLocation(event.filename)}:${event.lineno}:${event.colno}\n`;
-        res += debugPrettifyError(event.error) + "\n\n";
-        res += debugMakeContextReport();
-        try {
-            res += "\n" + debugGenerateReport(currentMod === "BCX");
-        }
-        catch (error) {
-            res += `----- Debug report -----\nERROR GENERATING DEBUG REPORT!\n${debugPrettifyError(error)}`;
-        }
-        return res;
-    }
-    function showErrorOverlay(title, description, contents, wrapCodeBlock = true, minTimeout, preContentHook) {
-        var _a, _b;
-        console.info("Error overlay displayed\n", contents);
-        if (wrapCodeBlock) {
-            contents = "```\n" + contents.trim() + "\n```";
-        }
-        const overlay = document.createElement("div");
-        overlay.style.position = "fixed";
-        overlay.style.inset = "0px";
-        overlay.style.zIndex = "999999";
-        overlay.style.background = "#00000090";
-        // Nice window
-        const win = document.createElement("div");
-        overlay.appendChild(win);
-        win.style.position = "absolute";
-        win.style.inset = "5%";
-        win.style.background = "white";
-        win.style.display = "flex";
-        win.style.flexDirection = "column";
-        win.style.padding = "1em";
-        // Title
-        const titleElem = document.createElement("h1");
-        win.appendChild(titleElem);
-        titleElem.innerText = title;
-        // Description
-        const descriptionElement = document.createElement("p");
-        win.appendChild(descriptionElement);
-        descriptionElement.innerHTML = description;
-        const contentElem = document.createElement("textarea");
-        // Copy button
-        if (preContentHook) {
-            preContentHook(win);
-        }
-        else {
-            const copy = document.createElement("button");
-            copy.style.cursor = "pointer";
-            win.appendChild(copy);
-            copy.innerText = "Copy report";
-            copy.onclick = () => {
-                contentElem.focus();
-                contentElem.select();
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(contentElem.value);
-                }
-                else {
-                    try {
-                        document.execCommand("copy");
-                    }
-                    catch (err) {
-                        /* Ignore */
-                    }
-                }
-            };
-        }
-        // Content
-        win.appendChild(contentElem);
-        contentElem.readOnly = true;
-        contentElem.value = contents;
-        contentElem.style.flex = "1";
-        contentElem.style.margin = "0.5em 0";
-        // Close button
-        let timeout = minTimeout !== null && minTimeout !== void 0 ? minTimeout : 0;
-        const close = document.createElement("button");
-        win.appendChild(close);
-        close.onclick = () => {
-            if (timeout > 0)
-                return;
-            overlay.remove();
-        };
-        const updateCloseButton = () => {
-            close.innerText = timeout > 0 ? `Close (${timeout})` : "Close";
-            close.disabled = timeout > 0;
-            if (timeout > 0) {
-                BCX_setTimeout(() => {
-                    timeout--;
-                    updateCloseButton();
-                }, 1000);
-            }
-            else {
-                close.style.cursor = "pointer";
-            }
-        };
-        updateCloseButton();
-        // Display it
-        (_b = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.blur) === null || _b === void 0 ? void 0 : _b.call(_a);
-        window.document.body.appendChild(overlay);
-    }
-    let compatibilityCheckTimeout;
-    const COMPATIBILITY_CHECK_INTERVAL = 60000;
-    let didReportCompatibilityIssues = false;
-    function detectCompatibilityProblems() {
-        if (didReportCompatibilityIssues || moduleInitPhase !== ModuleInitPhase.ready)
-            return;
-        const legacyMods = detectOtherMods();
-        let result = "";
-        let wait = 0;
-        if (legacyMods.BcUtil) {
-            wait = 5;
-            result += `----- BC-Util -----\n` +
-                `BCX detected the presence of the incompatible mod BC-Util.\n` +
-                `BC-Util is a useful and high quality mod, which has unfortunately not been updated since September 2021 and doesn't use ModSDK.\n` +
-                `It isn't compatible with BCX due to that and is known to cause problems, including crashes (especially in the wardrobe).\n` +
-                `\n`;
-        }
-        if (legacyMods.QuickAccessMenu) {
-            wait = 5;
-            result += `----- Quick Access Menu (QAM) -----\n` +
-                `BCX detected the presence of the incompatible mod Quick Access Menu.\n` +
-                `Besides not using ModSDK to support compatibility with other mods, it also modifies parts of the game such that it can break parts of BCX's functionality.\n` +
-                `Its author has refused multiple times to make the mod more compatible with other mods, causing a fair amount of extra work for other moders (for example BCX & FBC).\n` +
-                `Error reports while using QAM will not be acted upon.\n` +
-                `\n`;
-        }
-        if (legacyMods.Curse) {
-            result += `----- "Cursed" Script -----\n` +
-                `BCX detected the presence of the obsolete mod Cursed script.\n` +
-                `Curse is the spiritual predecessor of BCX, and can be considered obsolete since BCX has almost the same features (and much more). Curse is no longer updated since September 2021 and doesn't use ModSDK.\n` +
-                `As BCX is meant to supersede Curse, no compatibility can be guaranteed.\n` +
-                `\n`;
-        }
-        const patchingInfo = Array.from(bcModSDK.getPatchingInfo().values());
-        const unexpectedHashes = SUPPORTED_BC_VERSIONS.includes(GameVersion) ? getPatchedFunctionsHashes(false) : [];
-        const overwrittenFunctions = patchingInfo.filter(fn => fn.currentEntrypoint !== fn.sdkEntrypoint);
-        // If no known legacy mods are detected, look for unknown ones where it matters
-        if (Array.from(Object.values(legacyMods)).every(v => !v) && (unexpectedHashes.length > 0 || overwrittenFunctions.length > 0)) {
-            result += `----- Unknown mod not using ModSDK -----\n` +
-                `BCX detected the presence of modifications not done using ModSDK or any known legacy mod.\n` +
-                `If you are not author of the mod, please report what mod caused this warning on the BC Scripting Community Discord server: https://discord.gg/SHJMjEh9VH\n` +
-                `If you are author of the mod triggering this warning, please modify your mod to use ModSDK: https://github.com/Jomshir98/bondage-club-mod-sdk. Feel free to ask for help doing that on the above-mentioned Discord server.\n` +
-                `\n`;
-        }
-        // If there is a result, attach extra info to trace it
-        if (result) {
-            result += `----- Detected modifications -----\n` +
-                (unexpectedHashes.length > 0 ? `Patched functions with unknown checksums:\n` + unexpectedHashes.map(i => `  - ${i[0]}: ${i[1]}\n`).join("") : "") +
-                (overwrittenFunctions.length > 0 ? `Overwritten functions:\n` + overwrittenFunctions.map(fn => { var _a, _b; return `  - ${fn.name}: ${crc32((_b = (_a = fn.currentEntrypoint) === null || _a === void 0 ? void 0 : _a.toString().replaceAll("\r\n", "\n")) !== null && _b !== void 0 ? _b : "")}\n`; }).join("") : "") +
-                `\n`;
-        }
-        if (result) {
-            // Checksum the result and check against already seen one
-            const checksum = crc32(result);
-            if (modStorage.compatibilityCheckerWarningIgnore === checksum)
-                return;
-            didReportCompatibilityIssues = true;
-            showErrorOverlay("BCX Compatibility checker", "BCX's Compatibility checker detected problems with other mods you appear to be using.<br />" +
-                "For reasons stated below please reconsider using mentioned mods.<br />" +
-                "Please note, that this is a warning for you, not meant to be reported. It says that some features are likely to be broken.<br />" +
-                "If you have any questions or think this message is an error, please get in touch with us on <a href='https://discord.gg/SHJMjEh9VH' target='_blank'>BC Scripting Community</a> Discord server.<br />" +
-                "You can use the 'Close' button at the bottom to continue anyway.", result + `Report signature: ${checksum}`, false, wait, (win) => {
-                const doNotShowAgain = document.createElement("button");
-                doNotShowAgain.style.cursor = "pointer";
-                win.appendChild(doNotShowAgain);
-                doNotShowAgain.innerText = "Do not show this report again unless something changes";
-                doNotShowAgain.onclick = () => {
-                    doNotShowAgain.innerText = "This report won't show again unless something changes.";
-                    doNotShowAgain.disabled = true;
-                    modStorage.compatibilityCheckerWarningIgnore = checksum;
-                    modStorageSync();
-                };
-            });
-        }
-        else if (modStorage.compatibilityCheckerWarningIgnore != null) {
-            delete modStorage.compatibilityCheckerWarningIgnore;
-            modStorageSync();
-        }
-    }
-    const sourceBasedErrorMessage = {
-        bcx: "<br /><h3>Whoops... seems like BCX might be to blame this time</h3> Could you please help us by submitting the report below to the <a href='https://discord.gg/SHJMjEh9VH' target='_blank'>BC Scripting Community Discord</a> server?<br />Thank you!</p>",
-        knownMod: (mod) => `<br /><h3>The error seems to come from mod ${mod}</h3> Please submit the report to <a href='https://discord.gg/SHJMjEh9VH' target='_blank'>BC Scripting Community Discord</a> server!`,
-        bc: "<br /><h3>The error seems not to come from any ModSDK mod!</h3> Please submit the report to <a href='https://discord.gg/dkWsEjf' target='_blank'>Bondage Club's Discord</a> server!",
-        unknown: "<br /><h3>Could not detect origin of the error.</h3> Please submit the report to <a href='https://discord.gg/dkWsEjf' target='_blank'>Bondage Club's Discord</a> server!"
-    };
-    function onUnhandledError(event) {
-        if (!firstError)
-            return;
-        firstError = false;
-        const currentMod = contextCurrentModArea();
-        // Display error window
-        showErrorOverlay("Crash Handler (by ModSDK)", "The Crash Handler provided by ModSDK detected an uncaught error, which most likely crashed the Bondage Club.<br />" +
-            "While reporting this error, please use the information below to help us find the source faster.<br />" +
-            "You can use the 'Close' button at the bottom to continue, however BC may no longer work correctly until you reload the current tab." +
-            (currentMod === "BCX" ? sourceBasedErrorMessage.bcx :
-                currentMod === "" ? sourceBasedErrorMessage.bc :
-                    currentMod == null ? sourceBasedErrorMessage.unknown :
-                        sourceBasedErrorMessage.knownMod(currentMod)), debugGenerateReportErrorEvent(event));
-    }
-    // Server message origin
-    let originalSocketEmit;
-    function bcxSocketEmit(...args) {
-        const message = Array.isArray(args[0]) && typeof args[0][0] === "string" ? args[0][0] : "[unknown]";
-        lastReceivedMessageType = message;
-        lastReceivedMessageTime = Date.now();
-        const parameters = Array.isArray(args[0]) ? args[0].slice(1) : [];
-        if (logServerMessages) {
-            console.log("\u2B07 Receive", message, ...parameters);
-        }
-        const ctx = debugContextStart(`Server message ${message}`, {
-            root: true,
-            modArea: "",
-            extraInfo() {
-                return `Event: ${message}\n` + parameters.map(i => JSON.stringify(i, undefined, "  ")).join("\n");
-            }
-        });
-        const res = originalSocketEmit === null || originalSocketEmit === void 0 ? void 0 : originalSocketEmit.apply(this, args);
-        ctx.end();
-        return res;
-    }
-    // Click origin
-    let originalClick;
-    function bcxClick(event) {
-        const ctx = debugContextStart(`Canvas click`, {
-            root: true,
-            modArea: "",
-            extraInfo: () => `X: ${MouseX}\nY: ${MouseY}`
-        });
-        const res = originalClick === null || originalClick === void 0 ? void 0 : originalClick.call(this, event);
-        ctx.end();
-        return res;
-    }
-    let originalRAF;
-    function bcxRaf(fn) {
-        var _a;
-        return (_a = originalRAF === null || originalRAF === void 0 ? void 0 : originalRAF.call(this, (...rafArgs) => {
-            const ctx = debugContextStart(`Animation frame`, {
-                root: true,
-                modArea: "",
-                extraInfo: () => `time: ${rafArgs}`
-            });
-            const res = fn.apply(window, rafArgs);
-            ctx.end();
-            return res;
-        })) !== null && _a !== void 0 ? _a : 0;
-    }
-    function InitErrorReporter() {
-        var _a;
-        window.addEventListener("error", onUnhandledError);
-        // Server message origin
-        if (originalSocketEmit === undefined && typeof ((_a = ServerSocket === null || ServerSocket === void 0 ? void 0 : ServerSocket.__proto__) === null || _a === void 0 ? void 0 : _a.emitEvent) === "function") {
-            originalSocketEmit = ServerSocket.__proto__.emitEvent;
-            ServerSocket.__proto__.emitEvent = bcxSocketEmit;
-        }
-        const canvas = document.getElementById("MainCanvas");
-        if (canvas) {
-            // Click origin
-            if (originalClick === undefined && typeof canvas.onclick === "function") {
-                originalClick = canvas.onclick;
-                canvas.onclick = bcxClick;
-            }
-        }
-        // Frame origin
-        if (originalRAF === undefined && typeof window.requestAnimationFrame === "function") {
-            originalRAF = window.requestAnimationFrame;
-            window.requestAnimationFrame = bcxRaf;
-        }
-        hookFunction("ServerSend", 0, (args, next) => {
-            lastSentMessageType = args[0];
-            lastSentMessageTime = Date.now();
-            if (logServerMessages) {
-                console.log("\u2B06 Send", ...args);
-            }
-            return next(args);
-        });
-        if (compatibilityCheckTimeout == null) {
-            compatibilityCheckTimeout = BCX_setInterval(() => {
-                detectCompatibilityProblems();
-            }, COMPATIBILITY_CHECK_INTERVAL);
-            BCX_setTimeout(() => {
-                detectCompatibilityProblems();
-            }, 3000);
-        }
-    }
-    function UnloadErrorReporter() {
-        window.removeEventListener("error", onUnhandledError);
-        // Server message origin
-        if (originalSocketEmit && ServerSocket.__proto__.emitEvent === bcxSocketEmit) {
-            ServerSocket.__proto__.emitEvent = originalSocketEmit;
-            originalSocketEmit = undefined;
-        }
-        const canvas = document.getElementById("MainCanvas");
-        // Click origin
-        if (canvas && originalClick && canvas.onclick === bcxClick) {
-            canvas.onclick = originalClick;
-            originalClick = undefined;
-        }
-        // Frame origin
-        if (originalRAF && window.requestAnimationFrame === bcxRaf) {
-            window.requestAnimationFrame = originalRAF;
-            originalRAF = undefined;
-        }
-        if (compatibilityCheckTimeout != null) {
-            clearInterval(compatibilityCheckTimeout);
-            compatibilityCheckTimeout = undefined;
-        }
-    }
-
-    function loginInit(C) {
-        if (window.BCX_Loaded || moduleInitPhase !== ModuleInitPhase.construct)
-            return;
-        SetLoadedBeforeLogin(C);
-        init();
-    }
-    function clearCaches() {
-        if (typeof DrawRunMap !== "undefined") {
-            DrawRunMap.clear();
-            DrawScreen = "";
-        }
-        if (typeof CurrentScreenFunctions !== "undefined") {
-            const w = window;
-            CurrentScreenFunctions = {
-                Run: w[`${CurrentScreen}Run`],
-                Click: w[`${CurrentScreen}Click`],
-                Load: typeof w[`${CurrentScreen}Load`] === "function" ? w[`${CurrentScreen}Load`] : undefined,
-                Unload: typeof w[`${CurrentScreen}Unload`] === "function" ? w[`${CurrentScreen}Unload`] : undefined,
-                Resize: typeof w[`${CurrentScreen}Resize`] === "function" ? w[`${CurrentScreen}Resize`] : undefined,
-                KeyDown: typeof w[`${CurrentScreen}KeyDown`] === "function" ? w[`${CurrentScreen}KeyDown`] : undefined,
-                Exit: typeof w[`${CurrentScreen}Exit`] === "function" ? w[`${CurrentScreen}Exit`] : undefined
-            };
-        }
-    }
-    function init() {
-        if (window.BCX_Loaded || moduleInitPhase !== ModuleInitPhase.construct)
-            return;
-        const ctx = debugContextStart("BCX init", { modArea: "BCX" });
-        InitErrorReporter();
-        if (!init_modules()) {
-            ctx.end();
-            unload();
-            return;
-        }
-        const currentAccount = Player.MemberNumber;
-        if (currentAccount == null) {
-            throw new Error("No player MemberNumber");
-        }
-        hookFunction("LoginResponse", 0, (args, next) => {
-            const response = args[0];
-            if (isObject$1(response) && typeof response.Name === "string" && typeof response.AccountName === "string" && response.MemberNumber !== currentAccount) {
-                alert(`Attempting to load BCX with different account than already loaded (${response.MemberNumber} vs ${currentAccount}). This is not supported, please refresh the page.`);
-                throw new Error("Attempting to load BCX with different account");
-            }
-            return next(args);
-        });
-        // Loading into already loaded club - clear some caches
-        clearCaches();
-        //#region Other mod compatability
-        const { BondageClubTools } = detectOtherMods();
-        if (BondageClubTools) {
-            console.warn("BCX: Bondage Club Tools detected!");
-            if (window.BCX_BondageClubToolsPatch === true) {
-                console.info("BCX: Bondage Club Tools already patched, skip!");
-            }
-            else {
-                window.BCX_BondageClubToolsPatch = true;
-                const ChatRoomMessageForwarder = ServerSocket.listeners("ChatRoomMessage").find(i => i.toString().includes("window.postMessage"));
-                const AccountBeepForwarder = ServerSocket.listeners("AccountBeep").find(i => i.toString().includes("window.postMessage"));
-                if (!ChatRoomMessageForwarder || !AccountBeepForwarder) {
-                    throw new Error("Failed to patch for Bondage Club Tools!");
-                }
-                ServerSocket.off("ChatRoomMessage", ChatRoomMessageForwarder);
-                ServerSocket.on("ChatRoomMessage", data => {
-                    if ((data === null || data === void 0 ? void 0 : data.Type) !== "Hidden" || data.Content !== "BCXMsg" || typeof data.Sender !== "number") {
-                        ChatRoomMessageForwarder(data);
-                    }
-                });
-                ServerSocket.off("AccountBeep", AccountBeepForwarder);
-                ServerSocket.on("AccountBeep", data => {
-                    var _a;
-                    if (typeof (data === null || data === void 0 ? void 0 : data.BeepType) !== "string" || !["Leash", "BCX"].includes(data.BeepType) || !isObject$1((_a = data.Message) === null || _a === void 0 ? void 0 : _a.BCX)) {
-                        AccountBeepForwarder(data);
-                    }
-                });
-            }
-        }
-        //#endregion
-        window.BCX_Loaded = true;
-        InfoBeep(`BCX loaded! Version: ${VERSION$1.replace(/-[0-f]+$/i, "")}`);
-        console.log(`BCX loaded! Version: ${VERSION$1}`);
-        ctx.end();
-    }
-    function unload() {
-        unload_patches();
-        unload_modules();
-        UnloadErrorReporter();
-        // clear some caches
-        clearCaches();
-        delete window.BCX_Loaded;
-        console.log("BCX: Unloaded.");
-        return true;
-    }
-
-    let nextCheckTimer = null;
-    let versionCheckNewAvailable = null;
-    let versionCheckDidNotify = false;
-    let supporterStatus;
-    let supporterSecret;
-    function setSupporterVisible(visible) {
-        if (visible === !modStorage.supporterHidden)
-            return;
-        if (visible) {
-            delete modStorage.supporterHidden;
-        }
-        else {
-            modStorage.supporterHidden = true;
-        }
-        announceSelf();
-    }
-    const otherSupporterStatus = new Map();
-    function updateOtherSupporterStatus(memberNumber, status, secret) {
-        if (memberNumber === Player.MemberNumber)
-            return;
-        const current = otherSupporterStatus.get(memberNumber);
-        if (current && current.secret === status && current.secret === secret && current.verified)
-            return;
-        if (status && secret) {
-            otherSupporterStatus.set(memberNumber, {
-                verified: status === undefined,
-                status,
-                secret
-            });
-            if (status && secret) {
-                sendHiddenBeep("supporterCheck", {
-                    memberNumber,
-                    status,
-                    secret
-                }, VERSION_CHECK_BOT, true);
-            }
-        }
-        else {
-            otherSupporterStatus.delete(memberNumber);
-        }
-    }
-    function sendVersionCheckBeep() {
-        if (nextCheckTimer !== null) {
-            clearTimeout(nextCheckTimer);
-            nextCheckTimer = null;
-        }
-        sendHiddenBeep("versionCheck", {
-            version: VERSION$1,
-            devel: BCX_DEVEL,
-            GameVersion,
-            Source: (BCXSourceExternal ? "E:" : "") + (BCXSource !== null && BCXSource !== void 0 ? BCXSource : "[UNKNOWN]"),
-            UA: window.navigator.userAgent
-        }, VERSION_CHECK_BOT, true);
-        // Set check retry timer to 5 minutes + up to minute random delay
-        nextCheckTimer = BCX_setTimeout(sendVersionCheckBeep, (5 + Math.random()) * 60000);
-    }
-    class ModuleVersionCheck extends BaseModule {
-        load() {
-            hiddenBeepHandlers.set("versionResponse", (sender, message) => {
-                var _a, _b;
-                if (sender !== VERSION_CHECK_BOT) {
-                    console.warn(`BCX: got versionResponse from unexpected sender ${sender}, ignoring`);
-                    return;
-                }
-                if (!isObject$1(message) || typeof message.status !== "string") {
-                    console.warn(`BCX: bad versionResponse`, message);
-                    return;
-                }
-                // Got valid version response, reset timer to 15 minutes + up to 5 minutes random delay
-                if (nextCheckTimer !== null) {
-                    clearTimeout(nextCheckTimer);
-                    nextCheckTimer = null;
-                }
-                nextCheckTimer = BCX_setTimeout(sendVersionCheckBeep, (15 + 5 * Math.random()) * 60000);
-                if (message.status === "current") {
-                    versionCheckNewAvailable = false;
-                }
-                else if (message.status === "newAvailable") {
-                    versionCheckNewAvailable = true;
-                    if (!versionCheckDidNotify) {
-                        versionCheckDidNotify = true;
-                        if (ServerPlayerIsInChatRoom()) {
-                            ChatRoomSendLocal("New BCX version is available! You can upgrade by logging in again.");
-                        }
-                        else {
-                            InfoBeep("New BCX version is available! You can upgrade by logging in again.", 10000);
-                        }
-                    }
-                }
-                else if (message.status === "deprecated") {
-                    versionCheckNewAvailable = true;
-                    if (!versionCheckDidNotify) {
-                        versionCheckDidNotify = true;
-                        const overlay = document.createElement("div");
-                        overlay.style.position = "fixed";
-                        overlay.style.top = "0px";
-                        overlay.style.right = "0px";
-                        overlay.style.bottom = "0px";
-                        overlay.style.left = "0px";
-                        overlay.style.background = "#00000090";
-                        overlay.style.display = "flex";
-                        overlay.style.alignItems = "center";
-                        overlay.style.justifyContent = "center";
-                        // Nice window
-                        const win = document.createElement("div");
-                        overlay.appendChild(win);
-                        win.style.background = "white";
-                        win.style.display = "flex";
-                        win.style.flexDirection = "column";
-                        win.style.padding = "1em";
-                        // Title
-                        const titleElem = document.createElement("h1");
-                        win.appendChild(titleElem);
-                        titleElem.innerText = "Deprecated BCX version";
-                        // Description
-                        const descriptionElement = document.createElement("p");
-                        win.appendChild(descriptionElement);
-                        descriptionElement.innerText = "The BCX version you are using is too old and either contains critical bugs or " +
-                            "is no longer compatible with the current Bondage Club release version.\n" +
-                            "Unless you are using additional mods preventing this, please refresh the page and log into the club again to load the newest version.";
-                        // Close button
-                        const close = document.createElement("button");
-                        close.style.cursor = "pointer";
-                        win.appendChild(close);
-                        close.innerText = "Close";
-                        close.onclick = () => {
-                            overlay.remove();
-                        };
-                        // Display it
-                        (_b = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.blur) === null || _b === void 0 ? void 0 : _b.call(_a);
-                        window.document.body.appendChild(overlay);
-                    }
-                }
-                else if (message.status === "unsupported") {
-                    unload();
-                    alert("The BCX version you are trying to load is too old and either contains critical bugs or " +
-                        "is no longer compatible with the current Bondage Club release version. Please update your BCX.");
-                }
-                else {
-                    console.warn(`BCX: bad versionResponse status "${message.status}"`);
-                }
-                if (supporterStatus !== message.supporterStatus || supporterSecret !== message.supporterSecret) {
-                    supporterStatus = message.supporterStatus;
-                    supporterSecret = message.supporterSecret;
-                    announceSelf();
-                }
-            });
-            hiddenBeepHandlers.set("supporterCheckResult", (sender, message) => {
-                if (sender !== VERSION_CHECK_BOT) {
-                    console.warn(`BCX: got supporterCheckResult from unexpected sender ${sender}, ignoring`);
-                    return;
-                }
-                if (!isObject$1(message) || typeof message.memberNumber !== "number" || (message.status !== undefined && typeof message.status !== "string")) {
-                    console.warn(`BCX: bad supporterCheckResult`, message);
-                    return;
-                }
-                const status = otherSupporterStatus.get(message.memberNumber);
-                if (!status) {
-                    console.warn(`BCX: supporterCheckResult unknown memberNumber`, message);
-                    return;
-                }
-                status.status = message.status;
-                status.verified = true;
-            });
-            hookFunction("LoginResponse", 0, (args, next) => {
-                next(args);
-                const response = args[0];
-                if (isObject$1(response) && typeof response.Name === "string" && typeof response.AccountName === "string") {
-                    sendVersionCheckBeep();
-                }
-            });
-        }
-        run() {
-            sendVersionCheckBeep();
-        }
-        unload() {
-            if (nextCheckTimer !== null) {
-                clearTimeout(nextCheckTimer);
-                nextCheckTimer = null;
-            }
         }
     }
 
@@ -39846,6 +39713,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     	"HorseStableLight",
     	"HotelBedroom",
     	"HotelBedroom2",
+    	"HouseBasement1",
+    	"HouseBasement2",
+    	"HouseBasement3",
+    	"HouseInterior1",
+    	"HouseInterior2",
+    	"HouseInterior3",
     	"HypnoSpiral2",
     	"HypnoticSpiral",
     	"IndoorPool",
@@ -40032,13 +39905,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             open: null,
             close: "Closed",
             up: "Lewd",
-            down: "Shy"
+            down: "Shy",
         };
         const eyesTexts = {
             open: "SENDER_NAME (SENDER_NUMBER) made you open your eyes",
             close: "SENDER_NAME (SENDER_NUMBER) made you close your eyes",
             up: "SENDER_NAME (SENDER_NUMBER) made you look up",
-            down: "SENDER_NAME (SENDER_NUMBER) made you look down"
+            down: "SENDER_NAME (SENDER_NUMBER) made you look down",
         };
         registerCommand("eyes", {
             name: "Eyes",
@@ -40066,7 +39939,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (text) {
                         ChatRoomSendLocal(dictionaryProcess(text, {
                             SENDER_NAME: sender.Nickname,
-                            SENDER_NUMBER: `${sender.MemberNumber}`
+                            SENDER_NUMBER: `${sender.MemberNumber}`,
                         }), undefined, sender.MemberNumber);
                     }
                 }
@@ -40077,21 +39950,21 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], Object.keys(eyesExpressions));
                 }
                 return [];
-            }
+            },
         });
         const mouthExpressions = {
             close: null,
             open: "HalfOpen",
             openwide: "Moan",
             tongue: "Ahegao",
-            smile: "Smirk"
+            smile: "Smirk",
         };
         const mouthTexts = {
             close: "SENDER_NAME (SENDER_NUMBER) made you close your mouth",
             open: "SENDER_NAME (SENDER_NUMBER) made you open your mouth",
             openwide: "SENDER_NAME (SENDER_NUMBER) made you open your mouth wide",
             tongue: "SENDER_NAME (SENDER_NUMBER) made you stick out your tongue",
-            smile: "SENDER_NAME (SENDER_NUMBER) made you smile"
+            smile: "SENDER_NAME (SENDER_NUMBER) made you smile",
         };
         registerCommand("mouth", {
             name: "Mouth",
@@ -40119,7 +39992,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (text) {
                         ChatRoomSendLocal(dictionaryProcess(text, {
                             SENDER_NAME: sender.Nickname,
-                            SENDER_NUMBER: `${sender.MemberNumber}`
+                            SENDER_NUMBER: `${sender.MemberNumber}`,
                         }), undefined, sender.MemberNumber);
                     }
                 }
@@ -40130,7 +40003,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], Object.keys(mouthExpressions));
                 }
                 return [];
-            }
+            },
         });
         const posesArms = {
             down: "BaseUpper",
@@ -40138,13 +40011,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             up: "OverTheHead",
             back: "BackBoxTie",
             elbows: "BackElbowTouch",
-            wrists: "BackCuffs"
+            wrists: "BackCuffs",
         };
         const posesLegs = {
             normal: "BaseLower",
             kneel: "Kneel",
             kneelspread: "KneelingSpread",
-            close: "LegsClosed"
+            close: "LegsClosed",
         };
         const armsTexts = {
             down: "SENDER_NAME (SENDER_NUMBER) made you relax your arms",
@@ -40152,13 +40025,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             up: "SENDER_NAME (SENDER_NUMBER) made you raise your hands",
             back: "SENDER_NAME (SENDER_NUMBER) made you put your hands behind your back",
             elbows: "SENDER_NAME (SENDER_NUMBER) made you put your elbows together behind your back",
-            wrists: "SENDER_NAME (SENDER_NUMBER) made you put your wrists together behind your back"
+            wrists: "SENDER_NAME (SENDER_NUMBER) made you put your wrists together behind your back",
         };
         const legsTexts = {
             normal: "SENDER_NAME (SENDER_NUMBER) made you put your legs into a relaxed standing stance",
             kneel: "SENDER_NAME (SENDER_NUMBER) made you kneel with closed legs",
             kneelspread: "SENDER_NAME (SENDER_NUMBER) made you kneel with spread legs",
-            close: "SENDER_NAME (SENDER_NUMBER) made you close your legs while standing"
+            close: "SENDER_NAME (SENDER_NUMBER) made you close your legs while standing",
         };
         registerCommand("arms", {
             name: "Arms",
@@ -40181,7 +40054,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     respond(`Bad value: ${argv[0].toLowerCase()} is not one of '${Object.keys(posesArms).join("', '")}'`);
                     return false;
                 }
-                if ((typeof Player.ActivePose === "string" && Player.ActivePose === pose) || (Array.isArray(Player.ActivePose) && Player.ActivePose.includes(pose))) {
+                if (Array.isArray(Player.ActivePose) && Player.ActivePose.includes(pose)) {
                     respond(`This character is already in the chosen pose.`);
                     return false;
                 }
@@ -40197,7 +40070,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (text) {
                         ChatRoomSendLocal(dictionaryProcess(text, {
                             SENDER_NAME: sender.Nickname,
-                            SENDER_NUMBER: `${sender.MemberNumber}`
+                            SENDER_NUMBER: `${sender.MemberNumber}`,
                         }), undefined, sender.MemberNumber);
                     }
                 }
@@ -40208,7 +40081,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], Object.keys(posesArms));
                 }
                 return [];
-            }
+            },
         });
         registerCommand("legs", {
             name: "Legs",
@@ -40231,7 +40104,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     respond(`Bad value: ${argv[0].toLowerCase()} is not one of '${Object.keys(posesLegs).join("', '")}'`);
                     return false;
                 }
-                if ((typeof Player.ActivePose === "string" && Player.ActivePose === pose) || (Array.isArray(Player.ActivePose) && Player.ActivePose.includes(pose))) {
+                if (Array.isArray(Player.ActivePose) && Player.ActivePose.includes(pose)) {
                     respond(`This character is already in the chosen pose.`);
                     return false;
                 }
@@ -40247,7 +40120,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (text) {
                         ChatRoomSendLocal(dictionaryProcess(text, {
                             SENDER_NAME: sender.Nickname,
-                            SENDER_NUMBER: `${sender.MemberNumber}`
+                            SENDER_NUMBER: `${sender.MemberNumber}`,
                         }), undefined, sender.MemberNumber);
                     }
                 }
@@ -40258,7 +40131,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], Object.keys(posesLegs));
                 }
                 return [];
-            }
+            },
         });
         registerCommand("allfours", {
             name: "Allfours",
@@ -40276,7 +40149,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return false;
                 }
                 const pose = "AllFours";
-                if ((typeof Player.ActivePose === "string" && Player.ActivePose === pose) || (Array.isArray(Player.ActivePose) && Player.ActivePose.includes(pose))) {
+                if (Array.isArray(Player.ActivePose) && Player.ActivePose.includes(pose)) {
                     respond(`This character is already in the chosen pose.`);
                     return false;
                 }
@@ -40296,12 +40169,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     if (text) {
                         ChatRoomSendLocal(dictionaryProcess(text, {
                             SENDER_NAME: sender.Nickname,
-                            SENDER_NUMBER: `${sender.MemberNumber}`
+                            SENDER_NUMBER: `${sender.MemberNumber}`,
                         }), undefined, sender.MemberNumber);
                     }
                 }
                 return true;
-            }
+            },
         });
         registerCommand("goandwait", {
             name: "Go and wait",
@@ -40347,11 +40220,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     respond(`The room name part of the command cannot be longer than 20 characters.`);
                     return false;
                 }
-                // leave
                 InfoBeep(`You got ordered by ${sender} to wait in another room.`, 8000);
                 ChatRoomActionMessage(`TargetCharacterName received an order by SourceCharacter (${sender.MemberNumber}) to wait in another room.`, null, [
                     { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) }
+                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) },
                 ]);
                 DialogLentLockpicks = false;
                 ChatRoomClearAllElements();
@@ -40360,7 +40232,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 ChatRoomLeashPlayer = null;
                 CommonSetScreen("Online", "ChatSearch");
                 CharacterDeleteAllOnline();
-                // join
                 ChatRoomPlayerCanJoin = true;
                 ServerSend("ChatRoomCreate", {
                     Name,
@@ -40373,7 +40244,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     Admin,
                     Ban: [],
                     Limit: 10,
-                    BlockCategory: []
+                    BlockCategory: [],
                 });
                 ServerSend("ChatRoomJoin", { Name });
                 return true;
@@ -40386,7 +40257,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[1], backgroundList);
                 }
                 return [];
-            }
+            },
         });
         registerCommand("cell", {
             name: "Send to cell",
@@ -40421,7 +40292,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 InfoBeep(`Two maids locked you into a timer cell, following ${sender}'s command.`, 8000);
                 ChatRoomActionMessage(`TargetCharacterName gets grabbed by two maids and locked in a timer cell, following SourceCharacter's (${sender.MemberNumber}) command.`, null, [
                     { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) }
+                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) },
                 ]);
                 DialogLentLockpicks = false;
                 ChatRoomClearAllElements();
@@ -40429,7 +40300,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 CharacterDeleteAllOnline();
                 CellLock(minutes);
                 return true;
-            }
+            },
         });
         registerCommand("asylum", {
             name: "Send to asylum",
@@ -40469,7 +40340,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 InfoBeep(`Two nurses locked you in the Asylum, following ${sender}'s command.`, 8000);
                 ChatRoomActionMessage(`TargetCharacterName gets grabbed by two nurses and locked in the Asylum, following SourceCharacter's (${sender.MemberNumber}) command.`, null, [
                     { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) }
+                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) },
                 ]);
                 DialogLentLockpicks = false;
                 ChatRoomClearAllElements();
@@ -40484,7 +40355,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], ["cancel"]);
                 }
                 return [];
-            }
+            },
         });
         registerCommand("keydeposit", {
             name: "Deposit all keys",
@@ -40523,7 +40394,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 ChatRoomActionMessage(`A nurse took all keys from TargetCharacterName, following SourceCharacter's (${sender.MemberNumber}) command. The keys will be deposited for ${formatTimeInterval(time)}.`, null, [
                     { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) }
+                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) },
                 ]);
                 LogAdd("KeyDeposit", "Cell", CurrentTime + time, true);
                 return true;
@@ -40533,7 +40404,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], ["cancel"]);
                 }
                 return [];
-            }
+            },
         });
         registerCommand("timeleft", {
             name: "Show remaining time",
@@ -40581,7 +40452,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], ["asylum", "ggts", "keydeposit"]);
                 }
                 return [];
-            }
+            },
         });
         registerCommand("servedrinks", {
             name: "Send to serve drinks",
@@ -40605,7 +40476,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const D = `(Two maids grab you and escort you to their quarters.  Another maid addresses you.)  ${sender.Name} sent you here to work.`;
                 ChatRoomActionMessage(`TargetCharacterName gets grabbed by two maids and escorted to the maid quarters to serve drinks, following SourceCharacter's (${sender.MemberNumber}) command.`, null, [
                     { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
-                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) }
+                    { Tag: "SourceCharacter", MemberNumber: sender.MemberNumber, Text: CharacterNickname(sender.Character) },
                 ]);
                 ChatRoomClearAllElements();
                 ServerSend("ChatRoomLeave", "");
@@ -40615,7 +40486,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 MaidQuartersMaid.Stage = "205";
                 MaidQuartersOnlineDrinkFromOwner = true;
                 return true;
-            }
+            },
         });
         registerCommand("orgasm", {
             name: "Manipulate the arousal meter",
@@ -40675,7 +40546,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], ["forced", "ruined", "stop"]);
                 }
                 return [];
-            }
+            },
         });
         const emoticonExpressions = {
             none: null,
@@ -40697,7 +40568,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             gag: "LoveGag",
             lock: "LoveLock",
             wardrobe: "Wardrobe",
-            game: "Gaming"
+            game: "Gaming",
         };
         registerCommand("emoticon", {
             name: "Emoticon",
@@ -40714,7 +40585,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         `!emoticon ${state.commandDefinition.helpDescription}`));
                     return false;
                 }
-                // tied to rule "Prevent changing own emoticon"
                 const blockRule = RulesGetRuleState("block_changing_emoticon");
                 if (blockRule.isEnforced && sender.isPlayer()) {
                     blockRule.triggerAttempt();
@@ -40733,7 +40603,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     const text = "SENDER_NAME (SENDER_NUMBER) changed your emoticon.";
                     ChatRoomSendLocal(dictionaryProcess(text, {
                         SENDER_NAME: sender.Nickname,
-                        SENDER_NUMBER: `${sender.MemberNumber}`
+                        SENDER_NUMBER: `${sender.MemberNumber}`,
                     }), undefined, sender.MemberNumber);
                 }
                 return true;
@@ -40743,7 +40613,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], Object.keys(emoticonExpressions));
                 }
                 return [];
-            }
+            },
         });
     }
 
@@ -40774,7 +40644,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 ServerSend("ChatRoomChat", { Content: sentence, Type: "Chat" });
                 return true;
-            }
+            },
         });
         let lastRoomName = "";
         let senderNumber = null;
@@ -40790,7 +40660,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultLimit: ConditionsLimit.blocked,
             playerUsable: false,
             load() {
-                // 1. hook ChatRoomSync to set default values if the room name is different from the one stored locally
                 hookFunction("ChatRoomSync", 0, (args, next) => {
                     const data = args[0];
                     if (data.Name !== lastRoomName) {
@@ -40806,7 +40675,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     next(args);
                 }, ModuleCategory.Commands);
             },
-            // 2. do not allow sending anything else
             init() {
                 const check = (msg) => {
                     var _a;
@@ -40823,28 +40691,28 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             if (!getAllCharactersInRoom().some(c => c.MemberNumber === senderNumber)) {
                                 sayText = "";
                                 senderNumber = null;
-                                return 0 /* SpeechHookAllow.ALLOW */;
+                                return 0;
                             }
                             if (check(msg)) {
                                 if (senderNumber && sayText.length >= count) {
                                     ChatRoomActionMessage(`Note: SourceCharacter did not type out the text '${sayText}' fully and likely ` +
                                         `used copy & paste or the chat history instead.`, senderNumber, [
-                                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                                     ]);
                                     ChatRoomSendLocal(`Note: It appears you didn't type out the text '${sayText}' fully and likely` +
                                         `used copy & paste or the chat history instead. The giver of the command has been notified of this.`);
                                 }
                                 sayText = "";
                                 senderNumber = null;
-                                return 2 /* SpeechHookAllow.ALLOW_BYPASS */;
+                                return 2;
                             }
                             else {
                                 ChatRoomSendLocal(`You are ordered to say '${sayText}'.`);
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
                         }
-                        return 0 /* SpeechHookAllow.ALLOW */;
-                    }
+                        return 0;
+                    },
                 });
             },
             trigger: (argv, sender, respond, state) => {
@@ -40889,9 +40757,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return Command_pickAutocomplete(argv[0], ["cancel"]);
                 }
                 return [];
-            }
+            },
         });
-        //#region Type task
         let typeTaskText = "";
         let typeTaskForce = false;
         let repetitions = false;
@@ -40904,7 +40771,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             repetitions = false;
         }
         function TypeTaskLoad() {
-            // 1. hook ChatRoomSync to set default values if the room name is different from the one stored locally
             hookFunction("ChatRoomSync", 0, (args, next) => {
                 const data = args[0];
                 if (data.Name !== lastRoomName) {
@@ -40919,7 +40785,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 next(args);
             }, ModuleCategory.Commands);
         }
-        // 2. do not allow sending anything else
         function TypeTaskInit() {
             const check = (msg) => {
                 var _a;
@@ -40929,82 +40794,74 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             registerSpeechHook({
                 allowSend: (msg) => {
                     if (typeTaskText &&
+                        typeof repetitions === "number" &&
                         senderNumber &&
                         (msg.type === "Chat" || msg.type === "Whisper")) {
                         if (ChatRoomData === null || ChatRoomData === void 0 ? void 0 : ChatRoomData.Name) {
                             lastRoomName = ChatRoomData.Name;
                         }
-                        // end task as task giver is no longer in the room
                         if (!getAllCharactersInRoom().some(c => c.MemberNumber === senderNumber)) {
                             ChatRoomSendLocal(`Your current typing task ended prematurely, as the task giver is no longer in the room.`);
                             resetTypeTask();
-                            return 0 /* SpeechHookAllow.ALLOW */;
+                            return 0;
                         }
                         if (check(msg)) {
                             if (senderNumber && typeTaskText.length >= count) {
-                                // failure 1.1: typeTaskText.length > count (forced mode) -> iteration not counted
                                 if (typeTaskForce) {
                                     ChatRoomActionMessage(`SourceCharacter failed one instance of her typing task, since she did not type out the required text fully and likely ` +
                                         `used copy & paste or the chat history instead.`, senderNumber, [
-                                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                                     ]);
                                     ChatRoomSendLocal(`You are required to type the text out fully yourself. This try did not count!`);
-                                    return 1 /* SpeechHookAllow.BLOCK */;
+                                    return 1;
                                 }
-                                // failure 1.2: typeTaskText.length > count  -> task failed
                                 ChatRoomActionMessage(`SourceCharacter failed the typing task as she did not type out the required text '${typeTaskText}' fully and likely ` +
                                     `used copy & paste or the chat history instead.`, senderNumber, [
-                                    { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                    { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                                 ]);
                                 ChatRoomSendLocal(`You failed the typing task as you did not type out the text fully`);
                                 resetTypeTask();
                             }
                             else if (repCounter >= repetitions) {
-                                // successful all: whole task
                                 ChatRoomActionMessage(`SourceCharacter completed the typing task successfully`, senderNumber, [
-                                    { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                    { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                                 ]);
                                 ChatRoomSendLocal(`You completed the typing task successfully.`);
                                 resetTypeTask();
                             }
                             else {
-                                // successful once: single task iteration
                                 ChatRoomSendLocal(`Success: ${repCounter} of ${repetitions} times`);
                                 count = 0;
                                 repCounter++;
                             }
-                            return 2 /* SpeechHookAllow.ALLOW_BYPASS */;
+                            return 2;
                         }
                         else {
-                            // failure 2: whispered to the wrong target -> block
                             if (ChatRoomTargetMemberNumber !== senderNumber) {
                                 ChatRoomSendLocal(`You are not allowed to whisper to someone else than ${getCharacterNickname(senderNumber, "[unknown name]")} (${senderNumber}) while you have not finished your typing task.`);
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
-                            // failure 3: tried to speak in chat -> block
                             if (msg.type === "Chat") {
                                 ChatRoomSendLocal(`You are not allowed to speak loudly in the room until you complete your typing task by whispering the required text to ${getCharacterName(senderNumber, "[unknown name]")} (${senderNumber}).`);
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
-                            // failure 4.1: whispered incorrect text to the task giver (forced mode) -> iteration not counted
                             if (typeTaskForce) {
                                 ChatRoomActionMessage(`SourceCharacter typed the required text incorrectly. This try did not count.`, senderNumber, [
-                                    { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                    { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                                 ]);
                                 ChatRoomSendLocal(`You did not type out the correct text '${typeTaskText}'. This try did not count!`);
-                                return 1 /* SpeechHookAllow.BLOCK */;
+                                return 1;
                             }
-                            // failure 4.2: whispered incorrect text to the task giver -> task failed
                             ChatRoomActionMessage(`SourceCharacter typed the required text incorrectly and failed her task after ${repCounter} ${repCounter === 1 ? "time" : "times"} out of ${repetitions}.`, senderNumber, [
-                                { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                                { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                             ]);
                             ChatRoomSendLocal(`You typed the required text incorrectly and failed your task after ${repCounter} ${repCounter === 1 ? "time" : "times"} out of ${repetitions}.`);
                             resetTypeTask();
-                            return 0 /* SpeechHookAllow.ALLOW */;
+                            return 0;
                         }
                     }
-                    return 0 /* SpeechHookAllow.ALLOW */;
-                }
+                    return 0;
+                },
             });
         }
         function TypeTaskTrigger(argv, sender, respond, isForced) {
@@ -41085,7 +40942,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             },
             autoCompleter: (argv) => {
                 return TypeTaskAutoCompleter(argv, false);
-            }
+            },
         });
         registerCommand("forcetypetask", {
             name: "Forced typing task",
@@ -41097,21 +40954,16 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             defaultLimit: ConditionsLimit.blocked,
             playerUsable: false,
             load() {
-                // Done by non-forced version
-                // TypeTaskLoad();
             },
             init() {
-                // Done by non-forced version
-                // TypeTaskInit();
             },
             trigger: (argv, sender, respond, state) => {
                 return TypeTaskTrigger(argv, sender, respond, true);
             },
             autoCompleter: (argv) => {
                 return TypeTaskAutoCompleter(argv, true);
-            }
+            },
         });
-        //#endregion
     }
 
     const COMMANDS_ANTILOOP_RESET_INTERVAL = 60000;
@@ -41134,7 +40986,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         commands.set(name, {
             ...data,
-            state: new CommandState(name, data)
+            state: new CommandState(name, data),
         });
         commandsList.push(name);
     }
@@ -41149,7 +41001,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             longDescription: data.longDescription,
             helpDescription: data.helpDescription,
             playerUsable: data.playerUsable,
-            defaultLimit: data.defaultLimit
+            defaultLimit: data.defaultLimit,
         };
     }
     function CommandsGetCommandState(command) {
@@ -41213,8 +41065,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.lover],
                     [Preset.switch]: [true, AccessLevel.lover],
                     [Preset.submissive]: [false, AccessLevel.mistress],
-                    [Preset.slave]: [false, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [false, AccessLevel.mistress],
+                },
             });
             registerPermission("commands_limited", {
                 name: "Allows controlling limited commands",
@@ -41223,8 +41075,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.owner],
                     [Preset.switch]: [true, AccessLevel.owner],
                     [Preset.submissive]: [false, AccessLevel.lover],
-                    [Preset.slave]: [false, AccessLevel.lover]
-                }
+                    [Preset.slave]: [false, AccessLevel.lover],
+                },
             });
             registerPermission("commands_change_limits", {
                 name: "Allows to limit/block specific commands",
@@ -41233,8 +41085,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.self],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
             });
             queryHandlers.commandTrigger = (sender, data) => {
                 if (!Array.isArray(data) || !data.every(i => typeof i === "string") || data.length < 1) {
@@ -41277,7 +41129,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     const data = CommandsGetDisplayDefinition(result[1]);
                     respond(dictionaryProcess(data.longDescription, {
                         PLAYER_NAME: Player.Name,
-                        HELP_DESCRIPTION: data.helpDescription
+                        HELP_DESCRIPTION: data.helpDescription,
                     }));
                 }
                 else {
@@ -41339,9 +41191,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     }
                     return res;
                 },
-                commandConditionSelectorHelp: "command"
+                commandConditionSelectorHelp: "command",
             });
-            // Init individual commands
             initCommands_definitions();
             initCommands_speech();
             for (const [command, data] of commands.entries()) {
@@ -41409,7 +41260,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     this.suspendedUntil = null;
                     this.triggerCounts.clear();
                     ChatRoomActionMessage(`All of SourceCharacter's temporarily blocked commands can be used again.`, null, [
-                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                        { Tag: "SourceCharacter", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                     ]);
                 }
                 else {
@@ -41451,7 +41302,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             DrawText(`- Commands: Description of the command: "${this.commandDefinition.name}" -`, 125, 125, "Black", "Gray");
             BCXDrawTextWrap(dictionaryProcess(this.commandDefinition.longDescription, {
                 PLAYER_NAME: this.character.Name,
-                HELP_DESCRIPTION: this.commandDefinition.helpDescription
+                HELP_DESCRIPTION: this.commandDefinition.helpDescription,
             }), 125, 220, 1750, 500, "Black");
             MainCanvas.textAlign = "center";
             DrawButton(900, 800, 200, 80, "Back", "White");
@@ -41529,7 +41380,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     continue;
                 this.commandList.push({
                     name: entry[0],
-                    definition: entry[1]
+                    definition: entry[1],
                 });
             }
             const data = this.commandsData;
@@ -41564,22 +41415,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             DrawButton(1815, 305, 90, 90, "", this.commandsData.access_changeLimits ? "White" : "#ddd", this.permissionMode ? "Icons/Reset.png" : "Icons/Preference.png", this.commandsData.access_changeLimits ?
                 (this.permissionMode ? "Leave permission mode" : "Edit commands permissions") :
                 "You have no permission to change limits", !this.commandsData.access_changeLimits);
-            // filter
             MainCanvas.textAlign = "left";
             DrawText("Filter:", 130, 215, "Black");
             positionElement(this.filterInput, 550, 210, 600, 64);
-            // reset button
             MainCanvas.textAlign = "center";
             if (this.filterInput.value) {
                 DrawButton(870, 182, 64, 64, "X", "White");
             }
-            // sort toggle
             DrawButton(1483, 182, 64, 64, "", "White", undefined, "Toggle availability-based sorting");
             DrawImageEx("Icons/LockMenu.png", 1483 + 3, 182 + 3, { Alpha: availabilitySort ? 1 : 0.2, Width: 58, Height: 58 });
-            // A-Z toggle
             DrawButton(1583, 182, 64, 64, "", "white", undefined, "Toggle alphabetical sorting");
             DrawTextFit("A-Z", 1583 + 32, 182 + 32 + 1, 64 - 4, alphabeticalSort ? "black" : "#bbb");
-            // Actual commands
             MainCanvas.textAlign = "left";
             for (let off = 0; off < PER_PAGE_COUNT; off++) {
                 const i = this.page * PER_PAGE_COUNT + off;
@@ -41601,7 +41447,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     color = !allowAccess ? "#ccc" : "White";
                     text = !allowAccess ? "You don't have permission to use this rule" : "";
                 }
-                // Command name
                 DrawButton(130, Y, 1350, 64, "", color, "", "", this.permissionMode);
                 let description = e.definition.name;
                 if (e.definition.shortDescription) {
@@ -41614,11 +41459,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     });
                 }
             }
-            // Pagination
             const totalPages = Math.max(1, Math.ceil(this.commandList.length / PER_PAGE_COUNT));
             MainCanvas.textAlign = "center";
             DrawBackNextButton(1605, 800, 300, 90, `${DialogFindPlayer("Page")} ${this.page + 1} / ${totalPages}`, "White", "", () => "", () => "");
-            // permission mode legend
             if (this.permissionMode) {
                 MainCanvas.fillStyle = "#50ff56";
                 MainCanvas.fillRect(1739, 574, 166, 64);
@@ -41631,9 +41474,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 DrawText(`Limited`, 1739 + 166 / 2, 638 + 34, "Black");
                 DrawText(`Blocked`, 1739 + 166 / 2, 702 + 34, "Black");
             }
-            // help text
             if (this.showHelp) {
-                // TODO create and change to command ones
                 showHelp(HELP_TEXTS[this.permissionMode ? Views.CommandsPermissionMode : Views.Commands]);
             }
         }
@@ -41647,27 +41488,22 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             if (this.commandsData === null)
                 return;
-            // Permission mode
             if (MouseIn(1815, 305, 90, 90)) {
                 this.permissionMode = this.commandsData.access_changeLimits && !this.permissionMode;
                 return;
             }
-            // reset button
             if (MouseIn(870, 182, 64, 64)) {
                 this.filterInput.value = "";
                 this.rebuildList();
             }
-            // sort toggle
             if (MouseIn(1483, 182, 64, 64)) {
                 availabilitySort = !availabilitySort;
                 this.rebuildList();
             }
-            // A-Z toggle
             if (MouseIn(1583, 182, 64, 64)) {
                 alphabeticalSort = !alphabeticalSort;
                 this.rebuildList();
             }
-            // Actual rules
             for (let off = 0; off < PER_PAGE_COUNT; off++) {
                 const i = this.page * PER_PAGE_COUNT + off;
                 if (i >= this.commandList.length)
@@ -41677,7 +41513,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     continue;
                 const Y = 275 + off * 100;
                 const accessLevel = (_a = this.commandsData.limits[e.name]) !== null && _a !== void 0 ? _a : ConditionsLimit.normal;
-                // Command name
                 if (MouseIn(130, Y, 1350, 64)) {
                     const commandName = e.name;
                     if (this.permissionMode) {
@@ -41689,7 +41524,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return;
                 }
             }
-            // Pagination
             const totalPages = Math.ceil(this.commandList.length / PER_PAGE_COUNT);
             if (MouseIn(1605, 800, 150, 90)) {
                 this.page--;
@@ -41725,56 +41559,56 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             module: ModuleCategory.Global,
             onclick: (C) => {
                 setSubscreen(new GuiGlobal(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Authority,
             onclick: (C) => {
                 setSubscreen(new GuiAuthorityRoles(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Log,
             onclick: (C) => {
                 setSubscreen(new GuiLog(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Curses,
             onclick: (C) => {
                 setSubscreen(new GuiConditionViewCurses(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Rules,
             onclick: (C) => {
                 setSubscreen(new GuiConditionViewRules(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Commands,
             onclick: (C) => {
                 setSubscreen(new GuiCommandsModule(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Relationships,
             onclick: (C) => {
                 setSubscreen(new GuiRelationships(C));
-            }
+            },
         },
         {
             module: ModuleCategory.ExportImport,
             onclick: (C) => {
                 setSubscreen(new GuiExportImportMain(C));
-            }
+            },
         },
         {
             module: ModuleCategory.Misc,
             onclick: (C) => {
                 setSubscreen(new GuiMisc(C));
-            }
-        }
+            },
+        },
     ];
     class GuiMainMenu extends GuiSubscreen {
         constructor(character) {
@@ -41814,7 +41648,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [1, "#FFD700"],
                     [1, "#FFD700"],
                     [1, "#FFD700"],
-                    [1, "#FFD700"]
+                    [1, "#FFD700"],
                 ];
             }
             else if (this.character.supporterStatus === "developer") {
@@ -41828,7 +41662,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [1, "#6e6eff"],
                     [1, "#6e6eff"],
                     [1, "#6e6eff"],
-                    [1, "#6e6eff"]
+                    [1, "#6e6eff"],
                 ];
             }
             if (this.character.supporterStatus !== undefined && heartSteps) {
@@ -41853,11 +41687,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
             MainCanvas.textAlign = "center";
             if (this.character.isPlayer()) {
-                if (supporterStatus !== undefined) {
-                    DrawCheckbox(1450, 380, 64, 64, "", !modStorage.supporterHidden);
-                    DrawTextFit("Show your BCX Supporter", 1694, 391, 330, "Black");
-                    DrawTextFit("Heart to all BCX users", 1669, 433, 294, "Black");
-                }
                 DrawText(`Your BCX version: ${VERSION$1.replace(/-[0-f]+$/i, "")}`, 1450 + 400 / 2, 500, "Black", "");
                 DrawButton(1450, 590, 400, 90, "", "White", "", "Open changelog on GitHub");
                 if (versionCheckNewAvailable === true) {
@@ -41900,19 +41729,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 setSubscreen(new GuiTutorial(this.character, false));
             }
-            // BCX Supporter Heart toggle
-            if (MouseIn(1450, 380, 64, 64) && this.character.isPlayer()) {
-                setSupporterVisible(!!modStorage.supporterHidden);
-            }
-            // Changelog
             if (MouseIn(1450, 590, 400, 90) && this.character.isPlayer()) {
                 window.open(`https://github.com/Jomshir98/bondage-club-extended/blob/${BCX_DEVEL ? "master" : "stable"}/CHANGELOG.md`, "_blank");
             }
-            // Patreon
             if (MouseIn(1450, 700, 400, 90) && this.character.isPlayer()) {
                 window.open(`https://patreon.com/Jomshir98`, "_blank");
             }
-            // Discord invite
             if (MouseIn(1450, 810, 400, 90) && this.character.isPlayer()) {
                 window.open("https://discord.gg/SHJMjEh9VH", "_blank");
             }
@@ -41973,10 +41795,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         load() {
             patchFunction("InformationSheetRun", {
-                "DrawButton(1815, 765, 90, 90,": "DrawButton(1815, 800, 90, 90,"
+                "DrawButton(1815, 765, 90, 90,": "DrawButton(1815, 800, 90, 90,",
             });
             patchFunction("InformationSheetClick", {
-                "MouseIn(1815, 765, 90, 90)": "MouseIn(1815, 800, 90, 90)"
+                "MouseIn(1815, 765, 90, 90)": "MouseIn(1815, 800, 90, 90)",
             });
             hookFunction("InformationSheetRun", 10, (args, next) => {
                 if (this._currentSubscreen) {
@@ -42065,7 +41887,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         ChatRoomStatusManagerStatusType["Color"] = "Color";
         ChatRoomStatusManagerStatusType["Wardrobe"] = "Wardrobe";
         ChatRoomStatusManagerStatusType["Profile"] = "Profile";
-        // NMod
         ChatRoomStatusManagerStatusType["Action"] = "Action";
         ChatRoomStatusManagerStatusType["Afk"] = "Afk";
     })(ChatRoomStatusManagerStatusType || (ChatRoomStatusManagerStatusType = {}));
@@ -42073,13 +41894,11 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     class ChatRoomStatusManager {
         constructor() {
             this.InputTimeoutMs = 3000;
-            // Required for NMod!
             this.StatusTypes = {};
             this.InputElement = null;
             this.InputTimeout = null;
             this.Status = ChatRoomStatusManagerStatusType.None;
             this.StatusTarget = null;
-            // Status triggers
             this.DMS = 0;
             this.DMSUnlock = false;
             this.TypingStatus = ChatRoomStatusManagerStatusType.None;
@@ -42239,11 +42058,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     console.warn(`BCX: Invalid hello`, sender, message);
                     return;
                 }
-                // if (char.BCXVersion !== message.version) {
-                // 	console.log(`BCX: ${char.Character.Name} (${char.Character.MemberNumber}) uses BCX version ${message.version}`);
-                // }
                 char.BCXVersion = message.version;
-                // Apply effects
                 const effects = isObject$1(message.effects) ? message.effects : {};
                 char.Effects = cloneDeep(defaultBCXEffects);
                 if (Array.isArray(effects.Effect) && effects.Effect.every(i => typeof i === "string")) {
@@ -42256,10 +42071,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (typeof message.screenIndicatorEnable === "boolean") {
                     char.screenIndicatorEnable = message.screenIndicatorEnable;
                 }
-                // Supporter status
                 updateOtherSupporterStatus(sender, message.supporterStatus, message.supporterSecret);
-                // Send announcement, if requested
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
                 if (message.request === true) {
                     announceSelf(false);
                 }
@@ -42279,56 +42091,30 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 return next(args);
             });
-            const NMod = isNModClient();
-            if (NMod) {
-                hookFunction("ChatRoomDrawFriendList", 0, (args, next) => {
-                    var _a, _b;
-                    const [C, Zoom, CharX, CharY] = args;
-                    const Char = getChatroomCharacter(C.MemberNumber);
-                    const Friend = C.ID === 0 || ((_a = Player.FriendList) !== null && _a !== void 0 ? _a : []).includes(C.MemberNumber);
-                    const Ghosted = ((_b = Player.GhostList) !== null && _b !== void 0 ? _b : []).includes(C.MemberNumber);
-                    if ((Char === null || Char === void 0 ? void 0 : Char.BCXVersion) && ChatRoomHideIconState === 0 && !Ghosted) {
-                        if (Friend) {
-                            drawIcon(MainCanvas, icon_heart, CharX + 375 * Zoom, CharY, 50 * Zoom, 50 * Zoom, 50, 1, 4, "#6e6eff");
-                        }
-                        else {
-                            drawIcon(MainCanvas, icon_BCX_cross, CharX + 375 * Zoom, CharY, 50 * Zoom, 50 * Zoom, 50, 0.5, 3, "#6e6eff");
-                        }
+            patchFunction("ChatRoomDrawCharacterOverlay", {
+                'DrawImageResize("Icons/Small/Admin.png", CharX + 390 * Zoom, CharY, 40 * Zoom, 40 * Zoom);': 'DrawImageResize("Icons/Small/Admin.png", CharX + 400 * Zoom, CharY, 40 * Zoom, 40 * Zoom);',
+            });
+            hookFunction("ChatRoomDrawCharacterOverlay", 0, (args, next) => {
+                var _a, _b;
+                next(args);
+                const [C, CharX, CharY, Zoom] = args;
+                const Char = getChatroomCharacter(C.MemberNumber);
+                const Friend = C.ID === 0 || ((_a = Player.FriendList) !== null && _a !== void 0 ? _a : []).includes(C.MemberNumber);
+                const Ghosted = ((_b = Player.GhostList) !== null && _b !== void 0 ? _b : []).includes(C.MemberNumber);
+                if ((Char === null || Char === void 0 ? void 0 : Char.BCXVersion) &&
+                    !Ghosted &&
+                    ChatRoomHideIconState === 0 &&
+                    !modStorage.chatroomIconHidden) {
+                    if (Friend) {
+                        drawIcon(MainCanvas, icon_heart, CharX + 375 * Zoom, CharY + 5, 30 * Zoom, 30 * Zoom, 50, 0.7, 4, "#6e6eff");
                     }
                     else {
-                        next(args);
+                        drawIcon(MainCanvas, icon_BCX_cross, CharX + 375 * Zoom, CharY + 5, 30 * Zoom, 30 * Zoom, 50, 0.5, 3, "#6e6eff");
                     }
-                });
-                patchFunction("ChatRoomDrawCharacterOverlay", {
-                    "switch (C.Status)": "switch (null)"
-                });
-            }
-            else {
-                patchFunction("ChatRoomDrawCharacterOverlay", {
-                    'DrawImageResize("Icons/Small/FriendList.png", CharX + 375 * Zoom, CharY, 50 * Zoom, 50 * Zoom);': ""
-                });
-                hookFunction("ChatRoomDrawCharacterOverlay", 0, (args, next) => {
-                    var _a, _b;
-                    next(args);
-                    const [C, CharX, CharY, Zoom] = args;
-                    const Char = getChatroomCharacter(C.MemberNumber);
-                    const Friend = C.ID === 0 || ((_a = Player.FriendList) !== null && _a !== void 0 ? _a : []).includes(C.MemberNumber);
-                    const Ghosted = ((_b = Player.GhostList) !== null && _b !== void 0 ? _b : []).includes(C.MemberNumber);
-                    if ((Char === null || Char === void 0 ? void 0 : Char.BCXVersion) && ChatRoomHideIconState === 0 && !Ghosted) {
-                        if (Friend) {
-                            drawIcon(MainCanvas, icon_heart, CharX + 375 * Zoom, CharY, 50 * Zoom, 50 * Zoom, 50, 1, 4, "#6e6eff");
-                        }
-                        else {
-                            drawIcon(MainCanvas, icon_BCX_cross, CharX + 375 * Zoom, CharY, 50 * Zoom, 50 * Zoom, 50, 0.7, 3, "#6e6eff");
-                        }
-                    }
-                    else if (Friend && ChatRoomHideIconState === 0) {
-                        DrawImageEx("Icons/Small/FriendList.png", CharX + 375 * Zoom, CharY, {
-                            Width: 50 * Zoom,
-                            Height: 50 * Zoom
-                        });
-                    }
-                });
+                }
+            });
+            const NMod = isNModClient();
+            if (!NMod) {
                 hookFunction("ChatRoomCreateElement", 0, (args, next) => {
                     next(args);
                     ChatroomSM.SetInputElement(document.getElementById("InputChat"));
@@ -42356,29 +42142,29 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         DrawRect(CharX + 380 * Zoom, CharY + 53 * Zoom, 40 * Zoom, 40 * Zoom, "White");
                         DrawImageEx("Icons/Import.png", CharX + 375 * Zoom, CharY + 50 * Zoom, {
                             Width: 50 * Zoom,
-                            Height: 50 * Zoom
+                            Height: 50 * Zoom,
                         });
                         break;
                     case ChatRoomStatusManagerStatusType.Color:
                         DrawImageEx("Assets/Female3DCG/Emoticon/Spectator/Icon.png", CharX + 375 * Zoom, CharY + 50 * Zoom, {
                             Width: 50 * Zoom,
-                            Height: 50 * Zoom
+                            Height: 50 * Zoom,
                         });
                         DrawImageEx("Icons/ColorPick.png", CharX + 380 * Zoom, CharY + 51 * Zoom, {
                             Width: 40 * Zoom,
-                            Height: 40 * Zoom
+                            Height: 40 * Zoom,
                         });
                         break;
                     case ChatRoomStatusManagerStatusType.Wardrobe:
                         DrawImageEx("Assets/Female3DCG/Emoticon/Wardrobe/Icon.png", CharX + 375 * Zoom, CharY + 50 * Zoom, {
                             Width: 50 * Zoom,
-                            Height: 50 * Zoom
+                            Height: 50 * Zoom,
                         });
                         break;
                     case ChatRoomStatusManagerStatusType.Profile:
                         DrawImageEx("Assets/Female3DCG/Emoticon/Read/Icon.png", CharX + 375 * Zoom, CharY + 50 * Zoom, {
                             Width: 50 * Zoom,
-                            Height: 50 * Zoom
+                            Height: 50 * Zoom,
                         });
                         break;
                 }
@@ -42420,7 +42206,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 next(args);
                 ChatroomSM.SetInputElement(null);
             });
-            // Screen indicator
             hookFunction("CommonSetScreen", 0, (args, next) => {
                 next(args);
                 ChatroomSM.UpdateStatus();
@@ -42433,7 +42218,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 next(args);
                 ChatroomSM.UpdateStatus();
             });
-            // Suppress BC wardrobe indicator if BCX one is active
             hookFunction("ServerSend", 5, (args, next) => {
                 if (modStorage.screenIndicatorEnable &&
                     args[0] === "ChatRoomCharacterExpressionUpdate" &&
@@ -42488,7 +42272,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             request,
             effects: player.Effects,
             typingIndicatorEnable: modStorage.typingIndicatorEnable,
-            screenIndicatorEnable: modStorage.screenIndicatorEnable
+            screenIndicatorEnable: modStorage.screenIndicatorEnable,
         };
         if (supporterStatus && supporterSecret && !modStorage.supporterHidden) {
             msg.supporterStatus = supporterStatus;
@@ -42518,16 +42302,17 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function getLocalStorageName() {
         return `BCX_${Player.MemberNumber}`;
     }
+    function getLocalStorageNameBackup() {
+        return `BCX_${Player.MemberNumber}_backup`;
+    }
     function storageClearData() {
-        delete Player.OnlineSettings.BCX;
+        if (Player.OnlineSettings) {
+            delete Player.OnlineSettings.BCX;
+            Player.OnlineSettings.BCXDataCleared = Date.now();
+        }
         localStorage.removeItem(getLocalStorageName());
-        if (typeof ServerAccountUpdate !== "undefined") {
-            ServerAccountUpdate.QueueData({ OnlineSettings: Player.OnlineSettings }, true);
-        }
-        else {
-            console.debug("BCX: Old sync method");
-            ServerSend("AccountUpdate", { OnlineSettings: Player.OnlineSettings });
-        }
+        localStorage.removeItem(getLocalStorageNameBackup());
+        ServerAccountUpdate.QueueData({ OnlineSettings: Player.OnlineSettings }, true);
     }
     function switchStorageLocation(location) {
         if (location !== StorageLocations.LocalStorage && location !== StorageLocations.OnlineSettings) {
@@ -42550,15 +42335,23 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return;
         }
         const serializedData = LZString.compressToBase64(JSON.stringify(modStorage));
+        try {
+            if (typeof serializedData !== "string") {
+                throw new Error("Data compression failed");
+            }
+            const checkParsedData = JSON.parse(LZString.decompressFromBase64(serializedData));
+            if (!isMatch(modStorage, checkParsedData)) {
+                console.warn("Current data:\n", modStorage, "\nSaved data:\n", checkParsedData);
+                throw new Error("Saved data differs after load");
+            }
+        }
+        catch (error) {
+            reportManualError("Save data failed to validate!", error);
+            return;
+        }
         if (modStorageLocation === StorageLocations.OnlineSettings) {
             Player.OnlineSettings.BCX = serializedData;
-            if (typeof ServerAccountUpdate !== "undefined") {
-                ServerAccountUpdate.QueueData({ OnlineSettings: Player.OnlineSettings });
-            }
-            else {
-                console.debug("BCX: Old sync method");
-                ServerSend("AccountUpdate", { OnlineSettings: Player.OnlineSettings });
-            }
+            ServerAccountUpdate.QueueData({ OnlineSettings: Player.OnlineSettings });
         }
         else if (modStorageLocation === StorageLocations.LocalStorage) {
             localStorage.setItem(getLocalStorageName(), serializedData);
@@ -42566,6 +42359,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         else {
             throw new Error(`Unknown StorageLocation`);
         }
+        localStorage.setItem(getLocalStorageNameBackup(), serializedData);
     }
     function clearAllData() {
         deletionPending = true;
@@ -42577,16 +42371,27 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
     class ModuleStorage extends BaseModule {
         init() {
-            var _a;
             let saved = null;
             saved = localStorage.getItem(getLocalStorageName());
             if (typeof saved === "string") {
                 console.info(`BCX: Detected storage location: local storage`);
                 modStorageLocation = StorageLocations.LocalStorage;
             }
-            if (!saved) {
-                saved = (_a = Player.OnlineSettings) === null || _a === void 0 ? void 0 : _a.BCX;
+            if (typeof saved !== "string") {
+                if (!isObject$1(Player.OnlineSettings)) {
+                    console.error("BCX: Missing OnlineSettings during load");
+                    alert("BCX: Failed to load data, please see console for more details");
+                    return false;
+                }
+                saved = Player.OnlineSettings.BCX;
                 modStorageLocation = StorageLocations.OnlineSettings;
+            }
+            if (typeof saved !== "string") {
+                const backupSave = localStorage.getItem(getLocalStorageNameBackup());
+                if (typeof backupSave === "string" &&
+                    confirm("BCX: Error loading saved data, but found local backup.\nDo you want to load the backup?")) {
+                    saved = backupSave;
+                }
             }
             if (typeof saved === "string") {
                 try {
@@ -42598,12 +42403,24 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 catch (error) {
                     console.error("BCX: Error while loading saved data, full reset.", error);
+                    if (confirm(`BCX Failed to load saved data! Continue anyway, resetting all data?\n(${error})`)) {
+                        firstTimeInit = true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
+            }
+            else if (saved !== undefined) {
+                console.error("BCX: Unknown save data type:", saved);
+                alert("BCX: Failed to load data, please see console for more details");
+                return false;
             }
             else {
                 console.log("BCX: First time init");
                 firstTimeInit = true;
             }
+            return true;
         }
         run() {
             modStorageSync();
@@ -42621,7 +42438,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             Content: "BCXMsg",
             Type: "Hidden",
             Target,
-            Dictionary: { type, message }
+            Dictionary: { type, message },
         });
     }
     function sendHiddenBeep(type, message, target, asLeashBeep = false) {
@@ -42629,8 +42446,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             MemberNumber: target,
             BeepType: asLeashBeep ? "Leash" : "BCX",
             Message: {
-                BCX: { type, message }
-            }
+                BCX: { type, message },
+            },
         });
     }
     const pendingQueries = new Map();
@@ -42648,7 +42465,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     console.warn("BCX: Query timed out", target, type);
                     pendingQueries.delete(id);
                     reject("Timed out");
-                }, timeout)
+                }, timeout),
             };
             pendingQueries.set(id, info);
             const playerCharacter = getPlayerCharacter();
@@ -42656,7 +42473,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 handleQuery(playerCharacter, cloneDeep({
                     id,
                     query: type,
-                    data
+                    data,
                 }))
                     .then(result => {
                     handleQueryAnswer(playerCharacter.MemberNumber, result);
@@ -42664,7 +42481,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     handleQueryAnswer(playerCharacter.MemberNumber, {
                         id,
                         ok: false,
-                        data: error
+                        data: error,
                     });
                 });
             }
@@ -42672,7 +42489,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 sendHiddenMessage("query", {
                     id,
                     query: type,
-                    data
+                    data,
                 }, target);
             }
         });
@@ -42683,14 +42500,14 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             console.warn("BCX: Query no handler", sender, message);
             return {
                 id: message.id,
-                ok: false
+                ok: false,
             };
         }
         const result = await handler(sender, message.data);
         return {
             id: message.id,
             ok: result !== undefined,
-            data: result
+            data: result,
         };
     }
     hiddenMessageHandlers.set("query", (sender, message) => {
@@ -42704,7 +42521,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (!character || !character.hasAccessToPlayer()) {
             return sendHiddenMessage("queryAnswer", {
                 id: message.id,
-                ok: false
+                ok: false,
             }, sender);
         }
         handleQuery(character, message)
@@ -42714,7 +42531,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             sendHiddenMessage("queryAnswer", {
                 id: message.id,
                 ok: false,
-                data: String(error)
+                data: String(error),
             }, sender);
         });
     });
@@ -42818,7 +42635,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         [Preset.dominant]: [ModuleCategory.Log, ModuleCategory.Curses, ModuleCategory.Rules, ModuleCategory.Commands],
         [Preset.switch]: [],
         [Preset.submissive]: [],
-        [Preset.slave]: []
+        [Preset.slave]: [],
     };
     function getCurrentPreset() {
         var _a;
@@ -42917,7 +42734,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function init_modules() {
         moduleInitPhase = ModuleInitPhase.init;
         for (const m of modules) {
-            m.init();
+            if (m.init() === false) {
+                return false;
+            }
         }
         const oldVersion = typeof modStorage.version === "string" ? parseBCXVersion(modStorage.version) : { major: 0, minor: 0, patch: 0 };
         if (!oldVersion) {
@@ -42993,7 +42812,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         permissions.set(name, {
             ...data,
             self: data.defaults[Preset.switch][0],
-            min: data.defaults[Preset.switch][1]
+            min: data.defaults[Preset.switch][1],
         });
     }
     function getCharacterAccessLevel(character) {
@@ -43017,7 +42836,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         return AccessLevel.public;
     }
-    /** Returns the highest role, that is currently in room (except self), `null` if not in room or alone */
     function getHighestRoleInRoom() {
         let res = null;
         for (const char of getAllCharactersInRoom()) {
@@ -43072,7 +42890,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 res[k] = {
                     ...v,
                     self: bundle[k][0],
-                    min: bundle[k][1]
+                    min: bundle[k][1],
                 };
             }
         }
@@ -43122,17 +42940,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (permData.min === min)
             return true;
         if (characterToCheck && !forceAllow) {
-            const allowed = 
-            // Exception: Player can always lower permissions "Self"->"Owner"
-            (characterToCheck.isPlayer() && permData.min < min && min <= AccessLevel.owner) ||
-                (
-                // Character must have access to "allow lowest access modification"
-                checkPermissionAccess("authority_edit_min", characterToCheck) &&
-                    // Character must have access to target rule
+            const allowed = (characterToCheck.isPlayer() && permData.min < min && min <= AccessLevel.owner) ||
+                (checkPermissionAccess("authority_edit_min", characterToCheck) &&
                     checkPermissionAccess(permission, characterToCheck) &&
-                    (
-                    // Not player must have access to target level
-                    characterToCheck.isPlayer() ||
+                    (characterToCheck.isPlayer() ||
                         getCharacterAccessLevel(characterToCheck) <= min));
             if (!allowed) {
                 console.warn(`BCX: Unauthorized min permission edit attempt for "${permission}" by ${characterToCheck}`);
@@ -43197,7 +43008,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             allowAddMistress: checkPermissionAccess("authority_mistress_add", character),
             allowRemoveMistress: checkPermissionAccess("authority_mistress_remove", character),
             allowAddOwner: checkPermissionAccess("authority_owner_add", character),
-            allowRemoveOwner: checkPermissionAccess("authority_owner_remove", character)
+            allowRemoveOwner: checkPermissionAccess("authority_owner_remove", character),
         };
     }
     function editRole(role, action, target, character) {
@@ -43239,7 +43050,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 const user = character.isPlayer() ? "her" : `TargetCharacterName's (${Player.MemberNumber})`;
                 ChatRoomActionMessage(`SourceCharacter (${character.MemberNumber}) added you as ${user} BCX ${role}.`, target, [
                     { Tag: "SourceCharacter", MemberNumber: character.MemberNumber, Text: CharacterNickname(character.Character) },
-                    { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) }
+                    { Tag: "TargetCharacterName", MemberNumber: Player.MemberNumber, Text: CharacterNickname(Player) },
                 ]);
             }
         }
@@ -43272,8 +43083,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [false, AccessLevel.owner],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
             });
             registerPermission("authority_revoke_self", {
                 name: "Allow forbidding self access",
@@ -43282,8 +43093,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.self],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
             });
             registerPermission("authority_edit_min", {
                 name: "Allow lowest access modification",
@@ -43292,8 +43103,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.self],
-                    [Preset.slave]: [false, AccessLevel.owner]
-                }
+                    [Preset.slave]: [false, AccessLevel.owner],
+                },
             });
             registerPermission("authority_mistress_add", {
                 name: "Allow granting Mistress status",
@@ -43302,8 +43113,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.lover],
-                    [Preset.slave]: [true, AccessLevel.mistress]
-                }
+                    [Preset.slave]: [true, AccessLevel.mistress],
+                },
             });
             registerPermission("authority_mistress_remove", {
                 name: "Allow revoking Mistress status",
@@ -43312,8 +43123,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [false, AccessLevel.lover],
-                    [Preset.slave]: [false, AccessLevel.lover]
-                }
+                    [Preset.slave]: [false, AccessLevel.lover],
+                },
             });
             registerPermission("authority_owner_add", {
                 name: "Allow granting Owner status",
@@ -43322,8 +43133,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [true, AccessLevel.clubowner],
-                    [Preset.slave]: [true, AccessLevel.owner]
-                }
+                    [Preset.slave]: [true, AccessLevel.owner],
+                },
             });
             registerPermission("authority_owner_remove", {
                 name: "Allow revoking Owner status",
@@ -43332,8 +43143,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.self],
                     [Preset.submissive]: [false, AccessLevel.clubowner],
-                    [Preset.slave]: [false, AccessLevel.clubowner]
-                }
+                    [Preset.slave]: [false, AccessLevel.clubowner],
+                },
             });
             registerPermission("authority_view_roles", {
                 name: "Allow viewing list of owners/mistresses",
@@ -43342,8 +43153,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.self],
                     [Preset.switch]: [true, AccessLevel.mistress],
                     [Preset.submissive]: [true, AccessLevel.whitelist],
-                    [Preset.slave]: [true, AccessLevel.public]
-                }
+                    [Preset.slave]: [true, AccessLevel.public],
+                },
             });
             queryHandlers.permissions = () => {
                 return permissionsMakeBundle();
@@ -43586,7 +43397,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                             res += `Skipped unknown permission '${k}'\n`;
                             continue;
                         }
-                        // Silently skip permissions from disabled modules
                         if (!moduleIsEnabled(permData.category))
                             continue;
                         if (!v[0] && v[1] === AccessLevel.self) {
@@ -43610,7 +43420,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return res + `Done!`;
                 },
                 importPermissions: ["authority_grant_self", "authority_revoke_self", "authority_edit_min"],
-                importValidator: mod.record(mod.tuple([mod.boolean(), mod.nativeEnum(AccessLevel)]))
+                importValidator: z.record(z.tuple([z.boolean(), z.nativeEnum(AccessLevel)])),
             });
         }
         setDefultPermissionsForPreset(preset) {
@@ -43628,7 +43438,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             this.setDefultPermissionsForPreset(preset);
             if (isObject$1(modStorage.permissions)) {
                 const transitionDictionary = {
-                    log_leaveMessage: "log_add_note"
+                    log_leaveMessage: "log_add_note",
                 };
                 for (const [k, v] of Object.entries(modStorage.permissions)) {
                     if (transitionDictionary[k] !== undefined) {
@@ -43762,7 +43572,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return sendQuery("editPermission", {
                 permission,
                 edit: type,
-                target
+                target,
             }, this.MemberNumber).then(data => {
                 if (typeof data !== "boolean") {
                     console.error("BCX: Bad data during 'editPermission' query\n", data);
@@ -43792,7 +43602,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             return sendQuery("editRole", {
                 type: role,
                 action,
-                target
+                target,
             }, this.MemberNumber).then(data => {
                 if (typeof data !== "boolean") {
                     console.error("BCX: Bad data during 'editRole' query\n", data);
@@ -43842,7 +43652,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         setLogConfig(category, target) {
             return sendQuery("logConfigEdit", {
                 category,
-                target
+                target,
             }, this.MemberNumber).then(data => {
                 if (typeof data !== "boolean") {
                     console.error("BCX: Bad data during 'logConfigEdit' query\n", data);
@@ -43863,7 +43673,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         logPraise(value, message) {
             return sendQuery("logPraise", {
                 message,
-                value
+                value,
             }, this.MemberNumber).then(data => {
                 if (typeof data !== "boolean") {
                     console.error("BCX: Bad data during 'logPraise' query\n", data);
@@ -43987,7 +43797,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         exportImportDoExport(category, compress = true) {
             return sendQuery("export_import_do_export", {
                 category,
-                compress
+                compress,
             }, this.MemberNumber).then(res => {
                 if (typeof res !== "string") {
                     console.error("BCX: Bad data during 'export_import_do_export' query\n", res);
@@ -43999,7 +43809,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         exportImportDoImport(category, data) {
             return sendQuery("export_import_do_import", {
                 category,
-                data
+                data,
             }, this.MemberNumber).then(res => {
                 if (typeof res !== "string") {
                     console.error("BCX: Bad data during 'export_import_do_import' query\n", res);
@@ -44050,7 +43860,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     class PlayerCharacter extends ChatroomCharacter {
         constructor() {
             super(...arguments);
-            /** HACK: Otherwise TS wrongly assumes PlayerCharacter to be identical to ChatroomCharacter */
             this.playerObject = true;
         }
         get supporterStatus() {
@@ -44169,7 +43978,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         "HairAccessory2": "Ears Accessory",
         "Height": "Character Height",
         "Mouth": "Mouth Style",
-        "Pussy": "Pussy Style"
+        "Pussy": "Pussy Style",
     };
     let allowMode = false;
     let developmentMode = false;
@@ -44220,19 +44029,20 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     let BCXSourceExternal = false;
     function init_findBCXSource() {
         for (const elem of Array.from(document.getElementsByTagName("script"))) {
-            const match = /^(https:\/\/[^?/]+\/([^?]+)?|http:\/\/localhost(?::[0-9]+)?\/)bcx.js($|\?)/i.exec(elem.src);
+            const match = /^((https:\/\/[^?/]+|http:\/\/localhost(?::[0-9]+)?)\/([^?]+)?)bcx(\.dev)?\.js($|\?)/i.exec(elem.src);
             if (match) {
                 BCXSource = match[1];
+                console.debug("BCX: Using detected source:", BCXSource);
                 return;
             }
         }
         const externalSrc = window.BCX_SOURCE;
         if (typeof externalSrc === "string") {
             BCXSourceExternal = true;
-            const match = /^(https:\/\/[^?/]+\/(?:[^?]+?)?)(?:bcx.js)?(?:$|\?)/i.exec(externalSrc);
+            const match = /^(https:\/\/[^?/]+\/(?:[^?]+?)?)(?:bcx(\.dev)?\.js)?(?:$|\?)/i.exec(externalSrc);
             if (match) {
                 BCXSource = match[1];
-                console.log("BCX: External BCX_SOURCE supplied, using it");
+                console.log("BCX: External BCX_SOURCE supplied:", BCXSource);
                 return;
             }
             console.warn("BCX: External BCX_SOURCE supplied, but malformed, ignoring", externalSrc);
@@ -44248,7 +44058,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function InfoBeep(msg, timer = 3000) {
         ServerBeep = {
             Timer: CommonTime() + timer,
-            Message: msg
+            Message: msg,
         };
     }
     function ChatRoomActionMessage(msg, target = null, dictionary = []) {
@@ -44260,13 +44070,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             Target: target,
             Dictionary: [
                 { Tag: "MISSING PLAYER DIALOG: BCX_PLAYER_CUSTOM_DIALOG", Text: msg },
-                ...dictionary
-            ]
+                ...dictionary,
+            ],
         });
     }
     function ChatRoomSendLocal(msg, timeout, sender) {
         var _a, _b;
-        // Adds the message and scrolls down unless the user has scrolled up
         const div = document.createElement("div");
         div.setAttribute("class", "ChatMessage ChatMessageLocalMessage");
         div.setAttribute("data-time", ChatRoomCurrentTime());
@@ -44279,7 +44088,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             div.appendChild(msg);
         if (timeout)
             BCX_setTimeout(() => div.remove(), timeout);
-        // Returns the focus on the chat box
         const Refocus = ((_b = document.activeElement) === null || _b === void 0 ? void 0 : _b.id) === "InputChat";
         const ShouldScrollDown = ElementIsScrolledToEnd("TextAreaChatLog");
         const ChatLog = document.getElementById("TextAreaChatLog");
@@ -44308,26 +44116,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             BcUtil: typeof w.StartBcUtil === "function",
             QuickAccessMenu: typeof w.OLDmenu === "function" && typeof w.NEWmenu === "function",
             ImprovedStruggle: typeof w.OLDclick === "function" && typeof w.NEWclick === "function",
-            BCE: w.BCE_VERSION !== undefined ? (`${w.BCE_VERSION}` || true) : false
+            BCE: w.BCE_VERSION !== undefined ? (`${w.BCE_VERSION}` || true) : false,
         };
     }
-    /**
-     * Draws an image on canvas, applying all options
-     * @param {string | HTMLImageElement | HTMLCanvasElement} Source - URL of image or image itself
-     * @param {number} X - Position of the image on the X axis
-     * @param {number} Y - Position of the image on the Y axis
-     * @param {object} [options] - any extra options, optional
-     * @param {CanvasRenderingContext2D} [options.Canvas] - Canvas on which to draw the image, defaults to `MainCanvas`
-     * @param {number} [options.Alpha] - transparency between 0-1
-     * @param {[number, number, number, number]} [options.SourcePos] - Area in original image to draw in format `[left, top, width, height]`
-     * @param {number} [options.Width] - Width of the drawn image, defaults to width of original image
-     * @param {number} [options.Height] - Height of the drawn image, defaults to height of original image
-     * @param {boolean} [options.Invert=false] - If image should be flipped vertically
-     * @param {boolean} [options.Mirror=false] - If image should be flipped horizontally
-     * @param {number} [options.Zoom=1] - Zoom factor
-     * @returns {boolean} - whether the image was complete or not
-     */
-    function DrawImageEx(Source, X, Y, { Canvas = MainCanvas, Alpha = 1, SourcePos, Width, Height, Invert = false, Mirror = false, Zoom = 1 } = {}) {
+    function DrawImageEx(Source, X, Y, { Canvas = MainCanvas, Alpha = 1, SourcePos, Width, Height, Invert = false, Mirror = false, Zoom = 1, } = {}) {
         if (typeof Source === "string") {
             Source = DrawGetImage(Source);
             if (!Source.complete)
@@ -44500,20 +44292,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         ctx.restore();
     }
-    /**
-     * Draws a path from an SVG on canvas, applying all options
-     * @param {CanvasRenderingContext2D} ctx - Context of the canvas
-     * @param {string} icon - The SVG path for drawing
-     * @param {number} x - Icon position on the X axis
-     * @param {number} y - Icon position on the Y axis
-     * @param {number} width - Width of the icon
-     * @param {number} height - Height of the icon
-     * @param {number} baseSize - The base size of the provided path from the SVG, assuming equal width and height
-     * @param {number} alpha - Transparency between 0-1
-     * @param {number} lineWidth - Thickness of icon outline
-     * @param {string} fillColor - Icon fill colour
-     * @returns {void} - Nothing
-     */
     function drawIcon(ctx, icon, x, y, width, height, baseSize, alpha, lineWidth, fillColor, strokeColor = "black") {
         ctx.save();
         ctx.globalAlpha = alpha;
@@ -44531,21 +44309,8 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         ctx.restore();
     }
-    /**
-     * Draws a word wrapped text in a rectangle
-     * @param {string} Text - Text to draw
-     * @param {number} X - Position of the rectangle on the X axis
-     * @param {number} Y - Position of the rectangle on the Y axis
-     * @param {number} Width - Width of the rectangle
-     * @param {number} Height - Height of the rectangle
-     * @param {string} ForeColor - Foreground color
-     * @param {string} [BackColor] - Background color
-     * @param {number} [MaxLine] - Maximum of lines the word can wrap for
-     * @returns {void} - Nothing
-     */
     function BCXDrawTextWrap(Text, X, Y, Width, Height, ForeColor, BackColor, MaxLine) {
         MainCanvas.save();
-        // Draw the rectangle if we need too
         if (BackColor != null) {
             MainCanvas.fillStyle = BackColor;
             MainCanvas.fillRect(X, Y, Width, Height);
@@ -44558,23 +44323,19 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (MainCanvas.textAlign === "center") {
             X += Math.floor(Width / 2);
         }
-        // Sets the text size if there's a maximum number of lines
         const lines = SubdivideTextSize(Text, Width, MaxLine);
         Y = Math.round(Y + (Height / 2) - ((lines.length - 1) * 23));
         for (const line of lines) {
             MainCanvas.fillText(line, X, Y);
             Y += 46;
         }
-        // Resets the font text size
         MainCanvas.restore();
     }
     function SubdivideLine(Text, Width) {
-        // Don't bother if it fits on one line
         if (MainCanvas.measureText(Text).width <= Width)
             return [Text];
         const lines = [];
         let line = "";
-        // Find the number of lines
         for (const word of Text.split(" ")) {
             const testLine = line + " " + word;
             if (line && MainCanvas.measureText(testLine).width > Width) {
@@ -44589,13 +44350,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
         return lines;
     }
-    /**
-     * Reduces the font size progressively until the text fits the wrap size
-     * @param {string} Text - Text that will be drawn
-     * @param {number} Width - Width in which the text must fit
-     * @param {number} MaxLine - Maximum of lines the word can wrap for
-     * @returns {void} - Nothing
-     */
     function SubdivideTextSize(Text, Width, MaxLine) {
         const initialLines = Text.split("\n").map(l => l.trim());
         if (MaxLine && initialLines.length > MaxLine) {
@@ -44605,7 +44359,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         for (const line of initialLines) {
             finalLines.push(...SubdivideLine(line, Width));
         }
-        // If there's too many lines, we launch the function again with size minus 2
         if (MaxLine && finalLines.length > MaxLine) {
             MainCanvas.font = (parseInt(MainCanvas.font.substring(0, 2), 10) - 2).toString() + "px arial";
             return SubdivideTextSize(Text, Width, MaxLine);
@@ -44642,7 +44395,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         [ThemeRoomType.Tie]: "Tying all up",
         [ThemeRoomType.Market]: "Market/Auction",
         [ThemeRoomType.Game]: "Game",
-        [ThemeRoomType.Other]: "Undefined"
+        [ThemeRoomType.Other]: "Undefined",
     };
     function stringifyLimits(room) {
         return Array.from(room.Limits.values())
@@ -44656,15 +44409,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         "no-limits",
         "no-males",
         "no-sexual",
-        "no-tentacles"
+        "no-tentacles",
     ];
-    // for 2nd page / room template feature
     const ROOM_TEMPLATES_COUNT = 4;
     let overwriteMode;
     let onSecondPage = false;
     let onRoomCreateScreen = false;
-    //#region theme rooms
-    const MAX_DESCRIPTION_CHARS = 80; // it is 100, but font is getting way too small
+    const MAX_DESCRIPTION_CHARS = 80;
     const MAX_SPACES_AND_BRACKETS = 8;
     const MAX_TR_TYPE_LENGTH = Math.max(...(Object.values(TR_TYPE_NAMES).map(el => el.length)));
     const MAX_TR_SETTING_LENGTH = Math.max(...(Object.keys(ThemeRoomSetting).map(el => el.length)));
@@ -44677,7 +44428,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         Limits: new Set(),
         BlockCategories: [],
         Background: "",
-        IntroText: ""
+        IntroText: "",
     };
     let onThemeRoomSubpage = false;
     let roomGreeting = "";
@@ -44686,7 +44437,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function serializeThemeRoom(value) {
         return JSON.stringify({
             ...value,
-            Limits: Array.from(value.Limits)
+            Limits: Array.from(value.Limits),
         });
     }
     function parseThemeRoom(value) {
@@ -44716,7 +44467,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     }
     function ThemeRoomLoad() {
         document.addEventListener("paste", PasteListener);
-        // start cooldown for the room greeting when someone leaves
         hookFunction("ChatRoomSyncMemberLeave", 5, (args, next) => {
             next(args);
             const R = args[0];
@@ -44724,7 +44474,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 nextGreet.set(R.SourceMemberNumber, Date.now() + GREET_DELAY);
             }
         });
-        // greet a newly joining character when they did not see the room greeting for a while
         hookFunction("ChatRoomAddCharacterToChatRoom", 6, (args, next) => {
             const size = ChatRoomCharacter.length;
             next(args);
@@ -44749,7 +44498,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }, 5000);
             }
         });
-        // notify player that they have a room greeting set for this room
         hookFunction("ChatRoomSync", 4, (args, next) => {
             next(args);
             if (!greetingActiveNotificationGiven && roomGreeting !== "" && ChatRoomPlayerIsAdmin()) {
@@ -44759,7 +44507,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     "Leaving this room will cancel sending it.");
             }
         });
-        // delete room greeting when player leaves the room
         hookFunction("ChatRoomClearAllElements", 3, (args, next) => {
             greetingActiveNotificationGiven = false;
             roomGreeting = "";
@@ -44771,7 +44518,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             ChatSettingsThemeRoomExit();
         }
     }
-    // Sub page within the second page for the theme room creation form
     function ChatSettingsThemeRoomRun() {
         MainCanvas.textAlign = "left";
         DrawText(`1. Select the room type:`, 120, 100, "Black", "Gray");
@@ -44784,7 +44530,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             DrawButton(1480, 340, 193, 50, "Export", "White", "", "Export everything onscreen");
             DrawButton(1705, 340, 193, 50, "Import", "White", "", "Import everything onscreen");
         }
-        // 1. room type
         DrawButton(120, 130, 260, 60, TR_TYPE_NAMES[ThemeRoomType.Afk], currentThemeRoom.Type === ThemeRoomType.Afk ? "#FEC5C5" : "White");
         DrawButton(120, 205, 260, 60, TR_TYPE_NAMES[ThemeRoomType.Chill], currentThemeRoom.Type === ThemeRoomType.Chill ? "#FEC5C5" : "white");
         DrawButton(120, 280, 260, 60, TR_TYPE_NAMES[ThemeRoomType.Tie], currentThemeRoom.Type === ThemeRoomType.Tie ? "#FEC5C5" : "white");
@@ -44793,7 +44538,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         DrawButton(395, 205, 260, 60, TR_TYPE_NAMES[ThemeRoomType.Kidnap], currentThemeRoom.Type === ThemeRoomType.Kidnap ? "#FEC5C5" : "white");
         DrawButton(395, 280, 260, 60, TR_TYPE_NAMES[ThemeRoomType.Market], currentThemeRoom.Type === ThemeRoomType.Market ? "#FEC5C5" : "white");
         DrawButton(395, 355, 260, 60, TR_TYPE_NAMES[ThemeRoomType.Other], currentThemeRoom.Type === ThemeRoomType.Other ? "#FEC5C5" : "white");
-        // 2. room setting
         DrawButton(735, 130, 200, 60, ThemeRoomSetting[0], currentThemeRoom.Setting === ThemeRoomSetting.Adventure ? "#FEC5C5" : "White");
         DrawButton(735, 205, 200, 60, ThemeRoomSetting[2], currentThemeRoom.Setting === ThemeRoomSetting.Historic ? "#FEC5C5" : "white");
         DrawButton(735, 280, 200, 60, ThemeRoomSetting[4], currentThemeRoom.Setting === ThemeRoomSetting.Romantic ? "#FEC5C5" : "white");
@@ -44801,19 +44545,15 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         DrawButton(950, 130, 200, 60, ThemeRoomSetting[1], currentThemeRoom.Setting === ThemeRoomSetting.Fantasy ? "#FEC5C5" : "white");
         DrawButton(950, 205, 200, 60, ThemeRoomSetting[3], currentThemeRoom.Setting === ThemeRoomSetting.Modern ? "#FEC5C5" : "white");
         DrawButton(950, 280, 200, 60, ThemeRoomSetting[5], currentThemeRoom.Setting === ThemeRoomSetting.School ? "#FEC5C5" : "white");
-        // 3. limits
         for (const a of THEME_ROOM_LIMITS) {
             DrawButton(120 + THEME_ROOM_LIMITS.indexOf(a) * 245, 510, 230, 54, a, currentThemeRoom.Limits.has(a) ? "#FEC5C5" : "white");
         }
-        // DrawButton(120, 580, 230, 54, "Placeholder", "white");
-        // block some items
         MainCanvas.textAlign = "left";
         DrawText(`Blocked items:`, 910, 465, "Black", "Gray");
         DrawCheckbox(1170, 465 - 32, 60, 60, "ABDL", currentThemeRoom.BlockCategories.includes("ABDL"));
         DrawCheckbox(1400, 465 - 32, 60, 60, "Fantasy", currentThemeRoom.BlockCategories.includes("Fantasy"));
         DrawCheckbox(1660, 465 - 32, 60, 60, "SciFi", currentThemeRoom.BlockCategories.includes("SciFi"));
         MainCanvas.textAlign = "center";
-        // 4. intro text
         if (!input) {
             input = document.createElement("textarea");
             input.id = `INTRO_TEXT`;
@@ -44849,7 +44589,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             parseThemeRoom(data);
         }
     }
-    // Click events for the sub page within the second page for the theme room creation form
     function ChatSettingsThemeRoomClick() {
         if (MouseIn(1480, 75, 420, 245)) {
             ElementToggleGeneratedElements("ChatCreate", false);
@@ -44858,14 +44597,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             });
         }
         if (clipboardAvailable) {
-            // Export button
             if (MouseIn(1480, 340, 193, 50)) {
                 BCX_setTimeout(async () => {
                     await navigator.clipboard.writeText(serializeThemeRoom(currentThemeRoom));
                     InfoBeep(`BCX: Copied to clipboard!`, 5000);
                 }, 0);
             }
-            // Import button
             if (MouseIn(1705, 340, 193, 50)) {
                 BCX_setTimeout(async () => {
                     if (typeof navigator.clipboard.readText !== "function") {
@@ -44878,7 +44615,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }, 0);
             }
         }
-        // 1. room type
         if (MouseIn(120, 130, 260, 60)) {
             currentThemeRoom.Type = ThemeRoomType.Afk;
         }
@@ -44903,7 +44639,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (MouseIn(395, 355, 260, 60)) {
             currentThemeRoom.Type = ThemeRoomType.Other;
         }
-        // 2. room setting
         if (MouseIn(735, 130, 200, 60)) {
             ToggleThemeRoomSetting(ThemeRoomSetting.Adventure);
         }
@@ -44925,15 +44660,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         if (MouseIn(950, 280, 200, 60)) {
             ToggleThemeRoomSetting(ThemeRoomSetting.School);
         }
-        // 3. limits
         for (const a of THEME_ROOM_LIMITS) {
             if (MouseIn(120 + THEME_ROOM_LIMITS.indexOf(a) * 245, 510, 230, 54)) {
                 if (currentThemeRoom.Limits.has(a)) {
-                    // remove element if it is already selected
                     currentThemeRoom.Limits.delete(a);
                 }
                 else {
-                    // add element otherwise
                     currentThemeRoom.Limits.add(a);
                     if (stringifyLimits(currentThemeRoom).length + 2 > MAX_SPACE_FOR_TR_LIMITS) {
                         currentThemeRoom.Limits.delete(a);
@@ -44942,7 +44674,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
             }
         }
-        // block some items
         if (MouseIn(1170, 465 - 32, 60, 60)) {
             if (currentThemeRoom.BlockCategories.includes("ABDL")) {
                 currentThemeRoom.BlockCategories.splice(currentThemeRoom.BlockCategories.indexOf("ABDL"), 1);
@@ -44967,7 +44698,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 currentThemeRoom.BlockCategories.push("SciFi");
             }
         }
-        // OK button
         if (MouseIn(1450, 830, 180, 64)) {
             const inputDescription = document.getElementById("InputDescription");
             if (onRoomCreateScreen) {
@@ -45017,8 +44747,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             input = undefined;
         }
     }
-    //#endregion
-    // Second page for the chat room settings screen that is used in both the room creation and room administration variants
     function ChatSettingsExtraRun() {
         var _a;
         if (onThemeRoomSubpage) {
@@ -45054,7 +44782,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }
         }
     }
-    // Click events for the second page of the chat room settings screen with a callback to transport data to the two patched click event functions
     function ChatSettingsExtraClick(create, apply) {
         var _a;
         if (onThemeRoomSubpage) {
@@ -45124,7 +44851,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     Limit: ElementValue("InputSize") ? ElementValue("InputSize").trim() : "",
                     Language: create ? ChatCreateLanguage : ChatAdminLanguage,
                     BlockCategory: cloneDeep(create ? ChatBlockItemCategory : ChatAdminBlockCategory),
-                    AutoApply: (_a = modStorage.roomTemplates[i]) === null || _a === void 0 ? void 0 : _a.AutoApply
+                    AutoApply: (_a = modStorage.roomTemplates[i]) === null || _a === void 0 ? void 0 : _a.AutoApply,
                 };
                 modStorageSync();
                 overwriteMode = undefined;
@@ -45154,40 +44881,39 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     modStorage.roomTemplates[i] = null;
                 }
             }
-            //#region Second page button (on room create screen)
             hookFunction("ChatCreateExit", 0, (args, next) => {
                 next(args);
                 ChatSettingsExtraExit();
             });
             if (GameVersion === "R79") {
                 patchFunction("ChatCreateRun", {
-                    'DrawText(TextGet("RoomName"), 535, 110,': 'DrawText(TextGet("RoomName"), 675, 110,'
+                    'DrawText(TextGet("RoomName"), 535, 110,': 'DrawText(TextGet("RoomName"), 675, 110,',
                 });
                 patchFunction("ChatCreateRun", {
-                    'ElementPosition("InputName", 535, 170, 820);': 'ElementPosition("InputName", 610, 170, 680);'
+                    'ElementPosition("InputName", 535, 170, 820);': 'ElementPosition("InputName", 610, 170, 680);',
                 });
             }
             else {
                 patchFunction("ChatCreateRun", {
-                    'DrawText(TextGet("RoomName"), 250, 120,': 'DrawText(TextGet("RoomName"), 370, 120,'
+                    'DrawText(TextGet("RoomName"), 250, 120,': 'DrawText(TextGet("RoomName"), 370, 120,',
                 });
                 patchFunction("ChatCreateRun", {
-                    'ElementPosition("InputName", 815, 115, 820);': 'ElementPosition("InputName", 865, 115, 720);'
+                    'ElementPosition("InputName", 815, 115, 820);': 'ElementPosition("InputName", 865, 115, 720);',
                 });
                 patchFunction("ChatCreateRun", {
-                    'DrawText(TextGet("RoomLanguage"), 250, 205,': 'DrawText(TextGet("RoomLanguage"), 390, 205,'
+                    'DrawText(TextGet("RoomLanguage"), 250, 205,': 'DrawText(TextGet("RoomLanguage"), 390, 205,',
                 });
                 patchFunction("ChatCreateRun", {
-                    "DrawButton(405, 172,": "DrawButton(505, 172,"
+                    "DrawButton(405, 172,": "DrawButton(505, 172,",
                 });
                 patchFunction("ChatCreateRun", {
-                    'DrawText(TextGet("RoomSize"), 850, 205,': 'DrawText(TextGet("RoomSize"), 950, 205,'
+                    'DrawText(TextGet("RoomSize"), 850, 205,': 'DrawText(TextGet("RoomSize"), 950, 205,',
                 });
                 patchFunction("ChatCreateRun", {
-                    'ElementPosition("InputSize", 1099, 200, 250);': 'ElementPosition("InputSize", 1149, 200, 150);'
+                    'ElementPosition("InputSize", 1099, 200, 250);': 'ElementPosition("InputSize", 1149, 200, 150);',
                 });
                 patchFunction("ChatCreateClick", {
-                    "if (MouseIn(405, 172,": "if (MouseIn(505, 172,"
+                    "if (MouseIn(405, 172,": "if (MouseIn(505, 172,",
                 });
             }
             hookFunction("ChatCreateRun", 0, (args, next) => {
@@ -45206,7 +44932,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             hookFunction("ChatAdminExit", 0, (args, next) => {
                 next(args);
                 ChatSettingsExtraExit();
-                // needed to auto apply a template correctly again
                 ChatBlockItemReturnData = {};
             });
             hookFunction("ChatCreateLoad", 0, (args, next) => {
@@ -45236,11 +44961,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ChatCreateLanguage = template.Language;
                     ChatBlockItemCategory = template.BlockCategory;
                 }
-                // needed to auto apply a template correctly again
                 BackgroundSelectionPreviousScreen = "";
                 ChatBlockItemReturnData = {};
             });
-            //#endregion
             hookFunction("ChatCreateClick", 0, (args, next) => {
                 if (onSecondPage) {
                     return ChatSettingsExtraClick(onRoomCreateScreen, (data) => {
@@ -45265,7 +44988,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ChatBlockItemCategory = data.BlockCategory;
                     });
                 }
-                // click event for second page button
                 if (MouseIn(124, 147, 90, 90)) {
                     onSecondPage = !onSecondPage;
                     ElementToggleGeneratedElements("ChatCreate", false);
@@ -45273,36 +44995,35 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 next(args);
             });
-            //#region Second page button (on room admin screen)
             if (GameVersion === "R79") {
                 patchFunction("ChatAdminRun", {
-                    'DrawText(TextGet("RoomName"), 535, 110,': 'DrawText(TextGet("RoomName"), 675, 110,'
+                    'DrawText(TextGet("RoomName"), 535, 110,': 'DrawText(TextGet("RoomName"), 675, 110,',
                 });
                 patchFunction("ChatAdminRun", {
-                    'ElementPosition("InputName", 535, 170, 820);': 'ElementPosition("InputName", 610, 170, 680);'
+                    'ElementPosition("InputName", 535, 170, 820);': 'ElementPosition("InputName", 610, 170, 680);',
                 });
             }
             else {
                 patchFunction("ChatAdminRun", {
-                    'DrawText(TextGet("RoomName"), 250, 120,': 'DrawText(TextGet("RoomName"), 370, 120,'
+                    'DrawText(TextGet("RoomName"), 250, 120,': 'DrawText(TextGet("RoomName"), 370, 120,',
                 });
                 patchFunction("ChatAdminRun", {
-                    'ElementPosition("InputName", 815, 115, 820);': 'ElementPosition("InputName", 865, 115, 720);'
+                    'ElementPosition("InputName", 815, 115, 820);': 'ElementPosition("InputName", 865, 115, 720);',
                 });
                 patchFunction("ChatAdminRun", {
-                    'DrawText(TextGet("RoomLanguage"), 250, 205,': 'DrawText(TextGet("RoomLanguage"), 390, 205,'
+                    'DrawText(TextGet("RoomLanguage"), 250, 205,': 'DrawText(TextGet("RoomLanguage"), 390, 205,',
                 });
                 patchFunction("ChatAdminRun", {
-                    "DrawButton(405, 172,": "DrawButton(505, 172,"
+                    "DrawButton(405, 172,": "DrawButton(505, 172,",
                 });
                 patchFunction("ChatAdminRun", {
-                    'DrawText(TextGet("RoomSize"), 850, 205,': 'DrawText(TextGet("RoomSize"), 950, 205,'
+                    'DrawText(TextGet("RoomSize"), 850, 205,': 'DrawText(TextGet("RoomSize"), 950, 205,',
                 });
                 patchFunction("ChatAdminRun", {
-                    'ElementPosition("InputSize", 1099, 200, 250);': 'ElementPosition("InputSize", 1149, 200, 150);'
+                    'ElementPosition("InputSize", 1099, 200, 250);': 'ElementPosition("InputSize", 1149, 200, 150);',
                 });
                 patchFunction("ChatAdminClick", {
-                    "if (MouseIn(405, 172,": "if (MouseIn(505, 172,"
+                    "if (MouseIn(405, 172,": "if (MouseIn(505, 172,",
                 });
             }
             hookFunction("ChatAdminRun", 0, (args, next) => {
@@ -45316,7 +45037,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (MouseIn(124, 147, 90, 90))
                     DrawButtonHover(-36, 70, 64, 64, `More options [BCX]`);
             });
-            //#endregion
             hookFunction("ChatAdminClick", 0, (args, next) => {
                 if (onSecondPage) {
                     return ChatSettingsExtraClick(onRoomCreateScreen, (data) => {
@@ -45341,7 +45061,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         ChatAdminBlockCategory = data.BlockCategory;
                     });
                 }
-                // click event for second page button
                 if (MouseIn(124, 147, 90, 90)) {
                     onSecondPage = !onSecondPage;
                     ElementToggleGeneratedElements("ChatAdmin", false);
@@ -45377,14 +45096,13 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 Property: {
                     Type: "Light",
                     Effect: [],
-                    Hide: AssetGroup.map(A => A.Name).filter(A => A !== "ItemEars")
-                }
+                    Hide: AssetGroup.map(A => A.Name).filter(A => A !== "ItemEars"),
+                },
             });
             CharacterRefresh(Player);
         }
         ChatRoomCharacterUpdate(Player);
     }
-    //#region Hidden room backgrounds
     function processBackgroundCommand(input) {
         if (input.trim() === "") {
             ChatRoomSendLocal(`Try pressing the "tab"-key to show autocomplete options`);
@@ -45403,8 +45121,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     function processBackgroundCommand_autocomplete(input) {
         return Command_pickAutocomplete(input, backgroundList);
     }
-    //#endregion
-    //#region Antiblind
     let antiblind = false;
     function toggleAntiblind() {
         if (!antiblind) {
@@ -45420,8 +45136,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         antiblind = !antiblind;
         return true;
     }
-    //#endregion
-    //#region card deck
     let cardDeck = [];
     let dealersLog = [];
     function shuffleDeck() {
@@ -45457,7 +45171,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
     }
     function showDealersLog() {
-        // to circumevent BC's rate limit of 50 messages per second
         const middleIndex = Math.ceil(dealersLog.length / 2);
         const firstHalf = dealersLog.slice().splice(0, middleIndex);
         const secondHalf = dealersLog.slice().splice(-middleIndex);
@@ -45468,7 +45181,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             }, 1100);
         });
     }
-    //#endregion
     function rollDice(sides, rolls) {
         const result = [];
         for (let i = 0; i < rolls; i++) {
@@ -45486,21 +45198,18 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     [Preset.dominant]: [true, AccessLevel.whitelist],
                     [Preset.switch]: [true, AccessLevel.friend],
                     [Preset.submissive]: [true, AccessLevel.friend],
-                    [Preset.slave]: [true, AccessLevel.friend]
-                }
+                    [Preset.slave]: [true, AccessLevel.friend],
+                },
             });
         }
         load() {
             registerCommandParsed("utility", "dice", "[dice sides | <rolls>d<dice sides>] - Shows only you the result of rolling a dice the given number of times", (args) => {
                 let sides = 6;
                 let rolls = 1;
-                // no argument
                 if (args.length < 1) {
                     rollDice(6, 1);
-                    // at least one argument
                 }
                 else {
-                    // check first argument
                     if (/^[0-9]+$/.test(args[0])) {
                         sides = Number.parseInt(args[0], 10);
                         if ((sides < 2) || (sides > 100)) {
@@ -45530,7 +45239,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 return true;
             });
-            //#region card deck
             registerCommandParsed("utility", "deck", "- Draw, deal or shuffle with a 52-card deck. Use '.deck' for more help", (args) => {
                 const subcommand = (args[0] || "").toLowerCase();
                 if (subcommand === "shuffle") {
@@ -45600,12 +45308,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 return [];
             });
-            //#endregion
-            //#region room
             registerCommandParsed("utility", "room", "- Change or administrate the current chat room. Use '.room' for more help", (args) => {
                 var _a;
                 const subcommand = (args[0] || "").toLowerCase();
-                // Shouldn't be usable outside of room anyway
                 if (!ChatRoomData)
                     return false;
                 if (!ChatRoomPlayerIsAdmin()) {
@@ -45712,7 +45417,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                         Game: template.Game,
                         Admin: template.Admin,
                         Limit: size,
-                        BlockCategory: template.BlockCategory
+                        BlockCategory: template.BlockCategory,
                     });
                 }
                 else {
@@ -45746,8 +45451,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
                 return [];
             });
-            //#endregion
-            //#region Antiblind
             registerCommand$1("cheats", "antiblind", "- Toggles ability to always see despite items", () => {
                 if (toggleAntiblind()) {
                     ChatRoomSendLocal(`Antiblind switched ${antiblind ? "on" : "off"}`);
@@ -45770,10 +45473,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     return false;
                 return next(args);
             });
-            //#endregion
-            //#region Hidden room backgrounds
             registerCommand$1("utility", "background", "<name> - Changes chat room background", processBackgroundCommand, processBackgroundCommand_autocomplete);
-            // Add missing tags to tag list
             const availableTags = new Set();
             for (const background of BackgroundsList) {
                 background.Tag.forEach(t => availableTags.add(t));
@@ -45783,7 +45483,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     BackgroundsTagList.push(tag);
                 }
             }
-            // Add new backgrounds to the list
             if (!BackgroundsTagList.includes(BACKGROUNDS_BCX_NAME)) {
                 BackgroundsTagList.push(BACKGROUNDS_BCX_NAME);
             }
@@ -45798,7 +45497,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     BackgroundSelectionOffset = 0;
                 next(args);
             });
-            //#endregion
             registerCommandParsed("utility", "colour", "<source> <item> <target> - Copies color of certain item from source character to target character", (argv) => {
                 if (argv.length !== 3) {
                     ChatRoomSendLocal(`Expected three arguments: <source> <item> <target>`);
@@ -45906,7 +45604,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             });
         }
         run() {
-            // Refresh current background list, if already built
             if (ChatCreateBackgroundList != null) {
                 ChatCreateBackgroundList = BackgroundsGenerateList(BackgroundSelectionTagList);
             }
@@ -45914,7 +45611,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         unload() {
             remove(BackgroundsTagList, i => i === BACKGROUNDS_BCX_NAME);
             remove(BackgroundsList, i => i.Tag.includes(BACKGROUNDS_BCX_NAME));
-            // Refresh current background list, if already built
             if (ChatCreateBackgroundList != null) {
                 ChatCreateBackgroundList = BackgroundsGenerateList(BackgroundSelectionTagList);
             }
@@ -46003,10 +45699,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 if (result === null || typeof result !== "object") throw new TypeError("Object expected");
                 if (_ = accept(result.get)) descriptor.get = _;
                 if (_ = accept(result.set)) descriptor.set = _;
-                if (_ = accept(result.init)) initializers.push(_);
+                if (_ = accept(result.init)) initializers.unshift(_);
             }
             else if (_ = accept(result)) {
-                if (kind === "field") initializers.push(_);
+                if (kind === "field") initializers.unshift(_);
                 else descriptor[key] = _;
             }
         }
@@ -46215,6 +45911,34 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         return typeof state === "function" ? receiver === state : state.has(receiver);
     }
 
+    var tslib_es6 = {
+        __extends,
+        __assign,
+        __rest,
+        __decorate,
+        __param,
+        __metadata,
+        __awaiter,
+        __generator,
+        __createBinding,
+        __exportStar,
+        __values,
+        __read,
+        __spread,
+        __spreadArrays,
+        __spreadArray,
+        __await,
+        __asyncGenerator,
+        __asyncDelegator,
+        __asyncValues,
+        __makeTemplateObject,
+        __importStar,
+        __importDefault,
+        __classPrivateFieldGet,
+        __classPrivateFieldSet,
+        __classPrivateFieldIn,
+    };
+
     var _ModRuleState_ruleState;
     class ModRuleState {
         constructor(modName, state) {
@@ -46250,7 +45974,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 Object.values(dictionary).every(v => typeof v === "string")) {
                 const context = debugContextStart("ModApiRuleTrigger", {
                     modArea: this.modName,
-                    extraInfo: () => `mod: ${this.modName}; rule: ${this.rule}`
+                    extraInfo: () => `mod: ${this.modName}; rule: ${this.rule}`,
                 });
                 __classPrivateFieldGet(this, _ModRuleState_ruleState, "f").trigger(targetCharacter, dictionary);
                 context.end();
@@ -46265,7 +45989,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 Object.values(dictionary).every(v => typeof v === "string")) {
                 const context = debugContextStart("ModApiRuleTriggerAttempt", {
                     modArea: this.modName,
-                    extraInfo: () => `mod: ${this.modName}; rule: ${this.rule}`
+                    extraInfo: () => `mod: ${this.modName}; rule: ${this.rule}`,
                 });
                 __classPrivateFieldGet(this, _ModRuleState_ruleState, "f").triggerAttempt(targetCharacter, dictionary);
                 context.end();
@@ -46276,9 +46000,23 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
         }
     }
     _ModRuleState_ruleState = new WeakMap();
-    class ModAPI {
+    class ModAPI extends TypedEventEmitter {
         constructor(modName) {
+            super();
             this.modName = modName;
+            BCXGlobalEventSystem.onAny((event) => {
+                const context = debugContextStart("ModApiEvent", {
+                    modArea: this.modName,
+                    extraInfo: () => `mod: ${this.modName}; event: ${event.event}`,
+                });
+                try {
+                    this.emit(event.event, event.data);
+                }
+                catch (error) {
+                    reportManualError("While emitting BCX event", error);
+                }
+                context.end();
+            });
         }
         getRuleState(rule) {
             try {
@@ -46397,10 +46135,10 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             var _a;
             window.bcx = consoleInterface;
             patchFunction("ChatRoomMessageDefaultMetadataExtractor", {
-                "asset.DynamicDescription(character).toLowerCase()": `( bcx.isDevel ? asset.Description : asset.DynamicDescription(character).toLowerCase() )`
+                "asset.DynamicDescription(character).toLowerCase()": `( bcx.isDevel ? asset.Description : asset.DynamicDescription(character).toLowerCase() )`,
             });
             patchFunction("ChatRoomGetFocusGroupSubstitutions", {
-                "DialogActualNameForGroup(targetCharacter, focusGroup).toLowerCase()": `( bcx.isDevel ? focusGroup.Description : DialogActualNameForGroup(targetCharacter, focusGroup).toLowerCase() )`
+                "DialogActualNameForGroup(targetCharacter, focusGroup).toLowerCase()": `( bcx.isDevel ? focusGroup.Description : DialogActualNameForGroup(targetCharacter, focusGroup).toLowerCase() )`,
             });
             for (let i = 0; i < ChatRoomMessageExtractors.length; i++) {
                 if (ChatRoomMessageExtractors[i] === ((_a = bcModSDK.getPatchingInfo().get("ChatRoomMessageDefaultMetadataExtractor")) === null || _a === void 0 ? void 0 : _a.original)) {
@@ -46408,7 +46146,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 }
             }
             patchFunction("ExtendedItemDrawButton", {
-                "DialogFindPlayer(DialogPrefix + Option.Name)": `( bcx.isDevel ? JSON.stringify(Option.Property.Type) : DialogFindPlayer(DialogPrefix + Option.Name) )`
+                "DialogFindPlayer(DialogPrefix + Option.Name)": `( bcx.isDevel ? JSON.stringify(Option.Property.Type) : DialogFindPlayer(DialogPrefix + Option.Name) )`,
             });
             hookFunction("DialogDrawItemMenu", 0, (args, next) => {
                 var _a;
@@ -46418,7 +46156,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                 return next(args);
             });
             patchFunction("DialogDrawPoseMenu", {
-                '"Icons/Poses/" + PoseGroup[P].Name + ".png"': `"Icons/Poses/" + PoseGroup[P].Name + ".png", ( bcx.isDevel ? PoseGroup[P].Name : undefined )`
+                '"Icons/Poses/" + PoseGroup[P].Name + ".png"': `"Icons/Poses/" + PoseGroup[P].Name + ".png", ( bcx.isDevel ? PoseGroup[P].Name : undefined )`,
             });
             hookFunction("DialogDrawExpressionMenu", 0, (args, next) => {
                 next(args);
@@ -46501,7 +46239,7 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                                 Asset: f,
                                 Difficulty: 20,
                                 Color: ["#A7806F", "Default", "Default"],
-                                Property: { Mode: "Off", Intensity: -1, Effect: ["Egged"], TriggerValues: "ø,".repeat(7) + "ø", AccessMode: "LockMember" }
+                                Property: { Mode: "Off", Intensity: -1, Effect: ["Egged"], TriggerValues: "ø,".repeat(7) + "ø", AccessMode: "LockMember" },
                             });
                             CharacterRefresh(C.Character, false);
                             ChatRoomCharacterUpdate(C.Character);
@@ -46625,14 +46363,12 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
             if (GameVersion === "R88") {
                 hookFunction("StruggleDrawStrengthProgress", 0, (args, next) => {
                     next(args);
-                    // Prevent A/S spamming from writing into search right after struggle finishes
                     struggleCooldown = Date.now() + STRUGGLE_COOLDOWN_TIME;
                 });
             }
             else {
                 hookFunction("StruggleStrengthDraw", 0, (args, next) => {
                     next(args);
-                    // Prevent A/S spamming from writing into search right after struggle finishes
                     struggleCooldown = Date.now() + STRUGGLE_COOLDOWN_TIME;
                 });
             }
@@ -46668,10 +46404,9 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     exitSearchMode((_a = CharacterGetCurrent()) !== null && _a !== void 0 ? _a : Player);
                 }
             });
-            // Remove some buttons, if there are too many
             hookFunction("DialogMenuButtonBuild", 10, (args, next) => {
                 next(args);
-                for (const toRemove of ["ChangeLayersMouth", "Prev"]) {
+                for (const toRemove of ["ChangeLayersMouth", "Prev", "BCX_Search"]) {
                     if (DialogMenuButton.length <= 9)
                         break;
                     const index = DialogMenuButton.indexOf(toRemove);
@@ -46697,7 +46432,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
     const AUTOREFRESH_INTERVAL = 10000;
     class ModuleFriends extends BaseModule {
         load() {
-            //#region Friendlist Auto-Refresh
             if (!isNModClient()) {
                 let friendListNextRefresh = 0;
                 let pendingRefresh = false;
@@ -46733,7 +46467,6 @@ gEdTrWQmgoV4rsJMvJPiFpJ8u2c9WIX0JJ745gS6B7g/nYqlKq8gTMkDHgRuk9XTRuJbmf5ON9ik
                     next(args);
                 });
             }
-            //#endregion
         }
     }
 
