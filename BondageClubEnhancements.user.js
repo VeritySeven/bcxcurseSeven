@@ -6013,8 +6013,17 @@ async function ForBetterClub() {
 			}
 		}
 
-		let prioritySubscreen = false;
+		/** @type {"Priority" | "Difficulty"} */
+		let priorityField = "Priority",
+			prioritySubscreen = false;
 		let layerPage = 0;
+		const FIELDS = Object.freeze({
+			/** @type {"Priority"} */
+			Priority: "Priority",
+			/** @type {"Difficulty"} */
+			Difficulty: "Difficulty",
+		});
+
 
 		const preview = CharacterLoadSimple(
 			`LayeringPreview-${Player.MemberNumber}`
