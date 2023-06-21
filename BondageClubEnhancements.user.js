@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name Bondage Club Enhancements edit
 // @namespace https://www.bondageprojects.com/
-// @version 4.2.7
+// @version 4.2.8
 // @description FBC - For Better Club - enhancements for the bondage club - old name kept in tampermonkey for compatibility
 // @author Sidious
 // @match https://bondageprojects.elementfx.com/*
@@ -104,7 +104,7 @@ async function ForBetterClub() {
 
 	const BCX_DEVEL_SOURCE =
 			"https://VeritySeven.github.io/bcxcurseSeven/bcxdev.js",
-		BCX_SOURCE = "https://raw.githubusercontent.com/VeritySeven/bcxcurseSeven/44055d4b6b4a070eca386386f349f3b50a597ed9/bcxedit.js",
+		BCX_SOURCE = "https://jomshir98.github.io/bondage-club-extended/bcx.js",
 		EBCH_SOURCE = "https://e2466.gitlab.io/ebch/master/EBCH.js",
 		LSCG_SOURCE = "https://littlesera.github.io/LSCG/bundle.js",
 		MBS_SOURCE = "https://bananarama92.github.io/MBS/main/mbs.js";
